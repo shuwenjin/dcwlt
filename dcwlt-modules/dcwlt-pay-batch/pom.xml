@@ -9,8 +9,13 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.dcits</groupId>
-    <artifactId>dcwlt_pay</artifactId>
+    <artifactId>dcwlt-pay-batch</artifactId>
+
+
+    <description>
+        dcwlt-pay-batch 支付-批量模块
+    </description>
+
     <dependencies>
 
         <!-- SpringCloud Ailibaba Nacos -->

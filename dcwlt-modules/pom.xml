@@ -13,8 +13,9 @@
         <module>dcwlt-gen</module>
         <module>dcwlt-job</module>
         <module>dcwlt-file</module>
-        <module>dcwlt_pay</module>
         <module>dcwlt-monitor</module>
+        <module>dcwlt-pay-online</module>
+        <module>dcwlt-pay-batch</module>
     </modules>
 
     <artifactId>dcwlt-modules</artifactId>
