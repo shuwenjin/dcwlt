@@ -173,7 +173,7 @@ insert into sys_menu values('112',  'Nacos控制台',    '2',   '4',  'http://lo
 insert into sys_menu values('113',  'Admin控制台',    '2',   '5',  'http://localhost:9100/login',          '',                       1, 0, 'C', '0', '0', 'monitor:server:list',     'server',        'admin', '2018-03-16 11-33-00', 'admin', '2018-03-16 11-33-00', '服务监控菜单');
 insert into sys_menu values('114',  '表单构建',       '3',   '1',  'build',                                'tool/build/index',       1, 0, 'C', '0', '0', 'tool:build:list',         'build',         'admin', '2018-03-16 11-33-00', 'admin', '2018-03-16 11-33-00', '表单构建菜单');
 insert into sys_menu values('115',  '代码生成',       '3',   '2',  'gen',                                  'tool/gen/index',         1, 0, 'C', '0', '0', 'tool:gen:list',           'code',          'admin', '2018-03-16 11-33-00', 'admin', '2018-03-16 11-33-00', '代码生成菜单');
-insert into sys_menu values('116',  '系统接口',       '3',   '3',  'http://localhost:8080/swagger-ui.html', '',                      1, 0, 'C', '0', '0', 'tool:swagger:list',       'swagger',       'admin', '2018-03-16 11-33-00', 'admin', '2018-03-16 11-33-00', '系统接口菜单');
+insert into sys_menu values('116',  '系统接口',       '3',   '3',  'http://localhost:8000/swagger-ui.html', '',                      1, 0, 'C', '0', '0', 'tool:swagger:list',       'swagger',       'admin', '2018-03-16 11-33-00', 'admin', '2018-03-16 11-33-00', '系统接口菜单');
 insert into sys_menu values('2006', '机构管理',    '2012',   '1',  'party'                              , 'system/party/index'     , 1, 0, 'C', '0', '0', 'system:party:list',       'party',         'admin', '2018-03-01 00-00-00', 'admin', '2021-02-26 17:55:04', '机构菜单');
 
 -- 三级菜单
@@ -632,8 +632,8 @@ create table sys_notice (
 -- ----------------------------
 -- 初始化-公告信息表数据
 -- ----------------------------
-insert into sys_notice values('1', '温馨提醒：2018-07-01 若依新版本发布啦', '2', '新版本内容', '0', 'admin', '2018-03-16 11-33-00', 'admin', '2018-03-16 11-33-00', '管理员');
-insert into sys_notice values('2', '维护通知：2018-07-01 若依系统凌晨维护', '1', '维护内容',   '0', 'admin', '2018-03-16 11-33-00', 'admin', '2018-03-16 11-33-00', '管理员');
+insert into sys_notice values('1', '公告', '2', '公告', '0', 'admin', '2018-03-16 11-33-00', 'admin', '2018-03-16 11-33-00', '管理员');
+insert into sys_notice values('2', '通知', '1', '通知',   '0', 'admin', '2018-03-16 11-33-00', 'admin', '2018-03-16 11-33-00', '管理员');
 
 
 -- ----------------------------
