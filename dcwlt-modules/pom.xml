@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://maven.apache.org/POM/4.0.0"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <groupId>com.dcits</groupId>
+        <artifactId>dcwlt</artifactId>
+        <version>2.5.0</version>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+
+    <modules>
+        <module>dcwlt-system</module>
+        <module>dcwlt-gen</module>
+        <module>dcwlt-job</module>
+        <module>dcwlt-file</module>
+        <module>dcwlt_pay</module>
+        <module>dcwlt-monitor</module>
+    </modules>
+
+    <artifactId>dcwlt-modules</artifactId>
+    <packaging>pom</packaging>
+
+    <description>
+        modules业务模块
+    </description>
+
+</project>

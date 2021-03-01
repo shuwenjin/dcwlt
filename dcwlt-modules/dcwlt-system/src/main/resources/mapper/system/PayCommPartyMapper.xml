@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dcits.dcwlt.system.mapper.PayCommPartyMapper">
+    
+    <resultMap type="PayCommParty" id="PayCommPartyResult">
+        <result property="partyid"    column="partyid"    />
+        <result property="partytype"    column="partytype"    />
+        <result property="partyname"    column="partyname"    />
+        <result property="partyalias"    column="partyalias"    />
+        <result property="partystatus"    column="partystatus"    />
+        <result property="status"    column="status"    />
+        <result property="contact"    column="contact"    />
+        <result property="telephone"    column="telephone"    />
+        <result property="mail"    column="mail"    />
+        <result property="fax"    column="fax"    />
+        <result property="effectdate"    column="effectdate"    />
+        <result property="ineffectivedate"    column="ineffectivedate"    />
+        <result property="changenumber"    column="changenumber"    />
+        <result property="changecircletimes"    column="changecircletimes"    />
+        <result property="lastupdate"    column="lastupdate"    />
+        <result property="lastuptime"    column="lastuptime"    />
+    </resultMap>
+
+    <sql id="selectPayCommPartyVo">
+        select partyid, partytype, partyname, partyalias, partystatus, status, contact, telephone, mail, fax, effectdate, ineffectivedate, changenumber, changecircletimes, lastupdate, lastuptime from pay_comm_party
+    </sql>
+
+    <select id="selectPayCommPartyList" parameterType="PayCommParty" resultMap="PayCommPartyResult">
+        <include refid="selectPayCommPartyVo"/>
+        <where>  
+            <if test="partytype != null  and partytype != ''"> and partytype = #{partytype}</if>
+            <if test="partyname != null  and partyname != ''"> and partyname like concat('%', #{partyname}, '%')</if>
+            <if test="partyalias != null  and partyalias != ''"> and partyalias = #{partyalias}</if>
+            <if test="partystatus != null  and partystatus != ''"> and partystatus = #{partystatus}</if>
+            <if test="status != null  and status != ''"> and status = #{status}</if>
+            <if test="contact != null  and contact != ''"> and contact = #{contact}</if>
+            <if test="telephone != null  and telephone != ''"> and telephone = #{telephone}</if>
+            <if test="mail != null  and mail != ''"> and mail = #{mail}</if>
+            <if test="fax != null  and fax != ''"> and fax = #{fax}</if>
+            <if test="effectdate != null  and effectdate != ''"> and effectdate = #{effectdate}</if>
+            <if test="ineffectivedate != null  and ineffectivedate != ''"> and ineffectivedate = #{ineffectivedate}</if>
+            <if test="changenumber != null  and changenumber != ''"> and changenumber = #{changenumber}</if>
+            <if test="changecircletimes != null  and changecircletimes != ''"> and changecircletimes = #{changecircletimes}</if>
+            <if test="lastupdate != null  and lastupdate != ''"> and lastupdate = #{lastupdate}</if>
+            <if test="lastuptime != null  and lastuptime != ''"> and lastuptime = #{lastuptime}</if>
+        </where>
+    </select>
+    
+    <select id="selectPayCommPartyById" parameterType="String" resultMap="PayCommPartyResult">
+        <include refid="selectPayCommPartyVo"/>
+        where partyid = #{partyid}
+    </select>
+        
+    <insert id="insertPayCommParty" parameterType="PayCommParty">
+        insert into pay_comm_party
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="partyid != null">partyid,</if>
+            <if test="partytype != null and partytype != ''">partytype,</if>
+            <if test="partyname != null">partyname,</if>
+            <if test="partyalias != null">partyalias,</if>
+            <if test="partystatus != null and partystatus != ''">partystatus,</if>
+            <if test="status != null and status != ''">status,</if>
+            <if test="contact != null">contact,</if>
+            <if test="telephone != null">telephone,</if>
+            <if test="mail != null">mail,</if>
+            <if test="fax != null">fax,</if>
+            <if test="effectdate != null">effectdate,</if>
+            <if test="ineffectivedate != null">ineffectivedate,</if>
+            <if test="changenumber != null">changenumber,</if>
+            <if test="changecircletimes != null">changecircletimes,</if>
+            <if test="lastupdate != null">lastupdate,</if>
+            <if test="lastuptime != null">lastuptime,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="partyid != null">#{partyid},</if>
+            <if test="partytype != null and partytype != ''">#{partytype},</if>
+            <if test="partyname != null">#{partyname},</if>
+            <if test="partyalias != null">#{partyalias},</if>
+            <if test="partystatus != null and partystatus != ''">#{partystatus},</if>
+            <if test="status != null and status != ''">#{status},</if>
+            <if test="contact != null">#{contact},</if>
+            <if test="telephone != null">#{telephone},</if>
+            <if test="mail != null">#{mail},</if>
+            <if test="fax != null">#{fax},</if>
+            <if test="effectdate != null">#{effectdate},</if>
+            <if test="ineffectivedate != null">#{ineffectivedate},</if>
+            <if test="changenumber != null">#{changenumber},</if>
+            <if test="changecircletimes != null">#{changecircletimes},</if>
+            <if test="lastupdate != null">#{lastupdate},</if>
+            <if test="lastuptime != null">#{lastuptime},</if>
+         </trim>
+    </insert>
+
+    <update id="updatePayCommParty" parameterType="PayCommParty">
+        update pay_comm_party
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="partytype != null and partytype != ''">partytype = #{partytype},</if>
+            <if test="partyname != null">partyname = #{partyname},</if>
+            <if test="partyalias != null">partyalias = #{partyalias},</if>
+            <if test="partystatus != null and partystatus != ''">partystatus = #{partystatus},</if>
+            <if test="status != null and status != ''">status = #{status},</if>
+            <if test="contact != null">contact = #{contact},</if>
+            <if test="telephone != null">telephone = #{telephone},</if>
+            <if test="mail != null">mail = #{mail},</if>
+            <if test="fax != null">fax = #{fax},</if>
+            <if test="effectdate != null">effectdate = #{effectdate},</if>
+            <if test="ineffectivedate != null">ineffectivedate = #{ineffectivedate},</if>
+            <if test="changenumber != null">changenumber = #{changenumber},</if>
+            <if test="changecircletimes != null">changecircletimes = #{changecircletimes},</if>
+            <if test="lastupdate != null">lastupdate = #{lastupdate},</if>
+            <if test="lastuptime != null">lastuptime = #{lastuptime},</if>
+        </trim>
+        where partyid = #{partyid}
+    </update>
+
+    <delete id="deletePayCommPartyById" parameterType="String">
+        delete from pay_comm_party where partyid = #{partyid}
+    </delete>
+
+    <delete id="deletePayCommPartyByIds" parameterType="String">
+        delete from pay_comm_party where partyid in 
+        <foreach item="partyid" collection="array" open="(" separator="," close=")">
+            #{partyid}
+        </foreach>
+    </delete>
+</mapper>
