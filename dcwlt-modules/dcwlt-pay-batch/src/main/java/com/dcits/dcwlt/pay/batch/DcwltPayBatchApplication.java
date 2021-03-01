@@ -17,6 +17,6 @@ public class DcwltPayBatchApplication {
     public static void main(String[] args)
     {
         SpringApplication.run(DcwltPayBatchApplication.class, args);
-        System.out.println("#####  支付联机模块启动成功  #####\n");
+        System.out.println("#####  支付批量模块启动成功  #####\n");
     }
 }
