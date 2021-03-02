@@ -6,6 +6,7 @@ package com.dcits.dcwlt.pay.online;
 import com.dcits.dcwlt.common.security.annotation.EnableCustomConfig;
 import com.dcits.dcwlt.common.security.annotation.EnableRyFeignClients;
 import com.dcits.dcwlt.common.swagger.annotation.EnableCustomSwagger2;
+import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
 import org.springframework.cloud.client.SpringCloudApplication;
 

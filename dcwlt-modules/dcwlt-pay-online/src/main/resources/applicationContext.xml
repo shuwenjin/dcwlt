@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	   xsi:schemaLocation="http://www.springframework.org/schema/beans
+			http://www.springframework.org/schema/beans/spring-beans-4.1.xsd">
+	<!-- RTP 基本配置，主要扩展Spring MVC的相关配置 -->
+	<bean id="EcnyTradeConfig" class="com.dcits.dcwlt.pay.online.config.EcnyTradeConfig" init-method="init">
+		<property name="mappings">
+			<list>
+				<value>dcep.225.001.01,Convert225RTradeFlow,com.cgb.ecny.chnldto.convert.ConvertReqDTO,Y</value>
+				<value>dcep.401.001.01,FreeFrmt401RTradeFlow,com.cgb.ecny.chnldto.freefrmt.FreeFrmtDTO,Y</value>
+				<value>dcep.221.001.01,Reconvert221RTradeFlow,com.cgb.ecny.chnldto.reconvert.ReconvertReqDTO,Y</value>
+				<value>dcep.909.001.01,TxEndNtfcnt909RTradeFlow,com.cgb.ecny.chnldto.txendntfcnt.TxEndNtfcntReqDTO,N</value>
+				<value>dcep.411.001.01,TxStsQry411RTradeFlow,com.cgb.ecny.chnldto.txstsqryreq.TxStsQryReqDTO,Y</value>
+				<value>dcep.917.001.01,Party917RTradeFlow,com.cgb.ecny.chnldto.party.chng.FinCdChngNtfctnDTO,N</value>
+				<value>dcep.931.001.01,PartyStatus931RTradeFlow,com.cgb.ecny.chnldto.party.trblntfctn.TrblNtfctnDTO,N</value>
+				<value>dcep.915.001.01,authInfo915TradeFlow,com.cgb.ecny.chnldto.authinfo.AuthInfoReqDTO,N</value>
+				<value>dcep.713.001.01,CapitalCheckClear713RTradeFlow,com.cgb.ecny.chnldto.clrsummrychk.ClrSummryChkDTO,N</value>
+				<value>dcep.801.001.01,Dspt801RTradeFlow,com.cgb.ecny.chnldto.dspt.DsptReqDTO,Y</value>
+				<value>dcep.433.001.01,BankAttAcctManage433RTradeFlow,com.cgb.ecny.chnldto.bankattachedmanagement.BankAttAcctReqDTO,Y</value>
+				<value>dcep.711.001.01,ReconSummaryChk711TradeFlow,com.cgb.ecny.chnldto.summarychk.ReconSummaryChkDTO,N</value>
+			</list>
+		</property>
+	</bean>
+</beans>

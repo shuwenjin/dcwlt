@@ -77,7 +77,19 @@
             <groupId>com.dcits</groupId>
             <artifactId>dcwlt-common-swagger</artifactId>
         </dependency>
+        <dependency>
+            <groupId>com.dcits</groupId>
+            <artifactId>dcwlt-common-pay</artifactId>
+        </dependency>
 
+        <dependency>
+            <groupId>com.dcits</groupId>
+            <artifactId>dcwlt-api-pay</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.bouncycastle</groupId>
+            <artifactId>bcprov-jdk15on</artifactId>
+        </dependency>
     </dependencies>
 
 </project>
