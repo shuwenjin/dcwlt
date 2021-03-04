@@ -2,7 +2,7 @@ package com.dcits.dcwlt.pay.online.flow;
 
 import com.alibaba.fastjson.JSONObject;
 import com.dcits.dcwlt.common.pay.constant.AppConstant;
-import com.dcits.dcwlt.common.pay.tradeflow.TradeFlowRuner;
+import com.dcits.dcwlt.pay.online.flow.builder.TradeFlowRuner;
 import com.dcits.dcwlt.pay.api.domain.dcep.DCEPHeader;
 import com.dcits.dcwlt.pay.api.domain.dcep.DCEPReqDTO;
 import com.dcits.dcwlt.pay.api.domain.dcep.DCEPRspDTO;
@@ -15,8 +15,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 /**
- * @Time 2020/12/31 15:09
- * @Version 1.0
  * Description:对外接入互联互通报文，公共处理
  */
 @Service
@@ -26,6 +24,9 @@ public class DcepTransInTradeFlow {
 
     @Autowired
     private TransInService transInService;
+
+    @Autowired
+    private TradeFlowRuner tradeFlowRuner;
 
     /**
      * 交易公共入口
@@ -49,7 +50,7 @@ public class DcepTransInTradeFlow {
 
             // 3.交易处理
             String processor = transInService.getTradeProcessor(msgTp);
-            DCEPRspDTO<?> rspMsg = TradeFlowRuner.execute(processor, EcnyTradeContext.getInstance(dcepReqDTO));
+            DCEPRspDTO<?> rspMsg = tradeFlowRuner.execute(processor, EcnyTradeContext.getInstance(dcepReqDTO));
 
             //4、响应报文
             logger.info("响应报文：{}", rspMsg);

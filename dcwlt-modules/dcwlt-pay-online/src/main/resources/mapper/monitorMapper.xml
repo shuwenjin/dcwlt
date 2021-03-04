@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dcits.dcwlt.pay.online.mapper.MonitorMapper">
+
+
+    <!--新增监控数据-->
+    <insert id="insertMonitorData">
+        INSERT INTO pay_comm_monitor(
+        EXCEPTDATE,
+        EXCEPTSERNO,
+        EXCEPTTIME,
+        EXCEPTSCENARIO,
+        EXCEPTPARAMS,
+        EXCEPTCONTEXT,
+        LASTUPDATE,
+        LASTUPTIME)
+        VALUES(
+        <if test="exceptDate != null and exceptDate!='' ">
+            #{exceptDate},
+        </if>
+        <if test="exceptSerNO != null and exceptSerNO!='' ">
+            #{exceptSerNO},
+        </if>
+        <if test="exceptTime != null and exceptTime!='' ">
+            #{exceptTime},
+        </if>
+        <if test="exceptScenario != null and exceptScenario!='' ">
+            #{exceptScenario},
+        </if>
+        <if test="excepParams != null and excepParams!='' ">
+            #{excepParams},
+        </if>
+        <if test="excepContext != null and excepContext!='' ">
+            #{excepContext},
+        </if>
+        #{lastUpDate},
+        #{lastUpTime}
+        )
+    </insert>
+
+    <!--更新监控数据-->
+    <update id="updateMonitorData">
+        UPDATE pay_comm_monitor
+        SET
+        <if test="exceptTime != null and exceptTime!='' ">
+            EXCEPTTIME = #{exceptTime},
+        </if>
+        <if test="exceptScenario != null and exceptScenario!='' ">
+            EXCEPTSCENARIO = #{exceptScenario},
+        </if>
+        <if test="excepParams != null and excepParams!='' ">
+            EXCEPTPARAMS = #{excepParams},
+        </if>
+        <if test="excepContext != null and excepContext!='' ">
+            EXCEPTCONTEXT = #{excepContext},
+        </if>
+        LASTUPDATE = #{lastUpDate},
+        LASTUPTIME = #{lastUpTime}
+        <where>
+            <if test="exceptDate != null and exceptDate!='' ">
+                EXCEPTDATE = #{exceptDate}
+            </if>
+            <if test="exceptSerNO != null and exceptSerNO!='' ">
+                AND EXCEPTSERNO = #{exceptSerNO}
+            </if>
+        </where>
+    </update>
+
+</mapper>

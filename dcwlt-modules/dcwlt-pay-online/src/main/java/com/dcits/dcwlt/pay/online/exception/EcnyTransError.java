@@ -4,7 +4,7 @@ package com.dcits.dcwlt.pay.online.exception;
 import com.dcits.dcwlt.common.pay.exception.TransError;
 
 /**
- * 五羊支付错误码类
+ * 错误码类
  * 样例：ECNY+2位标识位+4位数字
  * 注：000000 标识交易成功。
  * （1）兑出：标识位为“P1”

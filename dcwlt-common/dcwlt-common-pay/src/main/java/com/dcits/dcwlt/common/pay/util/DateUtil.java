@@ -68,18 +68,6 @@ public class DateUtil {
 		return STANDARD_DATETIME_FORMATTER.format(new Date());
 	}
 	
-//	/**
-//	 * @Description:获取ISODateTime  yyyy-MM-dd'T'HH:mm:ss	-->yyyyMMddHHmmss
-//	 * @return
-//	 * @throws java.text.ParseException
-//	 */
-//	public static String getISODateTime(String dateTime) throws ParseException {
-//		//判断入参是否为空，为空取当前时间
-//		if (StringUtil.isBlank(dateTime)) {
-//			return getISODateTime();
-//		}
-//		return STANDARD_DATETIME_FORMATTER.format(DateTimeUtil.DEFAULT_DATETIME_FORMATTER.parse(dateTime));
-//	}
 
 	/**
 	 * @Description: 获取日期时间精确到秒
@@ -89,57 +77,6 @@ public class DateUtil {
 	public static String formatSeconds() {
 		return DEFAULT_SECONDS_FORMATTER.format(new Date());
 	}
-//
-//
-//	/**
-//	 * @Description: 获取yyyyMMddHHmmss格式入库
-//	 * @param dateTime yyyy-MM-dd'T'HH:mm:ss 转换为yyyyMMddHHmmss
-//	 * @return
-//	 * @throws java.text.ParseException
-//	 */
-//	public static String formatISODateTime(String dateTime) throws ParseException {
-//		return DateTimeUtil.DEFAULT_DATETIME_FORMATTER.format(STANDARD_DATETIME_FORMATTER.parse(dateTime));
-//	}
-//
-//	/**
-//	 * @Description: 获取yyyyMMdd格式入库
-//	 * @param dateTime yyyy-MM-dd'T'HH:mm:ss 转换为yyyyMMdd
-//	 * @return
-//	 * @throws java.text.ParseException
-//	 */
-//	public static String formatISODateTimeToDate(String dateTime) throws ParseException {
-//		return DateTimeUtil.DEFAULT_DATE_FORMATTER.format(STANDARD_DATETIME_FORMATTER.parse(dateTime));
-//	}
-//
-//	/**
-//	 * @Description: 获取yyyyMMdd格式入库
-//	 * @param dateTime yyyy-MM-dd'T'HH:mm:ss 转换为yyyyMMddHHmmss
-//	 * @return
-//	 * @throws java.text.ParseException
-//	 */
-//	public static String formatISODate(String dateTime) throws ParseException {
-//		return DateTimeUtil.DEFAULT_DATE_FORMATTER.format(STANDARD_DATETIME_FORMATTER.parse(dateTime));
-//	}
-//
-//	/**
-//	 * @Description: 获取HHmmss格式入库
-//	 * @param dateTime yyyy-MM-dd'T'HH:mm:ss 转换为yyyyMMddHHmmss
-//	 * @return
-//	 * @throws java.text.ParseException
-//	 */
-//	public static String formatISOTime(String dateTime) throws ParseException {
-//		return DateTimeUtil.DEFAULT_TIME_FORMATTER.format(STANDARD_DATETIME_FORMATTER.parse(dateTime));
-//	}
-//
-//	/**
-//	 * @Description: 获取HHmmss格式入库
-//	 * @param dateTime yyyy-MM-dd'T'HH:mm:ss 转换为yyyyMMddHHmmss
-//	 * @return
-//	 * @throws java.text.ParseException
-//	 */
-//	public static String formatISOTimeToDefaultDateTime(String dateTime) throws ParseException {
-//		return DateTimeUtil.DEFAULT_TIME_FORMATTER.format(STANDARD_DATETIME_FORMATTER.parse(dateTime));
-//	}
 
 	/**
 	 * @Description:获取yyyy-MM-dd'T'HH:mm:ss格式
@@ -181,29 +118,6 @@ public class DateUtil {
 	public static String formatMilliTime() {
 		return DEFAULT_MILLITIME_FORMATTER.format(new Date());
 	}
-//
-//	/**
-//	 * @Description: 加减天数
-//	 * 格式yyyyMMdd
-//	 * @param amount 偏量值
-//	 * @return
-//	 */
-//	public static String plusDaysToString(int amount){
-//		return DEFAULT_DATE_FORMATTER.format(DateTimeUtil.addDays(new Date(),amount));
-//	}
-//
-//	/**
-//	 * 时间字符串加减天厨yyyyMMdd
-//	 *
-//	 * @param dateStr 时间字符串
-//	 * @param amount  加减天数
-//	 * @return 加减天数后的时间字符串
-//	 * @throws java.text.ParseException 时间字符串格式异常时
-//	 */
-//	public static String plusDaysToString(String dateStr, int amount) throws ParseException {
-//		final Date date = DateTimeUtil.parseDate(dateStr);
-//		return DEFAULT_DATE_FORMATTER.format(DateTimeUtil.addDays(date, amount));
-//	}
 
 	/**
 	 * @// TODO: 2020/11/16  use DateTimeFormatter to replace SimpleDateFormat
@@ -240,18 +154,6 @@ public class DateUtil {
 		return DEFAULT_TIME_FORMATTER.format(new Date());
 	}
 
-	/**
-	 * 时间字符串加减天厨yyyy-MM-dd'T'HH:mm:ss
-	 *
-	 * @param dateStr 时间字符串
-	 * @param amount  加减天数
-	 * @return 加减天数后的时间字符串
-	 * @throws java.text.ParseException 时间字符串格式异常时
-	 */
-//	public static String plusISODateTimeToString(String dateStr, int amount) throws ParseException {
-//		final Date date = STANDARD_DATETIME_FORMATTER.parse(dateStr);
-//		return STANDARD_DATETIME_FORMATTER.format(DateTimeUtil.addDays(date, amount));
-//	}
 
 	/**
 	 * @Description: 获取yyyyMMdd格式
@@ -263,12 +165,21 @@ public class DateUtil {
 	}
 
 	/**
-	 * @Description: 获取HHmmss格式
-	 *  格式：HHmmss
+	 * @Description: 获取yyyyMMddHHmmss格式
+	 *  格式：yyyyMMddHHmmss
 	 * @return
 	 */
 	public static String getSysTime() {
-		return DEFAULT_TIME_FORMATTER.format(new Date());
+		return DEFAULT_SECONDS_FORMATTER.format(new Date());
+	}
+
+	/**
+	 * @Description: 获取yyyyMMddHHmmss格式
+	 *  格式：yyyyMMddHHmmss
+	 * @return
+	 */
+	public static String getSystemTime() {
+		return System.currentTimeMillis()+"";
 	}
 
 	/**

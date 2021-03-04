@@ -13,7 +13,7 @@ public class AppConstant {
     /**
      * 行内系统标识
      */
-    public static final String ECNY_SYS_ID                   = "ECNY";       //五羊支付子应用
+    public static final String ECNY_SYS_ID                   = "ECNY";       //支付子应用
     public static final String COP_SYS_ID                    = "COP";        //金融开放平台
     public static final String CRPM_SYS_ID                   = "CRPM";       //银行核心前置
     public static final String BDRD_SYS_ID                   = "BDRD";       //大数据零售智能风控子应用

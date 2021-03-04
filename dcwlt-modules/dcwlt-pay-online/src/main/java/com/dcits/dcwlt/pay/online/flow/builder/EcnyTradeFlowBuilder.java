@@ -16,8 +16,6 @@ import java.util.List;
  * 交易流程构造器
  * 
  * 针对不同的交易场景可以制定不同改的交易流程
- * 
- * @author liuyuanhui
  *
  */
 public class EcnyTradeFlowBuilder {

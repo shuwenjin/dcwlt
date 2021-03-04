@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dcits.dcwlt.pay.online.mapper.PayTransDtlNonfMapper">
+    <!-- 新增报文登记信息 -->
+    <insert id="insertPayTransDtlNonf">
+            INSERT INTO pay_pay_transdtl_nonf(
+            MSGID,
+            PAYDATE,
+            PAYTIME,
+            PAYSERNO,
+            PKGNO,
+            DRCT,
+            TRADESTATUS,
+            SENDERDATETIME,
+            INSTGDRCTPTY,
+            INSTDDRCTPTY,
+            OPTERATIONTYPE,
+            PROCSTATUS,
+            REJECTCODE,
+            REJECTINFO,
+            TLRNO,
+            REMARK,
+            MESSAGECONTEXT,
+            LASTUPDATE,
+            LASTUPTIME
+            )
+            VALUE (
+            #{msgId},
+            #{payDate},
+            #{payTime},
+            #{paySerNo},
+            #{pkgNo},
+            #{drct},
+            #{tradeStatus},
+            #{senderDateTime},
+            #{instgDrctPty},
+            #{instdDrctPty},
+            #{opterationType},
+            #{procStatus},
+            #{rejectCode},
+            #{rejectInfo},
+            #{tlrNo},
+            #{remark},
+            #{messageContext},
+            #{lastUpDate},
+            #{lastUpTime}
+            )
+    </insert>
+
+    <update id="updatePayTransDtlNonf">
+        UPDATE pay_pay_transdtl_nonf
+        SET
+        PAYDATE =         #{payDate},
+        PAYTIME =         #{payTime},
+        PAYSERNO =       #{paySerNo},
+        PKGNO =           #{pkgNo},
+        DRCT =             #{drct},
+        TRADESTATUS =     #{tradeStatus},
+        SENDERDATETIME = #{senderDateTime},
+        INSTGDRCTPTY =   #{instgDrctPty},
+        INSTDDRCTPTY =   #{instdDrctPty},
+        OPTERATIONTYPE =  #{opterationType},
+        PROCSTATUS =      #{procStatus},
+        REJECTCODE =      #{rejectCode},
+        REJECTINFO =      #{rejectInfo},
+        TLRNO      =      #{tlrNo},
+        REMARK =           #{remark},
+        MESSAGECONTEXT =  #{messageContext},
+        LASTUPDATE =      #{lastUpDate},
+        LASTUPTIME =      #{lastUpTime}
+        WHERE MSGID = #{msgId}
+    </update>
+
+    <select id="queryPayTransDtlNonf" resultType="com.dcits.dcwlt.pay.api.model.PayTransDtlNonfDO">
+        SELECT
+        E.msgId msgId,
+        E.PAYDATE payDate,
+        E.PAYTIME payTime,
+        E.PAYSERNO paySerNo,
+        E.PKGNO pkgNo,
+        E.DRCT drct,
+        E.TRADESTATUS tradeStatus
+        E.SENDERDATETIME senderDateTime,
+        E.INSTGDRCTPTY instgDrctPty,
+        E.INSTDDRCTPTY instdDrctPty,
+        E.OPTERATIONTYPE opterationType,
+        E.PROCSTATUS procStatus,
+        E.REJECTCODE rejectCode,
+        E.REJECTINFO rejectInfo,
+        E.TLRNO tlrNo,
+        E.REMARK remark,
+        E.MESSAGECONTEXT messageContext,
+        E.LASTUPDATE lastUpDate,
+        E.LASTUPTIME lastUpTime,
+        FROM pay_pay_transdtl_nonf E
+        <where>
+            <if test="msgId != null and msgId != ''">
+                E.MSGID = #{msgId}
+            </if>
+        </where>
+    </select>
+</mapper>

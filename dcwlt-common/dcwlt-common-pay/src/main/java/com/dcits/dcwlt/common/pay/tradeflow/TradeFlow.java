@@ -2,6 +2,7 @@ package com.dcits.dcwlt.common.pay.tradeflow;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Component;
 
 import java.lang.invoke.SerializedLambda;
 import java.lang.reflect.Method;
@@ -12,6 +13,7 @@ import java.util.List;
  *
  * @time 2020/12/20 17:14
  */
+@Component
 public class TradeFlow {
 
     private static final Logger logger = LoggerFactory.getLogger(TradeFlow.class);

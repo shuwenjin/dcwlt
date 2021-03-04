@@ -2,14 +2,16 @@ package com.dcits.dcwlt.pay.online.config;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.Resource;
+import org.springframework.stereotype.Component;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 /**
- * @Time 2020/12/31 23:16
- * @Version 1.0
  * Description:互联互通报文映射配置类
  * <bean id="EcnyTradeConfig" class="com.cgb.ecny.base.EcnyTradeConfig" init-method="init">
  * <property name="mappings">
@@ -38,6 +40,7 @@ public class EcnyTradeConfig {
 
 
     public Map<String, Map<String, String>> getTradeMappings() {
+        //读取Resource目录下的XML文件
         return tradeMappings;
     }
 

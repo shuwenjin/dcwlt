@@ -28,7 +28,7 @@ public class DCEPReqDTO<T extends DCEPReqBody> extends BaseReqDto {
 
 
     /**
-     * 往账请求互联互通时使用
+     * 来账请求互联互通时使用
      *
      * @param dcepHead 互联互通报文头
      * @param body     报文体

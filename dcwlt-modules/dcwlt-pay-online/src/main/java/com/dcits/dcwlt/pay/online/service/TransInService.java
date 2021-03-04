@@ -30,9 +30,6 @@ public class TransInService {
     @Autowired(required = false)
     private EcnyTradeConfig ecnyTradeConfig;
 
-//    @Autowired
-//    private IIdempotentRepository idempotentRepository;
-
 
     /**
      * 记录请求信息，堵重使用
