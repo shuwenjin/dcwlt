@@ -2,6 +2,7 @@ package com.dcits.dcwlt.pay.api.domain.dcep;
 
 import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.annotation.JSONField;
+import com.dcits.dcwlt.common.pay.constant.AppConstant;
 import com.dcits.dcwlt.pay.api.domain.BaseRespDto;
 
 
@@ -65,7 +66,7 @@ public class DCEPRspDTO<T extends DCEPRspBody> extends BaseRespDto {
         return (DCEPRspDTO<T>) DCEPRspDTO.newInstance(dcepHeader, body);
     }
 
-    @JSONField(name = "ecnyHead")
+    @JSONField(name = AppConstant.DCEP_HEAD)
     public DCEPHeader getDcepHead() {
         return dcepHead;
     }
@@ -75,7 +76,7 @@ public class DCEPRspDTO<T extends DCEPRspBody> extends BaseRespDto {
     }
 
 
-    @JSONField(name = "body")
+    @JSONField(name = AppConstant.DCEP_BODY)
     public T getBody() {
         return body;
     }

@@ -78,7 +78,7 @@ public class DCEPReqDTO<T extends DCEPReqBody> extends BaseReqDto {
         return newInstance(dcepHeader, body);
     }
 
-    @JSONField(name = "ecnyHead")
+    @JSONField(name = AppConstant.DCEP_HEAD)
     public DCEPHeader getDcepHead() {
         return dcepHead;
     }
@@ -88,7 +88,7 @@ public class DCEPReqDTO<T extends DCEPReqBody> extends BaseReqDto {
     }
 
 
-    @JSONField(name = "body")
+    @JSONField(name = AppConstant.DCEP_BODY)
     public T getBody() {
         return body;
     }
