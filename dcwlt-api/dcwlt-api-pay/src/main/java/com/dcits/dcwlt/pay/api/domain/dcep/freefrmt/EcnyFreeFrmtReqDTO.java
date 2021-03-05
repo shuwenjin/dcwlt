@@ -1,18 +1,17 @@
 package com.dcits.dcwlt.pay.api.domain.dcep.freefrmt;
 
 import com.alibaba.fastjson.annotation.JSONField;
-
-import com.dcits.dcwlt.pay.api.domain.dcep.DCEPReqBody;
+import com.dcits.dcwlt.pay.api.domain.ecny.ECNYReqBody;
 import org.hibernate.validator.constraints.Length;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 
 /**
- *
+ * @author wanyangwei
  * @desc 自由格式请求互联互通DTO
  */
-public class EcnyFreeFrmtReqDTO extends DCEPReqBody {
+public class EcnyFreeFrmtReqDTO extends ECNYReqBody {
     @NotNull
     @Length(max = 14)
     @Valid

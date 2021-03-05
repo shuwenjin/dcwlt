@@ -3,8 +3,8 @@ package com.dcits.dcwlt.pay.online.service.impl;
 import com.dcits.dcwlt.common.pay.constant.AppConstant;
 import com.dcits.dcwlt.common.pay.enums.MsgTpEnum;
 import com.dcits.dcwlt.common.pay.enums.ProcessStsCdEnum;
+import com.dcits.dcwlt.common.pay.sequence.service.impl.GenerateCodeServiceImpl;
 import com.dcits.dcwlt.common.pay.util.DateUtil;
-import com.dcits.dcwlt.common.pay.util.GenerateCodeUtil;
 import com.dcits.dcwlt.pay.api.domain.dcep.common.GrpHdr;
 import com.dcits.dcwlt.pay.api.domain.dcep.freefrmt.FreeFrmt;
 import com.dcits.dcwlt.pay.api.model.PayTransDtlNonfDO;
@@ -30,6 +30,9 @@ public class FreeFormatServiceimpl implements IFreeFormatService {
     @Autowired
     private PayTransDtlNonfMapper payTransDtlNonfmapper;
 
+    @Autowired
+    private GenerateCodeServiceImpl generateCodeService;
+
     /*
      * 保存自由格式
      * @param freeFrmt 自由格式报文
@@ -46,7 +49,7 @@ public class FreeFormatServiceimpl implements IFreeFormatService {
         //平台时间
         payTransDtlNonfDO.setPayTime(DateUtil.getDefaultTime());
         //平台流水
-        payTransDtlNonfDO.setPaySerNo(GenerateCodeUtil.generatePlatformFlowNo());
+        payTransDtlNonfDO.setPaySerNo(generateCodeService.generatePlatformFlowNo());
         //报文标识号
         payTransDtlNonfDO.setMsgId(grpHdr.getMsgId());
         //报文发送时间(原格式为19位2021-01-09T11:15:05,转为14位20210109111505)

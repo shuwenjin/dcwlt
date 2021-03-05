@@ -6,8 +6,11 @@ package com.dcits.dcwlt.pay.online;
 import com.dcits.dcwlt.common.security.annotation.EnableCustomConfig;
 import com.dcits.dcwlt.common.security.annotation.EnableRyFeignClients;
 import com.dcits.dcwlt.common.swagger.annotation.EnableCustomSwagger2;
+import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.client.SpringCloudApplication;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.ImportResource;
 
 @EnableCustomConfig
@@ -15,6 +18,7 @@ import org.springframework.context.annotation.ImportResource;
 @EnableRyFeignClients
 @SpringCloudApplication
 @ImportResource("classpath:applicationContext.xml")
+@ComponentScan(value = "com.dcits.dcwlt")
 public class DcwltPayOnlineApplication {
     public static void main(String[] args) {
         SpringApplication.run(DcwltPayOnlineApplication.class, args);

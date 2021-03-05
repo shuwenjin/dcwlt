@@ -1,31 +1,28 @@
 {
-	"head": {
-		"Ver": "01",
-		"SndDtTm": "2021-03-01T17:27:00",
-		"MsgTp": "dcep.401.001.01",
-		"MsgSn": "202102170021433000001490200070004977",
-		"Sender": "G4001011000013",
-		"Receiver": "C1030644021075",
-		"SignSN": "01",
-		"NcrptnSN": "01",
-		"DgtlEnvlp": "01"
-	},
-	"body": {
-		"FreeFrmt": {
-			"GrpHdr": {
-				"MsgId": "20210217002143300000149020007000",
-				"CreDtTm": "2021-03-01T17:27:00",
-				"InstgPty": {
-					"InstgDrctPty": "G4001011000013"
-				},
-				"InstdPty": {
-					"InstdDrctPty": "C1030644021075"
-				},
-				"Rmk": "自由格式"
-			},
-			"FreeFrmtInf": {
-				"MsgCnt": "自由格式报文"
-			}
-		}
-	}
+        "Header": {
+            "Sender": "C1030644021075",
+            "SignSN": "01",
+            "Ver": "01",
+            "Receiver": "C1010311000014",
+            "MsgSN": "20210113106040120333044574013001",
+            "SndDtTm": "2021-01-13T20:37:31",
+            "MsgTp": "dcep.401.001.01"
+        },
+        "Body": {
+            "FreeFrmt": {
+                "GrpHdr": {
+                    "CreDtTm": "2021-01-13T20:33:33",
+                    "InstdPty": {
+                        "InstdDrctPty": "C1010311000014"
+                    },
+                    "InstgPty": {
+                        "InstgDrctPty": "C1030644021075"
+                    },
+                    "MsgId": "20210113106040120333044574013001"
+                },
+                "FreeFrmtInf": {
+                    "MsgCnt": "接收机*:C1010311000014"
+                }
+            }
+        }
 }

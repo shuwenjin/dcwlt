@@ -2,10 +2,10 @@ package com.dcits.dcwlt.pay.online.flow.receive;
 
 import com.dcits.dcwlt.common.pay.constant.AppConstant;
 import com.dcits.dcwlt.common.pay.enums.MsgTpEnum;
+import com.dcits.dcwlt.common.pay.sequence.service.IGenerateCodeService;
 import com.dcits.dcwlt.common.pay.tradeflow.TradeContext;
 import com.dcits.dcwlt.common.pay.tradeflow.TradeFlow;
 import com.dcits.dcwlt.common.pay.util.DateUtil;
-import com.dcits.dcwlt.common.pay.util.GenerateCodeUtil;
 import com.dcits.dcwlt.pay.api.domain.dcep.DCEPHeader;
 import com.dcits.dcwlt.pay.api.domain.dcep.DCEPReqDTO;
 import com.dcits.dcwlt.pay.api.domain.dcep.DCEPRspDTO;
@@ -44,6 +44,9 @@ public class FreeFrmt401RTradeFlow {
 
     @Autowired
     private MonitorMapper monitorMapper;
+
+    @Autowired
+    private IGenerateCodeService generateCodeService;
 
 
     @Bean(name = FREEFRMT_TRADE_FLOW)
@@ -118,7 +121,7 @@ public class FreeFrmt401RTradeFlow {
             //异常登记日期
             monitorDO.setExceptDate(DateUtil.getDefaultDate());
             //异常登记流水
-            monitorDO.setExceptSerNO(GenerateCodeUtil.generatePlatformFlowNo());
+            monitorDO.setExceptSerNO(generateCodeService.generatePlatformFlowNo());
             //异常交易场景
             monitorDO.setExceptScenario(MsgTpEnum.DCEP401.getCode());
 
