@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dcits.dcwlt.pay.batch.mapper.PartyInfoDOMapper">
+
+    <resultMap type="com.dcits.dcwlt.pay.api.model.PartyInfoDO" id="PartyInfoDOResult">
+        <result property="partyID" column="partyid"/>
+        <result property="partyType" column="partytype"/>
+        <result property="partyName" column="partyname"/>
+        <result property="partyAlias" column="partyalias"/>
+        <result property="partyStatus" column="partystatus"/>
+        <result property="status" column="status"/>
+        <result property="contact" column="contact"/>
+        <result property="telephone" column="telephone"/>
+        <result property="mail" column="mail"/>
+        <result property="fax" column="fax"/>
+        <result property="effectDate" column="effectdate"/>
+        <result property="inEffectiveDate" column="ineffectivedate"/>
+        <result property="changeNumber" column="changenumber"/>
+        <result property="changeCircleTimes" column="changecircletimes"/>
+        <result property="lastUpDate" column="lastupdate"/>
+        <result property="lastUpTime" column="lastuptime"/>
+    </resultMap>
+
+    <sql id="selectPartyInfoDOVo">
+        select partyid, partytype, partyname, partyalias, partystatus, status, contact, telephone, mail, fax, effectdate, ineffectivedate, changenumber, changecircletimes, lastupdate, lastuptime from pay_comm_party
+    </sql>
+
+    <select id="selectPartyInfoDOList" parameterType="com.dcits.dcwlt.pay.api.model.PartyInfoDO" resultMap="PartyInfoDOResult">
+        <include refid="selectPartyInfoDOVo"/>
+        <where>
+            <if test="partyID != null  and partyID != ''">and partyid = #{partyID}</if>
+            <if test="partyType != null">and partytype = #{partyType}</if>
+            <if test="partyName != null  and partyName != ''">and partyname = #{partyName}</if>
+            <if test="partyAlias != null  and partyAlias != ''">and partyalias = #{partyAlias}</if>
+        </where>
+    </select>
+
+    <select id="selectPartyInfoDOById" parameterType="String" resultMap="PartyInfoDOResult">
+        <include refid="selectPartyInfoDOVo"/>
+        where partyid = #{partyID}
+    </select>
+
+    <insert id="insertPartyInfoDO" parameterType="com.dcits.dcwlt.pay.api.model.PartyInfoDO">
+        insert into pay_comm_party
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="partyID != null">partyID,</if>
+            <if test="partyType != null">partyType,</if>
+            <if test="partyName != null">partyName,</if>
+            <if test="partyAlias != null">partyAlias,</if>
+            <if test="partyStatus != null">partyStatus,</if>
+            <if test="status != null">status,</if>
+            <if test="contact != null">contact,</if>
+            <if test="telephone != null">telephone,</if>
+            <if test="mail != null">mail,</if>
+            <if test="fax != null">fax,</if>
+            <if test="effectDate != null">effectDate,</if>
+            <if test="inEffectiveDate != null">inEffectiveDate,</if>
+            <if test="changeNumber != null">changeNumber,</if>
+            <if test="changeCircleTimes != null">changeCircleTimes,</if>
+            <if test="lastUpDate != null">lastUpDate,</if>
+            <if test="lastUpTime != null">lastUpTime,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="partyID != null">#{partyID},</if>
+            <if test="partyType != null">#{partyType},</if>
+            <if test="partyName != null">#{partyName},</if>
+            <if test="partyAlias != null">#{partyAlias},</if>
+            <if test="partyStatus != null">#{partyStatus},</if>
+            <if test="status != null">#{status},</if>
+            <if test="contact != null">#{contact},</if>
+            <if test="telephone != null">#{telephone},</if>
+            <if test="mail != null">#{mail},</if>
+            <if test="fax != null">#{fax},</if>
+            <if test="effectDate != null">#{effectDate},</if>
+            <if test="inEffectiveDate != null">#{inEffectiveDate},</if>
+            <if test="changeNumber != null">#{changeNumber},</if>
+            <if test="changeCircleTimes != null">#{changeCircleTimes},</if>
+            <if test="lastUpDate != null">#{lastUpDate},</if>
+            <if test="lastUpTime != null">#{lastUpTime},</if>
+        </trim>
+    </insert>
+
+    <update id="updatePartyInfoDO" parameterType="com.dcits.dcwlt.pay.api.model.PartyInfoDO">
+        update pay_comm_party
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="partyType != null">partytype = #{partyType},</if>
+            <if test="partyName != null">partyname = #{partyName},</if>
+            <if test="partyAlias != null">partyalias = #{partyAlias},</if>
+            <if test="partyStatus != null">partystatus = #{partyStatus},</if>
+            <if test="status != null">status = #{status},</if>
+            <if test="contact != null">contact = #{contact},</if>
+            <if test="telephone != null">telephone = #{telephone},</if>
+            <if test="mail != null">mail = #{mail},</if>
+            <if test="fax != null">fax = #{fax},</if>
+            <if test="effectDate != null">effectdate = #{effectDate},</if>
+            <if test="inEffectiveDate != null">ineffectivedate = #{inEffectiveDate},</if>
+            <if test="changeNumber != null">changenumber = #{changeNumber},</if>
+            <if test="changeCircleTimes != null">changecircletimes = #{changeCircleTimes},</if>
+            <if test="lastUpDate != null">lastupdate = #{lastUpDate},</if>
+            <if test="lastUpTime != null">lastuptime = #{lastUpTime},</if>
+        </trim>
+        where partyid = #{partyid}
+    </update>
+
+    <delete id="deletePartyInfoDOById" parameterType="String">
+        delete from pay_comm_party where partyid = #{partyID}
+    </delete>
+
+    <delete id="deletePartyInfoDOByIds" parameterType="String">
+        delete from pay_comm_party where partyid in
+        <foreach item="partyID" collection="array" open="(" separator="," close=")">
+            #{partyID}
+        </foreach>
+    </delete>
+</mapper>

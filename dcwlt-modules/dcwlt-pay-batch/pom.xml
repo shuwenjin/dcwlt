@@ -78,6 +78,10 @@
             <groupId>com.dcits</groupId>
             <artifactId>dcwlt-common-swagger</artifactId>
         </dependency>
+        <dependency>
+            <groupId>com.dcits</groupId>
+            <artifactId>dcwlt-api-pay</artifactId>
+        </dependency>
 
     </dependencies>
 

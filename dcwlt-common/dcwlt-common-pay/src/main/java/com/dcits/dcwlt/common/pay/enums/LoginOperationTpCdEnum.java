@@ -11,7 +11,7 @@ import java.util.Set;
  * <p>登录退出操作类型</p>
  */
 public enum LoginOperationTpCdEnum {
-    OT00("OT00","登录"),
+    OT00(" ","登录"),
     OT01("OT01","退出")
     ;
 

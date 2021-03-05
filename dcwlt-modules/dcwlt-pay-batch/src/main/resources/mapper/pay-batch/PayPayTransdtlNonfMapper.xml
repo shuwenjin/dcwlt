@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dcits.dcwlt.pay.batch.mapper.PayPayTransdtlNonfMapper">
+    
+    <resultMap type="com.dcits.dcwlt.pay.api.model.PayTransDtlNonfDO" id="PayPayTransdtlNonfResult">
+        <result property="msgId"    column="msgid"    />
+        <result property="payDate"    column="paydate"    />
+        <result property="payTime"    column="paytime"    />
+        <result property="paySerNo"    column="payserno"    />
+        <result property="pkgNo"    column="pkgno"    />
+        <result property="drct"    column="drct"    />
+        <result property="tradeStatus"    column="tradestatus"    />
+        <result property="senderDateTime"    column="senderdatetime"    />
+        <result property="instgDrctPty"    column="instgdrctpty"    />
+        <result property="instdDrctPty"    column="instddrctpty"    />
+        <result property="opterationType"    column="opterationtype"    />
+        <result property="procStatus"    column="procstatus"    />
+        <result property="rejectCode"    column="rejectcode"    />
+        <result property="rejectInfo"    column="rejectinfo"    />
+        <result property="tlrNo"    column="tlrno"    />
+        <result property="remark"    column="remark"    />
+        <result property="messageContext"    column="messagecontext"    />
+        <result property="lastUpDate"    column="lastupdate"    />
+        <result property="lastUpTime"    column="lastuptime"    />
+    </resultMap>
+
+    <sql id="selectPayPayTransdtlNonfVo">
+        select msgid, paydate, paytime, payserno, pkgno, drct, tradestatus, senderdatetime, instgdrctpty, instddrctpty, opterationtype, procstatus, rejectcode, rejectinfo, tlrno, remark, messagecontext, lastupdate, lastuptime from pay_pay_transdtl_nonf
+    </sql>
+
+    <select id="selectPayPayTransdtlNonfList" parameterType="com.dcits.dcwlt.pay.api.model.PayTransDtlNonfDO" resultMap="PayPayTransdtlNonfResult">
+        <include refid="selectPayPayTransdtlNonfVo"/>
+        <where>  
+            <if test="msgId != null  and msgId != ''"> and msgid = #{msgId}</if>
+            <if test="payDate != null  and payDate != ''"> and paydate = #{payDate}</if>
+            <if test="paySerNo != null  and paySerNo != ''"> and payserno = #{paySerNo}</if>
+            <if test="pkgNo != null  and pkgNo != ''"> and pkgno = #{pkgNo}</if>
+        </where>
+    </select>
+    
+    <select id="selectPayPayTransdtlNonfById" parameterType="String" resultMap="PayPayTransdtlNonfResult">
+        <include refid="selectPayPayTransdtlNonfVo"/>
+        where msgid = #{msgId}
+    </select>
+        
+    <insert id="insertPayPayTransdtlNonf" parameterType="com.dcits.dcwlt.pay.api.model.PayTransDtlNonfDO">
+        insert into pay_pay_transdtl_nonf
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="msgId != null">msgid,</if>
+            <if test="payDate != null and payDate != ''">paydate,</if>
+            <if test="payTime != null">paytime,</if>
+            <if test="paySerNo != null">payserno,</if>
+            <if test="pkgNo != null">pkgno,</if>
+            <if test="drct != null">drct,</if>
+            <if test="tradeStatus != null">tradestatus,</if>
+            <if test="senderDateTime != null">senderdatetime,</if>
+            <if test="instgDrctPty != null">instgdrctpty,</if>
+            <if test="instdDrctPty != null">instddrctpty,</if>
+            <if test="opterationType != null">opterationtype,</if>
+            <if test="procStatus != null">procstatus,</if>
+            <if test="rejectCode != null">rejectcode,</if>
+            <if test="rejectInfo != null">rejectinfo,</if>
+            <if test="tlrNo != null">tlrno,</if>
+            <if test="remark != null">remark,</if>
+            <if test="messageContext != null">messagecontext,</if>
+            <if test="lastUpDate != null">lastupdate,</if>
+            <if test="lastUpTime != null">lastuptime,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="msgId != null">#{msgid},</if>
+            <if test="payDate != null and paydate != ''">#{paydate},</if>
+            <if test="payTime != null">#{paytime},</if>
+            <if test="paySerNo != null">#{payserno},</if>
+            <if test="pkgNo != null">#{pkgno},</if>
+            <if test="drct != null">#{drct},</if>
+            <if test="tradeStatus != null">#{tradestatus},</if>
+            <if test="senderDateTime != null">#{senderdatetime},</if>
+            <if test="instgDrctPty != null">#{instgdrctpty},</if>
+            <if test="instdDrctPty != null">#{instddrctpty},</if>
+            <if test="opterationType != null">#{opterationtype},</if>
+            <if test="procStatus != null">#{procstatus},</if>
+            <if test="rejectCode != null">#{rejectcode},</if>
+            <if test="rejectInfo != null">#{rejectinfo},</if>
+            <if test="tlrNo != null">#{tlrno},</if>
+            <if test="remark != null">#{remark},</if>
+            <if test="messageContext != null">#{messagecontext},</if>
+            <if test="lastUpDate != null">#{lastupdate},</if>
+            <if test="lastUpTime != null">#{lastuptime},</if>
+         </trim>
+    </insert>
+
+    <update id="updatePayPayTransdtlNonf" parameterType="com.dcits.dcwlt.pay.api.model.PayTransDtlNonfDO">
+        update pay_pay_transdtl_nonf
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="paydate != null and paydate != ''">paydate = #{paydate},</if>
+            <if test="paytime != null">paytime = #{paytime},</if>
+            <if test="payserno != null">payserno = #{payserno},</if>
+            <if test="pkgno != null">pkgno = #{pkgno},</if>
+            <if test="drct != null">drct = #{drct},</if>
+            <if test="tradestatus != null">tradestatus = #{tradestatus},</if>
+            <if test="senderdatetime != null">senderdatetime = #{senderdatetime},</if>
+            <if test="instgdrctpty != null">instgdrctpty = #{instgdrctpty},</if>
+            <if test="instddrctpty != null">instddrctpty = #{instddrctpty},</if>
+            <if test="opterationType != null">opterationtype = #{opterationType},</if>
+            <if test="procstatus != null">procstatus = #{procstatus},</if>
+            <if test="rejectcode != null">rejectcode = #{rejectcode},</if>
+            <if test="rejectinfo != null">rejectinfo = #{rejectinfo},</if>
+            <if test="tlrno != null">tlrno = #{tlrno},</if>
+            <if test="remark != null">remark = #{remark},</if>
+            <if test="messagecontext != null">messagecontext = #{messagecontext},</if>
+            <if test="lastupdate != null">lastupdate = #{lastupdate},</if>
+            <if test="lastuptime != null">lastuptime = #{lastuptime},</if>
+        </trim>
+        where msgid = #{msgid}
+    </update>
+
+    <delete id="deletePayPayTransdtlNonfById" parameterType="String">
+        delete from pay_pay_transdtl_nonf where msgid = #{msgid}
+    </delete>
+
+    <delete id="deletePayPayTransdtlNonfByIds" parameterType="String">
+        delete from pay_pay_transdtl_nonf where msgid in 
+        <foreach item="msgid" collection="array" open="(" separator="," close=")">
+            #{msgid}
+        </foreach>
+    </delete>
+</mapper>

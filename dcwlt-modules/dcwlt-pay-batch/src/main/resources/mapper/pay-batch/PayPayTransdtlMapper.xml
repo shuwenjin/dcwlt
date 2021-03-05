@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dcits.dcwlt.pay.batch.mapper.PayPayTransdtlMapper">
+
+    <resultMap type="com.dcits.dcwlt.pay.api.model.PayTransDtlInfoDO" id="PayPayTransdtlResult">
+        <result property="payDate" column="paydate"/>
+        <result property="paySerno" column="paySerno"/>
+        <result property="payTime" column="paytime"/>
+        <result property="direct" column="direct"/>
+        <result property="payFlag" column="payflag"/>
+        <result property="operStep" column="operstep"/>
+        <result property="operStatus" column="operstatus"/>
+        <result property="trxStatus" column="trxstatus"/>
+        <result property="trxRetCode" column="trxretcode"/>
+        <result property="trxRetMsg" column="trxretmsg"/>
+        <result property="coreProcStatus" column="coreprocstatus"/>
+        <result property="coreReqDate" column="corereqdate"/>
+        <result property="coreReqSerno" column="corereqserno"/>
+        <result property="coreAcctDate" column="coreacctdate"/>
+        <result property="coreSerno" column="coreserno"/>
+        <result property="coreRetCode" column="coreretcode"/>
+        <result property="coreRetMsg" column="coreretmsg"/>
+        <result property="payPathDateTime" column="paypathdatetime"/>
+        <result property="payPathSerno" column="paypathserno"/>
+        <result property="pathProcStatus" column="pathprocstatus"/>
+        <result property="payPathRspStatus" column="paypathrspstatus"/>
+        <result property="payPathRetCode" column="paypathretcode"/>
+        <result property="payPathRetMsg" column="paypathretmsg"/>
+        <result property="payPathRetDate" column="paypathretdate"/>
+        <result property="payPathRetSerno" column="paypathretserno"/>
+        <result property="batchId" column="batchid"/>
+        <result property="busiChnl" column="busichnl"/>
+        <result property="busiChnl2" column="busichnl2"/>
+        <result property="busiSysDate" column="busisysdate"/>
+        <result property="busiSysSerno" column="busisysserno"/>
+        <result property="busiSysTime" column="busisystime"/>
+        <result property="msgType" column="msgtype"/>
+        <result property="busiType" column="busitype"/>
+        <result property="busiKind" column="busikind"/>
+        <result property="instgPty" column="instgpty"/>
+        <result property="instdPty" column="instdpty"/>
+        <result property="amount" column="amount"/>
+        <result property="tradeFundSource" column="tradefundsource"/>
+        <result property="tradePurpose" column="tradepurpose"/>
+        <result property="payerPtyId" column="payerptyid"/>
+        <result property="payerName" column="payername"/>
+        <result property="payerAcctType" column="payeraccttype"/>
+        <result property="payerAcct" column="payeracct"/>
+        <result property="payerWalletId" column="payerwalletid"/>
+        <result property="payerWalletName" column="payerwalletname"/>
+        <result property="payerWalletLv" column="payerwalletlv"/>
+        <result property="payerWalletType" column="payerwallettype"/>
+        <result property="payeePtyId" column="payeeptyid"/>
+        <result property="payeeName" column="payeename"/>
+        <result property="payeeAcctType" column="payeeaccttype"/>
+        <result property="payeeAcct" column="payeeacct"/>
+        <result property="payeeWalletId" column="payeewalletid"/>
+        <result property="payeeWalletName" column="payeewalletname"/>
+        <result property="payeeWalletLv" column="payeewalletlv"/>
+        <result property="payeeWalletType" column="payeewallettype"/>
+        <result property="protocolNum" column="protocolnum"/>
+        <result property="ccy" column="ccy"/>
+        <result property="tellerNo" column="tellerno"/>
+        <result property="zoneNo" column="zoneno"/>
+        <result property="brno" column="brno"/>
+        <result property="acctBrno" column="acctbrno"/>
+        <result property="origChnl" column="origchnl"/>
+        <result property="origChnl2" column="origchnl2"/>
+        <result property="origChnlDtl" column="origchnldtl"/>
+        <result property="origMsgType" column="origmsgtype"/>
+        <result property="origPayPathDate" column="origpaypathdate"/>
+        <result property="origPayPathSerno" column="origpaypathserno"/>
+        <result property="summary" column="summary"/>
+        <result property="endToEndID" column="endtoendid"/>
+        <result property="lastUpJrnno" column="lastupjrnno"/>
+        <result property="lastUpDate" column="lastupdate"/>
+        <result property="lastUpTime" column="lastuptime"/>
+        <result property="narraTive" column="narrative"/>
+        <result property="remark" column="remark"/>
+    </resultMap>
+
+    <sql id="selectPayPayTransdtlVo">
+        select paydate, payserno, paytime, direct, payflag, operstep, operstatus, trxstatus, trxretcode, trxretmsg, coreprocstatus, corereqdate, corereqserno, coreacctdate, coreserno, coreretcode, coreretmsg, paypathdatetime, paypathserno, pathprocstatus, paypathrspstatus, paypathretcode, paypathretmsg, paypathretdate, paypathretserno, batchid, busichnl, busichnl2, busisysdate, busisysserno, busisystime, msgtype, busitype, busikind, instgpty, instdpty, amount, tradefundsource, tradepurpose, payerptyid, payername, payeraccttype, payeracct, payerwalletid, payerwalletname, payerwalletlv, payerwallettype, payeeptyid, payeename, payeeaccttype, payeeacct, payeewalletid, payeewalletname, payeewalletlv, payeewallettype, protocolnum, ccy, tellerno, zoneno, brno, acctbrno, origchnl, origchnl2, origchnldtl, origmsgtype, origpaypathdate, origpaypathserno, summary, endtoendid, lastupjrnno, lastupdate, lastuptime, narrative, remark from pay_pay_transdtl
+    </sql>
+
+    <select id="selectPayPayTransdtlList" parameterType="com.dcits.dcwlt.pay.api.model.PayTransDtlInfoDO"
+            resultMap="PayPayTransdtlResult">
+        <include refid="selectPayPayTransdtlVo"/>
+        <where>
+            <if test="payDate != null  and payDate != ''">and paydate = #{payDate}</if>
+            <if test="paySerno != null  and paySerno != ''">and payserno = #{paySerno}</if>
+            <if test="payPathSerno != null  and payPathSerno != ''">and paypathserno = #{payPathSerno}</if>
+            <if test="batchId != null  and batchId != ''">and batchid = #{batchId}</if>
+            <if test="msgType != null  and msgType != ''">and msgtype = #{msgType}</if>
+        </where>
+    </select>
+</mapper>

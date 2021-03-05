@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dcits.dcwlt.pay.batch.mapper.PayCommPartyauthMapper">
+    
+    <resultMap type="com.dcits.dcwlt.pay.api.model.AuthInfoDO" id="PayCommPartyauthResult">
+        <result property="partyId"    column="partyid"    />
+        <result property="msgType"    column="msgtype"    />
+        <result property="tradeCtgyCode"    column="tradectgycode"    />
+        <result property="sendAuth"    column="sendauth"    />
+        <result property="recvAuth"    column="recvauth"    />
+        <result property="status"    column="status"    />
+        <result property="effectDate"    column="effectdate"    />
+        <result property="inEffectiveDate"    column="ineffectivedate"    />
+        <result property="lastUpDate"    column="lastupdate"    />
+        <result property="lastUpTime"    column="lastuptime"    />
+    </resultMap>
+
+    <sql id="selectPayCommPartyauthVo">
+        select partyid, msgtype, tradectgycode, sendauth, recvauth, status, effectdate, ineffectivedate, lastupdate, lastuptime from pay_comm_partyauth
+    </sql>
+
+    <select id="selectPayCommPartyauthList" parameterType="com.dcits.dcwlt.pay.api.model.AuthInfoDO" resultMap="PayCommPartyauthResult">
+        <include refid="selectPayCommPartyauthVo"/>
+        <where>
+            <if test="partyId != null  and partyId != ''"> and partyid = #{partyId}</if>
+            <if test="msgType != null  and msgType != ''"> and msgtype = #{msgType}</if>
+            <if test="tradeCtgyCode != null  and tradeCtgyCode != ''"> and tradectgycode = #{tradeCtgyCode}</if>
+        </where>
+    </select>
+    
+<!--    <select id="selectPayCommPartyauthById" parameterType="String" resultMap="PayCommPartyauthResult">-->
+<!--        <include refid="selectPayCommPartyauthVo"/>-->
+<!--        where partyid = #{partyid}-->
+<!--    </select>-->
+<!--        -->
+<!--    <insert id="insertPayCommPartyauth" parameterType="com.dcits.dcwlt.pay.batch.domain.PayCommPartyauth">-->
+<!--        insert into pay_comm_partyauth-->
+<!--        <trim prefix="(" suffix=")" suffixOverrides=",">-->
+<!--            <if test="partyid != null">partyid,</if>-->
+<!--            <if test="msgtype != null">msgtype,</if>-->
+<!--            <if test="tradectgycode != null">tradectgycode,</if>-->
+<!--            <if test="sendauth != null and sendauth != ''">sendauth,</if>-->
+<!--            <if test="recvauth != null and recvauth != ''">recvauth,</if>-->
+<!--            <if test="status != null">status,</if>-->
+<!--            <if test="effectdate != null">effectdate,</if>-->
+<!--            <if test="ineffectivedate != null">ineffectivedate,</if>-->
+<!--            <if test="lastupdate != null and lastupdate != ''">lastupdate,</if>-->
+<!--            <if test="lastuptime != null and lastuptime != ''">lastuptime,</if>-->
+<!--         </trim>-->
+<!--        <trim prefix="values (" suffix=")" suffixOverrides=",">-->
+<!--            <if test="partyid != null">#{partyid},</if>-->
+<!--            <if test="msgtype != null">#{msgtype},</if>-->
+<!--            <if test="tradectgycode != null">#{tradectgycode},</if>-->
+<!--            <if test="sendauth != null and sendauth != ''">#{sendauth},</if>-->
+<!--            <if test="recvauth != null and recvauth != ''">#{recvauth},</if>-->
+<!--            <if test="status != null">#{status},</if>-->
+<!--            <if test="effectdate != null">#{effectdate},</if>-->
+<!--            <if test="ineffectivedate != null">#{ineffectivedate},</if>-->
+<!--            <if test="lastupdate != null and lastupdate != ''">#{lastupdate},</if>-->
+<!--            <if test="lastuptime != null and lastuptime != ''">#{lastuptime},</if>-->
+<!--         </trim>-->
+<!--    </insert>-->
+
+<!--    <update id="updatePayCommPartyauth" parameterType="com.dcits.dcwlt.pay.batch.domain.PayCommPartyauth">-->
+<!--        update pay_comm_partyauth-->
+<!--        <trim prefix="SET" suffixOverrides=",">-->
+<!--            <if test="msgtype != null">msgtype = #{msgtype},</if>-->
+<!--            <if test="tradectgycode != null">tradectgycode = #{tradectgycode},</if>-->
+<!--            <if test="sendauth != null and sendauth != ''">sendauth = #{sendauth},</if>-->
+<!--            <if test="recvauth != null and recvauth != ''">recvauth = #{recvauth},</if>-->
+<!--            <if test="status != null">status = #{status},</if>-->
+<!--            <if test="effectdate != null">effectdate = #{effectdate},</if>-->
+<!--            <if test="ineffectivedate != null">ineffectivedate = #{ineffectivedate},</if>-->
+<!--            <if test="lastupdate != null and lastupdate != ''">lastupdate = #{lastupdate},</if>-->
+<!--            <if test="lastuptime != null and lastuptime != ''">lastuptime = #{lastuptime},</if>-->
+<!--        </trim>-->
+<!--        where partyid = #{partyid}-->
+<!--    </update>-->
+
+<!--    <delete id="deletePayCommPartyauthById" parameterType="String">-->
+<!--        delete from pay_comm_partyauth where partyid = #{partyid}-->
+<!--    </delete>-->
+
+<!--    <delete id="deletePayCommPartyauthByIds" parameterType="String">-->
+<!--        delete from pay_comm_partyauth where partyid in -->
+<!--        <foreach item="partyid" collection="array" open="(" separator="," close=")">-->
+<!--            #{partyid}-->
+<!--        </foreach>-->
+<!--    </delete>-->
+</mapper>
