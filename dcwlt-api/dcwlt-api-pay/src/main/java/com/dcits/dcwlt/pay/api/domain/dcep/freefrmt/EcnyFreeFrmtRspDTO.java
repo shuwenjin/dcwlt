@@ -12,7 +12,6 @@ import javax.validation.constraints.NotNull;
  * @desc 自由格式响应互联互通DTO
  */
 public class EcnyFreeFrmtRspDTO extends ECNYRspBody {
-    @NotNull
     @Length(max = 64)
     @Valid
     private String procResult;          //处理结果

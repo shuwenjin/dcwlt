@@ -12,12 +12,10 @@ import javax.validation.constraints.NotNull;
  * @desc 自由格式请求互联互通DTO
  */
 public class EcnyFreeFrmtReqDTO extends ECNYReqBody {
-    @NotNull
     @Length(max = 14)
     @Valid
     private String instdDrctPty;            //接收机构
 
-    @NotNull
     @Length(max = 1024)
     @Valid
     private String msgContext;              //消息内容
