@@ -30,10 +30,10 @@
     <select id="selectPartyInfoDOList" parameterType="com.dcits.dcwlt.pay.api.model.PartyInfoDO" resultMap="PartyInfoDOResult">
         <include refid="selectPartyInfoDOVo"/>
         <where>
-            <if test="partyID != null  and partyID != ''">and partyid = #{partyID}</if>
+            <if test="partyID != null  and partyID != ''">and partyid like #{partyID}</if>
             <if test="partyType != null">and partytype = #{partyType}</if>
-            <if test="partyName != null  and partyName != ''">and partyname = #{partyName}</if>
-            <if test="partyAlias != null  and partyAlias != ''">and partyalias = #{partyAlias}</if>
+            <if test="partyName != null  and partyName != ''">and partyname like #{partyName}</if>
+            <if test="partyAlias != null  and partyAlias != ''">and partyalias like #{partyAlias}</if>
         </where>
     </select>
 
