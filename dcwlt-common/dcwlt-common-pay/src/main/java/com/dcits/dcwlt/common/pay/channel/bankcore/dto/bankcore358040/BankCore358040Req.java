@@ -1,4 +1,4 @@
-package com.dcits.dcwlt.pay.online.bankcore358040;
+package com.dcits.dcwlt.common.pay.channel.bankcore.dto.bankcore358040;
 
 import com.alibaba.fastjson.annotation.JSONField;
 import com.dcits.dcwlt.common.pay.util.HiddenUtil;

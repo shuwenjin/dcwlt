@@ -1,4 +1,4 @@
-package com.dcits.dcwlt.pay.online.lsfk43;
+package com.dcits.dcwlt.common.pay.channel.bankcore.dto;
 
 import com.alibaba.fastjson.annotation.JSONField;
 import org.hibernate.validator.constraints.Length;

@@ -2,8 +2,8 @@ package com.dcits.dcwlt.pay.online.service.impl;
 
 import com.dcits.dcwlt.pay.api.model.PayTransDtlInfoDO;
 import com.dcits.dcwlt.pay.api.model.StateMachine;
-import com.dcits.dcwlt.pay.online.bankcore351100.BankCore351100InnerReq;
-import com.dcits.dcwlt.pay.online.bankcore351100.BankCore351100InnerRsp;
+import com.dcits.dcwlt.common.pay.channel.bankcore.dto.bankcore351100.BankCore351100InnerReq;
+import com.dcits.dcwlt.common.pay.channel.bankcore.dto.bankcore351100.BankCore351100InnerRsp;
 import com.dcits.dcwlt.pay.online.exception.EcnyTransError;
 import com.dcits.dcwlt.pay.online.exception.EcnyTransException;
 import com.dcits.dcwlt.pay.online.service.ICoreProcessService;

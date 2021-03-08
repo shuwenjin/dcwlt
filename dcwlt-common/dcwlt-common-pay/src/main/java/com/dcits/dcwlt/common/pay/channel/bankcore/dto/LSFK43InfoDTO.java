@@ -1,4 +1,4 @@
-package com.dcits.dcwlt.pay.online.lsfk43;
+package com.dcits.dcwlt.common.pay.channel.bankcore.dto;
 
 /**
  * @author zhangwang

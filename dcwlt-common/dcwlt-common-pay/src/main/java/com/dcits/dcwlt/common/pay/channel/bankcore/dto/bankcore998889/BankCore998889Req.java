@@ -7,10 +7,10 @@
  *     rtp - initial implementation
  *********************************************/
 
-package com.dcits.dcwlt.pay.online.bankcore998889;
+package com.dcits.dcwlt.common.pay.channel.bankcore.dto.bankcore998889;
 
 import com.alibaba.fastjson.annotation.JSONField;
-import com.dcits.dcwlt.pay.online.lsfk43.IBankCoreBody;
+import com.dcits.dcwlt.common.pay.channel.bankcore.dto.IBankCoreBody;
 
 /**
  * 
