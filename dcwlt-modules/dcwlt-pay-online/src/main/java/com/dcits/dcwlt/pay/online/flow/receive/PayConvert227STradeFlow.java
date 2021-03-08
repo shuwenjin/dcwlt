@@ -30,6 +30,7 @@ import com.dcits.dcwlt.pay.online.flow.builder.EcnyTradeContext;
 import com.dcits.dcwlt.pay.online.flow.builder.EcnyTradeFlowBuilder;
 import com.dcits.dcwlt.pay.online.payconvert.PayConvertChnlReqDTO;
 import com.dcits.dcwlt.pay.online.payconvertstsqry.*;
+import com.dcits.dcwlt.pay.online.service.IAuthInfoService;
 import com.dcits.dcwlt.pay.online.service.ICoreProcessService;
 import com.dcits.dcwlt.pay.online.service.IPayTransDtlInfoRepository;
 import com.dcits.dcwlt.pay.online.service.ISignInfoRepository;
@@ -94,7 +95,7 @@ public class PayConvert227STradeFlow {
     private PartyService partyService;
 
     @Autowired
-    private AuthInfoService authInfoService;
+    private IAuthInfoService authInfoService;
 
     @Autowired
     private ICoreProcessService bankCoreProcessService;

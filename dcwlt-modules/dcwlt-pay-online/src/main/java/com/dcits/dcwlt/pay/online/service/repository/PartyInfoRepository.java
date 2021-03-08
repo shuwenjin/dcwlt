@@ -3,6 +3,7 @@ package com.dcits.dcwlt.pay.online.service.repository;
 import com.dcits.dcwlt.common.pay.constant.AppConstant;
 import com.dcits.dcwlt.common.pay.enums.StatusTpCdEnum;
 import com.dcits.dcwlt.pay.api.model.PartyInfoDO;
+import com.dcits.dcwlt.pay.online.mapper.PartyInfoMapper;
 import com.dcits.dcwlt.pay.online.mapper.PartyMapper;
 import com.dcits.dcwlt.pay.online.service.IPartyInfoRepository;
 import org.slf4j.Logger;
@@ -251,7 +252,7 @@ public class PartyInfoRepository implements IPartyInfoRepository {
     }
 
     @Autowired
-    private PartyMapper partyMapper;
+    private PartyInfoMapper partyMapper;
 
     /**
      * 查询机构信息，对库操作
@@ -260,7 +261,7 @@ public class PartyInfoRepository implements IPartyInfoRepository {
      * @return
      */
     private List<PartyInfoDO> queryPartyInfo(PartyInfoDO partyInfoDO) {
-        return partyMapper.selectList(partyInfoDO);
+        return partyMapper.queryEffectiveParty(partyInfoDO);
     }
 
     /**

@@ -14,6 +14,9 @@ public class ApiConstant {
     //重发申请报文发起服务
     public static final String RESENDAPY_SERVICE_NAME = "pymtRqstNwlySnd";
 
+    //差错贷记调账服务化接口
+    public static final String DSPT_SERVICE_NAME = "dcepPymtWrngAcctDeal";
+
 
 
 

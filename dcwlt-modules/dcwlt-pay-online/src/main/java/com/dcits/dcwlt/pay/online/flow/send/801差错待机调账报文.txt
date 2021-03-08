@@ -1,0 +1,16 @@
+{
+        "ecnyHead": {
+            "busiChnl": "1111",
+            "busiChnl2": "2222",
+            "zoneno": "01",
+            "brno": "01234",
+            "tellerno": "111",
+            "origChnl": "11",
+            "origChnl2": "222",
+            "origChnlDtl": "22"
+        },
+        "body": {
+            "payDate": "20210305",
+            "paySerno":"15033930001"
+        }
+}
