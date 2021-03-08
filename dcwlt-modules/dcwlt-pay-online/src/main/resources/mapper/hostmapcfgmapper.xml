@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dcits.dcwlt.pay.online.mapper.HostMapCfgMapper">
+
+    <select id="query" resultType="String">
+        SELECT
+        SERVERCLASS
+        FROM ECNY_COMM_CORE_CONFIG T
+        WHERE T.SERVERID = #{serverId}
+        AND T.ACCTMETH = #{acctMeth}
+    </select>
+</mapper>

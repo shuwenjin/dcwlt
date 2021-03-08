@@ -111,4 +111,8 @@ public class BankAttRspsnInf {
                 ", msgSndCd='" + msgSndCd + '\'' +
                 '}';
     }
+
+    public String getPrcSts() {
+        return "";
+    }
 }

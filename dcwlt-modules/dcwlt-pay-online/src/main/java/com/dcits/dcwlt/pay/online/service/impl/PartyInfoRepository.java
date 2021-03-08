@@ -3,9 +3,11 @@ package com.dcits.dcwlt.pay.online.service.impl;
 import com.dcits.dcwlt.common.pay.constant.AppConstant;
 import com.dcits.dcwlt.common.pay.enums.StatusTpCdEnum;
 import com.dcits.dcwlt.pay.api.model.PartyInfoDO;
+import com.dcits.dcwlt.pay.online.mapper.PartyMapper;
 import com.dcits.dcwlt.pay.online.service.IPartyInfoRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -20,11 +22,6 @@ import java.util.List;
 @Service
 public class PartyInfoRepository implements IPartyInfoRepository {
     private static final Logger logger = LoggerFactory.getLogger(PartyInfoRepository.class);
-    private static final String INSERT_URL = "party.insertParty";
-    private static final String UPDATE_URL = "party.updateParty";
-    private static final String QUERY_URL = "party.queryParty";
-    private static final String QUERY_EFFECTIVE_URL = "queryEffectiveParty";
-    private static final String QUERY_INEFFECTIVE_URL = "queryLoseEffectiveParty";
 
     /**
      * 添加机构信息
@@ -234,36 +231,7 @@ public class PartyInfoRepository implements IPartyInfoRepository {
         return 1;
     }
 
-    /**
-     * 查询机构信息，对库操作
-     *
-     * @param partyInfoDO
-     * @return
-     */
-    private List<PartyInfoDO> queryPartyInfo(PartyInfoDO partyInfoDO) {
-//        return DBUtil.selectList(QUERY_URL, partyInfoDO);
-        //TODO
-        //
-        return new ArrayList<>();
-    }
 
-    /**
-     * 根据id查询机构信息
-     *
-     * @param partyId
-     * @return
-     */
-    @Override
-    public PartyInfoDO queryPartyInfoByPartyId(String partyId) {
-        PartyInfoDO partyInfoDO = new PartyInfoDO();
-        partyInfoDO.setPartyID(partyId);
-        List<PartyInfoDO> partyInfoDOS = queryPartyInfo(partyInfoDO);
-
-        if (partyInfoDOS == null || partyInfoDOS.isEmpty()) {
-            return null;
-        }
-        return partyInfoDOS.get(0);
-    }
 
     /**
      * 获取已经失效的机构信息， 将这部分数据移动到临时表中
@@ -280,5 +248,35 @@ public class PartyInfoRepository implements IPartyInfoRepository {
 //        String inEffectiveDate = DateUtil.getSysDate();
 //        return DBUtil.selectList(QUERY_INEFFECTIVE_URL, inEffectiveDate);
         return new ArrayList<>();
+    }
+
+    @Autowired
+    private PartyMapper partyMapper;
+
+    /**
+     * 查询机构信息，对库操作
+     *
+     * @param partyInfoDO
+     * @return
+     */
+    private List<PartyInfoDO> queryPartyInfo(PartyInfoDO partyInfoDO) {
+        return partyMapper.selectList(partyInfoDO);
+    }
+
+    /**
+     * 根据id查询机构信息
+     *
+     * @param partyId
+     * @return
+     */
+    public PartyInfoDO queryPartyInfoByPartyId(String partyId) {
+        PartyInfoDO partyInfoDO = new PartyInfoDO();
+        partyInfoDO.setPartyID(partyId);
+        List<PartyInfoDO> partyInfoDOS = queryPartyInfo(partyInfoDO);
+
+        if (partyInfoDOS == null || partyInfoDOS.isEmpty()) {
+            return null;
+        }
+        return partyInfoDOS.get(0);
     }
 }

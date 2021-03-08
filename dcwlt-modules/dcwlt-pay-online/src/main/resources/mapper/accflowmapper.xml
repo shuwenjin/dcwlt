@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dcits.dcwlt.pay.online.mapper.AccflowMapper" >
+
+	<!-- 登记账务流水表 -->
+	<insert id="insert" >
+	INSERT INTO ECNY_PAY_ACCFLOW(COREREQDATE,COREREQSERNO,BOOKTYPE,PAYDATE,
+	PAYSERNO,BRNO,TELLERNO,ACCTBRNO,CURRENCY,AMOUNT,FEEAMOUNT,CORESYSID,COREINTFLAG,
+	REVTRANFLAG,CORETIME,CORETRXTYPE,CORETRXCODE,COREPROCSTATUS,CORERETCODE,CORERETMSG,
+	COREACCTDATE,CORESERNO,PAYERACCT,PAYERNAME,PAYEEACCT,PAYEENAME,ORIGCOREREQDATE,
+	ORIGCOREREQSERNO,ORIGPAYDATE,ORIGPAYSERNO,LASTUPDATE,LASTUPTIME,LASTMICROSECOND)
+		VALUES( #{coreReqDate},#{coreReqSerno},#{bookType},#{payDate},
+				#{paySerno},#{brno},#{tellerNo},#{acctBrno},#{currency},#{amount},#{feeAmount},#{coreSysId},#{coreIntFlag},
+				#{revTranFlag},#{coreTime},#{coreTrxType},#{coreTrxCode},#{coreProcStatus},#{coreRetCode},#{coreRetMsg},
+				#{coreAcctDate},#{coreSerno},#{payerAcct},#{payerName},#{payeeAcct},#{payeeName},#{origCoreReqDate},
+				#{origCoreReqSerno},#{origPayDate},#{origPaySerno},#{lastUpDate},#{lastUpTime},#{lastMicroSecond}
+			)
+	</insert>
+
+	<!-- 登记账务流水表 -->
+	<insert id="insertAccFlowByMap" parameterType="Map">
+	INSERT INTO ECNY_PAY_ACCFLOW(COREREQDATE,COREREQSERNO,BOOKTYPE,PAYDATE,
+	PAYSERNO,BRNO,TELLERNO,ACCTBRNO,CURRENCY,AMOUNT,FEEAMOUNT,CORESYSID,COREINTFLAG,
+	REVTRANFLAG,CORETIME,CORETRXTYPE,CORETRXCODE,COREPROCSTATUS,CORERETCODE,CORERETMSG,
+	COREACCTDATE,CORESERNO,PAYERACCT,PAYERNAME,PAYEEACCT,PAYEENAME,ORIGCOREREQDATE,
+	ORIGCOREREQSERNO,ORIGPAYDATE,ORIGPAYSERNO,LASTUPDATE,LASTUPTIME,LASTMICROSECOND)
+		VALUES( #{coreReqDate},#{coreReqSerno},#{bookType},#{payDate},
+				#{paySerno},#{brno},#{tellerNo},#{acctBrno},#{currency},#{amount},#{feeAmount},#{coreSysId},#{coreIntFlag},
+				#{revTranFlag},#{coreTime},#{coreTrxType},#{coreTrxCode},#{coreProcStatus},#{coreRetCode},#{coreRetMsg},
+				#{coreAcctDate},#{coreSerno},#{payerAcct},#{payerName},#{payeeAcct},#{payeeName},#{origCoreReqDate},
+				#{origCoreReqSerno},#{origPayDate},#{origPaySerno},#{lastUpDate},#{lastUpTime},#{lastMicroSecond}
+			)
+	</insert>
+
+	<!-- 更新记账流水表状态 -->
+    <update id="update">
+         UPDATE ECNY_PAY_ACCFLOW T
+	        SET T.COREPROCSTATUS = #{coreProcStatus},
+	            T.CORERETCODE = #{coreRetCode},
+	            T.CORERETMSG = #{coreRetMsg},
+	            T.COREACCTDATE = #{coreAcctDate},
+	            T.CORESERNO = #{coreSerno},
+	            T.LASTUPDATE = #{lastUpDate},
+	            T.LASTUPTIME = #{lastUpTime},
+	            T.LASTMICROSECOND = #{lastMicroSecond}
+	      WHERE T.COREREQDATE = #{coreReqDate} AND
+	      		T.COREREQSERNO = #{coreReqSerno}
+    </update>
+
+    <!-- 更新记账流水表状态 -->
+    <update id="updateAccFlowByMap"  parameterType="Map">
+         UPDATE ECNY_PAY_ACCFLOW T
+	        SET T.COREPROCSTATUS = #{coreProcStatus},
+	            T.CORERETCODE = #{coreRetCode},
+	            T.CORERETMSG = #{coreRetMsg},
+	            T.COREACCTDATE = #{coreAcctDate},
+	            T.CORESERNO = #{coreSerno},
+	          	T.ORIGCOREACCTDATE = #{origCoreAcctDate},
+	            T.ORIGCORESERNO = #{origCoreSerno},
+	            T.LASTUPDATE = #{lastUpDate},
+	            T.LASTUPTIME = #{lastUpTime},
+	            T.LASTMICROSECOND = #{lastMicroSecond}
+	      WHERE T.COREREQDATE = #{coreReqDate} AND
+	      		T.COREREQSERNO = #{coreReqSerno}
+    </update>
+
+    <!-- 更新记账流水表状态 -->
+    <update id="updateCoreQryAccFlowByMap"  parameterType="Map">
+        UPDATE ECNY_PAY_ACCFLOW T
+        SET T.COREPROCSTATUS = #{coreProcStatus},
+        T.CORERETCODE = #{coreRetCode},
+        T.CORERETMSG = #{coreRetMsg},
+        <if test="coreAcctDate!=null">
+            T.COREACCTDATE = #{coreAcctDate},
+        </if>
+        <if test="coreSerno!=null">
+            T.CORESERNO = #{coreSerno},
+        </if>
+        T.LASTUPDATE = #{lastUpDate},
+        T.LASTUPTIME = #{lastUpTime},
+        T.LASTMICROSECOND = #{lastMicroSecond}
+        WHERE T.COREREQDATE = #{coreReqDate} AND
+        T.COREREQSERNO = #{coreReqSerno}
+    </update>
+
+    <!-- 查看核心请求信息 -->
+    <select id ="selectCoreReqSerno" resultType="com.dcits.dcwlt.pay.api.model.AccFlowDO">
+              SELECT
+                     T.COREREQDATE              coreReqDate,
+                     T.COREREQSERNO             coreReqSerno,
+                     T.REVTRANFLAG              revTranFlag,
+                     T.BRNO                     brno,
+                     T.PAYDATE                  payDate,
+                     T.PAYSERNO                 paySerno,
+                     T.ACCTBRNO                 acctBrno,
+                     T.BOOKTYPE                 bookType,
+                     T.AMOUNT                   amount,
+                     T.CORETRXTYPE              coreTrxType,
+                     T.CORETRXCODE              coreTrxCode,
+                     T.COREPROCSTATUS           coreProcStatus,
+                     T.PAYERACCT                payerAcct,
+                     T.PAYERNAME                payeeName,
+                     T.PAYEENAME                origCoreReqDate,
+                     T.ORIGCOREREQDATE          origCoreReqDate,
+                     T.ORIGCOREREQSERNO         origCoreReqSerno,
+                     T.ORIGPAYDATE              origPayDate,
+                     T.ORIGPAYSERNO             origPaySerno
+              FROM ECNY_PAY_ACCFLOW T
+              where T.PAYDATE = #{payDate} and T.PAYSERNO = #{paySerno}
+              order by LASTUPDATE desc,LASTUPTIME desc limit 1
+    </select>
+
+    <!-- 查看核心请求信息 根据核心请求日期和核心请求流水查询账务流水表信息 -->
+    <select id ="query" resultType="com.dcits.dcwlt.pay.api.model.AccFlowDO">
+    SELECT           T.COREREQDATE              coreReqDate,
+                     T.COREREQSERNO             coreReqSerno,
+                     T.REVTRANFLAG              revTranFlag,
+                     T.BRNO                     brno,
+                     T.PAYDATE                  payDate,
+                     T.PAYSERNO                 paySerno,
+                     T.ACCTBRNO                 acctBrno,
+                     T.BOOKTYPE                 bookType,
+                     T.AMOUNT                   amount,
+                     T.CURRENCY                 currency,
+                     T.CORESYSID                coreSysId,
+                     T.CORETRXTYPE              coreTrxType,
+                     T.CORETRXCODE              coreTrxCode,
+                     T.COREPROCSTATUS           coreProcStatus,
+                     T.PAYERACCT                payerAcct,
+                     T.PAYERNAME                payerName,
+                     T.PAYEEACCT                payeeAcct,
+                     T.PAYEENAME                payeeName,
+                     T.ORIGCOREREQDATE          origCoreReqDate,
+                     T.ORIGCOREREQSERNO         origCoreReqSerno,
+                     T.ORIGPAYDATE              origPayDate,
+                     T.ORIGPAYSERNO             origPaySerno
+              FROM ECNY_PAY_ACCFLOW T
+              where T.COREREQDATE = #{coreReqDate} and T.COREREQSERNO = #{coreReqSerno}
+    </select>
+
+    <!-- 更新记账流水表状态 -->
+    <update id="updateCoreStatus">
+        UPDATE ECNY_PAY_ACCFLOW T
+        SET T.COREPROCSTATUS = #{coreProcStatus},
+            T.LASTUPDATE = #{lastUpDate},
+            T.LASTUPTIME = #{lastUpTime},
+            T.LASTMICROSECOND = #{lastMicroSecond}
+        WHERE T.COREREQDATE = #{coreReqDate} AND
+        T.COREREQSERNO = #{coreReqSerno}
+    </update>
+</mapper>

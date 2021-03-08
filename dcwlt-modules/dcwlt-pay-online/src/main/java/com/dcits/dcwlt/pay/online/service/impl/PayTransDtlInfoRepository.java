@@ -12,7 +12,11 @@ package com.dcits.dcwlt.pay.online.service.impl;
 import com.dcits.dcwlt.common.pay.util.DateUtil;
 import com.dcits.dcwlt.pay.api.model.PayTransDtlInfoDO;
 import com.dcits.dcwlt.pay.api.model.StateMachine;
+import com.dcits.dcwlt.pay.online.mapper.PayTransDtlInfoDOMapper;
+import com.dcits.dcwlt.pay.online.mapper.PayTransDtlInfoMapper;
 import com.dcits.dcwlt.pay.online.service.IPayTransDtlInfoRepository;
+import org.apache.commons.beanutils.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import java.lang.reflect.InvocationTargetException;
@@ -24,13 +28,11 @@ import java.util.Map;
 @Repository("payTransDtlInfoRepository")
 public class PayTransDtlInfoRepository implements IPayTransDtlInfoRepository {
 
-    private static final String INSERT_PAYTRANSDTL_INFO_SQL = "payTransDtlInfoMapper.insert";
-    private static final String UPDATE_PAYTRANSDTL_INFO_SQL = "payTransDtlInfoMapper.update";
-    private static final String UPDATE_PAYTRANSDTL_DIRECT_SQL = "payTransDtlInfoMapper.updateDirect";
-    private static final String QUERY_PAYTRANSDTL_BY_MSGID_SQL = "payTransDtlInfoMapper.queryByMsgId";
-    private static final String QUERY_PAYTRANSDTL_BY_PAYINFO_SQL = "payTransDtlInfoMapper.queryByPayInfo";
-    private static final String QUERY_PAYTRANSDTL_BY_BUSISYSSERNO_SQL = "payTransDtlInfoMapper.queryByBusiSysSerno";
-    private static final String QUERY_PAYTRANSDTL_BY_ORIGSERNO_SQL = "payTransDtlInfoMapper.queryByOrigSerno";
+    @Autowired
+    private PayTransDtlInfoDOMapper payTransDtlInfoDOMapper;
+
+    @Autowired
+    private PayTransDtlInfoMapper payTransDtlInfoMapper;
 
     /**
      * 金融交易信息入流水库
@@ -38,9 +40,10 @@ public class PayTransDtlInfoRepository implements IPayTransDtlInfoRepository {
      * @param payTransDtlInfoDO 金融信息流水表实体
      * @return
      */
+    @Override
     public int insert(PayTransDtlInfoDO payTransDtlInfoDO) {
-//        return DBUtil.insert(INSERT_PAYTRANSDTL_INFO_SQL, payTransDtlInfoDO);
-        return 1;
+//       return payTransDtlInfoDOMapper.insert(payTransDtlInfoDO);
+        return payTransDtlInfoMapper.insert(payTransDtlInfoDO);
     }
 
     /**
@@ -48,13 +51,13 @@ public class PayTransDtlInfoRepository implements IPayTransDtlInfoRepository {
      * @param payTransDtlInfoDO
      * @return
      */
+    @Override
     public int update(PayTransDtlInfoDO payTransDtlInfoDO) {
         //补充更新字段
-//        payTransDtlInfoDO.setLastUpDate(DateTimeUtil.getCurrentDateStr());
-//        payTransDtlInfoDO.setLastUpTime(DateTimeUtil.getCurrentTimeStr());
-//
-//        return DBUtil.update(UPDATE_PAYTRANSDTL_DIRECT_SQL, payTransDtlInfoDO);
-        return 1;
+        payTransDtlInfoDO.setLastUpDate(DateUtil.getDefaultDate());
+        payTransDtlInfoDO.setLastUpTime(DateUtil.getDefaultTime());
+
+        return payTransDtlInfoMapper.updateDirect(payTransDtlInfoDO);
     }
 
     /**
@@ -66,17 +69,17 @@ public class PayTransDtlInfoRepository implements IPayTransDtlInfoRepository {
      * @throws NoSuchMethodException
      * @throws InvocationTargetException
      */
+    @Override
     public int update(PayTransDtlInfoDO payTransDtlInfoDO, StateMachine stateMachine) throws IllegalAccessException, NoSuchMethodException, InvocationTargetException {
         //补充更新字段
-        payTransDtlInfoDO.setLastUpDate(DateUtil.getSysDate());
-        payTransDtlInfoDO.setLastUpTime(DateUtil.getCurTime());
+        payTransDtlInfoDO.setLastUpDate(DateUtil.getDefaultDate());
+        payTransDtlInfoDO.setLastUpTime(DateUtil.getDefaultTime());
 
-//        Map<String, String> param = BeanUtils.describe(payTransDtlInfoDO);
-//        if (null != stateMachine) {
-//            param.putAll(BeanUtils.describe(stateMachine));
-//        }
-//        return DBUtil.update(UPDATE_PAYTRANSDTL_INFO_SQL, param);
-        return 1;
+        Map<String, String> param = BeanUtils.describe(payTransDtlInfoDO);
+        if (null != stateMachine) {
+            param.putAll(BeanUtils.describe(stateMachine));
+        }
+        return payTransDtlInfoMapper.update(param);
     }
 
     /**
@@ -85,12 +88,12 @@ public class PayTransDtlInfoRepository implements IPayTransDtlInfoRepository {
      * @param payDate,paySerno
      * @return
      */
+    @Override
     public PayTransDtlInfoDO query(String payDate, String paySerno) {
         Map<String, String> param = new HashMap<>();
         param.put("payDate", payDate);
         param.put("paySerno", paySerno);
-//        return DBUtil.selectOne(QUERY_PAYTRANSDTL_BY_PAYINFO_SQL, param);
-        return new PayTransDtlInfoDO();
+        return payTransDtlInfoMapper.queryByPayInfo(param);
     }
 
     /**
@@ -99,9 +102,9 @@ public class PayTransDtlInfoRepository implements IPayTransDtlInfoRepository {
      * @param msgId
      * @return
      */
+    @Override
     public PayTransDtlInfoDO query(String msgId) {
-//        return DBUtil.selectOne(QUERY_PAYTRANSDTL_BY_MSGID_SQL, msgId);
-        return new PayTransDtlInfoDO();
+        return payTransDtlInfoMapper.queryByMsgId(msgId);
     }
 
     /**
@@ -110,9 +113,9 @@ public class PayTransDtlInfoRepository implements IPayTransDtlInfoRepository {
      * @param busiSysSerno
      * @return
      */
+    @Override
     public PayTransDtlInfoDO queryOriTxn(String busiSysSerno) {
-//        return DBUtil.selectOne(QUERY_PAYTRANSDTL_BY_BUSISYSSERNO_SQL, busiSysSerno);
-        return new PayTransDtlInfoDO();
+        return payTransDtlInfoMapper.queryByBusiSysSerno(busiSysSerno);
     }
 
     /**
@@ -123,7 +126,6 @@ public class PayTransDtlInfoRepository implements IPayTransDtlInfoRepository {
      */
     @Override
     public List<PayTransDtlInfoDO> queryList(String origPayPathSerno) {
-//        return DBUtil.selectList(QUERY_PAYTRANSDTL_BY_ORIGSERNO_SQL, origPayPathSerno);
-       return new ArrayList<PayTransDtlInfoDO>();
+        return payTransDtlInfoMapper.queryByOrigSerno(origPayPathSerno);
     }
 }
