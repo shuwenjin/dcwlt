@@ -1,6 +1,7 @@
 package com.dcits.dcwlt.pay.online.exception;
 
 
+import com.dcits.dcwlt.common.pay.constant.AppConstant;
 import com.dcits.dcwlt.common.pay.exception.TransError;
 import com.dcits.dcwlt.common.pay.exception.TransException;
 import com.dcits.dcwlt.pay.api.model.RspCodeMapDO;
@@ -49,9 +50,9 @@ public class EcnyTransException extends TransException {
 //     * @param e 异常类
 //     * @return
 //     */
-//    public static RspCodeMapDO convertRspCode(Throwable e) {
-//        return convertRspCode(e, AppConstant.TXN_TYPE_COMM, AppConstant.DCEP_SYS_ID);
-//    }
+    public static RspCodeMapDO convertRspCode(Throwable e) {
+        return convertRspCode(e);
+    }
 //
 //
 //    /**
@@ -124,6 +125,15 @@ public class EcnyTransException extends TransException {
 //
 //        return convertRspCode(srcId, destId, trxType, errorCode, errorMsg);
 //    }
+
+
+
+
+
+
+
+
+
 
 
     public String getSrcId() {

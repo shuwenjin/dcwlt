@@ -1,6 +1,7 @@
 package com.dcits.dcwlt.pay.api.model;
 
 
+import com.dcits.dcwlt.common.core.annotation.Excel;
 import com.dcits.dcwlt.common.pay.enums.PartyTpCdEnum;
 import com.dcits.dcwlt.common.pay.enums.StatusTpCdEnum;
 import com.dcits.dcwlt.common.pay.util.HiddenUtil;
@@ -12,22 +13,37 @@ import com.dcits.dcwlt.common.pay.util.HiddenUtil;
  * @date 2020/12/30
  */
 public class PartyInfoDO {
-
+    @Excel(name = "机构编码")
     protected String partyID;               //机构编码
+    @Excel(name = "机构类型")
     protected PartyTpCdEnum partyType;      //机构类型
+    @Excel(name = "机构名称")
     protected String partyName;             //机构名称
+    @Excel(name = "机构标识")
     protected String partyAlias;            //机构标识
+    @Excel(name = "机构状态")
     protected StatusTpCdEnum partyStatus;   //机构状态
+    @Excel(name = "撤销状态")
     protected String status;                //撤销状态
+    @Excel(name = "联系人")
     protected String contact;               //联系人
+    @Excel(name = "电话")
     protected String telephone;             //电话
+    @Excel(name = "邮件")
     protected String mail;                  //邮件
+    @Excel(name = "传真号")
     protected String fax;                   //传真号
+    @Excel(name = "生效日期")
     protected String effectDate;            //生效日期
+    @Excel(name = "失效日期")
     protected String inEffectiveDate;       //失效日期
-    protected long changeNumber;              //变更期数
-    protected long changeCircleTimes;        //变更记录条目
+    @Excel(name = "变更期数")
+    protected long changeNumber;            //变更期数
+    @Excel(name = "变更记录条目")
+    protected long changeCircleTimes;       //变更记录条目
+    @Excel(name = "最后更新日期")
     protected String lastUpDate;            //最后更新日期
+    @Excel(name = "最后更新时间")
     protected String lastUpTime;            //最后更新时间
 
     public String getPartyID() {

@@ -195,17 +195,17 @@
           {key: 2, label: `机构名称`, visible: true},
           {key: 3, label: `机构标识`, visible: true},
           {key: 4, label: `机构状态`, visible: true},
-          {key: 5, label: `撤销状态`, visible: true},
-          {key: 6, label: `联系人`, visible: true},
-          {key: 7, label: `电话`, visible: true},
-          {key: 8, label: `邮件`, visible: true},
-          {key: 9, label: `传真号`, visible: true},
-          {key: 10, label: `生效日期`, visible: true},
-          {key: 11, label: `失效日期`, visible: true},
-          {key: 12, label: `变更期数`, visible: true},
-          {key: 13, label: `变更记录条目`, visible: true},
-          {key: 14, label: `最后更新日期`, visible: true},
-          {key: 15, label: `最后更新时间`, visible: true}
+          {key: 5, label: `撤销状态`, visible: false},
+          {key: 6, label: `联系人`, visible: false},
+          {key: 7, label: `电话`, visible: false},
+          {key: 8, label: `邮件`, visible: false},
+          {key: 9, label: `传真号`, visible: false},
+          {key: 10, label: `生效日期`, visible: false},
+          {key: 11, label: `失效日期`, visible: false},
+          {key: 12, label: `变更期数`, visible: false},
+          {key: 13, label: `变更记录条目`, visible: false},
+          {key: 14, label: `最后更新日期`, visible: false},
+          {key: 15, label: `最后更新时间`, visible: false}
         ],
         // 表单参数
         form: {},
@@ -223,7 +223,7 @@
       /** 查询机构列表 */
       getList() {
         this.loading = true;
-        listParty(this.addDateRange(this.queryParams)).then(response => {
+        listParty(this.queryParams).then(response => {
           this.partyList = response.rows;
           this.total = response.total;
           this.loading = false;
