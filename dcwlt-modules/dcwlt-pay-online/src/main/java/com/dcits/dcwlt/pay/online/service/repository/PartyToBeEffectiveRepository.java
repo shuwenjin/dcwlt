@@ -1,4 +1,4 @@
-package com.dcits.dcwlt.pay.online.service.impl;
+package com.dcits.dcwlt.pay.online.service.repository;
 
 import com.dcits.dcwlt.pay.api.model.PartyToBeEffectiveDO;
 import com.dcits.dcwlt.pay.online.service.IPartyToBeEffectiveRepository;

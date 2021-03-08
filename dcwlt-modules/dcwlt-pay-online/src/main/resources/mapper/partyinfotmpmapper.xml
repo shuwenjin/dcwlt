@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.dcits.dcwlt.pay.online.mapper.PartyMapper">
+<mapper namespace="com.dcits.dcwlt.pay.batch.mapper.PartyInfoOTMapper">
 
     <resultMap id="partyToBeEffectiveDO" type="com.dcits.dcwlt.pay.api.model.PartyToBeEffectiveDO">
     </resultMap>
@@ -23,13 +23,13 @@
         P.CHANGECIRCLETIMES changeCircleTimes,
         P.LASTUPDATE lastUpDate,
         P.LASTUPTIME lastUpTime
-        FROM ecny_comm_party_tobeffect P
+        FROM pay_comm_party_tobeffect P
     </sql>
 
     <!-- 新增机构临时数据 -->
     <insert id="insertPartyTmp">
         <if test="_databaseId == 'mysql'">
-            INSERT INTO ecny_comm_party_tobeffect(
+            INSERT INTO pay_comm_party_tobeffect(
             PARTYID,
             CHANGETYPE,
             EFFECTIVETYPE,
@@ -71,7 +71,7 @@
     </insert>
 
     <update id="updatePartyTmp">
-        UPDATE ecny_comm_party_tobeffect
+        UPDATE pay_comm_party_tobeffect
         SET CHANGETYPE = #{partyType},
         CHANGETYPE = #{changeType},
         EFFECTIVETYPE = #{effectiveType},
@@ -93,10 +93,10 @@
     </update>
 
     <delete id="deletePartyTmp">
-        DELETE FROM ecny_comm_party_tobeffect WHERE PARTYID = #{partyID}
+        DELETE FROM pay_comm_party_tobeffect WHERE PARTYID = #{partyID}
     </delete>
 
-    <select id="selectList" resultType="com.dcits.dcwlt.pay.api.model.PartyToBeEffectiveDO">
+    <select id="queryPartyTmp" resultType="com.dcits.dcwlt.pay.api.model.PartyToBeEffectiveDO">
         <include refid="querySql"></include>
         <where>
             <if test="partyID != null and partyID != ''">
