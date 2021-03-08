@@ -21,7 +21,6 @@ import com.dcits.dcwlt.pay.online.flow.builder.EcnyTradeContext;
 import com.dcits.dcwlt.pay.online.flow.builder.EcnyTradeFlowBuilder;
 import com.dcits.dcwlt.pay.online.mapper.ReconvertRTradeMapper;
 import com.dcits.dcwlt.pay.online.service.*;
-import com.dcits.dcwlt.pay.online.service.impl.AuthInfoService;
 import com.dcits.dcwlt.pay.online.service.impl.PartyService;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
@@ -61,7 +60,7 @@ public class Reconvert221RTradeFlow {
     private PartyService partyService;
 
     @Autowired
-    private AuthInfoService authInfoService;
+    private IAuthInfoService authInfoService;
 
 
     @Bean(name = RECONVERT_TRADE_FLOW)
