@@ -10,6 +10,10 @@ public class ApiConstant {
     //自由格式报文发起服务
     public static final String FREEFRMT_SERVICE_NAME = "pymtFrdmFmtMsgSnd";
 
+    /**行内系统接口名**/
+    //重发申请报文发起服务
+    public static final String RESENDAPY_SERVICE_NAME = "pymtRqstNwlySnd";
+
 
 
 
