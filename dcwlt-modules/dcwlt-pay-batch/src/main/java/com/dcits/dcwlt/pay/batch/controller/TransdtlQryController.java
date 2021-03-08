@@ -51,12 +51,14 @@ public class TransdtlQryController extends BaseController
     /**
      * 导出金融交易登记列表
      */
+    @PreAuthorize(hasPermi = "system:transdtl:export")
+    @Log(title = "金融交易登记", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
     public void export(HttpServletResponse response, PayTransDtlInfoDO payPayTransdtl) throws IOException
     {
         List<PayTransDtlInfoDO> list = payPayTransdtlService.selectPayPayTransdtlList(payPayTransdtl);
         ExcelUtil<PayTransDtlInfoDO> util = new ExcelUtil<PayTransDtlInfoDO>(PayTransDtlInfoDO.class);
-        util.exportExcel(response, list, "transdtl");
+        util.exportExcel(response, list, "金融交易登记");
     }
 
 

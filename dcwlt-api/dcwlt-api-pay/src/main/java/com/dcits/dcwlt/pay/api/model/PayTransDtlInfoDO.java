@@ -10,19 +10,30 @@
 package com.dcits.dcwlt.pay.api.model;
 
 
+import com.dcits.dcwlt.common.core.annotation.Excel;
 import com.dcits.dcwlt.common.pay.util.HiddenUtil;
 
 public class PayTransDtlInfoDO implements EcnyBaseDO {
 
+    @Excel(name = "平台日期")
     private String payDate;          //平台日期
+    @Excel(name = "平台流水")
     private String paySerno;         //平台流水
+    @Excel(name = "平台时间")
     private String payTime;          //平台时间
+    @Excel(name = "往来标识")
     private String direct;           //往来标识
+    @Excel(name = "收付标识")
     private String payFlag;          //收付标识
+    @Excel(name = "操作步骤")
     private String operStep;         //操作步骤
+    @Excel(name = "操作状态")
     private String operStatus;       //操作状态
+    @Excel(name = "业务状态")
     private String trxStatus;         //业务状态
+    @Excel(name = "业务处理码")
     private String trxRetCode;       //业务处理码
+    @Excel(name = "业务处理信息")
     private String trxRetMsg;        //业务处理信息
     private String coreProcStatus;   //核心处理状态
     private String coreReqDate;      //核心请求日期

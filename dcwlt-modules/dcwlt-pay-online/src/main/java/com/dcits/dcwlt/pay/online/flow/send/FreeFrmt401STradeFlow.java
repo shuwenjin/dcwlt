@@ -3,6 +3,7 @@ package com.dcits.dcwlt.pay.online.flow.send;
 import com.alibaba.fastjson.JSONObject;
 import com.dcits.dcwlt.common.pay.constant.AppConstant;
 import com.dcits.dcwlt.common.pay.constant.Constant;
+import com.dcits.dcwlt.common.pay.enums.AuthInfoDrctEnum;
 import com.dcits.dcwlt.common.pay.enums.MsgTpEnum;
 import com.dcits.dcwlt.common.pay.enums.ProcessStatusCodeEnum;
 import com.dcits.dcwlt.common.pay.sequence.service.impl.GenerateCodeServiceImpl;
@@ -34,6 +35,8 @@ import com.dcits.dcwlt.pay.online.flow.DcepTransInTradeFlow;
 import com.dcits.dcwlt.pay.online.flow.builder.EcnyTradeContext;
 import com.dcits.dcwlt.pay.online.flow.builder.EcnyTradeFlowBuilder;
 import com.dcits.dcwlt.pay.online.mapper.MonitorMapper;
+import com.dcits.dcwlt.pay.online.service.IAuthInfoService;
+import com.dcits.dcwlt.pay.online.service.IPartyService;
 import com.dcits.dcwlt.pay.online.service.impl.FreeFormatServiceimpl;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -72,13 +75,15 @@ public class FreeFrmt401STradeFlow {
     @Autowired
     private MonitorMapper monitorMapper;
 
-    //@Autowired
-    //private PartyService partyService;
+    @Autowired
+    private IAuthInfoService authInfoService;
+
+    @Autowired
+    private IPartyService partyService;
 
     //@Autowired
     //private DcepSendService dcepSendService;
-    //@Autowired
-    //private AuthInfoService authInfoService;
+
 
 
 
@@ -100,9 +105,9 @@ public class FreeFrmt401STradeFlow {
         msgId = generateCodeService.generateMsgId(OutOrgTypeEnum.InnerOrg, MsgTpEnum.DCEP401.getCode().substring(5, 8), "");
         String msgSn = generateCodeService.generateMsgSN(msgId);
 
-        //发起机构是否有发送权限 TODO
-        //boolean sendAuth = authInfoService.validateAuthInfo(AppConstant.CGB_FINANCIAL_INSTITUTION_CD, Constant.DCEP_401, "", AuthInfoDrctEnum.sendAuth);
-        if (!true) {
+        //发起机构是否有发送权限
+        boolean sendAuth = authInfoService.validateAuthInfo(AppConstant.CGB_FINANCIAL_INSTITUTION_CD, Constant.DCEP_401, "", AuthInfoDrctEnum.sendAuth);
+        if (!sendAuth) {
             //初始化异常内容
             retCode = EcnyTransError.SEND_PARTY_AUTH_ERROR.getErrorCode();
             retMsg = EcnyTransError.SEND_PARTY_AUTH_ERROR.getErrorMsg();
@@ -122,18 +127,18 @@ public class FreeFrmt401STradeFlow {
             throw new EcnyTransException(EcnyTransError.PARAMS_INVALID);
         }
 
-        //判断接收机构状态 TODO
-        //boolean partyFlag = partyService.isAvailable(partyId);
-        if (!true) {
+        //判断接收机构状态
+        boolean partyFlag = partyService.isAvailable(partyId);
+        if (!partyFlag) {
             //初始化异常内容
             retCode = EcnyTransError.RECV_PARTY_STATUS_ERROR.getErrorCode();
             retMsg = EcnyTransError.RECV_PARTY_STATUS_ERROR.getErrorMsg();
             logger.error("接收机构状态异常,{}", partyId);
             throw new EcnyTransException(EcnyTransError.ORGAN_STATUS_ERROR);
         }
-        //判断接收机构权限 TODO
-        //boolean recvFlag = authInfoService.validateAuthInfo(partyId, Constant.DCEP_401, "", AuthInfoDrctEnum.recvAuth);
-        if (!true) {
+        //判断接收机构权限
+        boolean recvFlag = authInfoService.validateAuthInfo(partyId, Constant.DCEP_401, "", AuthInfoDrctEnum.recvAuth);
+        if (!recvFlag) {
             //初始化异常内容
             retCode = EcnyTransError.RECV_PARTY_AUTH_ERROR.getErrorCode();
             retMsg = EcnyTransError.RECV_PARTY_AUTH_ERROR.getErrorMsg();
@@ -196,7 +201,32 @@ public class FreeFrmt401STradeFlow {
         DCEPReqDTO<FreeFrmtDTO> dcepReqDTO = (DCEPReqDTO<FreeFrmtDTO>) EcnyTradeContext.getTempContext(context).get("dcepReqDTO");
         //发送请求报文,接收响应 TODO
         //JSONObject rspObj = dcepSendService.sendDcep(dcepReqDTO);
-        JSONObject rspObj = new JSONObject();
+        JSONObject rspObj = JSONObject.parseObject("{\n" +
+                "    \"ecnyHead\": {\n" +
+                "        \"Sender\": \"C1010311000014\",\n" +
+                "        \"DgtlEnvlp\": null,\n" +
+                "        \"SignSN\": \"01\",\n" +
+                "        \"Ver\": \"01\",\n" +
+                "        \"NcrptnSN\": null,\n" +
+                "        \"Receiver\": \"C1030644021075\",\n" +
+                "        \"MsgSN\": \"20210113106040120333044574013001\",\n" +
+                "        \"SndDtTm\": \"2021-03-08T14:18:20\",\n" +
+                "        \"MsgTp\": \"dcep.902.001.01\"\n" +
+                "    },\n" +
+                "    \"body\": {\n" +
+                "        \"ComConf\": {\n" +
+                "            \"ConfInf\": {\n" +
+                "                \"OrgnlMsgId\": \"20210113106040120333044574013001\",\n" +
+                "                \"OrgnlInstgPty\": \"C1030644021075\",\n" +
+                "                \"PrcSts\": \"PR00\",\n" +
+                "                \"OrgnlMT\": \"dcep.401.001.01\",\n" +
+                "                \"OrigSndDtTm\": \"2021-01-13T20:37:31\",\n" +
+                "                \"Remark\": null\n" +
+                "            }\n" +
+                "        }\n" +
+                "    },\n" +
+                "\t\"head\":{\"retCode\":\"000000\"}\n" +
+                "}");
         EcnyTradeContext.getTempContext(context).put("rspObj", rspObj);
     }
 

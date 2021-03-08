@@ -1,0 +1,253 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dcits.dcwlt.pay.online.mapper.PayTransDtlInfoDOMapper">
+
+    <resultMap type="com.dcits.dcwlt.pay.api.model.PayTransDtlInfoDO" id="PayPayTransdtlResult">
+        <result property="payDate" column="paydate"/>
+        <result property="paySerno" column="paySerno"/>
+        <result property="payTime" column="paytime"/>
+        <result property="direct" column="direct"/>
+        <result property="payFlag" column="payflag"/>
+        <result property="operStep" column="operstep"/>
+        <result property="operStatus" column="operstatus"/>
+        <result property="trxStatus" column="trxstatus"/>
+        <result property="trxRetCode" column="trxretcode"/>
+        <result property="trxRetMsg" column="trxretmsg"/>
+        <result property="coreProcStatus" column="coreprocstatus"/>
+        <result property="coreReqDate" column="corereqdate"/>
+        <result property="coreReqSerno" column="corereqserno"/>
+        <result property="coreAcctDate" column="coreacctdate"/>
+        <result property="coreSerno" column="coreserno"/>
+        <result property="coreRetCode" column="coreretcode"/>
+        <result property="coreRetMsg" column="coreretmsg"/>
+        <result property="payPathDateTime" column="paypathdatetime"/>
+        <result property="payPathSerno" column="paypathserno"/>
+        <result property="pathProcStatus" column="pathprocstatus"/>
+        <result property="payPathRspStatus" column="paypathrspstatus"/>
+        <result property="payPathRetCode" column="paypathretcode"/>
+        <result property="payPathRetMsg" column="paypathretmsg"/>
+        <result property="payPathRetDate" column="paypathretdate"/>
+        <result property="payPathRetSerno" column="paypathretserno"/>
+        <result property="batchId" column="batchid"/>
+        <result property="busiChnl" column="busichnl"/>
+        <result property="busiChnl2" column="busichnl2"/>
+        <result property="busiSysDate" column="busisysdate"/>
+        <result property="busiSysSerno" column="busisysserno"/>
+        <result property="busiSysTime" column="busisystime"/>
+        <result property="msgType" column="msgtype"/>
+        <result property="busiType" column="busitype"/>
+        <result property="busiKind" column="busikind"/>
+        <result property="instgPty" column="instgpty"/>
+        <result property="instdPty" column="instdpty"/>
+        <result property="amount" column="amount"/>
+        <result property="tradeFundSource" column="tradefundsource"/>
+        <result property="tradePurpose" column="tradepurpose"/>
+        <result property="payerPtyId" column="payerptyid"/>
+        <result property="payerName" column="payername"/>
+        <result property="payerAcctType" column="payeraccttype"/>
+        <result property="payerAcct" column="payeracct"/>
+        <result property="payerWalletId" column="payerwalletid"/>
+        <result property="payerWalletName" column="payerwalletname"/>
+        <result property="payerWalletLv" column="payerwalletlv"/>
+        <result property="payerWalletType" column="payerwallettype"/>
+        <result property="payeePtyId" column="payeeptyid"/>
+        <result property="payeeName" column="payeename"/>
+        <result property="payeeAcctType" column="payeeaccttype"/>
+        <result property="payeeAcct" column="payeeacct"/>
+        <result property="payeeWalletId" column="payeewalletid"/>
+        <result property="payeeWalletName" column="payeewalletname"/>
+        <result property="payeeWalletLv" column="payeewalletlv"/>
+        <result property="payeeWalletType" column="payeewallettype"/>
+        <result property="protocolNum" column="protocolnum"/>
+        <result property="ccy" column="ccy"/>
+        <result property="tellerNo" column="tellerno"/>
+        <result property="zoneNo" column="zoneno"/>
+        <result property="brno" column="brno"/>
+        <result property="acctBrno" column="acctbrno"/>
+        <result property="origChnl" column="origchnl"/>
+        <result property="origChnl2" column="origchnl2"/>
+        <result property="origChnlDtl" column="origchnldtl"/>
+        <result property="origMsgType" column="origmsgtype"/>
+        <result property="origPayPathDate" column="origpaypathdate"/>
+        <result property="origPayPathSerno" column="origpaypathserno"/>
+        <result property="summary" column="summary"/>
+        <result property="endToEndID" column="endtoendid"/>
+        <result property="lastUpJrnno" column="lastupjrnno"/>
+        <result property="lastUpDate" column="lastupdate"/>
+        <result property="lastUpTime" column="lastuptime"/>
+        <result property="narraTive" column="narrative"/>
+        <result property="remark" column="remark"/>
+    </resultMap>
+
+    <sql id="selectPayPayTransdtlVo">
+        select paydate, payserno, paytime, direct, payflag, operstep, operstatus, trxstatus, trxretcode, trxretmsg, coreprocstatus, corereqdate, corereqserno, coreacctdate, coreserno, coreretcode, coreretmsg, paypathdatetime, paypathserno, pathprocstatus, paypathrspstatus, paypathretcode, paypathretmsg, paypathretdate, paypathretserno, batchid, busichnl, busichnl2, busisysdate, busisysserno, busisystime, msgtype, busitype, busikind, instgpty, instdpty, amount, tradefundsource, tradepurpose, payerptyid, payername, payeraccttype, payeracct, payerwalletid, payerwalletname, payerwalletlv, payerwallettype, payeeptyid, payeename, payeeaccttype, payeeacct, payeewalletid, payeewalletname, payeewalletlv, payeewallettype, protocolnum, ccy, tellerno, zoneno, brno, acctbrno, origchnl, origchnl2, origchnldtl, origmsgtype, origpaypathdate, origpaypathserno, summary, endtoendid, lastupjrnno, lastupdate, lastuptime, narrative, remark from pay_pay_transdtl
+    </sql>
+
+    <select id="selectPayPayTransdtlList" parameterType="com.dcits.dcwlt.pay.api.model.PayTransDtlInfoDO"
+            resultMap="PayPayTransdtlResult">
+        <include refid="selectPayPayTransdtlVo"/>
+        <where>
+            <if test="payDate != null  and payDate != ''">and paydate = #{payDate}</if>
+            <if test="paySerno != null  and paySerno != ''">and payserno = #{paySerno}</if>
+            <if test="payPathSerno != null  and payPathSerno != ''">and paypathserno = #{payPathSerno}</if>
+            <if test="batchId != null  and batchId != ''">and batchid = #{batchId}</if>
+            <if test="msgType != null  and msgType != ''">and msgtype = #{msgType}</if>
+        </where>
+    </select>
+
+    <insert id="insert" parameterType="com.dcits.dcwlt.pay.api.model.PayTransDtlInfoDO">
+        insert into pay_pay_transdtl
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="payDate != null and payDate != ''">paydate,</if>
+            <if test="paySerno != null">payserno,</if>
+            <if test="payTime != null">paytime,</if>
+            <if test="direct != null">direct,</if>
+            <if test="payFlag != null">payflag,</if>
+            <if test="operStep != null">operstep,</if>
+            <if test="operStatus != null">operstatus,</if>
+            <if test="trxStatus != null">trxstatus,</if>
+            <if test="trxRetCode != null">trxretcode,</if>
+            <if test="trxRetMsg != null">trxretmsg,</if>
+            <if test="coreProcStatus != null">coreprocstatus,</if>
+            <if test="coreReqDate != null">corereqdate,</if>
+            <if test="coreReqSerno != null">corereqserno,</if>
+            <if test="coreAcctDate != null">coreacctdate,</if>
+            <if test="coreSerno != null">coreserno,</if>
+            <if test="coreRetCode != null">coreretcode,</if>
+            <if test="coreRetMsg != null">coreretmsg,</if>
+            <if test="payPathDateTime != null">paypathdatetime,</if>
+            <if test="payPathSerno != null">paypathserno,</if>
+            <if test="pathProcStatus != null">pathprocstatus,</if>
+            <if test="payPathRspStatus != null">paypathrspstatus,</if>
+            <if test="payPathRetCode != null">paypathretcode,</if>
+            <if test="payPathRetMsg != null">paypathretmsg,</if>
+            <if test="payPathRetDate != null">paypathretdate,</if>
+            <if test="payPathRetSerno != null">paypathretserno,</if>
+            <if test="batchId != null">batchid,</if>
+            <if test="busiChnl != null">busichnl,</if>
+            <if test="busiChnl2 != null">busichnl2,</if>
+            <if test="busiSysDate != null">busisysdate,</if>
+            <if test="busiSysSerno != null">busisysserno,</if>
+            <if test="busiSysTime != null">busisystime,</if>
+            <if test="msgType != null">msgtype,</if>
+            <if test="busiType != null">busitype,</if>
+            <if test="busiKind != null">busikind,</if>
+            <if test="instgPty != null">instgpty,</if>
+            <if test="instdPty != null">instdpty,</if>
+            <if test="amount != null">amount,</if>
+            <if test="tradeFundSource != null">tradefundsource,</if>
+            <if test="tradePurpose != null">tradepurpose,</if>
+            <if test="payerPtyId != null">payerptyid,</if>
+            <if test="payerName != null">payername,</if>
+            <if test="payerAcctType != null">payeraccttype,</if>
+            <if test="payerAcct != null">payeracct,</if>
+            <if test="payerWalletId != null">payerwalletid,</if>
+            <if test="payerWalletName != null">payerwalletname,</if>
+            <if test="payerWalletLv != null">payerwalletlv,</if>
+            <if test="payerWalletType != null">payerwallettype,</if>
+            <if test="payeePtyId != null">payeeptyid,</if>
+            <if test="payeeName != null">payeename,</if>
+            <if test="payeeAcctType != null">payeeaccttype,</if>
+            <if test="payeeAcct != null">payeeacct,</if>
+            <if test="payeeWalletId != null">payeewalletid,</if>
+            <if test="payeeWalletName != null">payeewalletname,</if>
+            <if test="payeeWalletLv != null">payeewalletlv,</if>
+            <if test="payeeWalletType != null">payeewallettype,</if>
+            <if test="protocolNum != null">protocolnum,</if>
+            <if test="ccy != null">ccy,</if>
+            <if test="tellerNo != null">tellerno,</if>
+            <if test="zoneNo != null">zoneno,</if>
+            <if test="brno != null">brno,</if>
+            <if test="acctBrno != null">acctbrno,</if>
+            <if test="origChnl != null">origchnl,</if>
+            <if test="origChnl2 != null">origchnl2,</if>
+            <if test="origChnlDtl != null">origchnldtl,</if>
+            <if test="origMsgType != null">origmsgtype,</if>
+            <if test="origPayPathDate != null">origpaypathdate,</if>
+            <if test="origPayPathSerno != null">origpaypathserno,</if>
+            <if test="summary != null">summary,</if>
+            <if test="endToEndID != null">endtoendid,</if>
+            <if test="lastUpJrnno != null">lastupjrnno,</if>
+            <if test="lastUpDate != null">lastupdate,</if>
+            <if test="lastUpTime != null">lastuptime,</if>
+            <if test="narraTive != null">narrative,</if>
+            <if test="remark != null">remark,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="payDate != null and payDate != ''">paydate,</if>
+            <if test="paySerno != null">payserno,</if>
+            <if test="payTime != null">paytime,</if>
+            <if test="direct != null">direct,</if>
+            <if test="payFlag != null">payflag,</if>
+            <if test="operStep != null">operstep,</if>
+            <if test="operStatus != null">operstatus,</if>
+            <if test="trxStatus != null">trxstatus,</if>
+            <if test="trxRetCode != null">trxretcode,</if>
+            <if test="trxRetMsg != null">trxretmsg,</if>
+            <if test="coreProcStatus != null">coreprocstatus,</if>
+            <if test="coreReqDate != null">corereqdate,</if>
+            <if test="coreReqSerno != null">corereqserno,</if>
+            <if test="coreAcctDate != null">coreacctdate,</if>
+            <if test="coreSerno != null">coreserno,</if>
+            <if test="coreRetCode != null">coreretcode,</if>
+            <if test="coreRetMsg != null">coreretmsg,</if>
+            <if test="payPathDateTime != null">paypathdatetime,</if>
+            <if test="payPathSerno != null">paypathserno,</if>
+            <if test="pathProcStatus != null">pathprocstatus,</if>
+            <if test="payPathRspStatus != null">paypathrspstatus,</if>
+            <if test="payPathRetCode != null">paypathretcode,</if>
+            <if test="payPathRetMsg != null">paypathretmsg,</if>
+            <if test="payPathRetDate != null">paypathretdate,</if>
+            <if test="payPathRetSerno != null">paypathretserno,</if>
+            <if test="batchId != null">batchid,</if>
+            <if test="busiChnl != null">busichnl,</if>
+            <if test="busiChnl2 != null">busichnl2,</if>
+            <if test="busiSysDate != null">busisysdate,</if>
+            <if test="busiSysSerno != null">busisysserno,</if>
+            <if test="busiSysTime != null">busisystime,</if>
+            <if test="msgType != null">msgtype,</if>
+            <if test="busiType != null">busitype,</if>
+            <if test="busiKind != null">busikind,</if>
+            <if test="instgPty != null">instgpty,</if>
+            <if test="instdPty != null">instdpty,</if>
+            <if test="amount != null">amount,</if>
+            <if test="tradeFundSource != null">tradefundsource,</if>
+            <if test="tradePurpose != null">tradepurpose,</if>
+            <if test="payerPtyId != null">payerptyid,</if>
+            <if test="payerName != null">payername,</if>
+            <if test="payerAcctType != null">payeraccttype,</if>
+            <if test="payerAcct != null">payeracct,</if>
+            <if test="payerWalletId != null">payerwalletid,</if>
+            <if test="payerWalletName != null">payerwalletname,</if>
+            <if test="payerWalletLv != null">payerwalletlv,</if>
+            <if test="payerWalletType != null">payerwallettype,</if>
+            <if test="payeePtyId != null">payeeptyid,</if>
+            <if test="payeeName != null">payeename,</if>
+            <if test="payeeAcctType != null">payeeaccttype,</if>
+            <if test="payeeAcct != null">payeeacct,</if>
+            <if test="payeeWalletId != null">payeewalletid,</if>
+            <if test="payeeWalletName != null">payeewalletname,</if>
+            <if test="payeeWalletLv != null">payeewalletlv,</if>
+            <if test="payeeWalletType != null">payeewallettype,</if>
+            <if test="protocolNum != null">protocolnum,</if>
+            <if test="ccy != null">ccy,</if>
+            <if test="tellerNo != null">tellerno,</if>
+            <if test="zoneNo != null">zoneno,</if>
+            <if test="brno != null">brno,</if>
+            <if test="acctBrno != null">acctbrno,</if>
+            <if test="origChnl != null">origchnl,</if>
+            <if test="origChnl2 != null">origchnl2,</if>
+            <if test="origChnlDtl != null">origchnldtl,</if>
+            <if test="origMsgType != null">origmsgtype,</if>
+            <if test="origPayPathDate != null">origpaypathdate,</if>
+            <if test="origPayPathSerno != null">origpaypathserno,</if>
+            <if test="summary != null">summary,</if>
+            <if test="endToEndID != null">endtoendid,</if>
+            <if test="lastUpJrnno != null">lastupjrnno,</if>
+            <if test="lastUpDate != null">lastupdate,</if>
+            <if test="lastUpTime != null">lastuptime,</if>
+            <if test="narraTive != null">narrative,</if>
+            <if test="remark != null">remark,</if>
+        </trim>
+    </insert>
+</mapper>

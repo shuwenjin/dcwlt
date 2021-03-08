@@ -16,5 +16,4 @@ public interface IAuthInfoRepository {
      * */
     List<AuthInfoDO> validateAuthInfo(AuthInfoDO authInfoDO);
 
-
 }

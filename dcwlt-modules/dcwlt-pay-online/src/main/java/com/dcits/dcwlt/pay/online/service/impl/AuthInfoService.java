@@ -1,22 +1,16 @@
 package com.dcits.dcwlt.pay.online.service.impl;
 
+
 import com.dcits.dcwlt.common.pay.constant.AppConstant;
 import com.dcits.dcwlt.common.pay.enums.AuthInfoDrctEnum;
 import com.dcits.dcwlt.common.pay.enums.AuthoritySignCodeEnum;
-import com.dcits.dcwlt.common.pay.enums.ChangeCdEnum;
-import com.dcits.dcwlt.common.pay.enums.EffectiveCdEnum;
 import com.dcits.dcwlt.common.pay.util.DateUtil;
 import com.dcits.dcwlt.pay.api.domain.dcep.authinfo.AuthrtyChngNtfctn;
-import com.dcits.dcwlt.pay.api.domain.dcep.authinfo.AuthrtyInf;
-import com.dcits.dcwlt.pay.api.domain.dcep.authinfo.BizAuthrtyInf;
-import com.dcits.dcwlt.pay.api.domain.dcep.chngctrl.ChngCtrl;
 import com.dcits.dcwlt.pay.api.model.AuthInfoDO;
-import com.dcits.dcwlt.pay.api.model.AuthInfoToBeEffectiveDO;
 import com.dcits.dcwlt.pay.online.exception.EcnyTransError;
 import com.dcits.dcwlt.pay.online.exception.EcnyTransException;
 import com.dcits.dcwlt.pay.online.service.IAuthInfoRepository;
 import com.dcits.dcwlt.pay.online.service.IAuthInfoService;
-import com.dcits.dcwlt.pay.online.service.IAuthInfoToBeEffectiveRepository;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -35,117 +29,13 @@ public class AuthInfoService implements IAuthInfoService {
     private static final Logger logger = LoggerFactory.getLogger(AuthInfoService.class);
     @Autowired
     private IAuthInfoRepository iAuthInfoRepository;
-    @Autowired
-    private IAuthInfoToBeEffectiveRepository authInfoToBeEffectiveRepository;
 
     //计数器
     private int count = 0;
-
-    /*
-     * 更新/新增业务权限信息
-     * */
-    public int replaceAuthInfo(AuthrtyChngNtfctn authrtyChngNtfctn) {
-        logger.info("进入[replaceAuthInfo]方法,进入时间为:{}", DateUtil.getCurTime());
-        List<AuthrtyInf> authrtyInfList = authrtyChngNtfctn.getAuthrtyInf();
-        //遍历参与机构业务权限信息清单
-        for (AuthrtyInf authrtyInf : authrtyInfList) {
-            //校验数据变更组件
-            ChngCtrl chngCtrl = authrtyInf.getChngCtrl();
-            //校验数据变更组件
-//            chngCtrl.validate();
-            //生效类型
-            String fctvTp = chngCtrl.getFctvTp();
-            //变更类型
-            String chngTp = chngCtrl.getChngTp();
-            //生效日期
-            String fctvDt = chngCtrl.getFctvDt();
-            if (StringUtils.isNotBlank(fctvDt)) {
-                fctvDt = fctvDt.replaceAll("\\D", "").substring(0, 8);
-            }
-            //失效日期
-            String ifctvDt = chngCtrl.getIfctvDt();
-            if (StringUtils.isNotBlank(ifctvDt)) {
-                ifctvDt = ifctvDt.replaceAll("\\D", "").substring(0, 8);
-            }
-            List<BizAuthrtyInf> bizAuthrtyInfList = authrtyInf.getBizAuthrtyInf();
-            //循环插入业务权限信息
-            if (bizAuthrtyInfList != null && !bizAuthrtyInfList.isEmpty()) {
-                for (BizAuthrtyInf bizAuthrtyInf : bizAuthrtyInfList) {
-                    try {
-                        if (EffectiveCdEnum.EF00.getCode().equals(fctvTp)) { //即时生效
-                            //封装实体
-                            AuthInfoDO authInfoDO = new AuthInfoDO();
-                            authInfoDO.setPartyId(authrtyInf.getPtcpt());
-                            authInfoDO.setMsgType(bizAuthrtyInf.getMT());
-                            authInfoDO.setTradeCtgyCode(bizAuthrtyInf.getTrdCtgyCd());
-                            authInfoDO.setSendAuth(bizAuthrtyInf.getInitAuthrtySgnCd());
-                            authInfoDO.setRecvAuth(bizAuthrtyInf.getRcvAuthrtySgnCd());
-                            authInfoDO.setEffectDate(fctvDt);
-                            authInfoDO.setInEffectiveDate(ifctvDt);
-                            authInfoDO.setLastUpDate(DateUtil.getDefaultDate());
-                            authInfoDO.setLastUpTime(DateUtil.getCurTime());
-                            if (ChangeCdEnum.CC00.getCode().equals(chngTp) || ChangeCdEnum.CC01.getCode().equals(chngTp)) {
-                                //变更类型为新增或修改,设置状态为生效中
-                                authInfoDO.setStatus(AppConstant.EFFECTIVE_STATUS_EFFECTIVE);
-                            } else { //更变类型为撤销
-                                authInfoDO.setStatus(AppConstant.EFFECTIVE_STATUS_REVOKE);
-                            }
-                            //新增或更新业务权限信息
-                            iAuthInfoRepository.replaceAuthInfo(authInfoDO);
-                            logger.info("该条业务权限插入成功:authInfoDO {}", authInfoDO);
-                        } else {     //定时生效
-                            //封装实体
-                            AuthInfoToBeEffectiveDO authInfoToBeEffectiveDO = new AuthInfoToBeEffectiveDO();
-                            authInfoToBeEffectiveDO.setPartyId(authrtyInf.getPtcpt());
-                            authInfoToBeEffectiveDO.setMsgType(bizAuthrtyInf.getMT());
-                            authInfoToBeEffectiveDO.setTradeCtgyCode(bizAuthrtyInf.getTrdCtgyCd());
-                            authInfoToBeEffectiveDO.setSendAuth(bizAuthrtyInf.getInitAuthrtySgnCd());
-                            authInfoToBeEffectiveDO.setRecvAuth(bizAuthrtyInf.getRcvAuthrtySgnCd());
-                            authInfoToBeEffectiveDO.setEffectiveType(EffectiveCdEnum.EF01.getCode());
-                            authInfoToBeEffectiveDO.setEffectDate(fctvDt);
-                            authInfoToBeEffectiveDO.setInEffectiveDate(ifctvDt);
-                            authInfoToBeEffectiveDO.setLastUpDate(DateUtil.getDefaultDate());
-                            authInfoToBeEffectiveDO.setLastUpTime(DateUtil.getCurTime());
-                            if (ChangeCdEnum.CC00.getCode().equals(chngTp)) { //变更类型为新增
-                                authInfoToBeEffectiveDO.setChangeType(ChangeCdEnum.CC00.getCode());
-                            } else if (ChangeCdEnum.CC01.getCode().equals(chngTp)) { //更变类型为修改
-                                authInfoToBeEffectiveDO.setChangeType(ChangeCdEnum.CC01.getCode());
-                            } else {        //更变类型为撤销
-                                authInfoToBeEffectiveDO.setChangeType(ChangeCdEnum.CC02.getCode());
-                            }
-                            //新增或更新业务权限信息到临时表
-                            authInfoToBeEffectiveRepository.replaceAuthInfoToBeEffective(authInfoToBeEffectiveDO);
-                            logger.info("该条业务权限临时信息插入成功:authInfoToBeEffectiveDO {}", authInfoToBeEffectiveDO);
-                        }
-                    } catch (Exception e) {
-                        //执行失败,记录该条失败信息
-                        count += 1;
-                        logger.warn("新增或更新该条业务权限失败,partyId:{},msgType:{},tradeCtgyCode:{}", authrtyInf.getPtcpt(), bizAuthrtyInf.getMT(), bizAuthrtyInf.getTrdCtgyCd());
-                        logger.warn("异常信息e:{}", e.getMessage());
-                    }
-                }
-            } else {
-                logger.error("业务权限清单为空:{}", bizAuthrtyInfList);
-                logger.info("结束执行[replaceAuthInfo]方法,结束时间为:{}", DateUtil.getDefaultTime());
-                return authrtyInfList.size();
-            }
-        }
-        logger.info("执行入库失败条数为 faultCount :{} ", count);
-        logger.info("结束执行[replaceAuthInfo]方法,结束时间为:{},", DateUtil.getCurTime());
-        //返回执行失败条数
-        return count;
-    }
-
-    /*
-     * 校验业务权限信息
-     * @Param:partyid 机构编码
-     * @Param:msgType 报文编号
-     * @Param:TradeCtgyCode 业务类型
-     * @Param:flag 接收/发送标识: recvAuth/sendAuth
-     * */
+    
     @Override
     public Boolean validateAuthInfo(String partyid, String msgType, String tradeCtgyCode, AuthInfoDrctEnum flag) {
-        logger.info("进入执行[validateAuthInfo]方法,进入时间为:{}", DateUtil.getCurTime());
+        logger.info("进入执行[validateAuthInfo]方法,进入时间为:{}", DateUtil.getDefaultTime());
 
         //封装查询条件
         AuthInfoDO authInfoDO = new AuthInfoDO();
@@ -158,7 +48,7 @@ public class AuthInfoService implements IAuthInfoService {
             List<AuthInfoDO> list = iAuthInfoRepository.validateAuthInfo(authInfoDO);
             if (list.isEmpty()) {
                 logger.info("无法查询到该业务信息，partyId：{}， msgType：{},TradeCtgyCode：{}", partyid, msgType, tradeCtgyCode);
-                logger.info("无业务权限信息,结束validateAuthInfo方法,结束时间为:{}", DateUtil.getCurTime());
+                logger.info("无业务权限信息,结束validateAuthInfo方法,结束时间为:{}", DateUtil.getDefaultTime());
                 //无权限
                 return false;
             }
@@ -197,21 +87,21 @@ public class AuthInfoService implements IAuthInfoService {
             if (AuthInfoDrctEnum.recvAuth.getCode().equals(flag.getCode())) {
                 //接收权限标识为允许/禁止
                 if (AuthoritySignCodeEnum.AS00.getCode().equals(authInfo.getRecvAuth())) {
-                    logger.info("{}有接收权限->{},结束validateAuthInfo方法,结束时间为:->{}", partyid, authInfo.getRecvAuth(), DateUtil.getCurTime());
+                    logger.info("{}有接收权限->{},结束validateAuthInfo方法,结束时间为:->{}", partyid, authInfo.getRecvAuth(), DateUtil.getDefaultTime());
                     //有接收权限
                     return true;
                 }
-                logger.info("{}无接收权限->{},结束validateAuthInfo方法,结束时间为:->{}", partyid, authInfo.getRecvAuth(), DateUtil.getCurTime());
+                logger.info("{}无接收权限->{},结束validateAuthInfo方法,结束时间为:->{}", partyid, authInfo.getRecvAuth(), DateUtil.getDefaultTime());
                 //无接收权限
                 return false;
             } else {   //查询发送权限
                 //发送权限标识为允许/禁止
                 if (AuthoritySignCodeEnum.AS00.getCode().equals(authInfo.getSendAuth())) {
-                    logger.info("{}有发送权限 ->{},结束validateAuthInfo方法,结束时间为:->{}", partyid, authInfo.getSendAuth(),DateUtil.getCurTime());
+                    logger.info("{}有发送权限 ->{},结束validateAuthInfo方法,结束时间为:->{}", partyid, authInfo.getSendAuth(), DateUtil.getDefaultTime());
                     //有发送权限
                     return true;
                 }
-                logger.info("{}无法送权限->{},结束validateAuthInfo方法,结束时间为:->{}", partyid, authInfo.getSendAuth(),DateUtil.getCurTime());
+                logger.info("{}无法送权限->{},结束validateAuthInfo方法,结束时间为:->{}", partyid, authInfo.getSendAuth(), DateUtil.getDefaultTime());
                 //无发送权限
                 return false;
             }
@@ -219,5 +109,10 @@ public class AuthInfoService implements IAuthInfoService {
             logger.error("校验业务权限变更数据库操作异常,异常信息e:{}", e.getMessage());
             throw new EcnyTransException(EcnyTransError.DATABASE_ERROR);
         }
+    }
+
+    @Override
+    public int replaceAuthInfo(AuthrtyChngNtfctn authrtyChngNtfctn) {
+        return 0;
     }
 }

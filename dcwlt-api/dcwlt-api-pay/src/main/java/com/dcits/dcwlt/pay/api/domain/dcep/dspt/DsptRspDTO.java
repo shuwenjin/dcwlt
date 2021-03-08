@@ -5,6 +5,7 @@ import com.dcits.dcwlt.pay.api.domain.dcep.DCEPRspBody;
 import com.dcits.dcwlt.pay.api.domain.dcep.bankattachedmanagement.BankAttRspsnInf;
 import com.dcits.dcwlt.pay.api.domain.dcep.common.GrpHdr;
 import com.dcits.dcwlt.pay.api.domain.dcep.common.OrgnlGrpHdr;
+import com.dcits.dcwlt.pay.api.domain.dcep.common.RspsnInf;
 
 
 /**
@@ -14,12 +15,11 @@ public class DsptRspDTO extends DCEPRspBody {
 
     private DsptRsp dsptRsp;
 
-    public static DsptRspDTO getInstance(GrpHdr grpHdr, OrgnlGrpHdr orgnlGrpHdr, BankAttRspsnInf rspsnInf) {
+    public static DsptRspDTO getInstance(GrpHdr grpHdr, OrgnlGrpHdr orgnlGrpHdr, RspsnInf rspsnInf) {
         DsptRspDTO dsptRspDTO = new DsptRspDTO();
         DsptRsp dsptRsp = new DsptRsp();
         dsptRsp.setGrpHdr(grpHdr);
         dsptRsp.setOrgnlGrpHdr(orgnlGrpHdr);
-        dsptRsp.setRspsnInf(rspsnInf);
         dsptRspDTO.setDsptRsp(dsptRsp);
         return dsptRspDTO;
     }
