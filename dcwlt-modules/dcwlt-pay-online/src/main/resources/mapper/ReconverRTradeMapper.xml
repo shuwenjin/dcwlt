@@ -1,0 +1,270 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dcits.dcwlt.pay.online.mapper.ReconvertRTradeMapper">
+    <!-- 新增报文登记信息 -->
+    <insert id="insertReconvertRTrade">
+            INSERT INTO pay_pay_transdtl(
+            paydate,
+            payserno,
+            paytime,
+            direct,
+            payflag,
+            operstep,
+            operstatus,
+            trxstatus,
+            trxretcode,
+            trxretmsg,
+            coreprocstatus,
+            corereqdate,
+            corereqserno,
+            coreacctdate,
+            coreserno,
+            coreretcode,
+            coreretmsg,
+            paypathdatetime,
+            paypathserno,
+            pathprocstatus,
+            paypathrspstatus,
+            paypathretcode,
+            paypathretmsg,
+            paypathretdate,
+            paypathretserno,
+            batchid,
+            busichnl,
+            busichnl2,
+            busisysdate,
+            busisysserno,
+            busisystime,
+            msgtype,
+            busitype,
+            busikind,
+            instgpty,
+            instdpty,
+            amount,
+            tradefundsource,
+            tradepurpose,
+            payerptyid,
+            payername,
+            payeraccttype,
+            payeracct,
+            payerwalletid,
+            payerwalletname,
+            payerwalletlv,
+            payerwallettype,
+            payeeptyid,
+            payeename,
+            payeeaccttype,
+            payeeacct,
+            payeewalletid,
+            payeewalletname,
+            payeewalletlv,
+            payeewallettype,
+            protocolnum,
+            ccy,
+            tellerno,
+            zoneno,
+            brno,
+            acctbrno,
+            origchnl,
+            origchnl2,
+            origchnldtl,
+            origmsgtype,
+            origpaypathdate,
+            origpaypathserno,
+            summary,
+            endtoendid,
+            lastupjrnno,
+            lastupdate,
+            lastuptime,
+            narrative,
+            remark
+            )
+            VALUE (
+            #{payDate},
+            #{paySerno},
+            #{payTime},
+            #{direct},
+            #{payFlag},
+            #{operStep},
+            #{operStatus},
+            #{trxStatus},
+            #{trxRetCode},
+            #{trxRetMsg},
+            #{coreProcStatus},
+            #{coreReqDate},
+            #{coreReqSerno},
+            #{coreAcctDate},
+            #{coreSerno},
+            #{coreRetCode},
+            #{coreRetMsg},
+            #{payPathDateTime},
+            #{payPathSerno},
+            #{pathProcStatus},
+            #{payPathRspStatus},
+            #{payPathRetCode},
+            #{payPathRetMsg},
+            #{payPathRetDate},
+            #{payPathRetSerno},
+            #{batchId},
+            #{busiChnl},
+            #{busiChnl2},
+            #{busiSysDate},
+            #{busiSysSerno},
+            #{busiSysTime},
+            #{msgType},
+            #{busiType},
+            #{busiKind},
+            #{instgPty},
+            #{instdPty},
+            #{amount},
+            #{tradeFundSource},
+            #{tradePurpose},
+            #{payerPtyId},
+            #{payerName},
+            #{payerAcctType},
+            #{payerAcct},
+            #{payerWalletId},
+            #{payerWalletName},
+            #{payerWalletLv},
+            #{payerWalletType},
+            #{payeePtyId},
+            #{payeeName},
+            #{payeeAcctType},
+            #{payeeAcct},
+            #{payeeWalletId},
+            #{payeeWalletName},
+            #{payeeWalletLv},
+            #{payeeWalletType},
+            #{protocolNum},
+            #{ccy},
+            #{tellerNo},
+            #{zoneNo},
+            #{brno},
+            #{acctBrno},
+            #{origChnl},
+            #{origChnl2},
+            #{origChnlDtl},
+            #{origMsgType},
+            #{origPayPathDate},
+            #{origPayPathSerno},
+            #{summary},
+            #{endToEndID},
+            #{lastUpJrnno},
+            #{lastUpDate},
+            #{lastUpTime},
+            #{narraTive},
+            #{remark}
+            )
+    </insert>
+
+    <update id="updateReconvertRTrade">
+        UPDATE pay_pay_transdtl
+        SET
+        paydate=#{payDate}
+        payserno=#{paySerno}
+        paytime=#{payTime}
+        direct=#{direct}
+        payflag=#{payFlag}
+        operstep=#{operStep}
+        operstatus=#{operStatus}
+        trxstatus=#{trxStatus}
+        trxretcode=#{trxRetCode}
+        trxretmsg=#{trxRetMsg}
+        coreprocstatus=#{coreProcStatus}
+        corereqdate=#{coreReqDate}
+        corereqserno=#{coreReqSerno}
+        coreacctdate=#{coreAcctDate}
+        coreserno=#{coreSerno}
+        coreretcode=#{coreRetCode}
+        coreretmsg=#{coreRetMsg}
+        paypathdatetime=#{payPathDateTime}
+        paypathserno=#{payPathSerno}
+        pathprocstatus=#{pathProcStatus}
+        paypathrspstatus=#{payPathRspStatus}
+        paypathretcode=#{payPathRetCode}
+        paypathretmsg=#{payPathRetMsg}
+        paypathretdate=#{payPathRetDate}
+        paypathretserno=#{payPathRetSerno}
+        batchid=#{batchId}
+        busichnl=#{busiChnl}
+        busichnl2=#{busiChnl2}
+        busisysdate=#{busiSysDate}
+        busisysserno=#{busiSysSerno}
+        busisystime=#{busiSysTime}
+        msgtype=#{msgType}
+        busitype=#{busiType}
+        busikind=#{busiKind}
+        instgpty=#{instgPty}
+        instdpty=#{instdPty}
+        amount=#{amount}
+        tradefundsource=#{tradeFundSource}
+        tradepurpose=#{tradePurpose}
+        payerptyid=#{payerPtyId}
+        payername=#{payerName}
+        payeraccttype=#{payerAcctType}
+        payeracct=#{payerAcct}
+        payerwalletid=#{payerWalletId}
+        payerwalletname=#{payerWalletName}
+        payerwalletlv=#{payerWalletLv}
+        payerwallettype=#{payerWalletType}
+        payeeptyid=#{payeePtyId}
+        payeename=#{payeeName}
+        payeeaccttype=#{payeeAcctType}
+        payeeacct=#{payeeAcct}
+        payeewalletid=#{payeeWalletId}
+        payeewalletname=#{payeeWalletName}
+        payeewalletlv=#{payeeWalletLv}
+        payeewallettype=#{payeeWalletType}
+        protocolnum=#{protocolNum}
+        ccy=#{ccy}
+        tellerno=#{tellerNo}
+        zoneno=#{zoneNo}
+        brno=#{brno}
+        acctbrno=#{acctBrno}
+        origchnl=#{origChnl}
+        origchnl2=#{origChnl2}
+        origchnldtl=#{origChnlDtl}
+        origmsgtype=#{origMsgType}
+        origpaypathdate=#{origPayPathDate}
+        origpaypathserno=#{origPayPathSerno}
+        summary=#{summary}
+        endtoendid=#{endToEndID}
+        lastupjrnno=#{lastUpJrnno}
+        lastupdate=#{lastUpDate}
+        lastuptime=#{lastUpTime}
+        narrative=#{narraTive}
+        remark=#{remark}
+        WHERE paydate = #{payDate} and payserno = #{paySerNo}
+    </update>
+
+    <select id="queryPayTransDtlNonf" resultType="com.dcits.dcwlt.pay.api.model.PayTransDtlNonfDO">
+        SELECT
+        E.msgId msgId,
+        E.PAYDATE payDate,
+        E.PAYTIME payTime,
+        E.PAYSERNO paySerNo,
+        E.PKGNO pkgNo,
+        E.DRCT drct,
+        E.TRADESTATUS tradeStatus
+        E.SENDERDATETIME senderDateTime,
+        E.INSTGDRCTPTY instgDrctPty,
+        E.INSTDDRCTPTY instdDrctPty,
+        E.OPTERATIONTYPE opterationType,
+        E.PROCSTATUS procStatus,
+        E.REJECTCODE rejectCode,
+        E.REJECTINFO rejectInfo,
+        E.TLRNO tlrNo,
+        E.REMARK remark,
+        E.MESSAGECONTEXT messageContext,
+        E.LASTUPDATE lastUpDate,
+        E.LASTUPTIME lastUpTime,
+        FROM pay_pay_transdtl_nonf E
+        <where>
+            <if test="msgId != null and msgId != ''">
+                E.MSGID = #{msgId}
+            </if>
+        </where>
+    </select>
+</mapper>

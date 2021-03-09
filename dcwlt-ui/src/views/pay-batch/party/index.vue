@@ -223,7 +223,7 @@
       /** 查询机构列表 */
       getList() {
         this.loading = true;
-        listParty(this.addDateRange(this.queryParams)).then(response => {
+        listParty(this.queryParams).then(response => {
           this.partyList = response.rows;
           this.total = response.total;
           this.loading = false;

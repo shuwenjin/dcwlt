@@ -107,10 +107,10 @@
         P.LASTUPTIME lastUpTime
         FROM  pay_comm_party P
         <where>
-            <if test="partyType != null and partyType != ''">
+            <if test="partyType != null">
                 P.PARTYTYPE = #{partyType}
             </if>
-            <if test="partyStatus != null and partyStatus != ''">
+            <if test="partyStatus != null">
                 P.PARTYSTATUS = #{partyStatus}
             </if>
             <if test="status != null and status != ''">

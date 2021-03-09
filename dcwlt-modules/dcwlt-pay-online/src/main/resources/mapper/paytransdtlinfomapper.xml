@@ -1,0 +1,295 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dcits.dcwlt.pay.online.mapper.PayTransDtlInfoMapper">
+    <!--金融交易信息入库-->
+    <insert id="insert" parameterType="com.dcits.dcwlt.pay.api.model.PayTransDtlInfoDO">
+        INSERT INTO pay_pay_transdtl
+        (PAYDATE, PAYSERNO, PAYTIME, DIRECT, PAYFLAG, OPERSTEP,
+         OPERSTATUS, TRXSTATUS, TRXRETCODE, TRXRETMSG, COREPROCSTATUS, COREREQDATE, COREREQSERNO,
+         COREACCTDATE, CORESERNO, CORERETCODE, CORERETMSG, PAYPATHDATETIME,
+         PAYPATHSERNO, PATHPROCSTATUS, PAYPATHRSPSTATUS, PAYPATHRETCODE, PAYPATHRETMSG,
+         PAYPATHRETDATE, PAYPATHRETSERNO, BATCHID, BUSICHNL, BUSICHNL2,
+         BUSISYSDATE, BUSISYSSERNO, BUSISYSTIME, MSGTYPE, BUSITYPE, BUSIKIND,
+         INSTGPTY, INSTDPTY, AMOUNT, TRADEFUNDSOURCE, TRADEPURPOSE, PAYERPTYID,
+         PAYERNAME, PAYERACCTTYPE, PAYERACCT, PAYERWALLETID, PAYERWALLETNAME, PAYERWALLETLV,
+         PAYERWALLETTYPE, PAYEEPTYID, PAYEENAME, PAYEEACCTTYPE, PAYEEACCT,
+         PAYEEWALLETID, PAYEEWALLETNAME, PAYEEWALLETLV, PAYEEWALLETTYPE, PROTOCOLNUM, CCY,
+         TELLERNO, ZONENO, BRNO, ACCTBRNO, ORIGCHNL, ORIGCHNL2,
+         ORIGCHNLDTL, ORIGMSGTYPE, ORIGPAYPATHDATE, ORIGPAYPATHSERNO, SUMMARY,
+         ENDTOENDID, LASTUPJRNNO, LASTUPDATE, LASTUPTIME, NARRATIVE, REMARK)
+        VALUES
+        (#{payDate},#{paySerno},#{payTime},#{direct},#{payFlag},#{operStep},
+        #{operStatus},#{trxStatus},#{trxRetCode}, #{trxRetMsg},#{coreProcStatus},#{coreReqDate},#{coreReqSerno},
+        #{coreAcctDate},#{coreSerno},#{coreRetCode},#{coreRetMsg},#{payPathDateTime},
+        #{payPathSerno},#{pathProcStatus}, #{payPathRspStatus}, #{payPathRetCode},#{payPathRetMsg},
+        #{payPathRetDate},#{payPathRetSerno}, #{batchId},#{busiChnl},#{busiChnl2},
+        #{busiSysDate},#{busiSysSerno},#{busiSysTime},#{msgType},#{busiType},#{busiKind},
+        #{instgPty},#{instdPty},#{amount},#{tradeFundSource},#{tradePurpose},#{payerPtyId},
+        #{payerName},#{payerAcctType},#{payerAcct}, #{payerWalletId},#{payerWalletName},#{payerWalletLv},
+        #{payerWalletType},#{payeePtyId},#{payeeName},#{payeeAcctType},#{payeeAcct},
+        #{payeeWalletId},#{payeeWalletName},#{payeeWalletLv},#{payeeWalletType},#{protocolNum},#{ccy},
+        #{tellerNo},#{zoneNo},#{brno},#{acctBrno},#{origChnl},#{origChnl2},
+        #{origChnlDtl},#{origMsgType},#{origPayPathDate},#{origPayPathSerno},#{summary},
+        #{endToEndID},#{lastUpJrnno},#{lastUpDate},#{lastUpTime},#{narraTive},#{remark})
+    </insert>
+    <!--金融交易信息更新-->
+    <update id="update">
+        UPDATE pay_pay_transdtl
+        SET
+        <trim prefix="" suffix="" suffixOverrides=",">
+            <if test="operStep != null and operStep != ''">OPERSTEP = #{operStep},</if>
+            <if test="operStatus != null and operStatus != ''">OPERSTATUS = #{operStatus},</if>
+            <if test="coreReqDate != null and coreReqDate != ''">COREREQDATE = #{coreReqDate},</if>
+            <if test="coreReqSerno != null and coreReqSerno != ''">COREREQSERNO = #{coreReqSerno},</if>
+            <if test="coreAcctDate != null and coreAcctDate != ''">COREACCTDATE = #{coreAcctDate},</if>
+            <if test="coreSerno != null and coreSerno != ''">CORESERNO = #{coreSerno},</if>
+            <if test="coreProcStatus != null and coreProcStatus != ''">COREPROCSTATUS = #{coreProcStatus},</if>
+            <if test="coreRetCode != null and coreRetCode != ''">CORERETCODE = #{coreRetCode},</if>
+            <if test="coreRetMsg != null and coreRetMsg != ''">CORERETMSG = #{coreRetMsg},</if>
+            <if test="trxStatus != null and trxStatus != ''">TRXSTATUS = #{trxStatus},</if>
+            <if test="trxRetCode != null and trxRetCode != ''">TRXRETCODE = #{trxRetCode},</if>
+            <if test="trxRetMsg != null and trxRetMsg != ''">TRXRETMSG = #{trxRetMsg},</if>
+            <if test="pathProcStatus != null and pathProcStatus != ''">PATHPROCSTATUS = #{pathProcStatus},</if>
+            <if test="payPathRspStatus != null and payPathRspStatus != ''">PAYPATHRSPSTATUS = #{payPathRspStatus},</if>
+            <if test="payPathRetSerno != null and payPathRetSerno != ''">PAYPATHRETSERNO = #{payPathRetSerno},</if>
+            <if test="payPathRetCode != null and payPathRetCode != ''">PAYPATHRETCODE = #{payPathRetCode},</if>
+            <if test="payPathRetMsg != null and payPathRetMsg != ''">PAYPATHRETMSG = #{payPathRetMsg},</if>
+            <if test="payPathRetDate != null and payPathRetDate != ''">PAYPATHRETDATE = #{payPathRetDate},</if>
+            <if test="lastUpDate != null and lastUpDate != ''">LASTUPDATE = #{lastUpDate},</if>
+            <if test="lastUpTime != null and lastUpTime != ''">LASTUPTIME = #{lastUpTime}</if>
+        </trim>
+        WHERE PAYDATE = #{payDate, jdbcType=CHAR} AND PAYSERNO = #{paySerno, jdbcType=CHAR}
+        <if test="preTrxStatus != null and preTrxStatus != ''">AND TRXSTATUS = #{preTrxStatus}</if>
+        <if test="preCoreProcStatus != null and preCoreProcStatus != ''">AND COREPROCSTATUS = #{preCoreProcStatus}</if>
+        <if test="prePathProcStatus != null and prePathProcStatus != ''">AND PATHPROCSTATUS = #{prePathProcStatus}</if>
+    </update>
+
+    <!--金融交易信息更新-->
+    <update id="updateDirect">
+        UPDATE pay_pay_transdtl
+        SET
+        <trim prefix="" suffix="" suffixOverrides=",">
+            <if test="operStep != null and operStep != ''">OPERSTEP = #{operStep},</if>
+            <if test="operStatus != null and operStatus != ''">OPERSTATUS = #{operStatus},</if>
+            <if test="coreReqDate != null and coreReqDate != ''">COREREQDATE = #{coreReqDate},</if>
+            <if test="coreReqSerno != null and coreReqSerno != ''">COREREQSERNO = #{coreReqSerno},</if>
+            <if test="coreAcctDate != null and coreAcctDate != ''">COREACCTDATE = #{coreAcctDate},</if>
+            <if test="coreSerno != null and coreSerno != ''">CORESERNO = #{coreSerno},</if>
+            <if test="coreProcStatus != null and coreProcStatus != ''">COREPROCSTATUS = #{coreProcStatus},</if>
+            <if test="coreRetCode != null and coreRetCode != ''">CORERETCODE = #{coreRetCode},</if>
+            <if test="coreRetMsg != null and coreRetMsg != ''">CORERETMSG = #{coreRetMsg},</if>
+            <if test="trxStatus != null and trxStatus != ''">TRXSTATUS = #{trxStatus},</if>
+            <if test="trxRetCode != null and trxRetCode != ''">TRXRETCODE = #{trxRetCode},</if>
+            <if test="trxRetMsg != null and trxRetMsg != ''">TRXRETMSG = #{trxRetMsg},</if>
+            <if test="pathProcStatus != null and pathProcStatus != ''">PATHPROCSTATUS = #{pathProcStatus},</if>
+            <if test="payPathRspStatus != null and payPathRspStatus != ''">PAYPATHRSPSTATUS = #{payPathRspStatus},</if>
+            <if test="payPathRetSerno != null and payPathRetSerno != ''">PAYPATHRETSERNO = #{payPathRetSerno},</if>
+            <if test="payPathRetCode != null and payPathRetCode != ''">PAYPATHRETCODE = #{payPathRetCode},</if>
+            <if test="payPathRetMsg != null and payPathRetMsg != ''">PAYPATHRETMSG = #{payPathRetMsg},</if>
+            <if test="payPathRetDate != null and payPathRetDate != ''">PAYPATHRETDATE = #{payPathRetDate},</if>
+            <if test="lastUpDate != null and lastUpDate != ''">LASTUPDATE = #{lastUpDate},</if>
+            <if test="lastUpTime != null and lastUpTime != ''">LASTUPTIME = #{lastUpTime},</if>
+            <if test="payerPtyId != null and payerPtyId != ''">PAYERPTYID = #{payerPtyId},</if>
+            <if test="payerName != null and payerName != ''">PAYERNAME = #{payerName},</if>
+            <if test="payerAcctType != null and payerAcctType != ''">PAYERACCTTYPE = #{payerAcctType},</if>
+            <if test="payerAcct != null and payerAcct != ''">PAYERACCT = #{payerAcct},</if>
+            <if test="payerWalletId != null and payerWalletId != ''">PAYERWALLETID = #{payerWalletId},</if>
+            <if test="payerWalletName != null and payerWalletName != ''">PAYERWALLETNAME = #{payerWalletName},</if>
+            <if test="payerWalletLv != null and payerWalletLv != ''">PAYERWALLETLV = #{payerWalletLv},</if>
+            <if test="payerWalletType != null and payerWalletType != ''">PAYERWALLETTYPE = #{payerWalletType},</if>
+            <if test="payeePtyId != null and payeePtyId != ''">PAYEEPTYID = #{payeePtyId},</if>
+            <if test="payeeName != null and payeeName != ''">PAYEENAME = #{payeeName},</if>
+            <if test="payeeAcctType != null and payeeAcctType != ''">PAYEEACCTTYPE = #{payeeAcctType},</if>
+            <if test="payeeAcct != null and payeeAcct != ''">PAYEEACCT = #{payeeAcct},</if>
+            <if test="payeeWalletId != null and payeeWalletId != ''">PAYEEWALLETID = #{payeeWalletId},</if>
+            <if test="payeeWalletName != null and payeeWalletName != ''">PAYEEWALLETNAME = #{payeeWalletName},</if>
+            <if test="payeeWalletLv != null and payeeWalletLv != ''">PAYEEWALLETLV = #{payeeWalletLv},</if>
+            <if test="payeeWalletType != null and payeeWalletType != ''">PAYEEWALLETTYPE = #{payeeWalletType},</if>
+            <if test="amount != null and amount != ''">AMOUNT = #{amount},</if>
+            <if test="ccy != null and ccy != ''">CCY = #{ccy},</if>
+            <if test="batchId != null and batchId != ''">BATCHID = #{batchId},</if>
+            <if test="origPayPathSerno != null and origPayPathSerno != ''">ORIGPAYPATHSERNO = #{origPayPathSerno},</if>
+            <if test="origMsgType != null and origMsgType != ''">ORIGMSGTYPE = #{origMsgType},</if>
+            <if test="origPayPathDate != null and origPayPathDate != ''">ORIGPAYPATHDATE = #{origPayPathDate},</if>
+            <if test="instgPty != null and instgPty != ''">INSTGPTY = #{instgPty},</if>
+            <if test="instdPty != null and instdPty != ''">INSTDPTY = #{instdPty},</if>
+            <if test="busiType != null and busiType != ''">BUSITYPE = #{busiType},</if>
+            <if test="busiKind != null and busiKind != ''">BUSIKIND = #{busiKind}</if>
+        </trim>
+        WHERE PAYDATE = #{payDate, jdbcType=CHAR} AND PAYSERNO = #{paySerno, jdbcType=CHAR}
+    </update>
+
+    <!--根据报文标识号查询金融交易信息-->
+    <select id="queryByMsgId" resultType="com.dcits.dcwlt.pay.api.model.PayTransDtlInfoDO">
+        SELECT  PAYDATE  payDate,
+                PAYSERNO paySerno,
+                PAYTIME payTime,
+                DIRECT direct,
+                PAYFLAG payFlag,
+                OPERSTEP operStep,
+                OPERSTATUS operStatus,
+                TRXSTATUS trxStatus,
+                TRXRETCODE trxRetCode,
+                TRXRETMSG trxRetMsg,
+                COREPROCSTATUS coreProcStatus,
+                COREREQDATE coreReqDate,
+                COREREQSERNO coreReqSerno,
+                COREACCTDATE coreAcctDate,
+                CORESERNO coreSerno,
+                CORERETCODE coreRetCode,
+                CORERETMSG coreRetMsg,
+                PAYPATHDATETIME payPathDateTime,
+                PAYPATHSERNO payPathSerno,
+                PATHPROCSTATUS pathProcStatus,
+                PAYPATHRSPSTATUS payPathRspStatus,
+                PAYPATHRETCODE payPathRetCode,
+                PAYPATHRETMSG payPathRetMsg,
+                PAYPATHRETDATE payPathRetDate,
+                PAYPATHRETSERNO payPathRetSerno,
+                BATCHID batchId,
+                BUSICHNL busiChnl,
+                BUSICHNL2 busiChnl2,
+                BUSISYSDATE busiSysDate,
+                BUSISYSSERNO busiSysSerno,
+                BUSISYSTIME busiSysTime,
+                MSGTYPE msgType,
+                BUSITYPE busiType,
+                BUSIKIND busiKind,
+                INSTGPTY instgPty,
+                INSTDPTY instdPty,
+                AMOUNT amount,
+                TRADEFUNDSOURCE tradeFundSource,
+                TRADEPURPOSE tradePurpose,
+                PAYERPTYID payerPtyId,
+                PAYERNAME payerName,
+                PAYERACCTTYPE payerAcctType,
+                PAYERACCT payerAcct,
+                PAYERWALLETID payerWalletId,
+                PAYERWALLETNAME payerWalletName,
+                PAYERWALLETLV payerWalletLv,
+                PAYERWALLETTYPE payerWalletType,
+                PAYEEPTYID payeePtyId,
+                PAYEENAME payeeName,
+                PAYEEACCTTYPE payeeAcctType,
+                PAYEEACCT payeeAcct,
+                PAYEEWALLETID payeeWalletId,
+                PAYEEWALLETNAME payeeWalletName,
+                PAYEEWALLETLV payeeWalletLv,
+                PAYEEWALLETTYPE payeeWalletType,
+                PROTOCOLNUM protocolNum,
+                CCY ccy,
+                TELLERNO tellerNo,
+                ZONENO zoneNo,
+                BRNO brno,
+                ACCTBRNO acctBrno,
+                ORIGCHNL origChnl,
+                ORIGCHNL2 origChnl2,
+                ORIGCHNLDTL origChnlDtl,
+                ORIGMSGTYPE origMsgType,
+                ORIGPAYPATHDATE origPayPathDate,
+                ORIGPAYPATHSERNO origPayPathSerno,
+                SUMMARY summary,
+                ENDTOENDID endToEndID,
+                LASTUPJRNNO lastUpJrnno,
+                LASTUPDATE lastUpDate,
+                LASTUPTIME lastUpTime,
+                NARRATIVE narraTive,
+                REMARK remark
+        FROM pay_pay_transdtl
+        WHERE PAYPATHSERNO = #{msgId, jdbcType=CHAR}
+    </select>
+
+    <!--根据平台日期和流水查询金融交易信息-->
+    <select id="queryByPayInfo" resultType="com.dcits.dcwlt.pay.api.model.PayTransDtlInfoDO">
+        SELECT PAYDATE  payDate,
+        PAYSERNO paySerno,
+        PAYTIME payTime,
+        DIRECT direct,
+        PAYFLAG payFlag,
+        OPERSTEP operStep,
+        OPERSTATUS operStatus,
+        TRXSTATUS trxStatus,
+        TRXRETCODE trxRetCode,
+        TRXRETMSG trxRetMsg,
+        COREPROCSTATUS coreProcStatus,
+        COREREQDATE coreReqDate,
+        COREREQSERNO coreReqSerno,
+        COREACCTDATE coreAcctDate,
+        CORESERNO coreSerno,
+        CORERETCODE coreRetCode,
+        CORERETMSG coreRetMsg,
+        PAYPATHDATETIME payPathDateTime,
+        PAYPATHSERNO payPathSerno,
+        PATHPROCSTATUS pathProcStatus,
+        PAYPATHRSPSTATUS payPathRspStatus,
+        PAYPATHRETCODE payPathRetCode,
+        PAYPATHRETMSG payPathRetMsg,
+        PAYPATHRETDATE payPathRetDate,
+        PAYPATHRETSERNO payPathRetSerno,
+        BATCHID batchId,
+        BUSICHNL busiChnl,
+        BUSICHNL2 busiChnl2,
+        BUSISYSDATE busiSysDate,
+        BUSISYSSERNO busiSysSerno,
+        BUSISYSTIME busiSysTime,
+        MSGTYPE msgType,
+        BUSITYPE busiType,
+        BUSIKIND busiKind,
+        INSTGPTY instgPty,
+        INSTDPTY instdPty,
+        AMOUNT amount,
+        TRADEFUNDSOURCE tradeFundSource,
+        TRADEPURPOSE tradePurpose,
+        PAYERPTYID payerPtyId,
+        PAYERNAME payerName,
+        PAYERACCTTYPE payerAcctType,
+        PAYERACCT payerAcct,
+        PAYERWALLETID payerWalletId,
+        PAYERWALLETNAME payerWalletName,
+        PAYERWALLETLV payerWalletLv,
+        PAYERWALLETTYPE payerWalletType,
+        PAYEEPTYID payeePtyId,
+        PAYEENAME payeeName,
+        PAYEEACCTTYPE payeeAcctType,
+        PAYEEACCT payeeAcct,
+        PAYEEWALLETID payeeWalletId,
+        PAYEEWALLETNAME payeeWalletName,
+        PAYEEWALLETLV payeeWalletLv,
+        PAYEEWALLETTYPE payeeWalletType,
+        PROTOCOLNUM protocolNum,
+        CCY ccy,
+        TELLERNO tellerNo,
+        ZONENO zoneNo,
+        BRNO brno,
+        ACCTBRNO acctBrno,
+        ORIGCHNL origChnl,
+        ORIGCHNL2 origChnl2,
+        ORIGCHNLDTL origChnlDtl,
+        ORIGMSGTYPE origMsgType,
+        ORIGPAYPATHDATE origPayPathDate,
+        ORIGPAYPATHSERNO origPayPathSerno,
+        SUMMARY summary,
+        ENDTOENDID endToEndID,
+        LASTUPJRNNO lastUpJrnno,
+        LASTUPDATE lastUpDate,
+        LASTUPTIME lastUpTime,
+        NARRATIVE narraTive,
+        REMARK remark
+        FROM pay_pay_transdtl
+        WHERE PAYDATE = #{payDate, jdbcType=CHAR} AND PAYSERNO = #{paySerno, jdbcType=CHAR}
+    </select>
+
+    <!--根据渠道流水查询金融交易信息-->
+    <select id="queryByBusiSysSerno" resultType="com.dcits.dcwlt.pay.api.model.PayTransDtlInfoDO">
+        SELECT COREACCTDATE, CORESERNO, PAYPATHSERNO, TRXSTATUS, TRXRETCODE, TRXRETMSG
+        FROM pay_pay_transdtl
+        WHERE BUSISYSSERNO = #{busiSysSerno, jdbcType=CHAR}
+    </select>
+
+    <!--根据渠道流水查询金融交易信息-->
+    <select id="queryByOrigSerno" resultType="com.dcits.dcwlt.pay.api.model.PayTransDtlInfoDO">
+        SELECT TRXSTATUS
+        FROM pay_pay_transdtl
+        WHERE ORIGPAYPATHSERNO = #{origPayPathSerno, jdbcType=CHAR} AND TRXSTATUS &gt; 0
+    </select>
+</mapper>

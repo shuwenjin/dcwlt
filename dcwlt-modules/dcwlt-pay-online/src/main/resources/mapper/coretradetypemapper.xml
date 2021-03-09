@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dcits.dcwlt.pay.online.mapper.CoreTradeTypeMapper">
+
+    <!--查询核算规则信息-->
+    <select id="queryByAccMeth" resultType="com.dcits.dcwlt.pay.api.model.CoreTradeTypeDO">
+        SELECT
+        payPath, acctMeth, seq, coreAccMode, corePrdMode,
+        corePrdCode, coreEventCode, coreAccEleMent, coreAccBrnoType1, coreAccBrno1,
+        coreAccBrnoType2, coreAccBrno2, coreAccBrnoType3, coreAccBrno3, coreAccBrnoType4,
+        coreAccBrno4, coreAccBrnoType5, coreAccBrno5, coreAccAmountType1, coreAccAmountPtr1,
+        coreAccAmountType2, coreAccAmountPtr2, coreAccAmountType3, coreAccAmountPtr3,
+        coreAccAmountType4, coreAccAmountPtr4, coreAccAmountType5, coreAccAmountPtr5,
+        coreAccAmountType6, coreAccAmountPtr6, coreAccAmountType7, coreAccAmountPtr7,
+        coreAccAmountType8, coreAccAmountPtr8, coreAccAmountType9, coreAccAmountPtr9,
+        coreAccAmountType10, coreAccAmountPtr10, corePrTabsCode, coreFeeCode, coreDrTrxType,
+        coreMateAccNo, coreMateName, coreMateUniteCode, coreMateUniteName, coreMateFlag
+        FROM ECNY_COMM_CORETRADETYPEINFO T
+        WHERE T.PAYPATH = #{payPath} AND T.ACCTMETH = #{acctMeth} ORDER BY seq ASC
+    </select>
+
+
+</mapper>

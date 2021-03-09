@@ -5,6 +5,7 @@ import com.dcits.dcwlt.pay.api.model.AuthInfoDO;
 import com.dcits.dcwlt.pay.api.model.AuthInfoToBeEffectiveDO;
 
 import java.util.List;
+import java.util.Map;
 
 public interface AuthInfoMapper {
     /*
@@ -34,4 +35,5 @@ public interface AuthInfoMapper {
     int deleteAuthInfo(AuthInfoToBeEffectiveDO authInfoToBeEffectiveDO);
 
 
+    List<AuthInfoDO> selectList(AuthInfoDO authInfoDO);
 }
