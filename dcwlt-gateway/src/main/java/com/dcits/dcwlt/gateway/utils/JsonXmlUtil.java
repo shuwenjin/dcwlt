@@ -1,5 +1,6 @@
 package com.dcits.dcwlt.gateway.utils;
 
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
@@ -18,7 +19,12 @@ import java.io.StringReader;
 import java.io.StringWriter;
 import java.net.URL;
 import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * JSON对象与XML相互转换工具类
@@ -45,6 +51,8 @@ public class JsonXmlUtil {
     private static final String SOAP_BODY_ATT_V = "http://www.dcep.com/";
     private static final String MSGTP = "head:MsgTp";
 
+    private static final Set<String> LISTELEMENTS = new HashSet<String>(Arrays.asList(new String[]{"FileInfList", "AuthrtyInf", "ChngInf", "BizAuthrtyInf", "BatchList", "ClrList", "FileNameList", "ChkPayList", "SummaryBody"}));
+
     private JsonXmlUtil() {
         throw new IllegalStateException("Utility class");
     }
@@ -60,9 +68,57 @@ public class JsonXmlUtil {
         SAXReader reader = new SAXReader();
         Document document = reader.read(new StringReader(xml));
         Element root = document.getRootElement();
-        JSONObject json = elementToJson(root);
+        JSONObject json = dcepElementToJson(root);
         return json;
     }
+
+    /**
+     * DCEPElement对象转JSON对象
+     *
+     * @param element Element对象
+     * @return JSON对象
+     */
+    public static JSONObject dcepElementToJson(Element element) {
+        JSONObject json = new JSONObject();
+        for (Object child : element.elements()) {
+            Element e = (Element) child;
+            if (LISTELEMENTS.contains(e.getName())) {
+                //数组
+                json.put(e.getName(), dcepElementLitToJsonArray(e));
+            } else {
+                if (e.elements().isEmpty()) {
+                    if (e.attributes().isEmpty()) {
+                        json.put(e.getName(), e.getText());
+                    } else {
+                        JSONObject jsonCcy = new JSONObject();
+                        jsonCcy.put(KEY_CCY, e.attributeValue(KEY_CCY));
+                        jsonCcy.put(KEY_VALUE, e.getText());
+                        json.put(e.getName(), jsonCcy);
+                    }
+                } else {
+                    json.put(e.getName(), dcepElementToJson(e));
+                }
+            }
+        }
+
+        return json;
+    }
+
+    public static JSONArray dcepElementLitToJsonArray(Element element) {
+        JSONArray jsonArray = new JSONArray();
+        for (Object child : element.elements()) {
+            Element e = (Element) child;
+            JSONObject json = new JSONObject();
+            if(e.elements().isEmpty()){
+                json.put(e.getName(), e.getText());
+            }else {
+                json.put(e.getName(), dcepElementToJson(e));
+            }
+            jsonArray.add(json);
+        }
+        return jsonArray;
+    }
+
     /**
      * JSON对象转漂亮的xml字符串
      *
@@ -77,6 +133,7 @@ public class JsonXmlUtil {
 
         return ToPrettyXml(document);
     }
+
     /**
      * JSON对象转漂亮的xml字符串
      *
@@ -112,7 +169,7 @@ public class JsonXmlUtil {
             XMLWriter writer = new XMLWriter(formatXml, format);
             writer.write(document);
             return formatXml.toString();
-        }catch (Exception e){
+        } catch (Exception e) {
             return document.asXML();
         }
     }
@@ -191,7 +248,7 @@ public class JsonXmlUtil {
             Element body = DocumentHelper.createElement(SOAP_ROOT_PREFIX + BODY);
             for (String bodyChildKey : json.getJSONObject(BODY).keySet()) {
                 Element bodyChild = DocumentHelper.createElement(SOAP_BODY_PREFIX + bodyChildKey);
-                bodyChild.addAttribute(SOAP_BODY_ATT,msgTpToBodySchema(msgTp));
+                bodyChild.addAttribute(SOAP_BODY_ATT, msgTpToBodySchema(msgTp));
                 bodyChild = addJsonToElement(json.getJSONObject(BODY).getJSONObject(bodyChildKey), bodyChild);
                 body.add(bodyChild);
 
@@ -204,12 +261,12 @@ public class JsonXmlUtil {
         return document;
     }
 
-    public static String msgTpToBodySchema(String msgTp){
+    public static String msgTpToBodySchema(String msgTp) {
         StringBuilder bodySchema = new StringBuilder();
         bodySchema.append(SOAP_BODY_ATT_V);
-        if(StringUtils.isNotBlank(msgTp)){
+        if (StringUtils.isNotBlank(msgTp)) {
             String[] tpa = msgTp.split("\\.");
-            if(tpa.length>0) {
+            if (tpa.length > 0) {
                 bodySchema.append(tpa[0]).append("/");
                 for (int i = 1; i < tpa.length; i++) {
                     bodySchema.append(tpa[i]);
@@ -219,6 +276,7 @@ public class JsonXmlUtil {
         }
         return bodySchema.toString();
     }
+
     /**
      * JSON对象添加到Element对象
      *
@@ -232,12 +290,12 @@ public class JsonXmlUtil {
             Object child = json.get(key);
             if (child instanceof JSONObject) {
                 //带币种的特殊处理
-                if(((JSONObject) child).containsKey(KEY_CCY) && ((JSONObject) child).containsKey(KEY_VALUE)){
+                if (((JSONObject) child).containsKey(KEY_CCY) && ((JSONObject) child).containsKey(KEY_VALUE)) {
                     Element element = DocumentHelper.createElement(key);
                     element.setText(json.getJSONObject(key).getString(KEY_VALUE) == null ? "" : json.getJSONObject(key).getString(KEY_VALUE));
                     element.addAttribute(KEY_CCY, json.getJSONObject(key).getString(KEY_CCY));
                     node.add(element);
-                }else{
+                } else {
                     Element nodeChild = DocumentHelper.createElement(key);
                     node.add(addJsonToElement(json.getJSONObject(key), nodeChild));
                 }
