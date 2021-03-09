@@ -16,7 +16,8 @@ import java.util.List;
  * @date 2020/12/29
  */
 @Component
-public class PayTransDtlNonfRepository implements IPayTransDtlNonfRepository {
+public class
+PayTransDtlNonfRepository implements IPayTransDtlNonfRepository {
 
     private static final String INSERT_URL = "payTransDtlNonf.insertPayTransDtlNonf";
     private static final String UPDATE_URL = "payTransDtlNonf.updatePayTransDtlNonf";

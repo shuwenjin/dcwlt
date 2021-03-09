@@ -74,6 +74,7 @@ public class PartyInfoRepository implements IPartyInfoRepository {
      * @param partyInfoDO
      * @return
      */
+    @Override
     public int updateParty(PartyInfoDO partyInfoDO) {
 //        partyInfoDO.setLastUpTime(DateUtil.getDefaultTime());
 //        partyInfoDO.setLastUpDate(DateUtil.getDefaultDate());
@@ -270,6 +271,7 @@ public class PartyInfoRepository implements IPartyInfoRepository {
      * @param partyId
      * @return
      */
+    @Override
     public PartyInfoDO queryPartyInfoByPartyId(String partyId) {
         PartyInfoDO partyInfoDO = new PartyInfoDO();
         partyInfoDO.setPartyID(partyId);

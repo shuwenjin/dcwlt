@@ -21,8 +21,8 @@ import java.util.List;
  * @date 2020/12/30
  */
 @Service
-public class PartyInfoRepository implements IPartyInfoRepository {
-    private static final Logger logger = LoggerFactory.getLogger(PartyInfoRepository.class);
+public class PartyInfoServiceImpl implements IPartyInfoRepository {
+    private static final Logger logger = LoggerFactory.getLogger(PartyInfoServiceImpl.class);
     private static final String INSERT_URL = "party.insertParty";
     private static final String UPDATE_URL = "party.updateParty";
     private static final String QUERY_URL = "party.queryParty";

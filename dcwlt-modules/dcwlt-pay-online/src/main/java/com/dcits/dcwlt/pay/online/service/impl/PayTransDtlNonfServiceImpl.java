@@ -17,7 +17,7 @@ import java.util.List;
  * @date 2020/12/29
  */
 @Component
-public class PayTransDtlNonfRepository implements IPayTransDtlNonfRepository {
+public class PayTransDtlNonfServiceImpl implements IPayTransDtlNonfRepository {
 
     @Autowired
     private LoginMapper loginMapper;

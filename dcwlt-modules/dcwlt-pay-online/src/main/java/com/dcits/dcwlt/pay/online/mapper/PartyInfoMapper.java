@@ -14,4 +14,6 @@ public interface PartyInfoMapper {
 	List<PartyInfoDO> queryParty(String queryUrl, PartyInfoDO partyInfoDO);
 
 	List<PartyInfoDO> queryLoseEffectiveParty(String queryIneffectiveUrl, String inEffectiveDate);
+
+	List<PartyInfoDO> queryEffectiveParty(PartyInfoDO partyInfoDO);
 }

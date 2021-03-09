@@ -72,8 +72,9 @@
         LASTUPTIME =      #{lastUpTime}
         WHERE MSGID = #{msgId}
     </update>
+    <select id="queryPayTransDtlNonf" resultType="com.dcits.dcwlt.pay.api.model.PayTransDtlNonfDO"></select>
 
-<!--    <select id="queryPayTransDtlNonf" resultType="com.dcits.dcwlt.pay.api.model.PayTransDtlNonfDO">-->
+    <!--    <select id="queryPayTransDtlNonf" resultType="com.dcits.dcwlt.pay.api.model.PayTransDtlNonfDO">-->
 <!--        SELECT-->
 <!--        E.msgId msgId,-->
 <!--        E.PAYDATE payDate,-->
