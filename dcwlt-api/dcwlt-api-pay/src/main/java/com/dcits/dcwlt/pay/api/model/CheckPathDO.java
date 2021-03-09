@@ -1,5 +1,6 @@
 package com.dcits.dcwlt.pay.api.model;
 
+import com.dcits.dcwlt.common.core.annotation.Excel;
 import com.dcits.dcwlt.common.pay.enums.CheckStatusEnum;
 import com.dcits.dcwlt.common.pay.enums.ProcessStsCdEnum;
 
@@ -7,35 +8,65 @@ import com.dcits.dcwlt.common.pay.enums.ProcessStsCdEnum;
  * 通道对账汇总表
  */
 public class CheckPathDO {
-    private String payDate;          	//平台日期          VARCHAR          8
-    private String paySerno;          //平台流水          VARCHAR          32
-    private String payTime;          	//平台时间          VARCHAR          10
-    private String msgId;        		//报文标识号          VARCHAR          35
-    private String senderDateTime;    //报文发送时间          VARCHAR          14
-    private String instgDrctPty;      //发起机构          VARCHAR          14
-    private String instdDrctPty;      //接收机构          VARCHAR          14
-    private String remark;           //备注          VARCHAR          256
-    private String digitalEnvelope;  //数字信封	VARCHAR	512
-    private String batchDate;        //  批次日期          VARCHAR          8
-    private String batchId;          //交易批次号          VARCHAR          13
-    private String countNum;        // 总笔数          VARCHAR          15
-    private String countAmt;         // 总金额          VARCHAR          18
-    private String ccy;             //货币代码	VARCHAR	3
-    private String dBITCountNum;     //     付款笔数          VARCHAR          15
-    private String dBITCountAmt;     //     付款金额          VARCHAR          18
-    private String cRDTCountNum;     //     收款笔数          VARCHAR          15
-    private String cRDTCountAmt;     //     收款金额          VARCHAR          18
-    private String msgType;          //报文编号          VARCHAR          15
-    private ProcessStsCdEnum msgBizStatus;      //    业务状态          VARCHAR          4
-    private String msgCountNum;       //   总笔数          VARCHAR          15
-    private String msgCountAmt;       //   总金额          VARCHAR          18
-    private String msgDBITCountNum;   //       付款笔数          VARCHAR          15
-    private String msgDBITCountAmt;   //       付款金额          VARCHAR          18
-    private String msgCRDTCountNum;   //       收款笔数          VARCHAR          15
-    private String msgCRDTCountAmt;   //       收款金额          VARCHAR          18
-    private CheckStatusEnum checkStatus;       //   对账标识          VARCHAR          1
-    private String lastUpDate;        //  最后更新日期          VARCHAR          8
-    private String lastUpTime;        //  最后更新时间          VARCHAR          6
+	@Excel(name = "平台日期")
+	private String payDate;          	//平台日期          VARCHAR          8
+	@Excel(name = "平台流水")
+	private String paySerno;          //平台流水          VARCHAR          32
+	@Excel(name = "平台时间")
+	private String payTime;          	//平台时间          VARCHAR          10
+	@Excel(name = "报文标识号")
+	private String msgId;        		//报文标识号          VARCHAR          35
+	@Excel(name = "报文发送时间")
+	private String senderDateTime;    //报文发送时间          VARCHAR          14
+	@Excel(name = "发起机构")
+	private String instgDrctPty;      //发起机构          VARCHAR          14
+	@Excel(name = "接收机构")
+	private String instdDrctPty;      //接收机构          VARCHAR          14
+	@Excel(name = "备注")
+	private String remark;           //备注          VARCHAR          256
+	@Excel(name = "数字信封")
+	private String digitalEnvelope;  //数字信封	VARCHAR	512
+	@Excel(name = "批次日期")
+	private String batchDate;        //  批次日期          VARCHAR          8
+	@Excel(name = "交易批次号")
+	private String batchId;          //交易批次号          VARCHAR          13
+	@Excel(name = "总笔数")
+	private String countNum;        // 总笔数          VARCHAR          15
+	@Excel(name = "总金额")
+	private String countAmt;         // 总金额          VARCHAR          18
+	@Excel(name = "货币代码")
+	private String ccy;             //货币代码	VARCHAR	3
+	@Excel(name = "付款笔数")
+	private String dBITCountNum;     //     付款笔数          VARCHAR          15
+	@Excel(name = "付款金额")
+	private String dBITCountAmt;     //     付款金额          VARCHAR          18
+	@Excel(name = "收款笔数")
+	private String cRDTCountNum;     //     收款笔数          VARCHAR          15
+	@Excel(name = "收款金额")
+	private String cRDTCountAmt;     //     收款金额          VARCHAR          18
+	@Excel(name = "报文编号")
+	private String msgType;          //报文编号          VARCHAR          15
+	@Excel(name = "业务状态")
+	private ProcessStsCdEnum msgBizStatus;      //    业务状态          VARCHAR          4
+	@Excel(name = "总笔数")
+	private String msgCountNum;       //   总笔数          VARCHAR          15
+	@Excel(name = "总金额")
+	private String msgCountAmt;       //   总金额          VARCHAR          18
+	@Excel(name = "付款笔数")
+	private String msgDBITCountNum;   //       付款笔数          VARCHAR          15
+	@Excel(name = "付款金额")
+	private String msgDBITCountAmt;   //       付款金额          VARCHAR          18
+	@Excel(name = "收款笔数")
+	private String msgCRDTCountNum;   //       收款笔数          VARCHAR          15
+	@Excel(name = "收款金额")
+	private String msgCRDTCountAmt;   //       收款金额          VARCHAR          18
+	@Excel(name = "对账标识")
+	private CheckStatusEnum checkStatus;       //   对账标识          VARCHAR          1
+	@Excel(name = "最后更新日期")
+	private String lastUpDate;        //  最后更新日期          VARCHAR          8
+	@Excel(name = "最后更新时间")
+	private String lastUpTime;        //  最后更新时间          VARCHAR          6
+
 	public String getPayDate() {
 		return payDate;
 	}
