@@ -1,6 +1,7 @@
 package com.dcits.dcwlt.pay.online.mapper;
 
 import com.dcits.dcwlt.pay.api.model.PartyInfoDO;
+import org.apache.ibatis.annotations.Param;
 import org.mapstruct.Mapper;
 
 import java.util.List;
@@ -70,4 +71,6 @@ public interface PartyInfoMapper
      * @return 结果
      */
     public int deletePartyInfoDOByIds(String[] partyids);
+
+    PartyInfoDO queryParty(@Param("partyID") String partyID);
 }
