@@ -28,6 +28,7 @@ import com.dcits.dcwlt.pay.online.exception.EcnyTransError;
 import com.dcits.dcwlt.pay.online.exception.EcnyTransException;
 import com.dcits.dcwlt.pay.online.flow.builder.EcnyTradeContext;
 import com.dcits.dcwlt.pay.online.flow.builder.EcnyTradeFlowBuilder;
+import com.dcits.dcwlt.pay.online.mapper.SignInfoMapper;
 import com.dcits.dcwlt.pay.online.payconvert.PayConvertChnlReqDTO;
 import com.dcits.dcwlt.pay.online.payconvertstsqry.*;
 import com.dcits.dcwlt.pay.online.service.IAuthInfoService;
@@ -63,7 +64,7 @@ public class PayConvert227STradeFlow {
     private static final String LIMIT_CONFIG_KEY = "ecny.payCounvert.limit.amount";
 
     @Autowired
-    private ISignInfoRepository signInfoRepository;
+    private SignInfoMapper signInfoRepository;
 
     @Autowired
     private IPayTransDtlInfoRepository payTransDtlInfoRepository;

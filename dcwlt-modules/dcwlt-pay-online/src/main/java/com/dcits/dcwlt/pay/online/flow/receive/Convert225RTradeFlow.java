@@ -24,6 +24,7 @@ import com.dcits.dcwlt.pay.online.exception.EcnyTransError;
 import com.dcits.dcwlt.pay.online.exception.EcnyTransException;
 import com.dcits.dcwlt.pay.online.flow.builder.EcnyTradeContext;
 import com.dcits.dcwlt.pay.online.flow.builder.EcnyTradeFlowBuilder;
+import com.dcits.dcwlt.pay.online.mapper.SignInfoMapper;
 import com.dcits.dcwlt.pay.online.service.*;
 import com.dcits.dcwlt.pay.online.service.impl.PartyService;
 import org.apache.commons.lang3.StringUtils;
@@ -47,7 +48,7 @@ public class Convert225RTradeFlow {
     private static final String BUSINESS_TYPE = "BIZTP";
 
     @Autowired
-    private ISignInfoRepository signInfoRepository;
+    private SignInfoMapper signInfoRepository;
 
     @Autowired
     private IPayTransDtlInfoRepository payTransDtlInfoRepository;
@@ -237,7 +238,7 @@ public class Convert225RTradeFlow {
         DCEPReqDTO<ConvertReqDTO> reqMsg = EcnyTradeContext.getReqMsg(tradeContext);
         logger.info("检查协议信息，协议号:{}", reqMsg.getBody().getConvertReq().getDbtrInf().getSgnNo());
         // 查询协议
-        SignInfoDO signInfoDO = signInfoRepository.queryBySignNo(reqMsg.getBody().getConvertReq().getDbtrInf().getSgnNo());
+        SignInfoDO signInfoDO = signInfoRepository.selectBySignNo(reqMsg.getBody().getConvertReq().getDbtrInf().getSgnNo());
         // 协议存在
         if (null != signInfoDO) {
             // 检查协议是否已失效

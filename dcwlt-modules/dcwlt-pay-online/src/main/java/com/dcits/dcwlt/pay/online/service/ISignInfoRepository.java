@@ -2,6 +2,7 @@ package com.dcits.dcwlt.pay.online.service;
 
 
 import com.dcits.dcwlt.pay.api.model.SignInfoDO;
+import org.springframework.stereotype.Service;
 
 /**
  * @author zhangwang
@@ -9,6 +10,7 @@ import com.dcits.dcwlt.pay.api.model.SignInfoDO;
  * @version 1.0.0
  * <p>协议表DAO</p>
  */
+
 public interface ISignInfoRepository {
 
 	int insert(SignInfoDO signInfoDO);

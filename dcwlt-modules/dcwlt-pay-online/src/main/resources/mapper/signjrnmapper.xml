@@ -1,0 +1,223 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dcits.dcwlt.pay.online.mapper.SignJrnMapper">
+
+    <insert id="insert" parameterType="com.dcits.dcwlt.pay.api.model.SignJrnDO">
+        INSERT INTO pay_sign_signinfo_jrn
+        ( PAYDATE,
+        PAYSERNO,
+        PAYTIME,
+        MSGID,
+        INSTGPTY,
+        INSTDPTY,
+        DIRECT,
+        MANAGETYPE,
+        SIGNTYPE,
+        SIGNNO,
+        MSGSENDCODE,
+        MSGVERIFYCODE,
+        TRXSTATUS,
+        TRXRETCODE,
+        TRXRETMSG,
+        RSPMSGID,
+        RSPSTATUS,
+        RSPCODE,
+        RSPMSG,
+        ACCTPTYID,
+        ACCTTYPE,
+        ACCTID,
+        ACCTNAME,
+        IDTYPE,
+        IDNO,
+        TELEPHONE,
+        WALLETPTYID,
+        WALLETID,
+        WALLETTYPE,
+        WALLETLEVEL,
+        LASTUPJRNNO,
+        LASTUPDATE,
+        LASTUPTIME,
+        REMARK
+        )
+        VALUES(
+        #{payDate},
+        #{paySerNo},
+        #{payTime},
+        #{msgId},
+        #{instGpTy},
+        #{instDpTy},
+        #{direct},
+        #{manageType},
+        #{signType},
+        #{signNo},
+        #{msgSendCode},
+        #{msgVerifyCode},
+        #{trxStatus},
+        #{trxRetCode},
+        #{trxRetMsg},
+        #{rspMsgId},
+        #{rspStatus},
+        #{rspCode},
+        #{rspMsg},
+        #{acctPtyId},
+        #{acctType},
+        #{acctId},
+        #{acctName},
+        #{idType},
+        #{idNo},
+        #{telephone},
+        #{walletPtyId},
+        #{walletId},
+        #{walletType},
+        #{walletLevel},
+        #{lastUpJrnNo},
+        #{lastUpDate},
+        #{lastUpTime},
+        #{remark}
+        )
+    </insert>
+
+    <select id="selectByMap" resultType="com.dcits.dcwlt.pay.api.model.SignJrnDO">
+        SELECT
+        PAYDATE       payDate,
+        PAYSERNO      paySerNo,
+        PAYTIME       payTime,
+        MSGID         msgId,
+        INSTGPTY      instGpTy,
+        INSTDPTY      instDpTy,
+        DIRECT        direct,
+        MANAGETYPE    manageType,
+        SIGNTYPE      signType,
+        SIGNNO        signNo,
+        MSGSENDCODE   msgSendCode,
+        MSGVERIFYCODE msgVerifyCode,
+        TRXSTATUS     trxStatus,
+        TRXRETCODE    trxRetCode,
+        TRXRETMSG     trxRetMsg,
+        RSPMSGID      rspMsgId,
+        RSPSTATUS     rspStatus,
+        RSPCODE       rspCode,
+        RSPMSG        rspMsg,
+        ACCTPTYID     acctPtyId,
+        ACCTTYPE      acctType,
+        ACCTID        acctId,
+        ACCTNAME      acctName,
+        IDTYPE        idType,
+        IDNO          idNo,
+        TELEPHONE     telephone,
+        WALLETPTYID   walletPtyId,
+        WALLETID      walletId,
+        WALLETTYPE    walletType,
+        WALLETLEVEL   walletLevel,
+        LASTUPJRNNO   lastUpJrnNo,
+        LASTUPDATE    lastUpDate,
+        LASTUPTIME    lastUpTime,
+        REMARK        remark
+        FROM pay_sign_signinfo_jrn
+        <where>
+            <if test="payDate != null">
+                PAYDATE = #{payDate}
+            </if>
+            <if test="paySerNo != null">
+                AND PAYSERNO = #{paySerNo}
+            </if>
+            <if test="walletId != null">
+                AND WALLETID = #{walletId}
+            </if>
+            <if test="msgSendCode != null">
+                AND MSGSENDCODE = #{msgSendCode}
+            </if>
+        </where>
+    </select>
+
+
+
+    <select id="selectByWalletIdAndMsgSndCd" resultType="com.dcits.dcwlt.pay.api.model.SignJrnDO">
+        SELECT
+        PAYDATE                                   payDate,
+        PAYSERNO                                  paySerNo,
+        PAYTIME                                   payTime,
+        MSGID                                     msgId,
+        INSTGPTY                                  instGpTy,
+        INSTDPTY                                  instDpTy,
+        DIRECT                                    direct,
+        MANAGETYPE                                manageType,
+        SIGNTYPE                                  signType,
+        SIGNNO                                    signNo,
+        MSGSENDCODE                               msgSendCode,
+        MSGVERIFYCODE                             msgVerifyCode,
+        TRXSTATUS                                 trxStatus,
+        TRXRETCODE                                trxRetCode,
+        TRXRETMSG                                 trxRetMsg,
+        RSPMSGID                                  rspMsgId,
+        RSPSTATUS                                 rspStatus,
+        RSPCODE                                   rspCode,
+        RSPMSG                                    rspMsg,
+        ACCTPTYID                                 acctPtyId,
+        ACCTTYPE                                  acctType,
+        ACCTID                                    acctId,
+        ACCTNAME                                  acctName,
+        IDTYPE                                    idType,
+        IDNO                                      idNo,
+        TELEPHONE                                 telephone,
+        WALLETPTYID                               walletPtyId,
+        WALLETID                                  walletId,
+        WALLETTYPE                                walletType,
+        WALLETLEVEL                               walletLevel,
+        LASTUPJRNNO                               lastUpJrnNo,
+        LASTUPDATE                                lastUpDate,
+        LASTUPTIME                                lastUpTime,
+        REMARK                                    remark
+        FROM pay_sign_signinfo_jrn
+        <where>
+            <if test="walletId != null">
+                AND WALLETID = #{walletId}
+            </if>
+            <if test="msgSendCode != null">
+                AND MSGSENDCODE = #{msgSendCode}
+            </if>
+        </where>
+    </select>
+
+    <update id="update" parameterType="com.dcits.dcwlt.pay.api.model.SignJrnDO">
+        update pay_sign_signinfo_jrn
+        <set>
+            <if test = "payTime != null">                PAYTIME      = #{payTime},     </if>
+            <if test = "msgId != null">                  MSGID        = #{msgId},       </if>
+            <if test = "instGpTy != null">               INSTGPTY     = #{instGpTy},    </if>
+            <if test = "instDpTy != null">               INSTDPTY     = #{instDpTy},    </if>
+            <if test = "direct != null">                 DIRECT       = #{direct},      </if>
+            <if test = "manageType != null">             MANAGETYPE   = #{manageType},  </if>
+            <if test = "signType != null">               SIGNTYPE     = #{signType},    </if>
+            <if test = "signNo != null">                 SIGNNO       = #{signNo},      </if>
+            <if test = "msgSendCode != null">            MSGSENDCODE  = #{msgSendCode}, </if>
+            <if test = "msgVerifyCode != null">          MSGVERIFYCODE = #{msgVerifyCode}, </if>
+            <if test = "trxStatus != null">              TRXSTATUS    = #{trxStatus},   </if>
+            <if test = "trxRetCode != null">             TRXRETCODE   = #{trxRetCode},  </if>
+            <if test = "trxRetMsg != null">              TRXRETMSG    = #{trxRetMsg},   </if>
+            <if test = "rspMsgId != null">               RSPMSGID     = #{rspMsgId},    </if>
+            <if test = "rspStatus != null">              RSPSTATUS    = #{rspStatus},   </if>
+            <if test = "rspCode != null">                RSPCODE      = #{rspCode},     </if>
+            <if test = "rspMsg != null">                 RSPMSG       = #{rspMsg},      </if>
+            <if test = "acctPtyId != null">              ACCTPTYID    = #{acctPtyId},   </if>
+            <if test = "acctType != null">               ACCTTYPE     = #{acctType},    </if>
+            <if test = "acctId != null">                 ACCTID       = #{acctId},      </if>
+            <if test = "acctName != null">               ACCTNAME     = #{acctName},    </if>
+            <if test = "idType != null">                 IDTYPE       = #{idType},      </if>
+            <if test = "idNo != null">                   IDNO         = #{idNo},        </if>
+            <if test = "telephone != null">              TELEPHONE    = #{telephone},   </if>
+            <if test = "walletPtyId != null">            WALLETPTYID  = #{walletPtyId}, </if>
+            <if test = "walletId != null">               WALLETID     = #{walletId},    </if>
+            <if test = "walletType != null">             WALLETTYPE   = #{walletType},  </if>
+            <if test = "walletLevel != null">            WALLETLEVEL  = #{walletLevel}, </if>
+            <if test = "lastUpJrnNo != null">            LASTUPJRNNO  = #{lastUpJrnNo}, </if>
+            <if test = "lastUpDate != null">             LASTUPDATE   = #{lastUpDate},  </if>
+            <if test = "lastUpTime != null">             LASTUPTIME   = #{lastUpTime},  </if>
+            <if test = "remark != null">                 REMARK       = #{remark}       </if>
+        </set>
+        WHERE PAYDATE  = #{payDate}
+        AND   PAYSERNO = #{paySerNo}
+    </update>
+
+
+</mapper>

@@ -8,7 +8,11 @@ public interface SignInfoMapper {
 
     int insert(SignInfoDO signInfoDO);
 
-    SignInfoDO selectByWltIdAndAcctId(String signNo);
+    SignInfoDO selectByWltIdAndAcctId(SignInfoDO signInfoDO);
+    int updateBySignNo(SignInfoDO signInfoDO);
+    int updateByWltIdAndAcctId(SignInfoDO signInfoDO);
+
+    SignInfoDO selectBySignNo(String signNo);
 }
 
 
