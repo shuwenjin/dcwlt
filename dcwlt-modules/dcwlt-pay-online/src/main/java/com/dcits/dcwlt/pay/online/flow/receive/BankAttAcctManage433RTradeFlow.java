@@ -838,7 +838,7 @@ public class BankAttAcctManage433RTradeFlow {
         orgnlGrpHdr.setOrgnlInstgPty(req.getGrpHdr().getInstgPty().getInstgDrctPty());          //设置发起机构
         //初始化响应信息
         rspsnInf.setRspsnSts(ProcessStsCdEnum.PR01.getCode());                                  //初始化时设置业务回执状态为失败状态
-        rspsnInf.setMgmtTp(req.getMgmtTp());                                                    //设置管理类型
+//        rspsnInf.setMgmtTp(req.getMgmtTp());                                                    //设置管理类型
         //初始化签约人信息
         sgnInf.setSgnAcctTp(req.getSgnInf().getSgnAcctTp());                                    //设置签约人银行账户类型
         sgnInf.setSgnAcctId(req.getSgnInf().getSgnAcctId());                                    //设置签约人银行账户账号
