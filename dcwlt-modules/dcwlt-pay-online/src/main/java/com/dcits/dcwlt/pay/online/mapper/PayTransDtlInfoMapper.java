@@ -1,6 +1,7 @@
 package com.dcits.dcwlt.pay.online.mapper;
 
 import com.dcits.dcwlt.pay.api.model.PayTransDtlInfoDO;
+import org.apache.ibatis.annotations.Param;
 import org.mapstruct.Mapper;
 
 import java.util.List;
@@ -23,6 +24,8 @@ public interface PayTransDtlInfoMapper {
     int update(Map<String, String> param);
 
     int insert(PayTransDtlInfoDO payTransDtlInfoDO);
+    PayTransDtlInfoDO queryByPayInfo(@Param("payDate") String payDate, @Param("paySerno")String paySerno);
+
 }
 
 

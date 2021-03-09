@@ -1,0 +1,34 @@
+{
+        "Header": {
+            "Sender": "C1030644021075",
+            "SignSN": "null",
+            "Ver": "01",
+            "Receiver": "C1010311000014",
+            "MsgSN": "20210113106040120333044574013001",
+            "SndDtTm": "2021-01-13T20:37:31",
+            "MsgTp": "dcep.411.001.01"
+        },
+        "Body": {
+            "TxStsQryReq": {
+                "GrpHdr": {
+                    "CreDtTm": "2021-01-13T20:33:33",
+                    "InstdPty": {
+                        "InstdDrctPty": "C1010311000014"
+                    },
+                    "InstgPty": {
+                        "InstgDrctPty": "C1030644021075"
+                    },
+                    "MsgId": "20210113106040120333044574013002"
+                },
+                "OrgnlGrpHdr": {
+                    "OrgnlMsgId": "111",
+                    "OrgnlInstgPty": "222",
+                    "OrgnlMT": "333",
+                    "OrgnlBizTp": "444",
+                    "OrgnlBizKind": "5555",
+                    "OrgnlDbtrWltId": "6666",
+                    "OrgnlCdtrWltId": "7777"
+                }
+            }
+        }
+}
