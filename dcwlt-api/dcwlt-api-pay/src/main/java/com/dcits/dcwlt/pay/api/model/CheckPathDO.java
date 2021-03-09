@@ -1,5 +1,8 @@
 package com.dcits.dcwlt.pay.api.model;
 
+import com.dcits.dcwlt.common.pay.enums.CheckStatusEnum;
+import com.dcits.dcwlt.common.pay.enums.ProcessStsCdEnum;
+
 /**
  * 通道对账汇总表
  */
@@ -22,22 +25,15 @@ public class CheckPathDO {
     private String dBITCountAmt;     //     付款金额          VARCHAR          18
     private String cRDTCountNum;     //     收款笔数          VARCHAR          15
     private String cRDTCountAmt;     //     收款金额          VARCHAR          18
-//    private String splitNum;         // 分片编号          VARCHAR          2
-//    private String splitCountNum;    //      分片总笔数          VARCHAR          15
-//    private String splitCountAmt;     //     分片总金额          VARCHAR          18
-//    private String splitDBITCountNum;  //        分片付款笔数          VARCHAR          15
-//    private String splitDBITCountAmt;  //        分片付款金额          VARCHAR          18
-//    private String splitCRDTCountNum;  //        分片收款笔数          VARCHAR          15
-//    private String splitCRDTCountAmt;   //       分片收款金额          VARCHAR          18
     private String msgType;          //报文编号          VARCHAR          15
-    private String msgBizStatus;      //    业务状态          VARCHAR          4
+    private ProcessStsCdEnum msgBizStatus;      //    业务状态          VARCHAR          4
     private String msgCountNum;       //   总笔数          VARCHAR          15
     private String msgCountAmt;       //   总金额          VARCHAR          18
     private String msgDBITCountNum;   //       付款笔数          VARCHAR          15
     private String msgDBITCountAmt;   //       付款金额          VARCHAR          18
     private String msgCRDTCountNum;   //       收款笔数          VARCHAR          15
     private String msgCRDTCountAmt;   //       收款金额          VARCHAR          18
-    private String checkStatus;       //   对账标识          VARCHAR          1
+    private CheckStatusEnum checkStatus;       //   对账标识          VARCHAR          1
     private String lastUpDate;        //  最后更新日期          VARCHAR          8
     private String lastUpTime;        //  最后更新时间          VARCHAR          6
 	public String getPayDate() {
@@ -154,10 +150,10 @@ public class CheckPathDO {
 	public void setMsgType(String msgType) {
 		this.msgType = msgType;
 	}
-	public String getMsgBizStatus() {
+	public ProcessStsCdEnum getMsgBizStatus() {
 		return msgBizStatus;
 	}
-	public void setMsgBizStatus(String msgBizStatus) {
+	public void setMsgBizStatus(ProcessStsCdEnum msgBizStatus) {
 		this.msgBizStatus = msgBizStatus;
 	}
 	public String getMsgCountNum() {
@@ -196,10 +192,10 @@ public class CheckPathDO {
 	public void setMsgCRDTCountAmt(String msgCRDTCountAmt) {
 		this.msgCRDTCountAmt = msgCRDTCountAmt;
 	}
-	public String getCheckStatus() {
+	public CheckStatusEnum getCheckStatus() {
 		return checkStatus;
 	}
-	public void setCheckStatus(String checkStatus) {
+	public void setCheckStatus(CheckStatusEnum checkStatus) {
 		this.checkStatus = checkStatus;
 	}
 	public String getLastUpDate() {

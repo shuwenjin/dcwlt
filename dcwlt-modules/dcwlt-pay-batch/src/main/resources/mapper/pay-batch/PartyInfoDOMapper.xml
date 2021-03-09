@@ -30,7 +30,7 @@
     <select id="selectPartyInfoDOList" parameterType="com.dcits.dcwlt.pay.api.model.PartyInfoDO" resultMap="PartyInfoDOResult">
         <include refid="selectPartyInfoDOVo"/>
         <where>
-            <if test="partyID != null  and partyID != ''">and partyid like concat('%', #{partyid}, '%')</if>
+            <if test="partyID != null  and partyID != ''">and partyid like concat('%', #{partyID}, '%')</if>
             <if test="partyType != null">and partytype like concat('%', #{partyType}, '%')</if>
             <if test="partyName != null  and partyName != ''">and partyname like concat('%', #{partyName}, '%')</if>
             <if test="partyAlias != null  and partyAlias != ''">and partyalias like concat('%', #{partyAlias}, '%')</if>

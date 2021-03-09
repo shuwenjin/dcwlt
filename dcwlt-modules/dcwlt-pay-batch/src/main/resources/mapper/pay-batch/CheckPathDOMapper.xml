@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dcits.dcwlt.pay.batch.mapper.CheckPathDOMapper">
+
+    <resultMap type="com.dcits.dcwlt.pay.api.model.CheckPathDO" id="CheckPathDOResult">
+        <result property="payDate"          column="paydate"    />
+        <result property="paySerno"         column="payserno"    />
+        <result property="payTime"          column="paytime"    />
+        <result property="msgId"          column="msgid"    />
+        <result property="senderDateTime"   column="senderdatetime"    />
+        <result property="instgDrctPty"     column="instgdrctpty"    />
+        <result property="instdDrctPty"     column="instddrctpty"    />
+        <result property="remark"           column="remark"    />
+        <result property="digitalEnvelope"  column="digitalenvelope"    />
+        <result property="batchDate"        column="batchdate"    />
+        <result property="batchId"          column="batchid"    />
+        <result property="countNum"         column="countnum"    />
+        <result property="countAmt"         column="countamt"    />
+        <result property="ccy"              column="ccy"    />
+        <result property="dBITCountNum"     column="dbitcountnum"    />
+        <result property="dBITCountAmt"     column="dbitcountamt"    />
+        <result property="cRDTCountNum"     column="crdtcountnum"    />
+        <result property="cRDTCountAmt"     column="crdtcountamt"    />
+        <result property="msgType"          column="msgtype"    />
+        <result property="msgBizStatus"       column="msgbizstatus"    />
+        <result property="msgCountNum"        column="msgcountnum"    />
+        <result property="msgCountAmt"        column="msgcountamt"    />
+        <result property="msgDBITCountNum"    column="msgdbitcountnum"    />
+        <result property="msgDBITCountAmt"    column="msgdbitcountamt"    />
+        <result property="msgCRDTCountNum"    column="msgcrdtcountnum"    />
+        <result property="msgCRDTCountAmt"    column="msgcrdtcountamt"    />
+        <result property="checkStatus"        column="checkstatus"    />
+        <result property="lastUpDate"         column="lastupdate"    />
+        <result property="lastUpTime"         column="lastuptime"    />
+    </resultMap>
+
+    <sql id="selectCheckPathDOVo">
+        select paydate, payserno, paytime, msgid, senderdatetime, instgdrctpty, instddrctpty, remark, digitalenvelope, batchdate, batchid, countnum, countamt, ccy, dbitcountnum, dbitcountamt, crdtcountnum, crdtcountamt, msgtype, msgbizstatus, msgcountnum, msgcountamt, msgdbitcountnum, msgdbitcountamt, msgcrdtcountnum, msgcrdtcountamt, checkstatus, lastupdate, lastuptime from pay_batch_checkpath
+    </sql>
+
+    <select id="selectCheckPathDOList" parameterType="com.dcits.dcwlt.pay.api.model.CheckPathDO" resultMap="CheckPathDOResult">
+        <include refid="selectCheckPathDOVo"/>
+        <where>
+            <if test="payDate != null  and payDate != ''"> and paydate like concat('%', #{payDate}, '%')</if>
+            <if test="batchId != null  and batchId != ''"> and batchid like concat('%', #{batchId}, '%')</if>
+            <if test="msgType != null  and msgType != ''"> and msgtype like concat('%', #{msgType}, '%')</if>
+            <if test="msgBizStatus != null"> and msgbizstatus like concat('%', #{msgBizStatus}, '%')</if>
+            <if test="checkStatus != null"> and checkstatus like concat('%', #{checkStatus}, '%')</if>
+        </where>
+    </select>
+
+    <select id="selectCheckPathDOById" parameterType="String" resultMap="CheckPathDOResult">
+        <include refid="selectCheckPathDOVo"/>
+        where paydate = #{payDate}
+    </select>
+</mapper>
