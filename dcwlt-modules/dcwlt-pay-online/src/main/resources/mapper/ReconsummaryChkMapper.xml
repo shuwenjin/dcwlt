@@ -1,0 +1,236 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dcits.dcwlt.pay.online.mapper.ReconsummaryChkMapper" >
+    
+    <!-- 更新事件处理结果 -->
+    <update id="updateEventInfo">
+         UPDATE pay_comm_excepteventinfo T
+	        SET 
+	        	<trim prefix="" suffix="" suffixOverrides=",">
+				<if test="exceptEventErrorCode != null and exceptEventErrorCode != ''">  T.EXCEPTEVENTERRORCODE = #{exceptEventErrorCode}, </if>
+				<if test="exceptEventErrorMsg != null and exceptEventErrorMsg != ''">  T.EXCEPTEVENTERRORMSG = #{exceptEventErrorMsg}, </if>
+				<if test="exceptEventSysStatus != null and exceptEventSysStatus != ''">  T.EXCEPTEVENTSYSSTATUS = #{exceptEventSysStatus}, </if>
+				<if test="lastUpDate != null and lastUpDate != ''">  T.LASTUPDATE = #{lastUpDate}, </if>
+				<if test="lastUpTime != null and lastUpTime != ''">  T.LASTUPTIME = #{lastUpTime} </if>
+	        </trim>
+	      WHERE T.EXCEPTEVENTCODE = #{exceptEventCode}
+	        AND T.EXCEPTEVENTSEQNO = #{exceptEventSeqNo}
+    </update>
+    
+      <!-- 更新处理次数，若新增违反唯一索引冲突，则更新处理次数 -->
+    <update id="updateEventDealNum">
+         UPDATE pay_comm_excepteventinfo T
+	        SET T.EXCEPTEVENTDEALCOUNT = ifnull(T.EXCEPTEVENTDEALCOUNT,0) + 1
+	      WHERE T.EXCEPTEVENTCODE = #{exceptEventCode}
+	        AND T.EXCEPTEVENTSEQNO = #{exceptEventSeqNo}
+	        AND ifnull(T.EXCEPTEVENTDEALCOUNT,0) + 1 &lt;= #{maxDealNum}
+    </update>
+    
+    <!-- 查询异常事件配置-->
+    <select id="queryEventConfig" resultType="com.dcits.dcwlt.pay.api.domain.dcep.eventBatch.EventConfigDO">
+		SELECT
+			T.EXCEPTEVENTCODE,
+			T.EXCEPTDEALMODE,
+			T.EXCEPTEVENTTRXCODE,
+			T.EXCEPTEVENTDEALMAXCOUNT,
+			T.EXCEPTEVENTDEALTYPE,
+			T.EXCEPTEVENTDEALINTERVALMIN,
+			T.EXCEPTEVENTREMARK
+		FROM pay_comm_excepteventconfig T
+		WHERE T.EXCEPTEVENTCODE = #{exceptEventCode}
+
+    </select>
+    
+    <!-- 插入异常事件信息 -->
+    <insert id="insertEventInfo">
+		INSERT INTO pay_comm_excepteventinfo
+			(EXCEPTEVENTDATE, EXCEPTEVENTSERNO, EXCEPTEVENTTIME, EXCEPTEVENTCODE, EXCEPTEVENTSEQNO, EXCEPTEVENTDEALCOUNT,
+			 EXCEPTEVENTSYSSTATUS, EXCEPTEVENTERRORCODE, EXCEPTEVENTERRORMSG, EXCEPTEVENTDEALPATH, EXCEPTEVENTCONTEXT, LASTUPDATE, LASTUPTIME)
+		VALUES(#{exceptEventDate},#{exceptEventSerno},#{exceptEventTime},#{exceptEventCode},#{exceptEventSeqNo},#{exceptEventDealCount},
+		#{exceptEventSysStatus},#{exceptEventErrorCode},#{exceptEventErrorMsg},#{exceptEventDealPath},#{exceptEventContext},#{lastUpDate},#{lastUpTime})
+    </insert>
+
+	<!--新增监控数据-->
+	<insert id="insertMonitorData">
+		INSERT INTO pay_comm_monitor(
+		EXCEPTDATE,
+		EXCEPTSERNO,
+		EXCEPTTIME,
+		EXCEPTSCENARIO,
+		EXCEPTPARAMS,
+		EXCEPTCONTEXT,
+		LASTUPDATE,
+		LASTUPTIME)
+		VALUES(
+		<if test="exceptDate != null and exceptDate!='' ">
+			#{exceptDate},
+		</if>
+		<if test="exceptSerNO != null and exceptSerNO!='' ">
+			#{exceptSerNO},
+		</if>
+		<if test="exceptTime != null and exceptTime!='' ">
+			#{exceptTime},
+		</if>
+		<if test="exceptScenario != null and exceptScenario!='' ">
+			#{exceptScenario},
+		</if>
+		<if test="excepParams != null and excepParams!='' ">
+			#{excepParams},
+		</if>
+		<if test="excepContext != null and excepContext!='' ">
+			#{excepContext},
+		</if>
+		#{lastUpDate},
+		#{lastUpTime}
+		)
+	</insert>
+
+	<!--更新监控数据-->
+	<update id="updateMonitorData">
+		UPDATE pay_comm_monitor
+		SET
+		<if test="exceptTime != null and exceptTime!='' ">
+			EXCEPTTIME = #{exceptTime},
+		</if>
+		<if test="exceptScenario != null and exceptScenario!='' ">
+			EXCEPTSCENARIO = #{exceptScenario},
+		</if>
+		<if test="excepParams != null and excepParams!='' ">
+			EXCEPTPARAMS = #{excepParams},
+		</if>
+		<if test="excepContext != null and excepContext!='' ">
+			EXCEPTCONTEXT = #{excepContext},
+		</if>
+		LASTUPDATE = #{lastUpDate},
+		LASTUPTIME = #{lastUpTime}
+		<where>
+			<if test="exceptDate != null and exceptDate!='' ">
+				EXCEPTDATE = #{exceptDate}
+			</if>
+			<if test="exceptSerNO != null and exceptSerNO!='' ">
+				AND EXCEPTSERNO = #{exceptSerNO}
+			</if>
+		</where>
+	</update>
+
+	<insert id="update" parameterType="com.dcits.dcwlt.pay.api.model.SummaryInfoDO">
+        REPLACE INTO pay_online_checkpath_sub(
+        MSGID,
+        BATCHDATE,
+        BATCHID,
+        SPLITNUM,
+        SPLITCOUNTNUM,
+        SPLITCOUNTAMT,
+        SPLITDBITCOUNTNUM,
+        SPLITDBITCOUNTAMT,
+        SPLITCRDTCOUNTNUM,
+        SPLITCRDTCOUNTAMT,
+        MSGTYPE,
+        MSGBIZSTATUS,
+        MSGCOUNTNUM,
+        MSGCOUNTAMT,
+        MSGDBITCOUNTNUM,
+        MSGDBITCOUNTAMT,
+        MSGCRDTCOUNTNUM,
+        MSGCRDTCOUNTAMT,
+        LASTUPDATE,
+        LASTUPTIME)
+        VALUES
+        (
+        #{msgId},
+        #{batchDate},
+        #{batchId},
+        #{splitNum},
+        #{splitCountNum},
+        #{splitCountAmt},
+        #{splitDbitCountNum},
+        #{splitDbitCountAmt},
+        #{splitCrdtCountNum},
+        #{splitCrdtCountAmt},
+        #{msgType},
+        #{msgBizStatus},
+        #{msgCountNum},
+        #{msgCountAmt},
+        #{msgDbitCountNum},
+        #{msgDbitCountAmt},
+        #{msgCrdtCountNum},
+        #{msgCrdtCountAmt},
+        #{lastUpDate},
+        #{lastUpTime})
+    </insert>
+
+	<insert id="replaceDtlFileInfDO" >
+        REPLACE INTO pay_online_checkfilelist
+        (MSGID,
+        BATCHID,
+        SRCFILEPATH,
+        FILENAME,
+        LASTUPDATE,
+        LASTUPTIME)
+        VALUES
+        (#{msgId},#{batchId},#{srcFilePath},#{fileName},#{lastUpDate},#{lastUpTime})
+    </insert>
+
+	<insert id="insertReconSummaryChkDO" parameterType="com.dcits.dcwlt.pay.api.model.ReconSummaryChkDO">
+        REPLACE INTO pay_online_checkpath_main(
+        PAYDATE,
+        PAYSERNO,
+        PAYTIME,
+        MSGID,
+        SENDERDATETIME,
+        INSTGDRCTPTY,
+        INSTDDRCTPTY,
+        BATCHDATE,
+        BATCHID,
+        COUNTNUM,
+        COUNTAMT,
+        CCY,
+        DBITCOUNTNUM,
+        DBITCOUNTAMT,
+        CRDTCOUNTNUM,
+        CRDTCOUNTAMT,
+        LASTUPDATE,
+        LASTUPTIME,
+        RECONINDEX,
+        REMARK,
+        DIGITALENVELOPE)
+        VALUES
+        (#{payDate},
+        #{paySerNo},
+        #{payTime},
+        #{msgId},
+        #{senderDateTime},
+        #{instgDrctPty},
+        #{instdDrctPty},
+        #{batchDate},
+        #{batchId},
+        #{countNum},
+        #{countAmt},
+        #{ccY},
+        #{dbitCountNum},
+        #{dbitCountAmt},
+        #{crdtCountNum},
+        #{crdtCountAmt},
+        #{lastUpDate},
+        #{lastUpTime},
+        #{reconIndex},
+        #{remark},
+        #{digitalEnvelope})
+    </insert>
+
+    <insert id="insertDtlFileInfDO" parameterType="com.dcits.dcwlt.pay.api.model.DtlFileInfDO">
+        REPLACE INTO pay_online_checkfilelist
+        (MSGID,
+        BATCHID,
+        SRCFILEPATH,
+        FILENAME,
+        LASTUPDATE,
+        LASTUPTIME)
+        VALUES
+        (#{msgId},#{batchId},#{srcFilePath},#{fileName},#{lastUpDate},#{lastUpTime})
+    </insert>
+
+
+    
+    
+</mapper>

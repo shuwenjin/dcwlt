@@ -42,14 +42,18 @@ public class EcnyTransException extends TransException {
     }
 
 
-//
-//    /**
-//     * 错误码转换，默认不使用txnType，如有该场景再扩展（txnType应答码分类,C为通用类,S为签约类，F为金融类，为了解决不同业务场景返回不通错误码的问题）
-//     *
-//     * @param e 异常类
-//     * @return
-//     */
-//    public static RspCodeMapDO convertRspCode(Throwable e) {
+
+    /**
+     * 错误码转换，默认不使用txnType，如有该场景再扩展（txnType应答码分类,C为通用类,S为签约类，F为金融类，为了解决不同业务场景返回不通错误码的问题）
+     *
+     * @param e 异常类
+     * @return
+     */
+    public static RspCodeMapDO convertRspCode(Throwable e) {
+        return convertRspCode(e);
+    }
+
+//    private static RspCodeMapDO convertRspCode(Throwable e, String txnTypeComm, String dcepSysId) {
 //        return convertRspCode(e, AppConstant.TXN_TYPE_COMM, AppConstant.DCEP_SYS_ID);
 //    }
 //

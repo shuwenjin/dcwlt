@@ -47,7 +47,7 @@ import org.springframework.context.annotation.Configuration;
  * @desc 自由格式发送配置类
  */
 @Configuration
-public class FreeFrmt401STradeFlow {
+public class    FreeFrmt401STradeFlow {
     private static final Logger logger = LoggerFactory.getLogger(DcepTransInTradeFlow.class);
 
     private static final String ECNY_HEAD = "ecnyHead";
