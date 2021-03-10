@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dcits.dcwlt.pay.batch.mapper.SettleTaskGroupExecMapper">
+
+    <!--任务执行信息表入库-->
+    <insert id="insert" parameterType="com.dcits.dcwlt.pay.api.model.SettleTaskGroupExecDO">
+        INSERT INTO ECNY_COMM_TASK_GROUP_EXEC
+        (SETTLEDATE, TASKGROUPCODE, TASKGROUPNAME, BUSICODE, BUSICODENAME, BATCHID,
+        EXECSTATE, CREATETIME, UPDATETIME)
+        values (#{settleDate}, #{taskGroupCode}, #{taskGroupName}, #{busiCode}
+        , #{busiCodeName}, #{batchId}, #{execState}, #{createTime}, #{updateTime})
+    </insert>
+
+    <select id="queryTaskGroupExec"  resultType="com.dcits.dcwlt.pay.api.model.SettleTaskGroupExecDO">
+        select SETTLEDATE settleDate,
+        TASKGROUPCODE taskGroupCode,
+        TASKGROUPNAME taskGroupName,
+        BUSICODE  busiCode,
+        BUSICODENAME busiCodeName,
+        BATCHID batchId,
+        EXECSTATE execState,
+        CREATETIME createTime,
+        UPDATETIME updateTime
+        FROM ECNY_COMM_TASK_GROUP_EXEC
+        WHERE SETTLEDATE = #{settleDate} AND BATCHID = #{batchId} AND TASKGROUPCODE = #{taskGroupCode}
+    </select>
+
+    <update id="updateTaskGroupExecState">
+        UPDATE ECNY_COMM_TASK_GROUP_EXEC
+        SET EXECSTATE = #{execState}, UPDATETIME = #{updateTime}
+        WHERE SETTLEDATE = #{settleDate}
+        AND    BATCHID = #{batchId}
+        AND TASKGROUPCODE = #{taskGroupCode}
+        <if test="execStateOld != null">
+            AND EXECSTATE = #{execStateOld}
+        </if>
+    </update>
+
+    <select id="queryTaskGroupExecFailure" resultType="com.dcits.dcwlt.pay.api.model.SettleTaskGroupExecDO">
+        SELECT SETTLEDATE settleDate,
+        TASKGROUPCODE taskGroupCode,
+        TASKGROUPNAME taskGroupName,
+        BUSICODE  busiCode,
+        BUSICODENAME busiCodeName,
+        BATCHID batchId,
+        EXECSTATE execState,
+        CREATETIME createTime,
+        UPDATETIME updateTime
+        FROM ECNY_COMM_TASK_GROUP_EXEC
+        WHERE SETTLEDATE = #{settleDate}
+        AND (EXECSTATE = 'FAIL' OR EXECSTATE = 'EXPT')
+    </select>
+
+    <delete id="deleteTaskGroupByGroupId">
+        delete from ECNY_COMM_TASK_GROUP_EXEC where SETTLEDATE = #{settleDate} AND BATCHID = #{batchId} AND TASKGROUPCODE = #{taskGroupCode}
+    </delete>
+    
+    
+    
+</mapper>
