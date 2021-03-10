@@ -196,7 +196,7 @@
                 NARRATIVE narraTive,
                 REMARK remark
         FROM pay_pay_transdtl
-        WHERE PAYPATHSERNO = #{msgId, jdbcType=CHAR}
+        WHERE ORIGPAYPATHSERNO = #{msgId, jdbcType=CHAR}
     </select>
 
     <!--根据平台日期和流水查询金融交易信息-->

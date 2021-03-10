@@ -222,7 +222,7 @@ public class PartyInfoServiceImpl implements IPartyInfoRepository {
      * @return
      */
     private int insertPartyInfo(PartyInfoDO partyInfoDO) {
-        return partyInfoMapper.insertParty(INSERT_URL, partyInfoDO);
+        return partyInfoMapper.insertParty(partyInfoDO);
     }
 
     /**
@@ -232,7 +232,7 @@ public class PartyInfoServiceImpl implements IPartyInfoRepository {
      * @return
      */
     private int updatePartyInfo(PartyInfoDO partyInfoDO) {
-        return partyInfoMapper.updateParty(UPDATE_URL, partyInfoDO);
+        return partyInfoMapper.updateParty(partyInfoDO);
     }
 
     /**

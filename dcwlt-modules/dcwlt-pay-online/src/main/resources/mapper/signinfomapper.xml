@@ -4,7 +4,7 @@
 
     <!--协议信息入库-->
     <insert id="insert" parameterType="com.dcits.dcwlt.pay.api.model.SignInfoDO">
-        INSERT INTO ecny.ecny_sign_signinfo
+        INSERT INTO pay_sign_signinfo
         (PAYDATE,
         PAYSERNO,
         PAYTIME,
@@ -69,7 +69,7 @@
         LASTUPJRNNO    lastUpJrnNo,
         LASTUPDATE     lastUpDate,
         LASTUPTIME     lastUpTime
-        FROM ECNY.ECNY_SIGN_SIGNINFO WHERE SIGNNO = #{signNo}
+        FROM pay_sign_signinfo WHERE SIGNNO = #{signNo}
     </select>
 
     <select id="selectByWltIdAndAcctId" resultType="com.dcits.dcwlt.pay.api.model.SignInfoDO">
@@ -97,11 +97,8 @@
         WHERE WALLETID = #{walletId}
         AND   ACCTID   = #{acctId}
     </select>
-
-
-
     <update id="updateBySignNo" parameterType="com.dcits.dcwlt.pay.api.model.SignInfoDO">
-        UPDATE ECNY.ECNY_SIGN_SIGNINFO
+        UPDATE pay_sign_signinfo
         <set>
             <if test = "payDate     !=null "> PAYDATE      = #{payDate}     ,</if>
             <if test = "paySerNo    !=null "> PAYSERNO     = #{paySerNo}    ,</if>
@@ -127,7 +124,7 @@
 
 
     <update id="updateByWltIdAndAcctId" parameterType="com.dcits.dcwlt.pay.api.model.SignInfoDO">
-        UPDATE ECNY.ECNY_SIGN_SIGNINFO
+        UPDATE pay_sign_signinfo
         <set>
             <if test = "signNo     !=null ">  SIGNNO      =  #{signNo}     ,</if>
             <if test = "payDate     !=null "> PAYDATE      = #{payDate}     ,</if>
@@ -148,12 +145,6 @@
             <if test = "lastUpTime  !=null "> LASTUPTIME   = #{lastUpTime}   </if>
         </set>
         WHERE WALLETID = #{walletId}
-        AND ACCTID    = #{acctId}
+        AND ACCTID = #{acctId}
     </update>
-
-
-
-
-
-
 </mapper>

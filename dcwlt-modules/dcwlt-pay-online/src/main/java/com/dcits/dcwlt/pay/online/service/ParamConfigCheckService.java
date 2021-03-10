@@ -2,7 +2,7 @@ package com.dcits.dcwlt.pay.online.service;
 
 
 import com.dcits.dcwlt.pay.api.model.EcnyCommConfigDO;
-import com.dcits.dcwlt.pay.online.cache.CacheDataExecutor;
+import com.dcits.dcwlt.common.pay.cache.CacheDataExecutor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

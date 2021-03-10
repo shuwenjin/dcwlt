@@ -829,7 +829,7 @@ public class TxEndNtfcntHandleService {
                 payTransDtlInfoDO.setTrxRetCode(bankCore351100InnerRsp.getErrorCode());
                 payTransDtlInfoDO.setTrxRetMsg(bankCore351100InnerRsp.getErrorMsg());
                 payTransDtlInfoDO.setPayPathRspStatus(ProcessStsCdEnum.PR01.getCode());
-                RspCodeMapDO rspCodeMapDO = EcnyTransException.convertRspCode(Constant.CORE_SYS_ID, Constant.DCEP_SYS_ID, bankCore351100InnerRsp.getErrorCode(), bankCore351100InnerRsp.getErrorMsg());
+                RspCodeMapDO rspCodeMapDO = EcnyTransException.convertRspCode(null);
                 payTransDtlInfoDO.setPayPathRetCode(rspCodeMapDO.getDestRspCode());
                 payTransDtlInfoDO.setPayPathRetMsg(rspCodeMapDO.getRspCodeDsp());
                 break;

@@ -23,3 +23,10 @@ spring:
         # 共享配置
         shared-configs:
           - application-${spring.profiles.active}.${spring.cloud.nacos.config.file-extension}
+
+# 线程数量
+ency:
+  batch:
+    task:
+      execute:
+        threads: 16

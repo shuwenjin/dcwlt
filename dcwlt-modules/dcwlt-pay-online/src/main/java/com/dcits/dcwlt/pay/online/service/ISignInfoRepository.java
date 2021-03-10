@@ -1,6 +1,5 @@
 package com.dcits.dcwlt.pay.online.service;
 
-
 import com.dcits.dcwlt.pay.api.model.SignInfoDO;
 
 /**
@@ -11,7 +10,14 @@ import com.dcits.dcwlt.pay.api.model.SignInfoDO;
  */
 public interface ISignInfoRepository {
 
+	SignInfoDO queryBySignNo(String signNo);
+
 	int insert(SignInfoDO signInfoDO);
 
-	SignInfoDO queryBySignNo(String signNo);
+	int updateBySignNo(SignInfoDO signNo);
+
+	SignInfoDO selectByWltIdAndAcctId(SignInfoDO signInfoDO);
+
+	int updateByWltIdAndAcctId(SignInfoDO signInfoDO);
+
 }

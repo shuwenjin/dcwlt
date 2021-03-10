@@ -10,6 +10,7 @@
 package com.dcits.dcwlt.common.pay.util;
 
 
+import org.apache.commons.lang3.time.DateUtils;
 import org.apache.commons.lang3.time.FastDateFormat;
 
 import java.text.ParseException;
@@ -211,4 +212,26 @@ public class DateUtil {
 	public static String formatISODateTimeToDate(String fctvDt) {
 		return "";
 	}
+
+
+	/**
+	 * @param date   当前时间
+	 * @param amount 增加小时数
+	 * @return 增加后时间
+	 * @description 增加小时
+	 */
+	public static Date addHours(Date date, int amount) {
+		return DateUtils.addHours(date, amount);
+	}
+
+
+	/**
+	 * @Description: 获取时间
+	 * 格式HHmmss
+	 * @return
+	 */
+	public static String getDefaultTimeFromDate(Date date){
+		return DEFAULT_TIME_FORMATTER.format(date);
+	}
+
 }

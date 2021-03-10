@@ -2,6 +2,7 @@ package com.dcits.dcwlt.pay.online.mapper;
 
 import com.dcits.dcwlt.pay.api.model.PartyInfoDO;
 import com.dcits.dcwlt.pay.api.model.PartyToBeEffectiveDO;
+import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;
 
@@ -12,6 +13,7 @@ import java.util.List;
  * @author dcwlt
  * @date 2021-03-03
  */
+@Mapper
 public interface PartyInfoOTMapper
 {
 

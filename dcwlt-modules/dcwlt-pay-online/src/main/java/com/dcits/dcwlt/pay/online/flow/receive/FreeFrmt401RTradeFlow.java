@@ -16,6 +16,7 @@ import com.dcits.dcwlt.pay.api.domain.dcep.fault.FaultDTO;
 import com.dcits.dcwlt.pay.api.domain.dcep.freefrmt.FreeFrmt;
 import com.dcits.dcwlt.pay.api.domain.dcep.freefrmt.FreeFrmtDTO;
 import com.dcits.dcwlt.pay.api.model.MonitorDO;
+import com.dcits.dcwlt.pay.api.model.RspCodeMapDO;
 import com.dcits.dcwlt.pay.online.exception.EcnyTransError;
 import com.dcits.dcwlt.pay.online.exception.EcnyTransException;
 import com.dcits.dcwlt.pay.online.flow.builder.EcnyTradeContext;
@@ -89,17 +90,16 @@ public class FreeFrmt401RTradeFlow {
             logger.error("自由格式报文更新失败:{}");
         }
         try {
-            // TODO 错误码映射暂时写死
-            //RspCodeMapDO rspCodeMapDO = EcnyTransException.convertRspCode(e);
+            RspCodeMapDO rspCodeMapDO = EcnyTransException.convertRspCode(e);
             //异常返回911报文
             Fault fault = new Fault();
             FaultDTO faultDTO = new FaultDTO();
             //业务故障信息:发生错误的机构编码
             fault.setFaultActor(AppConstant.CGB_FINANCIAL_INSTITUTION_CD);
             //业务故障代码:业务拒绝码
-            fault.setFaultCode("ECNY000");
+            fault.setFaultCode(rspCodeMapDO.getDestRspCode());
             //业务故障说明
-            fault.setFaultString("异常");
+            fault.setFaultString(rspCodeMapDO.getRspCodeDsp());
             faultDTO.setFault(fault);
             //封装响应报文
             DCEPRspDTO<FaultDTO> dcepRspDTO = DCEPRspDTO.newInstance(reqMsg, MsgTpEnum.DCEP911.getCode(), faultDTO);

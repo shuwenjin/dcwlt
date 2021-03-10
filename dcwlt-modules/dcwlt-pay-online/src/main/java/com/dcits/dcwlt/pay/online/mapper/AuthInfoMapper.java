@@ -3,10 +3,11 @@ package com.dcits.dcwlt.pay.online.mapper;
 
 import com.dcits.dcwlt.pay.api.model.AuthInfoDO;
 import com.dcits.dcwlt.pay.api.model.AuthInfoToBeEffectiveDO;
+import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;
 import java.util.Map;
-
+@Mapper
 public interface AuthInfoMapper {
     /*
      * 变更业务权限
