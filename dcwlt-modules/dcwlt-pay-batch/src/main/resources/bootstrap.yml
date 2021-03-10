@@ -30,3 +30,23 @@ ency:
     task:
       execute:
         threads: 16
+
+# 协议
+sftp:
+  client:
+    protocol: sftp
+    host: 127.0.0.1
+    port: 22
+    username: sftp
+    password: sftp
+  # 根路径
+    root: /home/sftp/
+  # 密钥文件路径
+    privateKey:
+  # 密钥的密码
+    passphrase:
+    sessionStrictHostKeyChecking: no
+  # session连接超时时间
+    sessionConnectTimeout: 15000
+  # channel连接超时时间
+    channelConnectedTimeout: 15000
