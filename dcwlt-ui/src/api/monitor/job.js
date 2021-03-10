@@ -56,6 +56,19 @@ export function changeJobStatus(jobId, status) {
   })
 }
 
+// 任务失败重试状态修改
+export function changeRetryJobStatus(jobId, retryStatus) {
+  const data = {
+    jobId,
+    retryStatus
+  }
+  return request({
+    url: '/schedule/job/changeRetryStatus',
+    method: 'put',
+    data: data
+  })
+}
+
 
 // 定时任务立即执行一次
 export function runJob(jobId, jobGroup) {

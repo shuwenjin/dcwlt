@@ -13,6 +13,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		<result property="misfirePolicy"  column="misfire_policy"  />
 		<result property="concurrent"     column="concurrent"      />
 		<result property="status"         column="status"          />
+		<result property="retryCron"      column="retry_cron"    />
+		<result property="retryStatus"    column="retry_status"    />
+		<result property="retryMaxNum"    column="retry_max_num"    />
 		<result property="createBy"       column="create_by"       />
 		<result property="createTime"     column="create_time"     />
 		<result property="updateBy"       column="update_by"       />
@@ -21,7 +24,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	</resultMap>
 	
 	<sql id="selectJobVo">
-        select job_id, job_name, job_group, invoke_target, cron_expression, misfire_policy, concurrent, status, create_by, create_time, remark 
+        select job_id, job_name, job_group, invoke_target, cron_expression, misfire_policy, concurrent, status,
+        retry_cron, retry_status, retry_max_num, create_by, create_time, remark
 		from sys_job
     </sql>
 	
@@ -73,6 +77,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
  			<if test="misfirePolicy != null and misfirePolicy != ''">misfire_policy = #{misfirePolicy},</if>
  			<if test="concurrent != null and concurrent != ''">concurrent = #{concurrent},</if>
  			<if test="status !=null">status = #{status},</if>
+			<if test="retryCron != null and retryCron != ''">retry_cron = #{retryCron},</if>
+			<if test="retryStatus != null and retryStatus != ''">retry_status = #{retryStatus},</if>
+			<if test="retryMaxNum != null">retry_max_num = #{retryMaxNum},</if>
  			<if test="remark != null and remark != ''">remark = #{remark},</if>
  			<if test="updateBy != null and updateBy != ''">update_by = #{updateBy},</if>
  			update_time = sysdate()
@@ -90,6 +97,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
  			<if test="misfirePolicy != null and misfirePolicy != ''">misfire_policy,</if>
  			<if test="concurrent != null and concurrent != ''">concurrent,</if>
  			<if test="status != null and status != ''">status,</if>
+		    <if test="retryCron != null and retryCron != ''">retry_cron,</if>
+		    <if test="retryStatus != null and retryStatus != ''">retry_status,</if>
+		    <if test="retryMaxNum != null">retry_max_num,</if>
  			<if test="remark != null and remark != ''">remark,</if>
  			<if test="createBy != null and createBy != ''">create_by,</if>
  			create_time
@@ -102,6 +112,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
  			<if test="misfirePolicy != null and misfirePolicy != ''">#{misfirePolicy},</if>
  			<if test="concurrent != null and concurrent != ''">#{concurrent},</if>
  			<if test="status != null and status != ''">#{status},</if>
+		    <if test="retryCron != null and retryCron != ''">#{retryCron},</if>
+		    <if test="retryStatus != null and retryStatus != ''">#{retryStatus},</if>
+		    <if test="retryMaxNum != null">#{retryMaxNum},</if>
  			<if test="remark != null and remark != ''">#{remark},</if>
  			<if test="createBy != null and createBy != ''">#{createBy},</if>
  			sysdate()

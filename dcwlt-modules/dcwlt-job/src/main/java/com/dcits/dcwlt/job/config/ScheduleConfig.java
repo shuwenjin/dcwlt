@@ -1,7 +1,13 @@
 package com.dcits.dcwlt.job.config;
 
+import java.io.IOException;
 import java.util.Properties;
 import javax.sql.DataSource;
+
+import com.dcits.dcwlt.job.quartz.SpringJobFactory;
+import org.quartz.Scheduler;
+import org.quartz.ee.servlet.QuartzInitializerListener;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.scheduling.quartz.SchedulerFactoryBean;
@@ -14,6 +20,9 @@ import org.springframework.scheduling.quartz.SchedulerFactoryBean;
 @Configuration
 public class ScheduleConfig
 {
+    @Autowired
+    private SpringJobFactory springJobFactory;
+
     @Bean
     public SchedulerFactoryBean schedulerFactoryBean(DataSource dataSource)
     {
@@ -52,6 +61,16 @@ public class ScheduleConfig
         // 设置自动启动，默认为true
         factory.setAutoStartup(true);
 
+        factory.setJobFactory(springJobFactory);
+
         return factory;
+    }
+
+    /*
+     * quartz初始化监听器
+     */
+    @Bean
+    public QuartzInitializerListener executorListener() {
+        return new QuartzInitializerListener();
     }
 }

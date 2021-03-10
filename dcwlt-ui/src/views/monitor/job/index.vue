@@ -89,17 +89,17 @@
           v-hasPermi="['monitor:job:query']"
         >日志</el-button>
       </el-col>
-      <right-toolbar :showSearch.sync="showSearch" @queryTable="getList"></right-toolbar>
+      <right-toolbar :showSearch.sync="showSearch" @queryTable="getList" :columns="columns"></right-toolbar>
     </el-row>
 
     <el-table v-loading="loading" :data="jobList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
-      <el-table-column label="任务编号" align="center" prop="jobId" />
-      <el-table-column label="任务名称" align="center" prop="jobName" :show-overflow-tooltip="true" />
-      <el-table-column label="任务组名" align="center" prop="jobGroup" :formatter="jobGroupFormat" />
-      <el-table-column label="调用目标字符串" align="center" prop="invokeTarget" :show-overflow-tooltip="true" />
-      <el-table-column label="cron执行表达式" align="center" prop="cronExpression" :show-overflow-tooltip="true" />
-      <el-table-column label="状态" align="center">
+      <el-table-column label="任务编号" align="center" prop="jobId" v-if="columns[0].visible" />
+      <el-table-column label="任务名称" align="center" prop="jobName" v-if="columns[1].visible" :show-overflow-tooltip="true" />
+      <el-table-column label="任务组名" align="center" prop="jobGroup" v-if="columns[2].visible" :formatter="jobGroupFormat" />
+      <el-table-column label="调用目标字符串" align="center" prop="invokeTarget" v-if="columns[3].visible" :show-overflow-tooltip="true" />
+      <el-table-column label="cron执行表达式" align="center" prop="cronExpression" v-if="columns[4].visible" :show-overflow-tooltip="true" />
+      <el-table-column label="状态" v-if="columns[5].visible" align="center">
         <template slot-scope="scope">
           <el-switch
             v-model="scope.row.status"
@@ -109,6 +109,18 @@
           ></el-switch>
         </template>
       </el-table-column>
+      <el-table-column label="失败重试cron" align="center" prop="retryCron" v-if="columns[6].visible" />
+      <el-table-column label="失败重试状态" align="center" v-if="columns[7].visible">
+        <template slot-scope="scope">
+          <el-switch
+            v-model="scope.row.retryStatus"
+            active-value="0"
+            inactive-value="1"
+            @change="handleRetryStatusChange(scope.row)"
+          ></el-switch>
+        </template>
+      </el-table-column>
+      <el-table-column label="重试最大次数" align="center" prop="retryMaxNum" v-if="columns[8].visible" />
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope">
           <el-button
@@ -207,6 +219,27 @@
               </el-radio-group>
             </el-form-item>
           </el-col>
+          <el-col :span="12">
+            <el-form-item label="失败重试状态">
+              <el-radio-group v-model="form.retryStatus">
+                <el-radio
+                  v-for="dict in retryStatusOptions"
+                  :key="dict.dictValue"
+                  :label="dict.dictValue"
+                >{{dict.dictLabel}}</el-radio>
+              </el-radio-group>
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="重试最大次数" prop="retryMaxNum">
+              <el-input-number v-model="form.retryMaxNum" controls-position="right" :min="1" />
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="失败重试cron" prop="retryCron">
+              <el-input v-model="form.retryCron" placeholder="请输入失败重试cron" />
+            </el-form-item>
+          </el-col>
         </el-row>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -239,7 +272,7 @@
           <el-col :span="12">
             <el-form-item label="任务状态：">
               <div v-if="form.status == 0">正常</div>
-              <div v-else-if="form.status == 1">失败</div>
+              <div v-else-if="form.status == 1">暂停</div>
             </el-form-item>
           </el-col>
           <el-col :span="12">
@@ -248,13 +281,25 @@
               <div v-else-if="form.concurrent == 1">禁止</div>
             </el-form-item>
           </el-col>
-          <el-col :span="12">
+          <el-col :span="24">
             <el-form-item label="执行策略：">
               <div v-if="form.misfirePolicy == 0">默认策略</div>
               <div v-else-if="form.misfirePolicy == 1">立即执行</div>
               <div v-else-if="form.misfirePolicy == 2">执行一次</div>
               <div v-else-if="form.misfirePolicy == 3">放弃执行</div>
             </el-form-item>
+          </el-col>
+          <el-col :span="24">
+            <el-form-item label="失败重试cron：">{{ form.retryCron }}</el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="失败重试状态：">
+              <div v-if="form.retryStatus == 0">正常</div>
+              <div v-else-if="form.retryStatus == 1">暂停</div>
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="重试最大次数：">{{ form.retryMaxNum }}</el-form-item>
           </el-col>
         </el-row>
       </el-form>
@@ -266,7 +311,7 @@
 </template>
 
 <script>
-import { listJob, getJob, delJob, addJob, updateJob, runJob, changeJobStatus } from "@/api/monitor/job";
+import { listJob, getJob, delJob, addJob, updateJob, runJob, changeJobStatus, changeRetryJobStatus } from "@/api/monitor/job";
 
 export default {
   name: "Job",
@@ -296,14 +341,28 @@ export default {
       jobGroupOptions: [],
       // 状态字典
       statusOptions: [],
+      // 失败重试状态字典
+      retryStatusOptions: [],
       // 查询参数
       queryParams: {
         pageNum: 1,
         pageSize: 10,
         jobName: undefined,
         jobGroup: undefined,
-        status: undefined
+        status: undefined,
       },
+      // 列信息
+      columns: [
+        { key: 0, label: `任务编号`, visible: true },
+        { key: 1, label: `任务名称`, visible: true },
+        { key: 2, label: `任务组名`, visible: true },
+        { key: 3, label: `调用目标字符串`, visible: true },
+        { key: 4, label: `cron执行表达式`, visible: true },
+        { key: 5, label: `状态`, visible: true },
+        { key: 6, label: `失败重试cron`, visible: true },
+        { key: 7, label: `失败重试状态`, visible: true },
+        { key: 8, label: `重试最大次数`, visible: true },
+      ],
       // 表单参数
       form: {},
       // 表单校验
@@ -316,7 +375,13 @@ export default {
         ],
         cronExpression: [
           { required: true, message: "cron执行表达式不能为空", trigger: "blur" }
-        ]
+        ],
+        retryCron: [
+          { required: true, message: "失败重试cron不能为空", trigger: "blur" }
+        ],
+        retryMaxNum: [
+          { required: true, message: "重试最大次数不能为空", trigger: "blur" }
+        ],
       }
     };
   },
@@ -327,6 +392,7 @@ export default {
     });
     this.getDicts("sys_job_status").then(response => {
       this.statusOptions = response.data;
+      this.retryStatusOptions = response.data;
     });
   },
   methods: {
@@ -347,6 +413,10 @@ export default {
     statusFormat(row, column) {
       return this.selectDictLabel(this.statusOptions, row.status);
     },
+    // 失败重试状态字典翻译
+    retryStatusFormat(row, column) {
+      return this.selectDictLabel(this.retryStatusOptions, row.retryStatus);
+    },
     // 取消按钮
     cancel() {
       this.open = false;
@@ -362,7 +432,10 @@ export default {
         cronExpression: undefined,
         misfirePolicy: 1,
         concurrent: 1,
-        status: "0"
+        status: "0",
+        retryCron: undefined,
+        retryStatus: "0",
+        retryMaxNum: 1,
       };
       this.resetForm("form");
     },
@@ -395,6 +468,21 @@ export default {
           this.msgSuccess(text + "成功");
         }).catch(function() {
           row.status = row.status === "0" ? "1" : "0";
+        });
+    },
+    // 失败重试状态修改
+    handleRetryStatusChange(row) {
+      let text = row.retryStatus === "0" ? "启用" : "停用";
+      this.$confirm('确认要"' + text + '""' + row.jobName + '"失败重试功能吗?', "警告", {
+          confirmButtonText: "确定",
+          cancelButtonText: "取消",
+          type: "warning"
+        }).then(function() {
+          return changeRetryJobStatus(row.jobId, row.retryStatus);
+        }).then(() => {
+          this.msgSuccess(text + "成功");
+        }).catch(function() {
+          row.retryStatus = row.retryStatus === "0" ? "1" : "0";
         });
     },
     /* 立即执行一次 */
@@ -437,7 +525,7 @@ export default {
       });
     },
     /** 提交按钮 */
-    submitForm: function() {
+    submitForm() {
       this.$refs["form"].validate(valid => {
         if (valid) {
           if (this.form.jobId != undefined) {

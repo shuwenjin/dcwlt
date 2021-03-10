@@ -90,6 +90,26 @@ public class SysJobServiceImpl implements ISysJobService
     }
 
     /**
+     * 暂停失败重试任务
+     *
+     * @param job 调度信息
+     */
+    @Override
+    @Transactional
+    public int pauseRetryJob(SysJob job) throws SchedulerException
+    {
+        Long jobId = job.getJobId();
+        String jobGroup = job.getJobGroup();
+        job.setRetryStatus(ScheduleConstants.Status.PAUSE.getValue());
+        int rows = jobMapper.updateJob(job);
+        if (rows > 0)
+        {
+            scheduler.pauseJob(ScheduleUtils.getRetryJobKey(jobId, jobGroup));
+        }
+        return rows;
+    }
+
+    /**
      * 恢复任务
      * 
      * @param job 调度信息
@@ -110,6 +130,26 @@ public class SysJobServiceImpl implements ISysJobService
     }
 
     /**
+     * 恢复失败重试任务
+     *
+     * @param job 调度信息
+     */
+    @Override
+    @Transactional
+    public int resumeRetryJob(SysJob job) throws SchedulerException
+    {
+        Long jobId = job.getJobId();
+        String jobGroup = job.getJobGroup();
+        job.setRetryStatus(ScheduleConstants.Status.NORMAL.getValue());
+        int rows = jobMapper.updateJob(job);
+        if (rows > 0)
+        {
+            scheduler.resumeJob(ScheduleUtils.getRetryJobKey(jobId, jobGroup));
+        }
+        return rows;
+    }
+
+    /**
      * 删除任务后，所对应的trigger也将被删除
      * 
      * @param job 调度信息
@@ -124,6 +164,7 @@ public class SysJobServiceImpl implements ISysJobService
         if (rows > 0)
         {
             scheduler.deleteJob(ScheduleUtils.getJobKey(jobId, jobGroup));
+            scheduler.deleteJob(ScheduleUtils.getRetryJobKey(jobId, jobGroup));
         }
         return rows;
     }
@@ -168,6 +209,34 @@ public class SysJobServiceImpl implements ISysJobService
     }
 
     /**
+     * 任务失败重试调度状态修改
+     * 修改为正常状态时，不创建失败重试任务，失败重试任务在主任务失败时触发
+     * 修改为暂停状态时，需要重新创建主任务，才能更新scheduler中jobDetail的SysJob信息
+     * @param job 调度信息
+     */
+    @Override
+    @Transactional
+    public int changeRetryStatus(SysJob job) throws SchedulerException, TaskException
+    {
+        int rows = 0;
+        String retryStatus = job.getRetryStatus();
+        if (ScheduleConstants.Status.NORMAL.getValue().equals(retryStatus))
+        {
+            rows = jobMapper.updateJob(job);
+        }
+        else if (ScheduleConstants.Status.PAUSE.getValue().equals(retryStatus))
+        {
+            SysJob properties = selectJobById(job.getJobId());
+            rows = jobMapper.updateJob(job);
+            if (rows > 0)
+            {
+                updateSchedulerJob(job, properties.getJobGroup());
+            }
+        }
+        return rows;
+    }
+
+    /**
      * 立即运行任务
      * 
      * @param job 调度信息
@@ -195,10 +264,13 @@ public class SysJobServiceImpl implements ISysJobService
     public int insertJob(SysJob job) throws SchedulerException, TaskException
     {
         job.setStatus(ScheduleConstants.Status.PAUSE.getValue());
+        // 失败重试状态初始化为暂停，当主任务失败时触发
+        job.setRetryStatus(ScheduleConstants.Status.PAUSE.getValue());
         int rows = jobMapper.insertJob(job);
         if (rows > 0)
         {
             ScheduleUtils.createScheduleJob(scheduler, job);
+            ScheduleUtils.createScheduleRetryJob(scheduler, job);
         }
         return rows;
     }
@@ -229,15 +301,19 @@ public class SysJobServiceImpl implements ISysJobService
      */
     public void updateSchedulerJob(SysJob job, String jobGroup) throws SchedulerException, TaskException
     {
-        Long jobId = job.getJobId();
-        // 判断是否存在
-        JobKey jobKey = ScheduleUtils.getJobKey(jobId, jobGroup);
-        if (scheduler.checkExists(jobKey))
-        {
-            // 防止创建时存在数据问题 先移除，然后在执行创建操作
-            scheduler.deleteJob(jobKey);
-        }
         ScheduleUtils.createScheduleJob(scheduler, job);
+    }
+
+    /**
+     * 更新失败重试任务
+     *
+     * @param job 任务对象
+     * @param jobGroup 任务组名
+     */
+    @Override
+    public void updateSchedulerRetryJob(SysJob job, String jobGroup) throws SchedulerException, TaskException
+    {
+        ScheduleUtils.createScheduleRetryJob(scheduler, job);
     }
 
     /**

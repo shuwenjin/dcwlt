@@ -24,6 +24,12 @@ public class ScheduleConstants
     /** 不触发立即执行 */
     public static final String MISFIRE_DO_NOTHING = "3";
 
+    /** 失败重试任务jobId后缀字符串 */
+    public static final String RETRY = "_retry";
+
+    /** 任务jobId + 基础值 = 失败重试任务jobId  */
+    public static final Long RETRY_BASE_NUM = 100000000000L;
+
     public enum Status
     {
         /**

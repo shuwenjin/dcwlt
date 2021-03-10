@@ -86,6 +86,10 @@ public class SysJobController extends BaseController
         {
             return AjaxResult.error("cron表达式不正确");
         }
+        if (!CronUtils.isValid(sysJob.getRetryCron()))
+        {
+            return AjaxResult.error("失败重试cron表达式不正确");
+        }
         sysJob.setCreateBy(SecurityUtils.getUsername());
         return toAjax(jobService.insertJob(sysJob));
     }
@@ -102,6 +106,10 @@ public class SysJobController extends BaseController
         {
             return AjaxResult.error("cron表达式不正确");
         }
+        if (!CronUtils.isValid(sysJob.getRetryCron()))
+        {
+            return AjaxResult.error("失败重试cron表达式不正确");
+        }
         sysJob.setUpdateBy(SecurityUtils.getUsername());
         return toAjax(jobService.updateJob(sysJob));
     }
@@ -117,6 +125,19 @@ public class SysJobController extends BaseController
         SysJob newJob = jobService.selectJobById(job.getJobId());
         newJob.setStatus(job.getStatus());
         return toAjax(jobService.changeStatus(newJob));
+    }
+
+    /**
+     * 定时任务状态修改
+     */
+    @PreAuthorize(hasPermi = "monitor:job:changeStatus")
+    @Log(title = "定时任务", businessType = BusinessType.UPDATE)
+    @PutMapping("/changeRetryStatus")
+    public AjaxResult changeRetryStatus(@RequestBody SysJob job) throws SchedulerException, TaskException
+    {
+        SysJob newJob = jobService.selectJobById(job.getJobId());
+        newJob.setRetryStatus(job.getRetryStatus());
+        return toAjax(jobService.changeRetryStatus(newJob));
     }
 
     /**

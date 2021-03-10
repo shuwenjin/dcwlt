@@ -18,7 +18,7 @@ import com.dcits.dcwlt.job.util.CronUtils;
 /**
  * 定时任务调度表 sys_job
  * 
- * @author ruoyi
+ * @author dcwlt
  */
 public class SysJob extends BaseEntity implements Serializable
 {
@@ -55,6 +55,18 @@ public class SysJob extends BaseEntity implements Serializable
     /** 任务状态（0正常 1暂停） */
     @Excel(name = "任务状态", readConverterExp = "0=正常,1=暂停")
     private String status;
+
+    /** 失败重试cron */
+    @Excel(name = "失败重试cron")
+    private String retryCron;
+
+    /** 失败重试状态（0正常 1暂停） */
+    @Excel(name = "失败重试状态", readConverterExp = "0=正常,1=暂停")
+    private String retryStatus;
+
+    /** 重试最大次数 */
+    @Excel(name = "重试最大次数")
+    private Integer retryMaxNum;
 
     public Long getJobId()
     {
@@ -152,6 +164,34 @@ public class SysJob extends BaseEntity implements Serializable
         this.status = status;
     }
 
+    public void setRetryCron(String retryCron)
+    {
+        this.retryCron = retryCron;
+    }
+
+    public String getRetryCron()
+    {
+        return retryCron;
+    }
+    public void setRetryStatus(String retryStatus)
+    {
+        this.retryStatus = retryStatus;
+    }
+
+    public String getRetryStatus()
+    {
+        return retryStatus;
+    }
+    public void setRetryMaxNum(Integer retryMaxNum)
+    {
+        this.retryMaxNum = retryMaxNum;
+    }
+
+    public Integer getRetryMaxNum()
+    {
+        return retryMaxNum;
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this,ToStringStyle.MULTI_LINE_STYLE)
@@ -163,6 +203,9 @@ public class SysJob extends BaseEntity implements Serializable
             .append("misfirePolicy", getMisfirePolicy())
             .append("concurrent", getConcurrent())
             .append("status", getStatus())
+            .append("retryCron", getRetryCron())
+            .append("retryStatus", getRetryStatus())
+            .append("retryMaxNum", getRetryMaxNum())
             .append("createBy", getCreateBy())
             .append("createTime", getCreateTime())
             .append("updateBy", getUpdateBy())

@@ -43,11 +43,27 @@ public class ScheduleUtils
     }
 
     /**
+     * 构建任务触发对象
+     */
+    public static TriggerKey getRetryTriggerKey(Long jobId, String jobGroup)
+    {
+        return TriggerKey.triggerKey(ScheduleConstants.TASK_CLASS_NAME + jobId + ScheduleConstants.RETRY, jobGroup);
+    }
+
+    /**
      * 构建任务键对象
      */
     public static JobKey getJobKey(Long jobId, String jobGroup)
     {
         return JobKey.jobKey(ScheduleConstants.TASK_CLASS_NAME + jobId, jobGroup);
+    }
+
+    /**
+     * 构建失败重试任务键对象
+     */
+    public static JobKey getRetryJobKey(Long jobId, String jobGroup)
+    {
+        return JobKey.jobKey(ScheduleConstants.TASK_CLASS_NAME + jobId + ScheduleConstants.RETRY, jobGroup);
     }
 
     /**
@@ -85,6 +101,44 @@ public class ScheduleUtils
         if (job.getStatus().equals(ScheduleConstants.Status.PAUSE.getValue()))
         {
             scheduler.pauseJob(ScheduleUtils.getJobKey(jobId, jobGroup));
+        }
+    }
+
+    /**
+     * 创建失败重试定时任务
+     */
+    public static void createScheduleRetryJob(Scheduler scheduler, SysJob job) throws SchedulerException, TaskException
+    {
+        Class<? extends Job> jobClass = getQuartzJobClass(job);
+        // 构建job信息
+        Long jobId = job.getJobId();
+        String jobGroup = job.getJobGroup();
+        JobDetail jobDetail = JobBuilder.newJob(jobClass).withIdentity(getRetryJobKey(jobId, jobGroup)).build();
+
+        // 表达式调度构建器
+        CronScheduleBuilder cronScheduleBuilder = CronScheduleBuilder.cronSchedule(job.getRetryCron());
+        cronScheduleBuilder = handleCronScheduleMisfirePolicy(job, cronScheduleBuilder);
+
+        // 按新的cronExpression表达式构建一个新的trigger
+        CronTrigger trigger = TriggerBuilder.newTrigger().withIdentity(getRetryTriggerKey(jobId, jobGroup))
+                .withSchedule(cronScheduleBuilder).build();
+
+        // 放入参数，运行时的方法可以获取
+        jobDetail.getJobDataMap().put(ScheduleConstants.TASK_PROPERTIES, job);
+
+        // 判断是否存在
+        if (scheduler.checkExists(getRetryJobKey(jobId, jobGroup)))
+        {
+            // 防止创建时存在数据问题 先移除，然后在执行创建操作
+            scheduler.deleteJob(getRetryJobKey(jobId, jobGroup));
+        }
+
+        scheduler.scheduleJob(jobDetail, trigger);
+
+        // 暂停任务
+        if (job.getRetryStatus().equals(ScheduleConstants.Status.PAUSE.getValue()))
+        {
+            scheduler.pauseJob(ScheduleUtils.getRetryJobKey(jobId, jobGroup));
         }
     }
 

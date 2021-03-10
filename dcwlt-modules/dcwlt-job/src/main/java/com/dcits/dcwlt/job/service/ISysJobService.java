@@ -38,12 +38,28 @@ public interface ISysJobService
     public int pauseJob(SysJob job) throws SchedulerException;
 
     /**
+     * 暂停失败重试任务
+     *
+     * @param job 调度信息
+     * @return 结果
+     */
+    public int pauseRetryJob(SysJob job) throws SchedulerException;
+
+    /**
      * 恢复任务
      * 
      * @param job 调度信息
      * @return 结果
      */
     public int resumeJob(SysJob job) throws SchedulerException;
+
+    /**
+     * 恢复失败重试任务
+     *
+     * @param job 调度信息
+     * @return 结果
+     */
+    public int resumeRetryJob(SysJob job) throws SchedulerException;
 
     /**
      * 删除任务后，所对应的trigger也将被删除
@@ -68,6 +84,15 @@ public interface ISysJobService
      * @return 结果
      */
     public int changeStatus(SysJob job) throws SchedulerException;
+
+
+    /**
+     * 任务失败重试调度状态修改
+     *
+     * @param job 调度信息
+     * @return 结果
+     */
+    public int changeRetryStatus(SysJob job) throws SchedulerException, TaskException;
 
     /**
      * 立即运行任务
@@ -100,4 +125,12 @@ public interface ISysJobService
      * @return 结果
      */
     public boolean checkCronExpressionIsValid(String cronExpression);
+
+    /**
+     * 更新失败重试任务
+     *
+     * @param job 任务对象
+     * @param jobGroup 任务组名
+     */
+    public void updateSchedulerRetryJob(SysJob job, String jobGroup) throws SchedulerException, TaskException;
 }
