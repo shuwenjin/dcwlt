@@ -1,5 +1,6 @@
 package com.dcits.dcwlt.pay.batch.task;
 
+import com.dcits.dcwlt.common.core.utils.SpringUtils;
 import com.dcits.dcwlt.common.pay.exception.SettleTaskException;
 import com.dcits.dcwlt.pay.batch.service.ISettleTaskExecService;
 import org.slf4j.Logger;
@@ -11,8 +12,6 @@ public class TaskExecRunnable implements Runnable {
     private String taskGroupCode = null;
     private String batchId = null;
 
-    private ISettleTaskExecService settleTaskExecService;
-
     public TaskExecRunnable(String settleDate, String batchId, String taskGroupCode) {
         this.settleDate = settleDate;
         this.taskGroupCode = taskGroupCode;
@@ -23,6 +22,7 @@ public class TaskExecRunnable implements Runnable {
     public void run() {
         logger.info("execute task: taskGroupCode=" + taskGroupCode + ", batchId=" + batchId);
         try {
+            ISettleTaskExecService settleTaskExecService = SpringUtils.getBean(ISettleTaskExecService.class);
             logger.info("任务组调起：settleDate=" + settleDate + ", batchId=" + batchId + ", taskGroupCode=" + taskGroupCode);
             settleTaskExecService.runTaskGroup(settleDate, batchId, taskGroupCode, null);
         } catch (SettleTaskException e) {
