@@ -6,7 +6,7 @@
 
     <select id="queryTaskInfoListToExec" resultType="com.dcits.dcwlt.pay.api.model.SettleTaskInfoDO">
         SELECT TASKCODE, TASKNAME, TASKGROUPCODE, TASKTYPE, TASKINDEX, TASKCLASSNAME, EXECPARAM, TASKSTATE
-        FROM ecny_comm_task_info
+        FROM
         WHERE TASKGROUPCODE = #{taskGroupCode}
         ORDER BY TASKINDEX
     </select>

@@ -6,7 +6,7 @@
 
     <!--任务执行信息表入库-->
     <insert id="insert" parameterType="com.dcits.dcwlt.pay.api.model.SettleTaskExecDO">
-        INSERT INTO ECNY_COMM_TASK_EXEC
+        INSERT INTO PAY_COMM_TASK_EXEC
         (SETTLEDATE, TASKCODE, TASKNAME, TASKGROUPCODE,
         TASKGROUPNAME, BUSICODE, BUSICODENAME, BATCHID, TASKTYPE, TASKINDEX,
         TASKCLASSNAME, EXECPARAM, EXECSTATE, STARTTIME, ENDTIME)
@@ -20,7 +20,7 @@
         SELECT SETTLEDATE, TASKCODE, TASKNAME, TASKGROUPCODE,
         TASKGROUPNAME, BUSICODE, BUSICODENAME, BATCHID, TASKTYPE, TASKINDEX,
         TASKCLASSNAME, EXECPARAM, EXECSTATE, STARTTIME, ENDTIME
-        FROM ECNY_COMM_TASK_EXEC
+        FROM PAY_COMM_TASK_EXEC
         WHERE SETTLEDATE = #{settleDate}
         AND TASKGROUPCODE = #{taskGroupCode}
         AND TASKCODE = #{taskCode}
@@ -31,7 +31,7 @@
         SELECT SETTLEDATE, TASKCODE, TASKNAME, TASKGROUPCODE,
         TASKGROUPNAME, BUSICODE, BUSICODENAME, BATCHID, TASKTYPE, TASKINDEX,
         TASKCLASSNAME, EXECPARAM, EXECSTATE, STARTTIME, ENDTIME
-        FROM ECNY_COMM_TASK_EXEC
+        FROM PAY_COMM_TASK_EXEC
         WHERE SETTLEDATE = #{settleDate}
         AND (EXECSTATE = 'FAIL' OR EXECSTATE = 'EXPT')
     </select>
@@ -40,7 +40,7 @@
         SELECT SETTLEDATE, TASKCODE, TASKNAME, TASKGROUPCODE,
         TASKGROUPNAME, BUSICODE, BUSICODENAME, BATCHID, TASKTYPE, TASKINDEX,
         TASKCLASSNAME, EXECPARAM, EXECSTATE, STARTTIME, ENDTIME
-        FROM ECNY_COMM_TASK_EXEC
+        FROM PAY_COMM_TASK_EXEC
         WHERE SETTLEDATE = #{settleDate}
         AND TASKGROUPCODE = #{taskGroupCode}
         AND BATCHID = #{batchId}
@@ -49,7 +49,7 @@
     </select>
 
     <update id="updateTaskExecState" parameterType = "com.dcits.dcwlt.pay.api.model.SettleTaskExecDO">
-        UPDATE ECNY_COMM_TASK_EXEC
+        UPDATE PAY_COMM_TASK_EXEC
         SET EXECSTATE = #{execState}, STARTTIME = #{startTime}
         WHERE SETTLEDATE = #{settleDate}
         AND BATCHID = #{batchId}
@@ -59,7 +59,7 @@
     </update>
 
     <update id="updateTaskExecDone" parameterType = "com.dcits.dcwlt.pay.api.model.SettleTaskExecDO">
-        UPDATE ECNY_COMM_TASK_EXEC
+        UPDATE PAY_COMM_TASK_EXEC
         SET EXECSTATE = #{execState}, ENDTIME = #{endTime}
         WHERE SETTLEDATE = #{settleDate}
         AND BATCHID = #{batchId}
@@ -68,7 +68,7 @@
     </update>
 
     <delete id="deleteExecTaskByGroupId">
-        delete from ECNY_COMM_TASK_EXEC where SETTLEDATE = #{settleDate} AND BATCHID = #{batchId} AND TASKGROUPCODE = #{taskGroupCode}
+        delete from PAY_COMM_TASK_EXEC where SETTLEDATE = #{settleDate} AND BATCHID = #{batchId} AND TASKGROUPCODE = #{taskGroupCode}
     </delete>
 
 </mapper>

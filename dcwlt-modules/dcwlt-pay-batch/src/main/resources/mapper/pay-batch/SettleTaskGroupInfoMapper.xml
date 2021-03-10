@@ -6,7 +6,7 @@
 
     <select id="queryTaskGroupInfoToExec" resultType="com.dcits.dcwlt.pay.api.model.SettleTaskGroupInfoDO">
         SELECT TASKGROUPCODE, TASKGROUPNAME, BUSICODE, BUSICODENAME, REMARK
-        FROM ecny_comm_task_group_info
+        FROM pay_comm_task_group_info
         WHERE TASKGROUPCODE = #{taskGroupCode}
     </select>
 
