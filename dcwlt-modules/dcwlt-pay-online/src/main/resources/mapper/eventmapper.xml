@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dcits.dcwlt.pay.online.mapper.EventMapper" >
+
+    <!-- 更新事件处理结果 -->
+    <update id="updateEventInfo">
+         UPDATE pay_comm_excepteventinfo T
+	        SET 
+	        	<trim prefix="" suffix="" suffixOverrides=",">
+				<if test="exceptEventErrorCode != null and exceptEventErrorCode != ''">  T.EXCEPTEVENTERRORCODE = #{exceptEventErrorCode}, </if>
+				<if test="exceptEventErrorMsg != null and exceptEventErrorMsg != ''">  T.EXCEPTEVENTERRORMSG = #{exceptEventErrorMsg}, </if>
+				<if test="exceptEventSysStatus != null and exceptEventSysStatus != ''">  T.EXCEPTEVENTSYSSTATUS = #{exceptEventSysStatus}, </if>
+				<if test="lastUpDate != null and lastUpDate != ''">  T.LASTUPDATE = #{lastUpDate}, </if>
+				<if test="lastUpTime != null and lastUpTime != ''">  T.LASTUPTIME = #{lastUpTime} </if>
+	        </trim>
+	      WHERE T.EXCEPTEVENTCODE = #{exceptEventCode}
+	        AND T.EXCEPTEVENTSEQNO = #{exceptEventSeqNo}
+    </update>
+    
+      <!-- 更新处理次数，若新增违反唯一索引冲突，则更新处理次数 -->
+    <update id="updateEventDealNum">
+         UPDATE pay_comm_excepteventinfo T
+	        SET T.EXCEPTEVENTDEALCOUNT = ifnull(T.EXCEPTEVENTDEALCOUNT,0) + 1
+	      WHERE T.EXCEPTEVENTCODE = #{exceptEventCode}
+	        AND T.EXCEPTEVENTSEQNO = #{exceptEventSeqNo}
+	        AND ifnull(T.EXCEPTEVENTDEALCOUNT,0) + 1 &lt;= #{maxDealNum}
+    </update>
+    
+    <!-- 查询异常事件配置-->
+<!--    <select id="queryEventConfig" resultType="com.cgb.pay.common.channel.event.db.model.EventConfigDO">-->
+<!--		SELECT-->
+<!--			T.EXCEPTEVENTCODE,-->
+<!--			T.EXCEPTDEALMODE,-->
+<!--			T.EXCEPTEVENTTRXCODE,-->
+<!--			T.EXCEPTEVENTDEALMAXCOUNT,-->
+<!--			T.EXCEPTEVENTDEALTYPE,-->
+<!--			T.EXCEPTEVENTDEALINTERVALMIN,-->
+<!--			T.EXCEPTEVENTREMARK-->
+<!--		FROM ECNY_COMM_EXCEPTEVENTCONFIG T-->
+<!--		WHERE T.EXCEPTEVENTCODE = #{exceptEventCode}-->
+
+<!--    </select>-->
+    
+    <!-- 插入异常事件信息 -->
+    <insert id="insertEventInfo">
+		INSERT INTO pay_comm_excepteventinfo
+			(EXCEPTEVENTDATE, EXCEPTEVENTSERNO, EXCEPTEVENTTIME, EXCEPTEVENTCODE, EXCEPTEVENTSEQNO, EXCEPTEVENTDEALCOUNT,
+			 EXCEPTEVENTSYSSTATUS, EXCEPTEVENTERRORCODE, EXCEPTEVENTERRORMSG, EXCEPTEVENTDEALPATH, EXCEPTEVENTCONTEXT, LASTUPDATE, LASTUPTIME)
+		VALUES(#{exceptEventDate},#{exceptEventSerno},#{exceptEventTime},#{exceptEventCode},#{exceptEventSeqNo},#{exceptEventDealCount},
+		#{exceptEventSysStatus},#{exceptEventErrorCode},#{exceptEventErrorMsg},#{exceptEventDealPath},#{exceptEventContext},#{lastUpDate},#{lastUpTime})
+    </insert>
+    
+    <!-- 查询异常事件配置-->
+<!--    <select id="queryEventOne" resultType="com.cgb.pay.common.channel.event.msg.EventDealReqMsg">-->
+<!--		SELECT-->
+<!--			T.EXCEPTEVENTCODE as exceptEventCode,-->
+<!--			T.EXCEPTEVENTSEQNO as exceptEventSeqNo,-->
+<!--			T.EXCEPTEVENTCONTEXT as exceptEventContext-->
+<!--		FROM ECNY_COMM_EXCEPTEVENTINFO T-->
+<!--        WHERE T.EXCEPTEVENTCODE = #{exceptEventCode}-->
+<!--	    AND T.EXCEPTEVENTSEQNO = #{exceptEventSeqNo}-->
+
+<!--    </select>-->
+    
+    
+</mapper>

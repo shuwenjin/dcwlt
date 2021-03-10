@@ -19,7 +19,7 @@
 
 	<!-- 登记账务流水表 -->
 	<insert id="insertAccFlowByMap" parameterType="Map">
-	INSERT INTO ECNY_PAY_ACCFLOW(COREREQDATE,COREREQSERNO,BOOKTYPE,PAYDATE,
+	INSERT INTO pay_pay_accflow(COREREQDATE,COREREQSERNO,BOOKTYPE,PAYDATE,
 	PAYSERNO,BRNO,TELLERNO,ACCTBRNO,CURRENCY,AMOUNT,FEEAMOUNT,CORESYSID,COREINTFLAG,
 	REVTRANFLAG,CORETIME,CORETRXTYPE,CORETRXCODE,COREPROCSTATUS,CORERETCODE,CORERETMSG,
 	COREACCTDATE,CORESERNO,PAYERACCT,PAYERNAME,PAYEEACCT,PAYEENAME,ORIGCOREREQDATE,
@@ -34,7 +34,7 @@
 
 	<!-- 更新记账流水表状态 -->
     <update id="update">
-         UPDATE ECNY_PAY_ACCFLOW T
+         UPDATE pay_pay_accflow T
 	        SET T.COREPROCSTATUS = #{coreProcStatus},
 	            T.CORERETCODE = #{coreRetCode},
 	            T.CORERETMSG = #{coreRetMsg},
@@ -49,7 +49,7 @@
 
     <!-- 更新记账流水表状态 -->
     <update id="updateAccFlowByMap"  parameterType="Map">
-         UPDATE ECNY_PAY_ACCFLOW T
+         UPDATE pay_pay_accflow T
 	        SET T.COREPROCSTATUS = #{coreProcStatus},
 	            T.CORERETCODE = #{coreRetCode},
 	            T.CORERETMSG = #{coreRetMsg},
@@ -66,7 +66,7 @@
 
     <!-- 更新记账流水表状态 -->
     <update id="updateCoreQryAccFlowByMap"  parameterType="Map">
-        UPDATE ECNY_PAY_ACCFLOW T
+        UPDATE pay_pay_accflow T
         SET T.COREPROCSTATUS = #{coreProcStatus},
         T.CORERETCODE = #{coreRetCode},
         T.CORERETMSG = #{coreRetMsg},
@@ -105,7 +105,7 @@
                      T.ORIGCOREREQSERNO         origCoreReqSerno,
                      T.ORIGPAYDATE              origPayDate,
                      T.ORIGPAYSERNO             origPaySerno
-              FROM ECNY_PAY_ACCFLOW T
+              FROM pay_pay_accflow T
               where T.PAYDATE = #{payDate} and T.PAYSERNO = #{paySerno}
               order by LASTUPDATE desc,LASTUPTIME desc limit 1
     </select>
@@ -134,13 +134,13 @@
                      T.ORIGCOREREQSERNO         origCoreReqSerno,
                      T.ORIGPAYDATE              origPayDate,
                      T.ORIGPAYSERNO             origPaySerno
-              FROM ECNY_PAY_ACCFLOW T
+              FROM pay_pay_accflow T
               where T.COREREQDATE = #{coreReqDate} and T.COREREQSERNO = #{coreReqSerno}
     </select>
 
     <!-- 更新记账流水表状态 -->
     <update id="updateCoreStatus">
-        UPDATE ECNY_PAY_ACCFLOW T
+        UPDATE pay_pay_accflow T
         SET T.COREPROCSTATUS = #{coreProcStatus},
             T.LASTUPDATE = #{lastUpDate},
             T.LASTUPTIME = #{lastUpTime},

@@ -9,7 +9,6 @@
 
 package com.dcits.dcwlt.pay.online.service.impl;
 
-import ch.qos.logback.core.db.dialect.DBUtil;
 import com.dcits.dcwlt.pay.api.model.SignInfoDO;
 import com.dcits.dcwlt.pay.online.mapper.SignInfoMapper;
 import com.dcits.dcwlt.pay.online.service.ISignInfoRepository;

@@ -13,6 +13,10 @@ public interface AccflowMapper {
     int insert(AccFlowDO accFlowDO);
 
     AccFlowDO query(Map<String, String> param);
+
+	AccFlowDO selectCoreReqSerno(String queryByPayAccflowSql, Map<String, String> param);
+
+	int updateCoreStatus(String updateStatusAccflowSql, AccFlowDO updAccFlowDO);
 }
 
 

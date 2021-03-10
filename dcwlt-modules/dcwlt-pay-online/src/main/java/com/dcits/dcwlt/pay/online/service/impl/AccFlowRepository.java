@@ -1,7 +1,6 @@
 package com.dcits.dcwlt.pay.online.service.impl;
 
 
-import ch.qos.logback.core.db.dialect.DBUtil;
 import com.dcits.dcwlt.common.pay.util.DateUtil;
 import com.dcits.dcwlt.pay.api.model.AccFlowDO;
 import com.dcits.dcwlt.pay.online.mapper.AccflowMapper;
@@ -20,6 +19,13 @@ import java.util.Map;
  */
 @Repository
 public class AccFlowRepository {
+
+    private static final String INSERT_ACCFLOW_SQL = "accflowMapper.insert";
+    private static final String QUERY_ACCFLOW_SQL = "accflowMapper.query";
+    private static final String UPDATE_ACCFLOW_SQL = "accflowMapper.update";
+    private static final String QUERY_BY_PAY_ACCFLOW_SQL= "accflowMapper.selectCoreReqSerno";
+    private static final String UPDATE_STATUS_ACCFLOW_SQL = "accflowMapper.updateCoreStatus";
+
 
     @Autowired
     private AccflowMapper accflowMapper;
@@ -69,5 +75,26 @@ public class AccFlowRepository {
         return accflowMapper.update(updAccFlowDO);
     }
 
+    /**
+     * 根据平台日期平台流水获取 记账实体
+     * @param payDate
+     * @param paySerno
+     * @return
+     */
+    public AccFlowDO selectCoreReqSerno(String payDate, String paySerno) {
+        Map<String, String> param = new HashMap<>();
+        param.put("payDate", payDate);
+        param.put("paySerno", paySerno);
+        return accflowMapper.selectCoreReqSerno(QUERY_BY_PAY_ACCFLOW_SQL, param);
+    }
 
+    public int updateCoreStatus(AccFlowDO updAccFlowDO) {
+        //补充更新字段
+        updAccFlowDO.setLastUpDate(DateUtil.getDefaultDate());
+        updAccFlowDO.setLastUpTime(DateUtil.getDefaultTime());
+        updAccFlowDO.setLastMicroSecond(String.valueOf(System.currentTimeMillis()));
+
+        return accflowMapper.updateCoreStatus(UPDATE_STATUS_ACCFLOW_SQL, updAccFlowDO);
+    }
 }
+

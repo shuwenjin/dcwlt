@@ -52,6 +52,10 @@ public class EcnyTransException extends TransException {
     public static RspCodeMapDO convertRspCode(Throwable e) {
         return convertRspCode(e);
     }
+
+    public static RspCodeMapDO convertRspCode(String coreSysId, String dcepSysId, String errorCode, String errorMsg) {
+     return  convertRspCode(coreSysId,dcepSysId,errorCode,errorMsg);
+    }
 //
 //
 //    /**

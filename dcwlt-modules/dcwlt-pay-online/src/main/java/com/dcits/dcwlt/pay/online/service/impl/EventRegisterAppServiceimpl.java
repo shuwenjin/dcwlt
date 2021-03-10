@@ -1,10 +1,12 @@
 package com.dcits.dcwlt.pay.online.service.impl;
 
+import com.alibaba.fastjson.JSONObject;
 import com.dcits.dcwlt.common.pay.constant.EventConst;
 import com.dcits.dcwlt.pay.api.domain.dcep.eventBatch.EventConfigDO;
 import com.dcits.dcwlt.pay.api.domain.dcep.eventBatch.EventDealReqMsg;
 import com.dcits.dcwlt.pay.online.mapper.ReconsummaryChkMapper;
 import com.dcits.dcwlt.pay.online.service.IEventRegisterAppService;
+import org.aspectj.bridge.MessageUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -52,7 +54,7 @@ public class EventRegisterAppServiceimpl implements IEventRegisterAppService {
         reqMsg.setExceptEventMsgTag(msgTag);
 
         //发送消息中心
-       // MessageUtil.sendMessage(EVENT_REGISTER_PRODUCT, msgTag, reqMsg.getExceptEventSeqNo(), intervalMin, (JSONObject) JSON.toJSON(reqMsg));
+      //  MessageUtil.sendMessage(EVENT_REGISTER_PRODUCT, msgTag, reqMsg.getExceptEventSeqNo(), intervalMin, (JSONObject) JSON.toJSON(reqMsg));
     }
 
 
