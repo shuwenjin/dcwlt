@@ -1,4 +1,4 @@
-package com.dcits.dcwlt.pay.online.payconvertstsqry;
+package com.dcits.dcwlt.pay.api.domain.ecny.payconvert;
 
 
 public class PayConvertStsQryRspDTO{
