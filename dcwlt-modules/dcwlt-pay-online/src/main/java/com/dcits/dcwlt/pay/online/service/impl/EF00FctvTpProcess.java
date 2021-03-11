@@ -9,7 +9,7 @@ import com.dcits.dcwlt.pay.api.domain.dcep.party.Party;
 import com.dcits.dcwlt.pay.online.flow.builder.PartyFactory;
 import com.dcits.dcwlt.pay.api.domain.dcep.party.chng.FinCdChngNtfctn;
 import com.dcits.dcwlt.pay.api.domain.dcep.party.chng.FinCdChngNtfctnDTO;
-import com.dcits.dcwlt.pay.online.service.IPartyInfoRepository;
+import com.dcits.dcwlt.pay.online.mapper.PartyInfoMapper;
 import com.dcits.dcwlt.pay.online.service.PartyChangeProcess;
 import com.dcits.dcwlt.pay.api.model.PartyInfoDO;
 import com.dcits.dcwlt.pay.online.exception.EcnyTransError;
@@ -27,8 +27,11 @@ import org.springframework.stereotype.Component;
 @Component("eF00FctvTpProcess")
 public class EF00FctvTpProcess implements PartyChangeProcess {
 
+//    @Autowired
+//    private IPartyInfoRepository partyInfoRepository;
+
     @Autowired
-    private IPartyInfoRepository partyInfoRepository;
+    private PartyInfoMapper partyMapper;
 
     @Override
     public void doChange(Party party, TradeContext context)  {
@@ -51,7 +54,7 @@ public class EF00FctvTpProcess implements PartyChangeProcess {
             //新增，变更处理， 设置机构生效状态为生效中
             partyInfoDO.setStatus(AppConstant.EFFECTIVE_STATUS_EFFECTIVE);
         }
-        PartyInfoDO oldPartyInfo = partyInfoRepository.queryPartyInfoByPartyId(party.getPtyId());
+        PartyInfoDO oldPartyInfo = partyMapper.queryParty(party.getPtyId());
         if(oldPartyInfo != null){
             //如果原来变更期数为99999999， 不进行比较，否则进行比较
             if(oldPartyInfo.getChangeNumber() >= NbInf.MAX_CHNG_NB){
@@ -71,9 +74,9 @@ public class EF00FctvTpProcess implements PartyChangeProcess {
         }
         //更新入库
         if(needInsert){
-            partyInfoRepository.addParty(partyInfoDO);
+            partyMapper.insertParty(partyInfoDO);
         }else {
-            partyInfoRepository.updateParty(partyInfoDO);
+            partyMapper.updateParty(partyInfoDO);
         }
     }
 }

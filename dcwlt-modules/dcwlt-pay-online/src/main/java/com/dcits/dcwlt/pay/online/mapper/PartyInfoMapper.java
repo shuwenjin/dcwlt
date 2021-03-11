@@ -32,12 +32,12 @@ public interface PartyInfoMapper
     public List<PartyInfoDO> queryLoseEffectiveParty(String inEffectiveDate);
 
     /**
-     * 查询报文登记信息
+     * 根据id查询报文登记信息
      * 
-     * @param partyInfoDO 机构
+     * @param PtyId 机构id
      * @return 机构集合
      */
-    public List<PartyInfoDO> queryParty(PartyInfoDO partyInfoDO);
+    public PartyInfoDO queryParty(String PtyId);
 
     /**
      * 新增报文登记信息
@@ -71,5 +71,4 @@ public interface PartyInfoMapper
      */
     public int deletePartyInfoDOByIds(String[] partyids);
 
-    PartyInfoDO queryParty(@Param("partyID") String partyID);
 }
