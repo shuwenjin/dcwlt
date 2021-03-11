@@ -1,7 +1,7 @@
-package com.dcits.dcwlt.pay.online.payconvert;
+package com.dcits.dcwlt.pay.api.domain.ecny.payconvert;
 
 import com.dcits.dcwlt.common.pay.util.HiddenUtil;
-import com.dcits.dcwlt.pay.online.payconvertstsqry.ECNYReqBody;
+import com.dcits.dcwlt.pay.api.domain.ecny.ECNYReqBody;
 import org.hibernate.validator.constraints.Length;
 
 import javax.validation.constraints.NotBlank;

@@ -1,7 +1,6 @@
-package com.dcits.dcwlt.pay.online.payconvert;
+package com.dcits.dcwlt.pay.api.domain.ecny.payconvert;
 
-
-import com.dcits.dcwlt.pay.online.payconvertstsqry.ECNYReqBody;
+import com.dcits.dcwlt.pay.api.domain.ecny.ECNYReqBody;
 
 public class PayConvertChnlRspDTO extends ECNYReqBody {
 
