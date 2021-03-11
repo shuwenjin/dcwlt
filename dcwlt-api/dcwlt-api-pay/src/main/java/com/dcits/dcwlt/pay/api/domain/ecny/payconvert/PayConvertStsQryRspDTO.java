@@ -1,13 +1,21 @@
-package com.dcits.dcwlt.pay.online.payconvert;
+package com.dcits.dcwlt.pay.api.domain.ecny.payconvert;
 
 
-import com.dcits.dcwlt.pay.online.payconvertstsqry.ECNYReqBody;
-
-public class PayConvertChnlRspDTO extends ECNYReqBody {
+public class PayConvertStsQryRspDTO{
 
     private String coreAcctDate;// 核心记账日期
     private String coreSerno;// 核心记账流水
     private String payPathSerno;// 通道流水
+
+    public PayConvertStsQryRspDTO(String coreAcctDate, String coreSerno, String payPathSerno) {
+        this.coreAcctDate = coreAcctDate;
+        this.coreSerno = coreSerno;
+        this.payPathSerno = payPathSerno;
+    }
+
+    public PayConvertStsQryRspDTO() {
+
+    }
 
     public String getCoreAcctDate() {
         return coreAcctDate;
@@ -35,7 +43,7 @@ public class PayConvertChnlRspDTO extends ECNYReqBody {
 
     @Override
     public String toString() {
-        return "PayConvertRspDTO{" +
+        return "PayConvertStsQryRspDTO{" +
                 "coreAcctDate='" + coreAcctDate + '\'' +
                 ", coreSerno='" + coreSerno + '\'' +
                 ", payPathSerno='" + payPathSerno + '\'' +

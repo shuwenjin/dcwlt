@@ -5,7 +5,7 @@ package com.dcits.dcwlt.common.pay.cache;
  */
 public interface CacheDataExecutor {
 
-    String getTableName();
+//    String getTableName();
 
-    void cacheData();
+//    void cacheData();
 }

@@ -26,6 +26,7 @@ import com.dcits.dcwlt.pay.online.flow.builder.EcnyTradeContext;
 import com.dcits.dcwlt.pay.online.flow.builder.EcnyTradeFlowBuilder;
 import com.dcits.dcwlt.pay.online.mapper.SignInfoMapper;
 import com.dcits.dcwlt.pay.online.service.*;
+import com.dcits.dcwlt.pay.online.service.impl.BankCoreImplDubboService;
 import com.dcits.dcwlt.pay.online.service.impl.PartyService;
 import com.dcits.dcwlt.pay.online.task.ParamConfigCheckTask;
 import org.apache.commons.lang3.StringUtils;
@@ -38,7 +39,7 @@ import org.springframework.context.annotation.Configuration;
 /**
  * 兑出交易处理配置
  *
- * @author liuyuanhui，wuguofeng01
+ * @author liurhf
  */
 @Configuration
 public class Convert225RTradeFlow {
@@ -54,8 +55,8 @@ public class Convert225RTradeFlow {
     @Autowired
     private IPayTransDtlInfoRepository payTransDtlInfoRepository;
 
-//    @Autowired
-//    private BankCoreImplDubboSrvice bankCoreImplDubboService;
+    @Autowired
+    private BankCoreImplDubboService bankCoreImplDubboService;
 
     @Autowired
     private PartyService partyService;
@@ -281,9 +282,9 @@ public class Convert225RTradeFlow {
         EcnyTradeContext.getTempContext(tradeContext).put("oldStatus", oldStatus);
 
         // 发送核心
-//        BankCore351100InnerRsp bankCore351100InnerRsp = sendToCore(bankCore351100InnerReq);
+        BankCore351100InnerRsp bankCore351100InnerRsp = sendToCore(bankCore351100InnerReq);
         // 核心后处理
-//        sendCoreDone(payTransDtlInfoDO, bankCore351100InnerRsp);
+        sendCoreDone(payTransDtlInfoDO, bankCore351100InnerRsp);
 
         //更新上核心后处理成功后的登记簿状态
         oldStatus.setPreTrxStatus(payTransDtlInfoDO.getTrxStatus());
@@ -366,7 +367,7 @@ public class Convert225RTradeFlow {
      * @param bankCore351100InnerReq
      * @return
      */
-/*    public BankCore351100InnerRsp sendToCore(BankCore351100InnerReq bankCore351100InnerReq) {
+    public BankCore351100InnerRsp sendToCore(BankCore351100InnerReq bankCore351100InnerReq) {
         logger.info("发送核心系统进行账务处理,核心请求日期:{},流水:{}", bankCore351100InnerReq.getCoreReqDate(), bankCore351100InnerReq.getCoreReqSerno());
         BankCore351100InnerRsp bankCore351100InnerRsp;
         try {
@@ -376,7 +377,7 @@ public class Convert225RTradeFlow {
             throw new EcnyTransException(AppConstant.TRXSTATUS_ABEND, EcnyTransError.GATEWAY_REQUEST_ERROR);
         }
         return bankCore351100InnerRsp;
-    }*/
+    }
 
     /**
      * 核心后处理

@@ -10,14 +10,14 @@ import com.dcits.dcwlt.pay.api.domain.dcep.DCEPReqBody;
  *
  */
 public class TxDtlQryReqDTO extends DCEPReqBody {
-    TxDtlQryReq txDtlsQryReq;
+    TxDtlsQryReq txDtlsQryReq;
 
     @JSONField(name = "TxDtlsQryReq")
-    public TxDtlQryReq getTxDtlsQryReq() {
+    public TxDtlsQryReq getTxDtlsQryReq() {
         return txDtlsQryReq;
     }
 
-    public void setTxDtlsQryReq(TxDtlQryReq txDtlsQryReq) {
+    public void setTxDtlsQryReq(TxDtlsQryReq txDtlsQryReq) {
         this.txDtlsQryReq = txDtlsQryReq;
     }
 
