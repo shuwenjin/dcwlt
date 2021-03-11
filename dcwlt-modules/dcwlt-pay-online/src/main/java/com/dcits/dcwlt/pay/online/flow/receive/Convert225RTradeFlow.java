@@ -27,6 +27,7 @@ import com.dcits.dcwlt.pay.online.flow.builder.EcnyTradeFlowBuilder;
 import com.dcits.dcwlt.pay.online.mapper.SignInfoMapper;
 import com.dcits.dcwlt.pay.online.service.*;
 import com.dcits.dcwlt.pay.online.service.impl.PartyService;
+import com.dcits.dcwlt.pay.online.task.ParamConfigCheckTask;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -65,8 +66,6 @@ public class Convert225RTradeFlow {
     @Autowired
     private IAuthInfoService authInfoService;
 
-    @Autowired
-    private ParamConfigCheckService paramConfigCheckService;
 
     @Autowired
     private ICoreProcessService bankCoreProcessService;
@@ -206,7 +205,7 @@ public class Convert225RTradeFlow {
             throw new EcnyTransException(AppConstant.TRXSTATUS_FAILED, EcnyTransError.WALLET_LEVEL_ERROR);
         }
         //业务种类、业务类型校验
-        if (!AppConstant.BUSINESS_TYPE_CONVERT.equals(busiType) || !paramConfigCheckService.checkConfigValue(BUSINESS_TYPE,
+        if (!AppConstant.BUSINESS_TYPE_CONVERT.equals(busiType) || !ParamConfigCheckTask.checkConfigValue(BUSINESS_TYPE,
                 busiType, busiKind)
         ) {
             logger.error("业务类型:{},业务种类:{}校验不通过,", busiType, busiKind);

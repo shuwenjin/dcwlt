@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dcits.dcwlt.pay.online.mapper.EcnyCommConfigMapper">
+
+
+    <select id="getAllConfig" resultType="com.dcits.dcwlt.pay.api.model.EcnyCommConfigDO">
+        SELECT
+        PAMKEY        pamKey,
+        PAMVALUE      pamValue,
+        STATUS         status,
+        PAMCODE       pamCode
+        FROM PAY_COMM_PARAM_CONFIG
+    </select>
+</mapper>

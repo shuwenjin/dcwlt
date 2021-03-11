@@ -4,6 +4,7 @@ import com.alibaba.fastjson.annotation.JSONField;
 import com.dcits.dcwlt.pay.api.domain.dcep.bankattachedmanagement.BankAttRspsnInf;
 import com.dcits.dcwlt.pay.api.domain.dcep.common.GrpHdr;
 import com.dcits.dcwlt.pay.api.domain.dcep.common.OrgnlGrpHdr;
+import com.dcits.dcwlt.pay.api.domain.dcep.common.RspsnInf;
 
 
 /**
@@ -16,7 +17,7 @@ public class ReconvertRsp {
 
     private OrgnlGrpHdr orgnlGrpHdr;	//原报文主键组件
 
-    private BankAttRspsnInf rspsnInf;			//响应信息
+    private RspsnInf rspsnInf;			//响应信息
 
     @JSONField(name = "GrpHdr")
     public GrpHdr getGrpHdr() {
@@ -37,11 +38,11 @@ public class ReconvertRsp {
     }
 
     @JSONField(name = "RspsnInf")
-    public BankAttRspsnInf getRspsnInf() {
+    public RspsnInf getRspsnInf() {
         return rspsnInf;
     }
 
-    public void setRspsnInf(BankAttRspsnInf rspsnInf) {
+    public void setRspsnInf(RspsnInf rspsnInf) {
         this.rspsnInf = rspsnInf;
     }
 

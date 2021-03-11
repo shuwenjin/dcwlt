@@ -85,7 +85,7 @@ public class SegmentIdGenImpl implements SegmentIdGenerator {
 
 
     //线程池，定时每分钟扫描数据库，加载或者删除变化的biz_tag，实现biz_tag的热部署，线程为后台线程
-    @Scheduled(cron = "0 0/1 * * * ?")
+    @Scheduled(cron = "0 0/10 * * * ?")
     private void updateCacheFromDbAtEveryMinute() {
         scheduleService.scheduleWithFixedDelay(new Runnable() {
             @Override

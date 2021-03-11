@@ -1,6 +1,7 @@
-package com.dcits.dcwlt.pay.online.service;
+package com.dcits.dcwlt.pay.online.mapper;
 
 import com.dcits.dcwlt.pay.api.model.EcnyCommConfigDO;
+import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;
 
@@ -10,7 +11,7 @@ import java.util.List;
  * @version 1.0.0
  * <p>ECNY配置参数DAO</p>
  */
-public interface IECNYCommConfigRepository {
-
+@Mapper
+public interface EcnyCommConfigMapper {
     List<EcnyCommConfigDO> getAllConfig();
 }

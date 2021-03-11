@@ -28,8 +28,6 @@ import java.util.Map;
 @Repository("payTransDtlInfoRepository")
 public class PayTransDtlInfoRepository implements IPayTransDtlInfoRepository {
 
-    @Autowired
-    private PayTransDtlInfoDOMapper payTransDtlInfoDOMapper;
 
     @Autowired
     private PayTransDtlInfoMapper payTransDtlInfoMapper;
@@ -42,7 +40,6 @@ public class PayTransDtlInfoRepository implements IPayTransDtlInfoRepository {
      */
     @Override
     public int insert(PayTransDtlInfoDO payTransDtlInfoDO) {
-//       return payTransDtlInfoDOMapper.insert(payTransDtlInfoDO);
         return payTransDtlInfoMapper.insert(payTransDtlInfoDO);
     }
 

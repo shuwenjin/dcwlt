@@ -1,14 +1,20 @@
-package com.dcits.dcwlt.pay.online.service;
+package com.dcits.dcwlt.pay.online.task;
 
 
 import com.dcits.dcwlt.pay.api.model.EcnyCommConfigDO;
-import com.dcits.dcwlt.common.pay.cache.CacheDataExecutor;
+import com.dcits.dcwlt.pay.online.mapper.EcnyCommConfigMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
+import org.springframework.scheduling.annotation.EnableScheduling;
+import org.springframework.stereotype.Component;
 
-import java.util.*;
+import javax.annotation.PostConstruct;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * @author zhangwang
@@ -17,28 +23,29 @@ import java.util.*;
  * @date 2021/1/2
  */
 
-@Service
-public class ParamConfigCheckService implements CacheDataExecutor {
+@Component
+@EnableScheduling
+public class ParamConfigCheckTask {
 
-    private static final Logger logger = LoggerFactory.getLogger(ParamConfigCheckService.class);
+    private static final Logger logger = LoggerFactory.getLogger(ParamConfigCheckTask.class);
 
     private static final String EFFECTIVE_STATUS = "1";
 
-    private static final String ECNY_COMM_CONFIG_TABLE_NAME = "ECNY_COMM_CONFIG";
+    private static final String ECNY_COMM_CONFIG_TABLE_NAME = "PAY_COMM_PARAM_CONFIG";
 
     @Autowired
-    private IECNYCommConfigRepository commConfigRepository;
+    private EcnyCommConfigMapper commConfigRepository;
 
 
     /**
      * 一级分类配置，对应pamCode下所有的配置
      */
-    private Map<String, Set<String>> topCategoryMap;
+    private static Map<String, Set<String>> topCategoryMap;
 
     /**
      * 二级分类配置，以一级分类（pamCode） + 二级分类（pamKey）为键（同时pamCode + pamKey为唯一索引）
      */
-    private Map<String, String> subCategoryMap;
+    private static Map<String, String> subCategoryMap;
 
     /**
      * 校验是否有配置参数
@@ -46,7 +53,7 @@ public class ParamConfigCheckService implements CacheDataExecutor {
      * @param subCategory   二级分类码
      * @return <tt>true</tt> 当数据库表含当前配置时
      */
-    public boolean checkConfigValue(String topCategory, String subCategory, String value) {
+    public static boolean checkConfigValue(String topCategory, String subCategory, String value) {
         String key = topCategory + subCategory;
         return subCategoryMap.getOrDefault(key,"").contains(value);
     }
@@ -60,14 +67,7 @@ public class ParamConfigCheckService implements CacheDataExecutor {
         return topCategoryMap.getOrDefault(topCategory,null);
     }
 
-
-
-    @Override
-    public String getTableName() {
-        return ECNY_COMM_CONFIG_TABLE_NAME;
-    }
-
-    @Override
+    @PostConstruct
     public void cacheData() {
         Map<String, Set<String>> innerTopCategoryMap = new HashMap<>();
         Map<String, String> innerSubCategoryMap = new HashMap<>();
