@@ -261,23 +261,23 @@ public class Dispute801STradeFlow {
             logger.error("发起机构传输有误,{}", instgPty);
             throw new EcnyTransException(AppConstant.TRXSTATUS_FAILED, EcnyTransError.PARTY_INSTG_ERROR);
         }
-        //判断发起机构状态 todo
-//        boolean sendPartyFlag = partyService.isAvailable(instgPty);
-//        if (!sendPartyFlag) {
-//            logger.info("发起机构状态异常,{}", instgPty);
-//            throw new EcnyTransException(AppConstant.TRXSTATUS_FAILED, EcnyTransError.PARTY_INSTG_STATUS_UNSUPPORT);
-//        }
+        //判断发起机构状态
+        boolean sendPartyFlag = partyService.isAvailable(instgPty);
+        if (!sendPartyFlag) {
+            logger.info("发起机构状态异常,{}", instgPty);
+            throw new EcnyTransException(AppConstant.TRXSTATUS_FAILED, EcnyTransError.PARTY_INSTG_STATUS_UNSUPPORT);
+        }
 
-        //判断接收机构状态 todo
-//        boolean recvPartyFlag = partyService.isAvailable(instdPty);
-//        if (!recvPartyFlag) {
-//            logger.info("接收机构状态异常,{}", instdPty);
-//            throw new EcnyTransException(AppConstant.TRXSTATUS_FAILED, EcnyTransError.PARTY_INSTD_STATUS_UNSUPPORT);
-//        }
-//        if (!sendAuth) {
-//            logger.error("发送机构权限不足,{}", instgPty);
-//            throw new EcnyTransException(AppConstant.TRXSTATUS_FAILED, EcnyTransError.ORGAN_POWER_ERROR);
-//        }
+        //判断接收机构状态
+        boolean recvPartyFlag = partyService.isAvailable(instdPty);
+        if (!recvPartyFlag) {
+            logger.info("接收机构状态异常,{}", instdPty);
+            throw new EcnyTransException(AppConstant.TRXSTATUS_FAILED, EcnyTransError.PARTY_INSTD_STATUS_UNSUPPORT);
+        }
+        if (!sendAuth) {
+            logger.error("发送机构权限不足,{}", instgPty);
+            throw new EcnyTransException(AppConstant.TRXSTATUS_FAILED, EcnyTransError.ORGAN_POWER_ERROR);
+        }
         // 接收机构权限校验
         Boolean recvAuth = authInfoService.validateAuthInfo(instdPty, msgType, DSPT_BIZ_TP, AuthInfoDrctEnum.recvAuth);
         if (!recvAuth) {
@@ -480,6 +480,7 @@ public class Dispute801STradeFlow {
             payTransDtlInfoDO.setPayPathRetDate(DateUtil.getDefaultDate());
             payTransDtlInfoDO.setPayPathRetCode(fault.getFaultCode());
             payTransDtlInfoDO.setPayPathRetMsg(fault.getFaultString());
+            // todo
             //txStsQryNetPartyService.registerTrxStsQry(payTransDtlInfoDO);
         }
         EcnyTradeContext.getTempContext(tradeContext).put("PAY_TRANS_DTL", payTransDtlInfoDO);
