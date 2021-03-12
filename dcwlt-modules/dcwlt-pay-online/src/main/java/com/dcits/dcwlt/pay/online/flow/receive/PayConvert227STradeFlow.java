@@ -73,7 +73,7 @@ public class PayConvert227STradeFlow {
     private IPayTransDtlInfoService payTransDtlInfoRepository;
 
     @Autowired
-    private BankCoreAccTxnService bankCoreAccTxnService;
+    private BankCoreAccTxnServiceImpl bankCoreAccTxnService;
 
 //    @Autowired
 //    private BankCoreImplDubboService bankCoreImplDubboService;
@@ -82,7 +82,7 @@ public class PayConvert227STradeFlow {
     private BankAccountVerifyService bankAccountVerifyService;
 
     @Autowired
-    private CoreEventService coreEventService;
+    private CoreEventServiceImpl coreEventService;
 
     @Autowired
     private DcepSendService dcepSendService;

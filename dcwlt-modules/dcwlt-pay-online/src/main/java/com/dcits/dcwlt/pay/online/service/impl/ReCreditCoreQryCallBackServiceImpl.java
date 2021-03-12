@@ -7,8 +7,8 @@ import com.dcits.dcwlt.common.pay.constant.AppConstant;
 import com.dcits.dcwlt.pay.api.model.PayTransDtlInfoDO;
 import com.dcits.dcwlt.pay.api.model.StateMachine;
 import com.dcits.dcwlt.pay.online.service.ICoreProcessService;
-import com.dcits.dcwlt.pay.online.service.IPayTransDtlInfoRepository;
 import com.dcits.dcwlt.pay.online.service.ICoreQryCallBackService;
+import com.dcits.dcwlt.pay.online.service.IPayTransDtlInfoService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +19,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 public class ReCreditCoreQryCallBackServiceImpl implements ICoreQryCallBackService {
 
     @Autowired
-    private  IPayTransDtlInfoRepository payTransDtlInfoRepository;
+    private IPayTransDtlInfoService payTransDtlInfoRepository;
 
     @Autowired
     private ICoreProcessService bankCoreProcessService;

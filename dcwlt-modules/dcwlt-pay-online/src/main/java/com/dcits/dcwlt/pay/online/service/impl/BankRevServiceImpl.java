@@ -18,10 +18,9 @@ import com.dcits.dcwlt.pay.api.model.StateMachine;
 import com.dcits.dcwlt.pay.online.base.Constant;
 import com.dcits.dcwlt.pay.online.exception.EcnyTransError;
 import com.dcits.dcwlt.pay.online.exception.EcnyTransException;
-import com.dcits.dcwlt.pay.online.serno.SernoService;
 import com.dcits.dcwlt.pay.online.service.IEventService;
-import com.dcits.dcwlt.pay.online.service.IPayTransDtlInfoRepository;
 import com.dcits.dcwlt.pay.online.service.IBankRevCallBackService;
+import com.dcits.dcwlt.pay.online.service.IPayTransDtlInfoService;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -46,8 +45,6 @@ public class BankRevServiceImpl implements IEventService {
     @Autowired
     private BankCoreAccTxnServiceImpl bankCoreAccTxnServiceImpl;
 
-    @Autowired
-    private SernoService sernoService;
 
     @Autowired
     private CoreQryServiceImpl coreQryServiceImpl;
@@ -56,7 +53,7 @@ public class BankRevServiceImpl implements IEventService {
     private GenerateCodeServiceImpl generateCodeService;
 
     @Autowired
-    private IPayTransDtlInfoRepository payTransDtlInfoRepository;
+    private IPayTransDtlInfoService payTransDtlInfoRepository;
 
     @Autowired
     private BankCoreDubboServiceImpl bankCoreDubboServiceImpl;

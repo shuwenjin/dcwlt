@@ -5,7 +5,6 @@ import com.dcits.dcwlt.common.pay.channel.bankcore.dto.bankcore351100.BankCore35
 import com.dcits.dcwlt.common.pay.channel.event.msg.EventDealRspMsg;
 import com.dcits.dcwlt.common.pay.constant.AppConstant;
 import com.dcits.dcwlt.pay.api.model.PayTransDtlInfoDO;
-import com.dcits.dcwlt.pay.online.service.IPayTransDtlInfoRepository;
 import com.dcits.dcwlt.pay.online.service.IPayTransDtlInfoService;
 import com.dcits.dcwlt.pay.online.service.IReCreditCallBackService;
 import org.slf4j.Logger;
@@ -20,14 +19,12 @@ public class ReCreditCallBackServiceImpl implements IReCreditCallBackService {
     private static final Logger logger = LoggerFactory.getLogger(ReCreditCallBackServiceImpl.class);
 
     @Autowired
-    private IPayTransDtlInfoRepository payTransDtlInfoRepository;
+    private PayTransDtlInfoServiceImpl payTransDtlInfoRepository;
 
     @Autowired
     private IPayTransDtlInfoService payTransDtlInfoService;
 
-    //private static final IPayTransDtlInfoRepository payTransDtlInfoRepository = RtpUtil.getInstance().getBean("payTransDtlInfoRepository");
 
-    //private static final IPayTransDtlInfoService payTransDtlInfoService = RtpUtil.getInstance().getBean("payTransDtlInfoServiceImpl");
 
 
     @Override

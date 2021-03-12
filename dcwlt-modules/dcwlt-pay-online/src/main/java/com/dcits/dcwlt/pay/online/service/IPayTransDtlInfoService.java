@@ -3,7 +3,6 @@ package com.dcits.dcwlt.pay.online.service;
 import com.dcits.dcwlt.pay.api.domain.dcep.reconvert.ReconvertReq;
 import com.dcits.dcwlt.pay.api.model.PayTransDtlInfoDO;
 import com.dcits.dcwlt.pay.api.model.StateMachine;
-import org.springframework.stereotype.Service;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;

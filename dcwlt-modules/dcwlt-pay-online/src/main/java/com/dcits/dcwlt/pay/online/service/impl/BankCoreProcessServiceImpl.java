@@ -1,5 +1,6 @@
 package com.dcits.dcwlt.pay.online.service.impl;
 
+import com.dcits.dcwlt.common.pay.channel.bankcore.dto.BankCore996666.BankCore996666Rsp;
 import com.dcits.dcwlt.pay.api.model.PayTransDtlInfoDO;
 import com.dcits.dcwlt.pay.api.model.StateMachine;
 import com.dcits.dcwlt.common.pay.channel.bankcore.dto.bankcore351100.BankCore351100InnerReq;
@@ -8,13 +9,9 @@ import com.dcits.dcwlt.common.pay.constant.AppConstant;
 import com.dcits.dcwlt.common.pay.constant.Constant;
 import com.dcits.dcwlt.common.pay.sequence.service.impl.GenerateCodeServiceImpl;
 import com.dcits.dcwlt.common.pay.util.DateUtil;
-import com.dcits.dcwlt.pay.api.model.PayTransDtlInfoDO;
-import com.dcits.dcwlt.pay.api.model.StateMachine;
 import com.dcits.dcwlt.pay.online.exception.EcnyTransError;
 import com.dcits.dcwlt.pay.online.exception.EcnyTransException;
-import com.dcits.dcwlt.pay.online.serno.SernoService;
 import com.dcits.dcwlt.pay.online.service.ICoreProcessService;
-import com.dcits.dcwlt.pay.online.service.IPayTransDtlInfoRepository;
 import com.dcits.dcwlt.pay.online.service.IPayTransDtlInfoService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -32,13 +29,11 @@ public class BankCoreProcessServiceImpl implements ICoreProcessService {
     private static final String TRANS_TYPE_CREDIT = "04";
 
     @Autowired
-    private IPayTransDtlInfoRepository payTransDtlInfoRepository;
+    private IPayTransDtlInfoService payTransDtlInfoRepository;
 
     @Autowired
     private BankCoreAccTxnServiceImpl bankCoreAccTxnServiceImpl;
 
-    @Autowired
-    private SernoService sernoService;
 
     @Autowired
     private BankCoreImplDubboServiceImpl bankCoreImplDubboServiceImpl;
@@ -415,7 +410,7 @@ public class BankCoreProcessServiceImpl implements ICoreProcessService {
                 payTransDtlInfoDO.getPayDate(), payTransDtlInfoDO.getPaySerno());
 
         try {
-            bankCoreAccTxnService.insertCoreFlow(bankCore351100InnerReq, bankCore351100InnerReq.getCoreReqSerno(), bankCore351100InnerReq.getCoreReqDate());
+            bankCoreAccTxnServiceImpl.insertCoreFlow(bankCore351100InnerReq, bankCore351100InnerReq.getCoreReqSerno(), bankCore351100InnerReq.getCoreReqDate());
             int updateNum = payTransDtlInfoRepository.update(payTransDtlInfoDO, stateMachine);
             if (updateNum != 1) {
                 logger.error("更新交易登记簿失败");

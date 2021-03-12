@@ -9,7 +9,8 @@ import com.dcits.dcwlt.pay.api.domain.dcep.party.Party;
 import com.dcits.dcwlt.pay.online.flow.builder.PartyFactory;
 import com.dcits.dcwlt.pay.api.domain.dcep.party.chng.FinCdChngNtfctn;
 import com.dcits.dcwlt.pay.api.domain.dcep.party.chng.FinCdChngNtfctnDTO;
-import com.dcits.dcwlt.pay.online.service.IPartyInfoRepository;
+import com.dcits.dcwlt.pay.online.mapper.PartyInfoMapper;
+import com.dcits.dcwlt.pay.online.service.IPartyInfoservice;
 import com.dcits.dcwlt.pay.online.service.PartyChangeProcess;
 import com.dcits.dcwlt.pay.api.model.PartyInfoDO;
 import com.dcits.dcwlt.pay.online.exception.EcnyTransError;
@@ -28,7 +29,10 @@ import org.springframework.stereotype.Component;
 public class EF00FctvTpProcess implements PartyChangeProcess {
 
     @Autowired
-    private IPartyInfoRepository partyInfoRepository;
+    private IPartyInfoservice partyInfoRepository;
+
+    @Autowired
+    PartyInfoMapper partyMapper;
 
     @Override
     public void doChange(Party party, TradeContext context)  {

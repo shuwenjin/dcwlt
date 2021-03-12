@@ -30,7 +30,7 @@ public class BankRevService implements IEventService {
 //    private BankCoreImplDubboService bankCoreImplDubboService;
 
     @Autowired
-    private BankCoreAccTxnService bankCoreAccTxnService;
+    private BankCoreAccTxnServiceImpl bankCoreAccTxnService;
 
 //    @Autowired
 //    private SernoService sernoService;

@@ -8,10 +8,7 @@ import com.dcits.dcwlt.common.pay.enums.ProcessStsCdEnum;
 import com.dcits.dcwlt.pay.api.model.PayNotifyDO;
 import com.dcits.dcwlt.pay.api.model.PayTransDtlInfoDO;
 import com.dcits.dcwlt.pay.api.model.StateMachine;
-import com.dcits.dcwlt.pay.online.service.ICoreProcessService;
-import com.dcits.dcwlt.pay.online.service.IPayNotifyService;
-import com.dcits.dcwlt.pay.online.service.IPayTransDtlInfoRepository;
-import com.dcits.dcwlt.pay.online.service.ICoreQryCallBackService;
+import com.dcits.dcwlt.pay.online.service.*;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -30,7 +27,7 @@ public class BankCoreQryCallBackServiceImpl implements ICoreQryCallBackService {
     private ICoreProcessService bankCoreProcessService;
 
     @Autowired
-    private IPayTransDtlInfoRepository payTransDtlInfoRepository;
+    private IPayTransDtlInfoService payTransDtlInfoRepository;
 
     @Autowired
     private BankCoreAccTxnServiceImpl bankCoreAccTxnServiceImpl;

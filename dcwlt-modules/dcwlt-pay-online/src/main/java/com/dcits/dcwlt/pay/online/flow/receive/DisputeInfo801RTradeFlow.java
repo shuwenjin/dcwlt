@@ -27,8 +27,8 @@ import com.dcits.dcwlt.pay.online.exception.EcnyTransException;
 import com.dcits.dcwlt.pay.online.flow.builder.EcnyTradeContext;
 import com.dcits.dcwlt.pay.online.flow.builder.EcnyTradeFlowBuilder;
 import com.dcits.dcwlt.pay.online.service.*;
-import com.dcits.dcwlt.pay.online.service.impl.BankCoreAccTxnService;
-import com.dcits.dcwlt.pay.online.service.impl.CoreEventService;
+import com.dcits.dcwlt.pay.online.service.impl.BankCoreAccTxnServiceImpl;
+import com.dcits.dcwlt.pay.online.service.impl.CoreEventServiceImpl;
 import com.dcits.dcwlt.pay.online.service.impl.ECNYSerNoService;
 import com.dcits.dcwlt.pay.online.service.impl.ParamConfigCheckService;
 import org.apache.commons.lang.StringUtils;
@@ -79,7 +79,7 @@ public class DisputeInfo801RTradeFlow {
     private ECNYSerNoService ecnySerNoService;
 
     @Autowired
-    private BankCoreAccTxnService bankCoreAccTxnService;
+    private BankCoreAccTxnServiceImpl bankCoreAccTxnService;
 
 //    @Autowired
 //    private BankCoreImplDubboService bankCoreImplDubboService;
@@ -87,7 +87,7 @@ public class DisputeInfo801RTradeFlow {
 
 
     @Autowired
-    private CoreEventService coreEventService;
+    private CoreEventServiceImpl coreEventService;
 
 
     private static final String BUSINESS_TYPE = "BIZTP";

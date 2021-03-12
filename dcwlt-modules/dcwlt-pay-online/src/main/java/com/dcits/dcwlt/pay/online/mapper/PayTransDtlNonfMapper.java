@@ -16,4 +16,5 @@ public interface PayTransDtlNonfMapper {
     int updatePayTransDtlNonf(PayTransDtlNonfDO payTransDtlNonfDO);
 
     List<PayTransDtlNonfDO> queryPayTransDtlNonf(PayTransDtlNonfDO payTransDtlNonfDO);
+
 }

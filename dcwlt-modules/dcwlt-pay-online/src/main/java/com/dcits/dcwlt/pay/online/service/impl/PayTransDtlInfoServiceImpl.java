@@ -526,6 +526,7 @@ public class PayTransDtlInfoServiceImpl implements IPayTransDtlInfoService {
      * @param payTransDtlInfoDO 金融信息流水表实体
      * @return
      */
+    @Override
     public int insert(PayTransDtlInfoDO payTransDtlInfoDO) {
         return payTransDtlInfoMapper.insert(payTransDtlInfoDO);
     }
@@ -535,6 +536,7 @@ public class PayTransDtlInfoServiceImpl implements IPayTransDtlInfoService {
      * @param payTransDtlInfoDO
      * @return
      */
+    @Override
     public int update(PayTransDtlInfoDO payTransDtlInfoDO) {
         //补充更新字段
         payTransDtlInfoDO.setLastUpDate(DateUtil.getDefaultDate());
@@ -552,6 +554,7 @@ public class PayTransDtlInfoServiceImpl implements IPayTransDtlInfoService {
      * @throws NoSuchMethodException
      * @throws InvocationTargetException
      */
+    @Override
     public int update(PayTransDtlInfoDO payTransDtlInfoDO, StateMachine stateMachine) throws IllegalAccessException, NoSuchMethodException, InvocationTargetException {
         //补充更新字段
         payTransDtlInfoDO.setLastUpDate(DateUtil.getDefaultDate());
@@ -570,6 +573,7 @@ public class PayTransDtlInfoServiceImpl implements IPayTransDtlInfoService {
      * @param payDate,paySerno
      * @return
      */
+    @Override
     public PayTransDtlInfoDO query(String payDate, String paySerno) {
         Map<String, String> param = new HashMap<>();
         param.put("payDate", payDate);
@@ -583,6 +587,7 @@ public class PayTransDtlInfoServiceImpl implements IPayTransDtlInfoService {
      * @param msgId
      * @return
      */
+    @Override
     public PayTransDtlInfoDO query(String msgId) {
         return payTransDtlInfoMapper.queryByMsgId(msgId);
     }
@@ -593,6 +598,7 @@ public class PayTransDtlInfoServiceImpl implements IPayTransDtlInfoService {
      * @param busiSysSerno
      * @return
      */
+    @Override
     public PayTransDtlInfoDO queryOriTxn(String busiSysSerno) {
         return payTransDtlInfoMapper.queryByBusiSysSerno(busiSysSerno);
     }
