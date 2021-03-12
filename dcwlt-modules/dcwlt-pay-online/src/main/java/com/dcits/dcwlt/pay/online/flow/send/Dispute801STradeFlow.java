@@ -48,7 +48,7 @@ import com.dcits.dcwlt.pay.online.flow.builder.EcnyTradeContext;
 import com.dcits.dcwlt.pay.online.flow.builder.EcnyTradeFlowBuilder;
 import com.dcits.dcwlt.pay.online.service.IAuthInfoService;
 import com.dcits.dcwlt.pay.online.service.IPartyService;
-import com.dcits.dcwlt.pay.online.service.IPayTransDtlInfo1Service;
+import com.dcits.dcwlt.pay.online.service.IPayTransDtlInfoService;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -77,7 +77,7 @@ public class Dispute801STradeFlow {
     //private DcepSendService dcepSendService;
 
     @Autowired
-    private IPayTransDtlInfo1Service payTransDtlInfoRepository;
+    private IPayTransDtlInfoService payTransDtlInfoService;
 
     @Autowired
     private IAuthInfoService authInfoService;
@@ -158,7 +158,7 @@ public class Dispute801STradeFlow {
         payTransDtlInfoDO.setPayPathSerno(generateCodeService.generateMsgId(OutOrgTypeEnum.OutOrg,
                 MsgTpEnum.DCEP801.getCode().substring(5, 8), ""));
         try {
-            payTransDtlInfoRepository.insert(payTransDtlInfoDO);
+            payTransDtlInfoService.insert(payTransDtlInfoDO);
         } catch (Exception e) {
             logger.error("金融流水表入库失败:{}-{}", e.getMessage(), e);
             throw new EcnyTransException(AppConstant.TRXSTATUS_FAILED, EcnyTransError.DATABASE_ERROR);
@@ -182,7 +182,7 @@ public class Dispute801STradeFlow {
         // 平台流水号
         String paySerno = reqMsg.getBody().getPaySerno();
         // 获取原交易信息
-        PayTransDtlInfoDO payTransDtlInfo_old = payTransDtlInfoRepository.query(payDate, paySerno);
+        PayTransDtlInfoDO payTransDtlInfo_old = payTransDtlInfoService.query(payDate, paySerno);
 
         if (null == payTransDtlInfo_old) {
             logger.error("原交易流水不存在");
@@ -236,7 +236,7 @@ public class Dispute801STradeFlow {
 
     private void update(PayTransDtlInfoDO payTransDtlInfoDO) {
         try {
-            payTransDtlInfoRepository.update(payTransDtlInfoDO);
+            payTransDtlInfoService.update(payTransDtlInfoDO);
         } catch (Exception e) {
             logger.error("金融流水表入库失败:{}-{}", e.getMessage(), e);
             throw new EcnyTransException(AppConstant.TRXSTATUS_FAILED, EcnyTransError.DATABASE_ERROR);
@@ -490,7 +490,7 @@ public class Dispute801STradeFlow {
     private void update(PayTransDtlInfoDO payTransDtlInfoDO,StateMachine stateMachine){
         try {
             // 更新新金融登记簿
-            int retCount = payTransDtlInfoRepository.update(payTransDtlInfoDO, stateMachine);
+            int retCount = payTransDtlInfoService.update(payTransDtlInfoDO, stateMachine);
 
             if (retCount != 1) {
                 throw new EcnyTransException(AppConstant.TRXSTATUS_ABEND, EcnyTransError.DATABASE_ERROR);
@@ -561,7 +561,7 @@ public class Dispute801STradeFlow {
             DsptChnlRspDTO rspDTO = new DsptChnlRspDTO();
             rspDTO.setProcResult(payTransDtlInfoDO.getTrxRetMsg());
 
-            payTransDtlInfoRepository.update(payTransDtlInfoDO);
+            payTransDtlInfoService.update(payTransDtlInfoDO);
             ECNYRspDTO ecnyRspDTO = ECNYRspDTO.newInstance(ecnyReqDTO, ecnyRspHead, rspDTO,
                     payTransDtlInfoDO.getTrxRetCode(), payTransDtlInfoDO.getTrxRetMsg());
             EcnyTradeContext.setRspMsg(tradeContext, ecnyRspDTO);

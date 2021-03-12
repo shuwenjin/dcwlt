@@ -18,13 +18,19 @@ import com.dcits.dcwlt.pay.api.model.StateMachine;
 import com.dcits.dcwlt.pay.online.base.Constant;
 import com.dcits.dcwlt.pay.online.exception.EcnyTransError;
 import com.dcits.dcwlt.pay.online.exception.EcnyTransException;
-import com.dcits.dcwlt.pay.online.service.IPayTransDtlInfo1Service;
+import com.dcits.dcwlt.pay.online.mapper.PayTransDtlInfoMapper;
 import com.dcits.dcwlt.pay.online.service.IPayTransDtlInfoService;
+import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.lang.reflect.InvocationTargetException;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @Service("payTransDtlInfoServiceImpl")
 public class PayTransDtlInfoServiceImpl implements IPayTransDtlInfoService {
@@ -35,8 +41,6 @@ public class PayTransDtlInfoServiceImpl implements IPayTransDtlInfoService {
     @Autowired
     private IGenerateCodeService generateCodeService;
 
-    @Autowired
-    private IPayTransDtlInfo1Service payTransDtlInfoRepository;
 
     @Override
     public PayTransDtlInfoDO init(ReconvertReq reconvertReqDTO) {
@@ -121,7 +125,7 @@ public class PayTransDtlInfoServiceImpl implements IPayTransDtlInfoService {
         payTransDtlInfoDO.setTrxRetCode(payTransDtlInfoDO.getCoreRetCode());
         payTransDtlInfoDO.setTrxRetMsg(payTransDtlInfoDO.getCoreRetMsg());
         try {
-            return payTransDtlInfoRepository.update(payTransDtlInfoDO, stateMachine);
+            return this.update(payTransDtlInfoDO, stateMachine);
         } catch (Exception e) {
             logger.error("更新金融交易簿状态200 --》 000 异常： {}-{}", e.getMessage(), e);
             throw new EcnyTransException(EcnyTransError.DATABASE_ERROR);
@@ -148,7 +152,7 @@ public class PayTransDtlInfoServiceImpl implements IPayTransDtlInfoService {
         payTransDtlInfoDO.setTrxRetCode(EcnyTransError.SUCCESS.getErrorCode());
         payTransDtlInfoDO.setTrxRetMsg(EcnyTransError.SUCCESS.getErrorMsg());
         try {
-            return payTransDtlInfoRepository.update(payTransDtlInfoDO, stateMachine);
+            return this.update(payTransDtlInfoDO, stateMachine);
         } catch (Exception e) {
             logger.error("更新金融交易簿通道状态211 --》111 异常： {}-{}", e.getMessage(), e);
             throw new EcnyTransException(EcnyTransError.DATABASE_ERROR);
@@ -172,7 +176,7 @@ public class PayTransDtlInfoServiceImpl implements IPayTransDtlInfoService {
         stateMachine.setPreCoreProcStatus(AppConstant.CORESTATUS_SUCCESS);
         stateMachine.setPrePathProcStatus(AppConstant.PAYPATHSTATUS_FAILED);
         try {
-            return payTransDtlInfoRepository.update(payTransDtlInfoDO, stateMachine);
+            return this.update(payTransDtlInfoDO, stateMachine);
         } catch (Exception e) {
             logger.error("终态通知-更新金融交易簿通道状态异常： {}-{}", e.getMessage(), e);
             throw new EcnyTransException(EcnyTransError.DATABASE_ERROR);
@@ -197,7 +201,7 @@ public class PayTransDtlInfoServiceImpl implements IPayTransDtlInfoService {
         stateMachine.setPreCoreProcStatus(AppConstant.CORESTATUS_INIT);
         stateMachine.setPrePathProcStatus(AppConstant.PAYPATHSTATUS_FAILED);
         try {
-            return payTransDtlInfoRepository.update(payTransDtlInfoDO, stateMachine);
+            return this.update(payTransDtlInfoDO, stateMachine);
         } catch (Exception e) {
             logger.error("终态通知-更新金融交易簿通道状态异常： {}-{}", e.getMessage(), e);
             throw new EcnyTransException(EcnyTransError.DATABASE_ERROR);
@@ -221,7 +225,7 @@ public class PayTransDtlInfoServiceImpl implements IPayTransDtlInfoService {
         stateMachine.setPreCoreProcStatus(AppConstant.CORESTATUS_FAILED);
         stateMachine.setPrePathProcStatus(AppConstant.PAYPATHSTATUS_SUCCESS);
         try {
-            return payTransDtlInfoRepository.update(payTransDtlInfoDO, stateMachine);
+            return this.update(payTransDtlInfoDO, stateMachine);
         } catch (Exception e) {
             logger.error("终态通知-更新金融交易簿通道状态异常： {}-{}", e.getMessage(), e);
             throw new EcnyTransException(EcnyTransError.DATABASE_ERROR);
@@ -242,7 +246,7 @@ public class PayTransDtlInfoServiceImpl implements IPayTransDtlInfoService {
 
         payTransDtlInfoDO.setTrxStatus(AppConstant.TRXSTATUS_FAILED);
         try {
-            int updateNum = payTransDtlInfoRepository.update(payTransDtlInfoDO, stateMachine);
+            int updateNum = this.update(payTransDtlInfoDO, stateMachine);
             if (updateNum != 1) {
                 logger.error("更新金融交易簿通道状态从290为终态090失败,平台日期：{}，平台流水：{}",
                         payTransDtlInfoDO.getPayDate(), payTransDtlInfoDO.getPaySerno());
@@ -291,7 +295,7 @@ public class PayTransDtlInfoServiceImpl implements IPayTransDtlInfoService {
         }
 
         try {
-            return payTransDtlInfoRepository.update(updateDO, stateMachine);
+            return this.update(updateDO, stateMachine);
         } catch (Exception e) {
             logger.error("更新金融交易簿状态异常： {}-{}", e.getMessage(), e);
             throw new EcnyTransException(EcnyTransError.DATABASE_ERROR);
@@ -329,7 +333,7 @@ public class PayTransDtlInfoServiceImpl implements IPayTransDtlInfoService {
         updateDO.setPayPathRetMsg(RejectCdEnum.SUCCESS.getDesc());
 
         try {
-            return payTransDtlInfoRepository.update(updateDO, stateMachine);
+            return this.update(updateDO, stateMachine);
         } catch (Exception e) {
             logger.error("更新金融交易簿状态异常： {}-{}", e.getMessage(), e);
             throw new EcnyTransException(EcnyTransError.DATABASE_ERROR);
@@ -351,7 +355,7 @@ public class PayTransDtlInfoServiceImpl implements IPayTransDtlInfoService {
         payTransDtlInfoDO.setPathProcStatus(payPathStatus);
 
         try {
-            int updateNum = payTransDtlInfoRepository.update(payTransDtlInfoDO, stateMachine);
+            int updateNum = this.update(payTransDtlInfoDO, stateMachine);
             if (updateNum != 1) {
                 logger.error("更新核心流水表失败,平台日期：{}，平台流水：{}",
                         payTransDtlInfoDO.getPayDate(), payTransDtlInfoDO.getPaySerno());
@@ -370,7 +374,7 @@ public class PayTransDtlInfoServiceImpl implements IPayTransDtlInfoService {
 
         String payDate = payTransDtlInfoDO.getPayDate();
         String paySerno = payTransDtlInfoDO.getPaySerno();
-        payTransDtlInfoDO = payTransDtlInfoRepository.query(payDate, paySerno);
+        payTransDtlInfoDO = this.query(payDate, paySerno);
 
         String trxStatus = payTransDtlInfoDO.getTrxStatus();
         String coreProcStatus = payTransDtlInfoDO.getCoreProcStatus();
@@ -437,7 +441,7 @@ public class PayTransDtlInfoServiceImpl implements IPayTransDtlInfoService {
             }
 
             try {
-                int updateNum = payTransDtlInfoRepository.update(payTransDtlInfoDO, stateMachine);
+                int updateNum = this.update(payTransDtlInfoDO, stateMachine);
                 if (updateNum != 1) {
                     logger.error("更新登记簿状态失败,平台日期：{}，平台流水：{}",
                             payDate, paySerno);
@@ -468,7 +472,7 @@ public class PayTransDtlInfoServiceImpl implements IPayTransDtlInfoService {
 
         payTransDtlInfoDO.setTrxStatus(AppConstant.TRXSTATUS_SUCCESS);
         try {
-            int updateNum = payTransDtlInfoRepository.update(payTransDtlInfoDO, stateMachine);
+            int updateNum = this.update(payTransDtlInfoDO, stateMachine);
             if (updateNum != 1) {
                 logger.error("更新金融交易簿通道状态从X91为终态191失败,平台日期：{}，平台流水：{}",
                         payTransDtlInfoDO.getPayDate(), payTransDtlInfoDO.getPaySerno());
@@ -508,5 +512,99 @@ public class PayTransDtlInfoServiceImpl implements IPayTransDtlInfoService {
                 payTransDtlInfoDO.getPayDate(), payTransDtlInfoDO.getPaySerno(), flag);
 
         return flag;
+    }
+
+
+
+
+    //----------------------------------数据库交互-------------------------------------------------
+    @Autowired
+    private PayTransDtlInfoMapper payTransDtlInfoMapper;
+    /**
+     * 金融交易信息入流水库
+     *
+     * @param payTransDtlInfoDO 金融信息流水表实体
+     * @return
+     */
+    public int insert(PayTransDtlInfoDO payTransDtlInfoDO) {
+        return payTransDtlInfoMapper.insert(payTransDtlInfoDO);
+    }
+
+    /**
+     * 金融交易流水表更新
+     * @param payTransDtlInfoDO
+     * @return
+     */
+    public int update(PayTransDtlInfoDO payTransDtlInfoDO) {
+        //补充更新字段
+        payTransDtlInfoDO.setLastUpDate(DateUtil.getDefaultDate());
+        payTransDtlInfoDO.setLastUpTime(DateUtil.getDefaultTime());
+
+        return payTransDtlInfoMapper.updateDirect(payTransDtlInfoDO);
+    }
+
+    /**
+     * 金融信息表更新
+     * @param payTransDtlInfoDO
+     * @param stateMachine
+     * @return
+     * @throws IllegalAccessException
+     * @throws NoSuchMethodException
+     * @throws InvocationTargetException
+     */
+    public int update(PayTransDtlInfoDO payTransDtlInfoDO, StateMachine stateMachine) throws IllegalAccessException, NoSuchMethodException, InvocationTargetException {
+        //补充更新字段
+        payTransDtlInfoDO.setLastUpDate(DateUtil.getDefaultDate());
+        payTransDtlInfoDO.setLastUpTime(DateUtil.getDefaultTime());
+
+        Map<String, String> param = BeanUtils.describe(payTransDtlInfoDO);
+        if (null != stateMachine) {
+            param.putAll(BeanUtils.describe(stateMachine));
+        }
+        return payTransDtlInfoMapper.update(param);
+    }
+
+    /**
+     * 根据平台流水和日期查询金融交易流水表
+     *
+     * @param payDate,paySerno
+     * @return
+     */
+    public PayTransDtlInfoDO query(String payDate, String paySerno) {
+        Map<String, String> param = new HashMap<>();
+        param.put("payDate", payDate);
+        param.put("paySerno", paySerno);
+        return payTransDtlInfoMapper.queryByPayInfo(param);
+    }
+
+    /**
+     * 根据报文标识号查询金融交易流水表
+     *
+     * @param msgId
+     * @return
+     */
+    public PayTransDtlInfoDO query(String msgId) {
+        return payTransDtlInfoMapper.queryByMsgId(msgId);
+    }
+
+    /**
+     * 根据渠道请求流水查询金融信息表原交易信息
+     *
+     * @param busiSysSerno
+     * @return
+     */
+    public PayTransDtlInfoDO queryOriTxn(String busiSysSerno) {
+        return payTransDtlInfoMapper.queryByBusiSysSerno(busiSysSerno);
+    }
+
+    /**
+     * 根据原交易流水查询异常交易
+     *
+     * @param origPayPathSerno
+     * @return
+     */
+    @Override
+    public List<PayTransDtlInfoDO> queryList(String origPayPathSerno) {
+        return payTransDtlInfoMapper.queryByOrigSerno( origPayPathSerno);
     }
 }
