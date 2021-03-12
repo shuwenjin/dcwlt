@@ -4,6 +4,7 @@ import ch.qos.logback.core.db.dialect.DBUtil;
 import com.dcits.dcwlt.common.pay.enums.DtlFileProcStatusEnum;
 import com.dcits.dcwlt.pay.api.model.DtlFileInfDO;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.transaction.TransactionStatus;
 
 import java.util.List;
@@ -27,18 +28,18 @@ public interface SettledtlFileInfoBatchMapper {
      int updateDtlFileInfoProcessStatus(DtlFileInfDO dtlFileInfDO);
 
 
-     List<DtlFileInfDO> queryDtlFileInfoByBatchId(String batchId);
+     List<DtlFileInfDO> queryDtlFileInfoByBatchId(@Param("batchId")String batchId);
 
 
-     List<DtlFileInfDO> queryDtlFileInfoByBatchIdStatus(String batchId, String processStatus);
+     List<DtlFileInfDO> queryDtlFileInfoByBatchIdStatus(@Param("batchId")String batchId, @Param("fileProcStatus")String processStatus);
 
 
-     List<DtlFileInfDO> queryDtlFileInfoByBatchIdUnStatus(String batchId,String processStatus);
+     List<DtlFileInfDO> queryDtlFileInfoByBatchIdUnStatus(@Param("batchId")String batchId, @Param("fileProcStatus")String processStatus);
 
 
-     int deleteByBatchId(String batchId);
+     int deleteByBatchId(@Param("batchId")String batchId);
 
-     DtlFileInfDO queryByFileName(String fileName);
+     DtlFileInfDO queryByFileName(@Param("fileName")String fileName);
 
      int updateDtlFileInfoLastProcessStatus(DtlFileInfDO dtlFileInfDO);
 }

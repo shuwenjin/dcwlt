@@ -3,6 +3,8 @@ package com.dcits.dcwlt.pay.batch.mapper;
 
 import com.dcits.dcwlt.pay.api.model.CheckPathDO;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
+
 import java.util.List;
 
 
@@ -17,9 +19,9 @@ public interface SettleCheckPathMapper {
 
     public int insert(CheckPathDO checkPathDO);
 
-    public List<CheckPathDO> selectPath(String batchDate, String batchId);
+    public List<CheckPathDO> selectPath(@Param("batchDate") String batchDate, @Param("batchId")String batchId);
 
-    public int updateStatus(String payDate, String paySerno, String checkStatus,String date,String time);
+    public int updateStatus(@Param("payDate") String payDate, @Param("paySerno") String paySerno, @Param("checkStatus") String checkStatus, @Param("lastUpDate") String lastUpDate, @Param("lastUpTime") String lastUpTime);
 
     /**
      * 批量插入数据
@@ -34,7 +36,7 @@ public interface SettleCheckPathMapper {
      * @return
      */
     public List<CheckPathDO> selectPathInOnline(//String datasource,
-                                                String batchDate, String batchId);
+                                                @Param("batchDate") String batchDate, @Param("batchId") String batchId);
 
 
 }
