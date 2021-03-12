@@ -1,5 +1,7 @@
 package com.dcits.dcwlt.pay.api.model;
 
+import com.dcits.dcwlt.common.core.annotation.Excel;
+
 /**
  *
  * @desc 资金调整汇总核对表实体
@@ -8,67 +10,83 @@ public class BatchCheckClearDO {
     /*
      * 报文标识号
      * */
+    @Excel(name = "报文标识号")
     private String msgId;
     /*
      * 报文发送时间
      * */
+    @Excel(name = "报文发送时间")
     private String senderDateTime;
     /*
      * 发起机构
      * */
+    @Excel(name = "发起机构")
     private String instgDrctPty;
     /*
      * 接收机构
      * */
+    @Excel(name = "接收机构")
     private String instdDrctPty;
     /*
      * 备注
      * */
+    @Excel(name = "备注")
     private String remark;
     /*
      * 清算日期
      * */
+    @Excel(name = "清算日期")
     private String clearDate;
     /*
      * 清算总笔数
      * */
+    @Excel(name = "清算总笔数")
     private String clearCountNum;
     /*
      * 清算借方总金额
      * */
+    @Excel(name = "清算借方总金额")
     private String clearDbtTotAmt;
     /*
      * 清算贷方总金额
      * */
+    @Excel(name = "清算贷方总金额")
     private String clearCbtTotAmt;
     /*
      * 清算场次编号
      * */
+    @Excel(name = "清算场次编号")
     private String clearNetNum;
     /*
      * 清算报文标识号
      * */
+    @Excel(name = "清算报文标识号")
     private String clearMsgId;
     /*
      * 清算借贷标识
      * */
+    @Excel(name = "清算借贷标识")
     private String clearDrct;
     /*
      * 清算金额
      * */
+    @Excel(name = "清算金额")
     private String clearAmt;
     /*
      * 批次号
      * */
+    @Excel(name = "批次号")
     private String batchId;
     /*
      * 批次借贷标识
      * */
+    @Excel(name = "批次借贷标识")
     private String batchDrct;
 
     /*
      * 批次扎差净额
      * */
+    @Excel(name = "批次扎差净额")
     private String batchNetAmt;
     /*
      * 最后更新日期

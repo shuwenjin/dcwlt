@@ -18,7 +18,7 @@ import com.dcits.dcwlt.pay.api.model.StateMachine;
 import com.dcits.dcwlt.pay.online.base.Constant;
 import com.dcits.dcwlt.pay.online.exception.EcnyTransError;
 import com.dcits.dcwlt.pay.online.exception.EcnyTransException;
-import com.dcits.dcwlt.pay.online.service.IPayTransDtlInfoRepository;
+import com.dcits.dcwlt.pay.online.service.IPayTransDtlInfo1Service;
 import com.dcits.dcwlt.pay.online.service.IPayTransDtlInfoService;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -36,7 +36,7 @@ public class PayTransDtlInfoServiceImpl implements IPayTransDtlInfoService {
     private IGenerateCodeService generateCodeService;
 
     @Autowired
-    private IPayTransDtlInfoRepository payTransDtlInfoRepository;
+    private IPayTransDtlInfo1Service payTransDtlInfoRepository;
 
     @Override
     public PayTransDtlInfoDO init(ReconvertReq reconvertReqDTO) {

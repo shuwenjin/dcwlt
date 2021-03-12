@@ -9,7 +9,7 @@ import com.dcits.dcwlt.pay.api.domain.dcep.party.Party;
 import com.dcits.dcwlt.pay.online.flow.builder.PartyFactory;
 import com.dcits.dcwlt.pay.api.domain.dcep.party.chng.FinCdChngNtfctn;
 import com.dcits.dcwlt.pay.api.domain.dcep.party.chng.FinCdChngNtfctnDTO;
-import com.dcits.dcwlt.pay.online.service.IPartyToBeEffectiveRepository;
+import com.dcits.dcwlt.pay.online.mapper.PartyInfoOTMapper;
 import com.dcits.dcwlt.pay.online.service.PartyChangeProcess;
 import com.dcits.dcwlt.pay.api.model.PartyToBeEffectiveDO;
 import com.dcits.dcwlt.pay.online.exception.EcnyTransError;
@@ -19,6 +19,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.text.ParseException;
+import java.util.List;
 
 /**
  * 定时生效处理
@@ -29,8 +30,11 @@ import java.text.ParseException;
 @Component("eF01FctvTpProcess")
 public class EF01FctvTpProcess implements PartyChangeProcess {
 
+//    @Autowired
+//    private IPartyToBeEffectiveRepository partyInfoTmpRepository;
+
     @Autowired
-    private IPartyToBeEffectiveRepository partyInfoTmpRepository;
+    private PartyInfoOTMapper partyInfoOTMapper;
 
     /**
      * 执行定时生效变更逻辑
@@ -52,8 +56,10 @@ public class EF01FctvTpProcess implements PartyChangeProcess {
         PartyToBeEffectiveDO partyToBeEffectiveDO = PartyFactory.fromParty(party, nbInf);
         //定时生效，设置生效状态为已撤销
         partyToBeEffectiveDO.setStatus(AppConstant.EFFECTIVE_STATUS_REVOKE);
-
-        PartyToBeEffectiveDO oldPartyInfo = partyInfoTmpRepository.queryPartyTmpByPartyId(party.getPtyId());
+        PartyToBeEffectiveDO partyToBeEffectiveDOo = new PartyToBeEffectiveDO();
+        partyToBeEffectiveDOo.setPartyID(party.getPtyId());
+        List<PartyToBeEffectiveDO> oldPartyInfoList = partyInfoOTMapper.queryPartyTmp(partyToBeEffectiveDOo);
+        PartyToBeEffectiveDO oldPartyInfo = oldPartyInfoList.get(0);
         if(oldPartyInfo != null){
             //如果原来变更期数为99999999， 不进行比较，否则进行比较
             if(oldPartyInfo.getChangeNumber() >= NbInf.MAX_CHNG_NB){
@@ -73,9 +79,9 @@ public class EF01FctvTpProcess implements PartyChangeProcess {
         }
 
         if(needInsert){
-            partyInfoTmpRepository.addPartyTmp(partyToBeEffectiveDO);
+            partyInfoOTMapper.insertPartyTmp(partyToBeEffectiveDO);
         }else {
-            partyInfoTmpRepository.updatePartyTmp(partyToBeEffectiveDO);
+            partyInfoOTMapper.updatePartyTmp(partyToBeEffectiveDO);
         }
     }
 }

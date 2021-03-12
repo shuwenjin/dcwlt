@@ -2,6 +2,7 @@ package com.dcits.dcwlt.pay.online.service.impl;
 
 import com.dcits.dcwlt.common.pay.constant.AppConstant;
 import com.dcits.dcwlt.common.pay.enums.ChangeCdEnum;
+import com.dcits.dcwlt.common.pay.util.DateCompareUtil;
 import com.dcits.dcwlt.common.pay.util.DateUtil;
 import com.dcits.dcwlt.pay.api.domain.dcep.common.NbInf;
 import com.dcits.dcwlt.pay.api.domain.ecny.ECNYReqDTO;
@@ -14,8 +15,9 @@ import com.dcits.dcwlt.pay.api.model.PartyInfoDO;
 import com.dcits.dcwlt.pay.api.model.PartyToBeEffectiveDO;
 import com.dcits.dcwlt.pay.online.exception.EcnyTransError;
 import com.dcits.dcwlt.pay.online.exception.EcnyTransException;
+import com.dcits.dcwlt.pay.online.mapper.PartyInfoMapper;
 import com.dcits.dcwlt.pay.online.service.*;
-import com.dcits.dcwlt.pay.online.util.DateCompareUtil;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,14 +38,15 @@ public class PartyService implements IPartyService {
     private static final Logger logger = LoggerFactory.getLogger(PartyService.class);
 
     @Autowired
-    private IPartyToBeEffectiveRepository partyInfoTmpRepository;
+    private IPartyToBeEffectiveService partyInfoTmpRepository;
     @Autowired
-    private IPartyInfoservice partyInfoRepository;
+    private PartyInfoMapper partyInfoRepository;
     @Autowired
     private IAuthInfoRepository iAuthInfoRepository;
     @Autowired
     private IAuthInfoToBeEffectiveRepository authInfoToBeEffectiveRepository;
-
+    @Autowired
+    private partyInfoCommonService partyInfoCommonService;
     /**
      * 定时移动生效数据
      */
@@ -230,7 +233,7 @@ public class PartyService implements IPartyService {
         boolean newInsert = false;
         //是否需要更新到生效表
         boolean needUpdate = false;
-        PartyInfoDO partyInfoDO = partyInfoRepository.queryPartyInfoByPartyId(partyToBeEffectiveDO.getPartyID());
+        PartyInfoDO partyInfoDO = partyInfoRepository.queryParty(partyToBeEffectiveDO.getPartyID());
 
         //生效判断, 非CC02撤销类型，
         if (!ChangeCdEnum.CC02.getCode().equals(partyToBeEffectiveDO.getChangeType())) {
@@ -297,7 +300,7 @@ public class PartyService implements IPartyService {
             partyInfoDO.setChangeNumber(partyToBeEffectiveDO.getChangeNumber());
             if (newInsert) {
                 logger.info("机构ID{}, 执行插入生效表操作", partyInfoDO.getPartyID());
-                partyInfoRepository.addParty(partyInfoDO);
+                partyInfoRepository.insertParty(partyInfoDO);
             } else {
                 logger.info("机构ID{}, 执行更新生效表操作", partyInfoDO.getPartyID());
                 partyInfoRepository.updateParty(partyInfoDO);
@@ -351,8 +354,10 @@ public class PartyService implements IPartyService {
      * @return
      */
     public boolean sendReceiveAble(String partyId) {
-        return partyInfoRepository.sendReceiveAble(partyId);
+        return partyInfoCommonService.sendReceiveAble(partyId);
     }
+
+
 
     /**
      * 判断机构是否可以发送或接收报文
@@ -361,7 +366,7 @@ public class PartyService implements IPartyService {
      * @return
      */
     public boolean sendReceiveAble(PartyInfoDO partyInfoDO) {
-        return partyInfoRepository.sendReceiveAble(partyInfoDO);
+        return partyInfoCommonService.sendReceiveAble(partyInfoDO);
     }
 
     /**
@@ -371,7 +376,7 @@ public class PartyService implements IPartyService {
      * @return
      */
     public boolean isAvailable(PartyInfoDO partyInfoDO) {
-        return partyInfoRepository.isAvailable(partyInfoDO);
+        return partyInfoCommonService.isAvailable(partyInfoDO);
     }
 
     /**
@@ -381,6 +386,6 @@ public class PartyService implements IPartyService {
      * @return
      */
     public boolean isAvailable(String partyId) {
-        return partyInfoRepository.isAvailable(partyId);
+        return partyInfoCommonService.isAvailable(partyId);
     }
 }

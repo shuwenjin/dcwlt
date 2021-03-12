@@ -3,6 +3,7 @@ package com.dcits.dcwlt.pay.online.mapper;
 import com.dcits.dcwlt.pay.api.model.PartyInfoDO;
 
 import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.annotations.Mapper;
 import java.util.List;
 
 public interface PartyInfoMapper {

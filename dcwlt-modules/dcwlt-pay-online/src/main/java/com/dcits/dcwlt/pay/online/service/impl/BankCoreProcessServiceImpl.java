@@ -1,6 +1,7 @@
 package com.dcits.dcwlt.pay.online.service.impl;
 
-import com.dcits.dcwlt.common.pay.channel.bankcore.dto.BankCore996666.BankCore996666Rsp;
+import com.dcits.dcwlt.pay.api.model.PayTransDtlInfoDO;
+import com.dcits.dcwlt.pay.api.model.StateMachine;
 import com.dcits.dcwlt.common.pay.channel.bankcore.dto.bankcore351100.BankCore351100InnerReq;
 import com.dcits.dcwlt.common.pay.channel.bankcore.dto.bankcore351100.BankCore351100InnerRsp;
 import com.dcits.dcwlt.common.pay.constant.AppConstant;
@@ -414,7 +415,7 @@ public class BankCoreProcessServiceImpl implements ICoreProcessService {
                 payTransDtlInfoDO.getPayDate(), payTransDtlInfoDO.getPaySerno());
 
         try {
-            bankCoreAccTxnServiceImpl.insertCoreFlow(bankCore351100InnerReq, bankCore351100InnerReq.getCoreReqSerno(), bankCore351100InnerReq.getCoreReqDate());
+            bankCoreAccTxnService.insertCoreFlow(bankCore351100InnerReq, bankCore351100InnerReq.getCoreReqSerno(), bankCore351100InnerReq.getCoreReqDate());
             int updateNum = payTransDtlInfoRepository.update(payTransDtlInfoDO, stateMachine);
             if (updateNum != 1) {
                 logger.error("更新交易登记簿失败");

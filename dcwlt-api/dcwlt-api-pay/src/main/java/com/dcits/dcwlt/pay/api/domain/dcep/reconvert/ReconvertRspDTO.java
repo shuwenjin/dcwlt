@@ -5,6 +5,7 @@ import com.dcits.dcwlt.pay.api.domain.dcep.DCEPRspBody;
 import com.dcits.dcwlt.pay.api.domain.dcep.bankattachedmanagement.BankAttRspsnInf;
 import com.dcits.dcwlt.pay.api.domain.dcep.common.GrpHdr;
 import com.dcits.dcwlt.pay.api.domain.dcep.common.OrgnlGrpHdr;
+import com.dcits.dcwlt.pay.api.domain.dcep.common.RspsnInf;
 
 
 /**
@@ -15,7 +16,7 @@ public class ReconvertRspDTO extends DCEPRspBody {
 
     private ReconvertRsp reconvertRsp;
 
-    public ReconvertRspDTO(GrpHdr grpHdr, OrgnlGrpHdr orgnlGrpHdr, BankAttRspsnInf rspsnInf) {
+    public ReconvertRspDTO(GrpHdr grpHdr, OrgnlGrpHdr orgnlGrpHdr, RspsnInf rspsnInf) {
         ReconvertRsp reconvertRsp = new ReconvertRsp();
         reconvertRsp.setGrpHdr(grpHdr);
         reconvertRsp.setOrgnlGrpHdr(orgnlGrpHdr);
