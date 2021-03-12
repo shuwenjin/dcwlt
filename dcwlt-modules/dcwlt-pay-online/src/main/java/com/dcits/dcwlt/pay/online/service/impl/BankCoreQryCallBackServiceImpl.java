@@ -11,7 +11,7 @@ import com.dcits.dcwlt.pay.api.model.StateMachine;
 import com.dcits.dcwlt.pay.online.service.ICoreProcessService;
 import com.dcits.dcwlt.pay.online.service.IPayNotifyService;
 import com.dcits.dcwlt.pay.online.service.IPayTransDtlInfoRepository;
-import com.dcits.dcwlt.pay.online.service.ICoreQryCallBack;
+import com.dcits.dcwlt.pay.online.service.ICoreQryCallBackService;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -24,7 +24,7 @@ import org.springframework.beans.factory.annotation.Autowired;
  * Description:终态通知差错贷记调账核心回查回调
  */
 
-public class BankCoreQryCallBack implements ICoreQryCallBack {
+public class BankCoreQryCallBackServiceImpl implements ICoreQryCallBackService {
 
     @Autowired
     private ICoreProcessService bankCoreProcessService;
@@ -33,12 +33,12 @@ public class BankCoreQryCallBack implements ICoreQryCallBack {
     private IPayTransDtlInfoRepository payTransDtlInfoRepository;
 
     @Autowired
-    private BankCoreAccTxnService bankCoreAccTxnService;
+    private BankCoreAccTxnServiceImpl bankCoreAccTxnServiceImpl;
 
     @Autowired
     private IPayNotifyService payTxEndMsgRepository;
 
-    private static final Logger logger = LoggerFactory.getLogger(BankCoreQryCallBack.class);
+    private static final Logger logger = LoggerFactory.getLogger(BankCoreQryCallBackServiceImpl.class);
 
    // private static final ICoreProcessService bankCoreProcessService = RtpUtil.getInstance().getBean("bankCoreProcessService");
 

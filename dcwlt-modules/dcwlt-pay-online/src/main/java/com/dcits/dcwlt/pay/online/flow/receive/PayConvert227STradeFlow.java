@@ -34,7 +34,6 @@ import com.dcits.dcwlt.pay.online.payconvertstsqry.*;
 import com.dcits.dcwlt.pay.online.service.IAuthInfoService;
 import com.dcits.dcwlt.pay.online.service.ICoreProcessService;
 import com.dcits.dcwlt.pay.online.service.IPayTransDtlInfoRepository;
-import com.dcits.dcwlt.pay.online.service.ISignInfoRepository;
 import com.dcits.dcwlt.pay.online.service.impl.*;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -70,7 +69,7 @@ public class PayConvert227STradeFlow {
     private IPayTransDtlInfoRepository payTransDtlInfoRepository;
 
     @Autowired
-    private BankCoreAccTxnService bankCoreAccTxnService;
+    private BankCoreAccTxnServiceImpl bankCoreAccTxnServiceImpl;
 
 //    @Autowired
 //    private BankCoreImplDubboService bankCoreImplDubboService;
@@ -79,7 +78,7 @@ public class PayConvert227STradeFlow {
     private BankAccountVerifyService bankAccountVerifyService;
 
     @Autowired
-    private CoreEventService coreEventService;
+    private CoreEventServiceImpl coreEventServiceImpl;
 
     @Autowired
     private DcepSendService dcepSendService;
@@ -91,7 +90,7 @@ public class PayConvert227STradeFlow {
 //    private ITxStsQryNetPartyService txStsQryNetPartyService;
 
     @Autowired
-    private BankRevService bankRevService;
+    private BankRevServiceImpl bankRevServiceImpl;
 
     @Autowired
     private PartyService partyService;
@@ -585,7 +584,7 @@ public class PayConvert227STradeFlow {
             if (retCount != 1) {
                 // 更新失败，若此时交易是失败的，也要即时冲正，回复手机银行异常（一般不会）
                 if (isFailed) {
-                    bankRevService.bankRevOnTime(payTransDtlInfoDO);
+                    bankRevServiceImpl.bankRevOnTime(payTransDtlInfoDO);
                 }
                 throw new EcnyTransException(AppConstant.TRXSTATUS_ABEND, EcnyTransError.DATABASE_ERROR);
             }
@@ -596,7 +595,7 @@ public class PayConvert227STradeFlow {
         // 交易失败，即时冲正
         if (isFailed) {
             // 即时冲正
-            bankRevService.bankRevOnTime(payTransDtlInfoDO);
+            bankRevServiceImpl.bankRevOnTime(payTransDtlInfoDO);
         }
     }
 

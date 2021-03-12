@@ -7,7 +7,7 @@ import com.dcits.dcwlt.common.pay.constant.AppConstant;
 import com.dcits.dcwlt.pay.api.model.PayTransDtlInfoDO;
 import com.dcits.dcwlt.pay.online.service.IPayTransDtlInfoRepository;
 import com.dcits.dcwlt.pay.online.service.IPayTransDtlInfoService;
-import com.dcits.dcwlt.pay.online.service.IReCreditCallBack;
+import com.dcits.dcwlt.pay.online.service.IReCreditCallBackService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,9 +15,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 /**
  * 调用补入账事件回调
  */
-public class ReCreditCallBack implements IReCreditCallBack {
+public class ReCreditCallBackServiceImpl implements IReCreditCallBackService {
 
-    private static final Logger logger = LoggerFactory.getLogger(ReCreditCallBack.class);
+    private static final Logger logger = LoggerFactory.getLogger(ReCreditCallBackServiceImpl.class);
 
     @Autowired
     private IPayTransDtlInfoRepository payTransDtlInfoRepository;

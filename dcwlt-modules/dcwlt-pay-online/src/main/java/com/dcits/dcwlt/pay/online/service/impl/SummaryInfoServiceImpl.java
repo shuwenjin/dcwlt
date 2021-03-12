@@ -14,7 +14,7 @@ import org.springframework.stereotype.Repository;
  * Description: 汇总信息分类及业务清单信息接口
  */
 @Repository
-public class SummaryInfoService implements ISummaryInfoService {
+public class SummaryInfoServiceImpl implements ISummaryInfoService {
     private static final String REPLACE_SQL = "summaryinfomapper.replaceSummaryInfoDO";
 
     @Autowired

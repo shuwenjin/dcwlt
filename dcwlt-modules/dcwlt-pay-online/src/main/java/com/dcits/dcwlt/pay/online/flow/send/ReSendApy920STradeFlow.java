@@ -23,7 +23,7 @@ import com.dcits.dcwlt.pay.online.exception.EcnyTransException;
 import com.dcits.dcwlt.pay.online.flow.builder.EcnyTradeContext;
 import com.dcits.dcwlt.pay.online.flow.builder.EcnyTradeFlowBuilder;
 import com.dcits.dcwlt.pay.online.service.ECNYSerNoService;
-import com.dcits.dcwlt.pay.online.service.IPayTransDtlNonfRepository;
+import com.dcits.dcwlt.pay.online.service.IPayTransDtlNonfService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
@@ -75,7 +75,7 @@ public class ReSendApy920STradeFlow {
 //    private DcepSendService dcepSendService;
 
     @Autowired
-    private IPayTransDtlNonfRepository payTransDtlNonfRepository;
+    private IPayTransDtlNonfService payTransDtlNonfRepository;
 
     @Autowired
     private GenerateCodeServiceImpl generateCodeService;

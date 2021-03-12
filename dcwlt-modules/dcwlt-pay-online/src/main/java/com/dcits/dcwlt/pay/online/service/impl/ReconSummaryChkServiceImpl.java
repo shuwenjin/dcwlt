@@ -39,7 +39,7 @@ public class ReconSummaryChkServiceImpl implements IReconSummaryChkService {
     @Autowired
     private GenerateCodeServiceImpl generateCodeService;
     @Autowired
-    private SummaryInfoService summaryInfoRepository;
+    private SummaryInfoServiceImpl summaryInfoRepository;
 
 
     /**

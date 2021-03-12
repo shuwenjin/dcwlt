@@ -3,8 +3,7 @@ package com.dcits.dcwlt.pay.online.service.impl;
 import com.alibaba.csp.sentinel.util.StringUtil;
 import com.dcits.dcwlt.pay.api.model.PayTransDtlNonfDO;
 import com.dcits.dcwlt.pay.online.mapper.LoginMapper;
-import com.dcits.dcwlt.pay.online.mapper.PayTransDtlNonfMapper;
-import com.dcits.dcwlt.pay.online.service.IPayTransDtlNonfRepository;
+import com.dcits.dcwlt.pay.online.service.IPayTransDtlNonfService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -17,7 +16,7 @@ import java.util.List;
  * @date 2020/12/29
  */
 @Component
-public class PayTransDtlNonfServiceImpl implements IPayTransDtlNonfRepository {
+public class PayTransDtlNonfServiceImpl implements IPayTransDtlNonfService {
 
     @Autowired
     private LoginMapper loginMapper;

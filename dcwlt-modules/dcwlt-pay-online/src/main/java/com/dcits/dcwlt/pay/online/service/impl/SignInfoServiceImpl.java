@@ -11,12 +11,12 @@ package com.dcits.dcwlt.pay.online.service.impl;
 
 import com.dcits.dcwlt.pay.api.model.SignInfoDO;
 import com.dcits.dcwlt.pay.online.mapper.SignInfoMapper;
-import com.dcits.dcwlt.pay.online.service.ISignInfoRepository;
+import com.dcits.dcwlt.pay.online.service.ISignInfoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public class SignInfoRepository implements ISignInfoRepository {
+public class SignInfoServiceImpl implements ISignInfoService {
 
     @Autowired
     private SignInfoMapper signInfoMapper;

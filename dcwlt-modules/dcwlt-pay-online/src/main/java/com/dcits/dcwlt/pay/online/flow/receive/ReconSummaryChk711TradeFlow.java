@@ -47,13 +47,13 @@ public class ReconSummaryChk711TradeFlow {
     @Autowired
     private GenerateCodeServiceImpl generateCodeService;
     @Autowired
-    private SummaryInfoService summaryInfoRepository;
+    private SummaryInfoServiceImpl summaryInfoRepository;
     @Autowired
     private EventRegisterAppServiceimpl eventRegisterAppServiceimpl;
     @Autowired
     private EventInfoServiceimpl eventInfoRepository;
     @Autowired
-    private MonitorService monitorRepository;
+    private MonitorServiceImpl monitorRepository;
     @Autowired
     private ReconSummaryChkServiceImpl reconSummaryChkService;
 

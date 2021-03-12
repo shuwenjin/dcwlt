@@ -7,7 +7,7 @@ import com.dcits.dcwlt.common.pay.channel.event.msg.EventDealRspMsg;
 /**
  * 核心回查回调
  */
-public interface ICoreQryCallBack {
+public interface ICoreQryCallBackService {
 
     //回查成功
     public EventDealRspMsg coreSucc(EventDealRspMsg eventDealRspMsg, BankCore996666Rsp bankCore996666Rsp, JSONObject eventParam);

@@ -17,7 +17,7 @@ import com.dcits.dcwlt.pay.online.exception.EcnyTransException;
 import com.dcits.dcwlt.pay.online.service.ICoreProcessService;
 import com.dcits.dcwlt.pay.online.service.IEventService;
 import com.dcits.dcwlt.pay.online.service.IPayTransDtlInfoRepository;
-import com.dcits.dcwlt.pay.online.service.IReCreditCallBack;
+import com.dcits.dcwlt.pay.online.service.IReCreditCallBackService;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -29,21 +29,21 @@ import org.springframework.stereotype.Service;
  * 状态为001,201,291可进行补入账
  */
 @Service
-public class ReCreditService implements IEventService {
+public class ReCreditServiceImpl implements IEventService {
 
-    private static final Logger logger = LoggerFactory.getLogger(ReCreditService.class);
+    private static final Logger logger = LoggerFactory.getLogger(ReCreditServiceImpl.class);
 
     @Autowired
     private IPayTransDtlInfoRepository payTransDtlInfoRepository;
 
     @Autowired
-    private BankCoreAccTxnService bankCoreAccTxnService;
+    private BankCoreAccTxnServiceImpl bankCoreAccTxnServiceImpl;
 
     @Autowired
     private ICoreProcessService bankCoreProcessService;
 
     @Autowired
-    private CoreEventService coreEventService;
+    private CoreEventServiceImpl coreEventServiceImpl;
 
     @Autowired
     private GenerateCodeServiceImpl generateCodeService;
@@ -244,7 +244,7 @@ public class ReCreditService implements IEventService {
                 break;
             default:
                 logger.info("上核心入账异常，回查核心");
-                coreEventService.registerCoreQry(bankCore351100InnerRsp.getCoreReqDate(), bankCore351100InnerRsp.getCoreReqSerno(), payTransDtlInfoDO.getPayDate(), payTransDtlInfoDO.getPaySerno(), ReCreditCoreQryCallBack.class);
+                coreEventServiceImpl.registerCoreQry(bankCore351100InnerRsp.getCoreReqDate(), bankCore351100InnerRsp.getCoreReqSerno(), payTransDtlInfoDO.getPayDate(), payTransDtlInfoDO.getPaySerno(), ReCreditCoreQryCallBackServiceImpl.class);
                 break;
         }
 
@@ -270,7 +270,7 @@ public class ReCreditService implements IEventService {
             }
             //存在回调,调用对应回调方法
             String coreProcStatus = bankCore351100InnerRsp.getCoreStatus();
-            IReCreditCallBack callBack = (IReCreditCallBack) Class.forName(callBackClassName).newInstance();
+            IReCreditCallBackService callBack = (IReCreditCallBackService) Class.forName(callBackClassName).newInstance();
 
             if (Constant.CORESTATUS_SUCCESS.equals(coreProcStatus)) {
                 logger.info("补登成功");

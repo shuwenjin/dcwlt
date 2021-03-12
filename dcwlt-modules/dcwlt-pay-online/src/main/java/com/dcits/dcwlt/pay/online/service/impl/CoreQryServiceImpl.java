@@ -12,7 +12,7 @@ import com.dcits.dcwlt.pay.api.model.PayTransDtlInfoDO;
 import com.dcits.dcwlt.pay.online.serno.SernoService;
 import com.dcits.dcwlt.pay.online.service.IEventService;
 import com.dcits.dcwlt.pay.online.service.IPayTransDtlInfoRepository;
-import com.dcits.dcwlt.pay.online.service.ICoreQryCallBack;
+import com.dcits.dcwlt.pay.online.service.ICoreQryCallBackService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,14 +26,14 @@ import org.springframework.stereotype.Service;
  * Description:
  */
 @Service
-public class CoreQryService implements IEventService {
-    private static final Logger logger = LoggerFactory.getLogger(CoreQryService.class);
+public class CoreQryServiceImpl implements IEventService {
+    private static final Logger logger = LoggerFactory.getLogger(CoreQryServiceImpl.class);
 
     @Autowired
-    BankCoreImplDubboService bankCoreImplDubboService;
+    BankCoreImplDubboServiceImpl bankCoreImplDubboServiceImpl;
 
     @Autowired
-    private BankCoreAccTxnService bankCoreAccTxnService;
+    private BankCoreAccTxnServiceImpl bankCoreAccTxnServiceImpl;
 
     @Autowired
     SernoService sernoService;
@@ -64,7 +64,7 @@ public class CoreQryService implements IEventService {
         }
 
         //4、上核心回查
-        BankCore996666Rsp bankCore996666Rsp = bankCoreImplDubboService.queryCoreStatus(oriCoreReqDate, oriCoreReqSerno);
+        BankCore996666Rsp bankCore996666Rsp = bankCoreImplDubboServiceImpl.queryCoreStatus(oriCoreReqDate, oriCoreReqSerno);
 
         //5.执行回调程序
         eventDealRspMsg = runCallBack(eventDealRspMsg, bankCore996666Rsp, callBackClassName, JSONObject.parseObject(eventDealReqMsg.getExceptEventContext()));
@@ -88,8 +88,8 @@ public class CoreQryService implements IEventService {
                 return eventDealRspMsg;
             }
             //存在回调处理，调用应用的冲正回调
-            String coreProcStatus = bankCoreAccTxnService.getCoreStatusMap(bankCore996666Rsp.getTxnSts());;
-            ICoreQryCallBack callBack = (ICoreQryCallBack) Class.forName(callBackClassName).newInstance();
+            String coreProcStatus = bankCoreAccTxnServiceImpl.getCoreStatusMap(bankCore996666Rsp.getTxnSts());;
+            ICoreQryCallBackService callBack = (ICoreQryCallBackService) Class.forName(callBackClassName).newInstance();
             if (Constant.CORESTATUS_SUCCESS.equals(coreProcStatus)) {
                 eventDealRspMsg.setRespCode(Constant.CORESTATUS_SUCCESS);
                 return callBack.coreSucc(eventDealRspMsg, bankCore996666Rsp, eventParam);
@@ -128,7 +128,7 @@ public class CoreQryService implements IEventService {
      * @return
      */
     private EventDealRspMsg packEventRspMsg(EventDealRspMsg eventDealRspMsg, BankCore996666Rsp bankCore996666Rsp) {
-        String coreProcStatus = bankCoreAccTxnService.getCoreStatusMap(bankCore996666Rsp.getTxnSts());
+        String coreProcStatus = bankCoreAccTxnServiceImpl.getCoreStatusMap(bankCore996666Rsp.getTxnSts());
         //终态不进行回查
         if (Constant.CORESTATUS_SUCCESS.equals(coreProcStatus)) {
             eventDealRspMsg.setRetryFlag(EventConst.EVENT_DEAL_RETRY_N);

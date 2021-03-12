@@ -16,12 +16,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
-public class BankCoreAccTxnService {
+public class BankCoreAccTxnServiceImpl {
 
-    private static final Logger logger = LoggerFactory.getLogger(BankCoreAccTxnService.class);
+    private static final Logger logger = LoggerFactory.getLogger(BankCoreAccTxnServiceImpl.class);
 
     @Autowired
-    private AccFlowRepository accFlowRepository;
+    private AccFlowServiceImpl accFlowServiceImpl;
 
     /**
      * 登记核心流水表
@@ -55,7 +55,7 @@ public class BankCoreAccTxnService {
         accFlowDO.setPayeeName(data.getPayeeName());
         accFlowDO.setOrigPayDate(data.getPayDate());
         accFlowDO.setOrigPaySerno(data.getPaySerno());
-        return accFlowRepository.insert(accFlowDO);
+        return accFlowServiceImpl.insert(accFlowDO);
     }
 
     /**
@@ -73,7 +73,7 @@ public class BankCoreAccTxnService {
         accFlowEnDO.setCoreAcctDate(bankCore351100InnerRsp.getCoreRspDate());
         accFlowEnDO.setCoreSerno(bankCore351100InnerRsp.getCoreRspSerno());
 
-        return accFlowRepository.update(accFlowEnDO.getCoreReqDate(), accFlowEnDO.getCoreReqSerno(), accFlowEnDO);
+        return accFlowServiceImpl.update(accFlowEnDO.getCoreReqDate(), accFlowEnDO.getCoreReqSerno(), accFlowEnDO);
     }
 
 
@@ -112,7 +112,7 @@ public class BankCoreAccTxnService {
         accFlowDO.setOrigCoreReqSerno(data.getCoreReqSerno());
         accFlowDO.setOrigPayDate(data.getPayDate());
         accFlowDO.setOrigPaySerno(data.getPaySerno());
-        return accFlowRepository.insert(accFlowDO);
+        return accFlowServiceImpl.insert(accFlowDO);
     }
 
     /**
@@ -123,7 +123,7 @@ public class BankCoreAccTxnService {
      * @return
      */
     public AccFlowDO selectByOrigInfo(String coreReqDate, String coreReqSerno) {
-        AccFlowDO entity = accFlowRepository.query(coreReqDate, coreReqSerno);
+        AccFlowDO entity = accFlowServiceImpl.query(coreReqDate, coreReqSerno);
         if (null == entity) {
             logger.error("原交易不存在，coreReqDate：{}， coreReqSerno：{}", coreReqDate, coreReqSerno);
             throw new PlatformException(PlatformError.EMPTY_RECORDS);
@@ -148,7 +148,7 @@ public class BankCoreAccTxnService {
         accFlowDO.setCoreProcStatus(rspMsg.getCoreStatus());
         accFlowDO.setCoreAcctDate(rspMsg.getRspCoreDate());
         accFlowDO.setCoreSerno(rspMsg.getRspCoreSerno());
-        return accFlowRepository.update(accFlowDO.getCoreReqDate(), accFlowDO.getCoreReqSerno(), accFlowDO);
+        return accFlowServiceImpl.update(accFlowDO.getCoreReqDate(), accFlowDO.getCoreReqSerno(), accFlowDO);
     }
 
 
@@ -171,7 +171,7 @@ public class BankCoreAccTxnService {
         accFlowDO.setCoreSerno(bankCore996666Rsp.getHostJrnno());
         accFlowDO.setCoreRetCode(bankCore996666Rsp.getCoreRetCode());
         accFlowDO.setCoreRetMsg(bankCore996666Rsp.getCoreRetMsg());
-        return accFlowRepository.update(accFlowDO.getCoreReqDate(), accFlowDO.getCoreReqSerno(), accFlowDO);
+        return accFlowServiceImpl.update(accFlowDO.getCoreReqDate(), accFlowDO.getCoreReqSerno(), accFlowDO);
     }
 
 
@@ -208,10 +208,10 @@ public class BankCoreAccTxnService {
      * @return
      */
     public AccFlowDO selectByPayInfo(String payDate, String paySerno) {
-        return accFlowRepository.selectCoreReqSerno(payDate, paySerno);
+        return accFlowServiceImpl.selectCoreReqSerno(payDate, paySerno);
     }
 
     public int updateCoreAccFlowStatus(AccFlowDO accFlowEnDO) {
-        return accFlowRepository.updateCoreStatus(accFlowEnDO);
+        return accFlowServiceImpl.updateCoreStatus(accFlowEnDO);
     }
 }

@@ -21,7 +21,7 @@ import com.dcits.dcwlt.pay.online.exception.EcnyTransException;
 import com.dcits.dcwlt.pay.online.serno.SernoService;
 import com.dcits.dcwlt.pay.online.service.IEventService;
 import com.dcits.dcwlt.pay.online.service.IPayTransDtlInfoRepository;
-import com.dcits.dcwlt.pay.online.service.IBankRevCallBack;
+import com.dcits.dcwlt.pay.online.service.IBankRevCallBackService;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -36,21 +36,21 @@ import org.springframework.transaction.annotation.Transactional;
  * Description:
  */
 @Service
-public class BankRevService implements IEventService {
+public class BankRevServiceImpl implements IEventService {
 
-    private static final Logger logger = LoggerFactory.getLogger(BankRevService.class);
-
-    @Autowired
-    private BankCoreImplDubboService bankCoreImplDubboService;
+    private static final Logger logger = LoggerFactory.getLogger(BankRevServiceImpl.class);
 
     @Autowired
-    private BankCoreAccTxnService bankCoreAccTxnService;
+    private BankCoreImplDubboServiceImpl bankCoreImplDubboServiceImpl;
+
+    @Autowired
+    private BankCoreAccTxnServiceImpl bankCoreAccTxnServiceImpl;
 
     @Autowired
     private SernoService sernoService;
 
     @Autowired
-    private CoreQryService coreQryService;
+    private CoreQryServiceImpl coreQryServiceImpl;
 
     @Autowired
     private GenerateCodeServiceImpl generateCodeService;
@@ -59,7 +59,7 @@ public class BankRevService implements IEventService {
     private IPayTransDtlInfoRepository payTransDtlInfoRepository;
 
     @Autowired
-    private BankCoreDubboService bankCoreDubboService;
+    private BankCoreDubboServiceImpl bankCoreDubboServiceImpl;
 
     public EventDealRspMsg runFlow(EventDealReqMsg eventDealReqMsg) {
         // 获取异常事件配置
@@ -84,17 +84,17 @@ public class BankRevService implements IEventService {
             logger.info("核心状态异常,需回查后,判断状态冲正");
             String coreReqDate = payTransDtlInfoDO.getCoreReqDate();
             String coreReqSerno = payTransDtlInfoDO.getCoreReqSerno();
-            BankCore996666Rsp bankCore996666Rsp = bankCoreImplDubboService.queryCoreStatus(coreReqDate, coreReqSerno);
-            String coreProcStatus = bankCoreAccTxnService.getCoreStatusMap(bankCore996666Rsp.getTxnSts());
+            BankCore996666Rsp bankCore996666Rsp = bankCoreImplDubboServiceImpl.queryCoreStatus(coreReqDate, coreReqSerno);
+            String coreProcStatus = bankCoreAccTxnServiceImpl.getCoreStatusMap(bankCore996666Rsp.getTxnSts());
             payTransDtlInfoDO.setCoreProcStatus(coreProcStatus);
             if (Constant.CORESTATUS_SUCCESS.equals(coreProcStatus)) {
                 logger.info("回查核心成功允许冲正");
                 payTransDtlInfoRepository.update(payTransDtlInfoDO);
-                bankCoreAccTxnService.updateQryTradeRet(coreReqDate, coreReqSerno, bankCore996666Rsp);
+                bankCoreAccTxnServiceImpl.updateQryTradeRet(coreReqDate, coreReqSerno, bankCore996666Rsp);
             } else if (Constant.CORESTATUS_ABEND.equals(coreProcStatus)) {
                 logger.info("回查核心异常，继续登记异常事件");
                 payTransDtlInfoRepository.update(payTransDtlInfoDO);
-                bankCoreAccTxnService.updateQryTradeRet(coreReqDate, coreReqSerno, bankCore996666Rsp);
+                bankCoreAccTxnServiceImpl.updateQryTradeRet(coreReqDate, coreReqSerno, bankCore996666Rsp);
                 eventDealRspMsg.setRetryFlag(EventConst.EVENT_DEAL_RETRY_Y);
                 eventDealRspMsg.setRespCode(PlatformError.SYSTEM_ERROR.getErrorCode());
                 eventDealRspMsg.setRespMsg("回查核心异常，继续回查");
@@ -104,7 +104,7 @@ public class BankRevService implements IEventService {
                 payTransDtlInfoDO.setTrxStatus(AppConstant.TRXSTATUS_FAILED);
                 payTransDtlInfoDO.setPathProcStatus(AppConstant.PAYPATHSTATUS_FAILED);
                 payTransDtlInfoRepository.update(payTransDtlInfoDO);
-                bankCoreAccTxnService.updateQryTradeRet(coreReqDate, coreReqSerno, bankCore996666Rsp);
+                bankCoreAccTxnServiceImpl.updateQryTradeRet(coreReqDate, coreReqSerno, bankCore996666Rsp);
                 eventDealRspMsg.setRetryFlag(EventConst.EVENT_DEAL_RETRY_N);
                 eventDealRspMsg.setRespCode(PlatformError.SYSTEM_ERROR.getErrorCode());
                 eventDealRspMsg.setRespMsg("回查核心失败，不再冲正");
@@ -114,7 +114,7 @@ public class BankRevService implements IEventService {
                 payTransDtlInfoDO.setTrxStatus(AppConstant.TRXSTATUS_REVERSED);
                 payTransDtlInfoDO.setPathProcStatus(AppConstant.PAYPATHSTATUS_FAILED);
                 payTransDtlInfoRepository.update(payTransDtlInfoDO);
-                bankCoreAccTxnService.updateQryTradeRet(coreReqDate, coreReqSerno, bankCore996666Rsp);
+                bankCoreAccTxnServiceImpl.updateQryTradeRet(coreReqDate, coreReqSerno, bankCore996666Rsp);
                 eventDealRspMsg.setRetryFlag(EventConst.EVENT_DEAL_RETRY_N);
                 eventDealRspMsg.setRespCode(PlatformError.SYSTEM_ERROR.getErrorCode());
                 eventDealRspMsg.setRespMsg("回查核心已冲正，不再冲正");
@@ -130,7 +130,7 @@ public class BankRevService implements IEventService {
         }
 
         //4、上核心冲正
-        AccFlowDO accFlowDO = bankCoreAccTxnService.selectByOrigInfo(payTransDtlInfoDO.getCoreReqDate(), payTransDtlInfoDO.getCoreReqSerno());
+        AccFlowDO accFlowDO = bankCoreAccTxnServiceImpl.selectByOrigInfo(payTransDtlInfoDO.getCoreReqDate(), payTransDtlInfoDO.getCoreReqSerno());
         BankCore998889Rsp bankCore998889Rsp = bankRev(eventDealReqMsg, accFlowDO, payTransDtlInfoDO);
 
         //5、拼包响应
@@ -159,7 +159,7 @@ public class BankRevService implements IEventService {
         String canResn = JSONObject.parseObject(eventDealReqMsg.getExceptEventContext()).getString("canResn");
 
         //2）、登记账务流水
-        bankCoreAccTxnService.insertReverseCoreFlow(accFlowDO, coreReqDate, coreReqSerno);
+        bankCoreAccTxnServiceImpl.insertReverseCoreFlow(accFlowDO, coreReqDate, coreReqSerno);
 
         //3）、更新业务表核心状态为异常
         StateMachine stateMachine = new StateMachine();
@@ -173,7 +173,7 @@ public class BankRevService implements IEventService {
         }
 
         //4)、填充核心头
-        BankCoreReqHeader coreHead = bankCoreDubboService.buildDefaultBankCoreHeader(Constant.BANKCORE_BANKREV_CODE, Constant.MASTERBANK);
+        BankCoreReqHeader coreHead = bankCoreDubboServiceImpl.buildDefaultBankCoreHeader(Constant.BANKCORE_BANKREV_CODE, Constant.MASTERBANK);
         if(StringUtil.isNotBlank(payTransDtlInfoDO.getOrigChnl())) {
             coreHead.setReqChnl(payTransDtlInfoDO.getOrigChnl());
         }
@@ -182,7 +182,7 @@ public class BankRevService implements IEventService {
         }
 
         //5）、上核心冲正
-        BankCore998889Rsp bankCore998889Rsp = bankCoreImplDubboService.bankRev(coreHead, coreReqSerno, origCoreReqDate, origCoreReqSerno, canResn);
+        BankCore998889Rsp bankCore998889Rsp = bankCoreImplDubboServiceImpl.bankRev(coreHead, coreReqSerno, origCoreReqDate, origCoreReqSerno, canResn);
 
         return bankCore998889Rsp;
     }
@@ -201,7 +201,7 @@ public class BankRevService implements IEventService {
         String origCoreReqSerno = payTransDtlInfoDO.getCoreReqSerno();
 
         // 登记账务流水
-        bankCoreAccTxnService.insertReverseCoreFlow(bankCoreAccTxnService.selectByOrigInfo(origCoreReqDate, origCoreReqSerno), coreReqDate, coreReqSerno);
+        bankCoreAccTxnServiceImpl.insertReverseCoreFlow(bankCoreAccTxnServiceImpl.selectByOrigInfo(origCoreReqDate, origCoreReqSerno), coreReqDate, coreReqSerno);
 
         // 更新业务表核心状态为异常
         StateMachine stateMachine = new StateMachine();
@@ -219,7 +219,7 @@ public class BankRevService implements IEventService {
         }
 
         //填充核心头
-        BankCoreReqHeader coreHead = bankCoreDubboService.buildDefaultBankCoreHeader(Constant.BANKCORE_BANKREV_CODE, Constant.MASTERBANK);
+        BankCoreReqHeader coreHead = bankCoreDubboServiceImpl.buildDefaultBankCoreHeader(Constant.BANKCORE_BANKREV_CODE, Constant.MASTERBANK);
         if(StringUtil.isNotBlank(payTransDtlInfoDO.getOrigChnl())) {
             coreHead.setReqChnl(payTransDtlInfoDO.getOrigChnl());
         }
@@ -228,10 +228,10 @@ public class BankRevService implements IEventService {
         }
 
         // 上核心冲正
-        BankCore998889Rsp bankCore998889Rsp = bankCoreImplDubboService.bankRev(coreHead, coreReqSerno, origCoreReqDate, origCoreReqSerno, "交易冲正");
+        BankCore998889Rsp bankCore998889Rsp = bankCoreImplDubboServiceImpl.bankRev(coreHead, coreReqSerno, origCoreReqDate, origCoreReqSerno, "交易冲正");
 
         // 更新账务流水表
-        bankCoreAccTxnService.updateReverseCoreFlow(bankCore998889Rsp);
+        bankCoreAccTxnServiceImpl.updateReverseCoreFlow(bankCore998889Rsp);
 
         // 更新金融信息流水表
         String coreProcStatus = getCoreStatusMap(bankCore998889Rsp.getCoreStatus());
@@ -278,7 +278,7 @@ public class BankRevService implements IEventService {
             }
             //存在回调处理，调用应用的冲正回调
             String coreProcStatus = getCoreStatusMap(bankCore998889Rsp.getCoreStatus());
-            IBankRevCallBack callBack = (IBankRevCallBack) Class.forName(callBackClassName).newInstance();
+            IBankRevCallBackService callBack = (IBankRevCallBackService) Class.forName(callBackClassName).newInstance();
             if (Constant.CORESTATUS_SUCCESS.equals(coreProcStatus)) {
                 eventDealRspMsg.setRespCode(Constant.CORESTATUS_SUCCESS);
                 return callBack.bankRevSucc(eventDealRspMsg, bankCore998889Rsp, eventParam);
@@ -409,7 +409,7 @@ public class BankRevService implements IEventService {
 
         // 更新账户流水表
        // BankCoreAccTxnService bankCoreAccTxnService = RtpUtil.getInstance().getBean("bankCoreAccTxnService");
-        bankCoreAccTxnService.updateReverseCoreFlow(bankCore998889Rsp);
+        bankCoreAccTxnServiceImpl.updateReverseCoreFlow(bankCore998889Rsp);
         // 更新金融信息流水表
       //  PayTransDtlInfoRepository payTransDtlInfoRepository = RtpUtil.getInstance().getBean("payTransDtlInfoRepository");
         PayTransDtlInfoDO payTransDtlInfoDO = new PayTransDtlInfoDO();

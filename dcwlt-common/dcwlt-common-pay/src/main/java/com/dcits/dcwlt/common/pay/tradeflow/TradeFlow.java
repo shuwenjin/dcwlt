@@ -18,6 +18,7 @@ public class TradeFlow {
 
     private static final Logger logger = LoggerFactory.getLogger(TradeFlow.class);
 
+
     private List<TradeProcess> tradeProcessFlow;
 
     private TradeErrHandler tradeErrHandler;

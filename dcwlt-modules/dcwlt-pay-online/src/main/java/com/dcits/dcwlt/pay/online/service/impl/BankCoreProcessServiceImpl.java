@@ -34,19 +34,19 @@ public class BankCoreProcessServiceImpl implements ICoreProcessService {
     private IPayTransDtlInfoRepository payTransDtlInfoRepository;
 
     @Autowired
-    private BankCoreAccTxnService bankCoreAccTxnService;
+    private BankCoreAccTxnServiceImpl bankCoreAccTxnServiceImpl;
 
     @Autowired
     private SernoService sernoService;
 
     @Autowired
-    private BankCoreImplDubboService bankCoreImplDubboService;
+    private BankCoreImplDubboServiceImpl bankCoreImplDubboServiceImpl;
 
     @Autowired
     private IPayTransDtlInfoService payTransDtlInfoService;
 
     @Autowired
-    private CoreEventService coreEventService;
+    private CoreEventServiceImpl coreEventServiceImpl;
 
     @Autowired
     private GenerateCodeServiceImpl generateCodeService;
@@ -118,7 +118,7 @@ public class BankCoreProcessServiceImpl implements ICoreProcessService {
 
         //设置更新字段
         PayTransDtlInfoDO updateDO = new PayTransDtlInfoDO();
-        String coreProcStatus = bankCoreAccTxnService.getCoreStatusMap(bankCore996666Rsp.getTxnSts());
+        String coreProcStatus = bankCoreAccTxnServiceImpl.getCoreStatusMap(bankCore996666Rsp.getTxnSts());
         updateDO.setPayDate(payTransDtlInfoDO.getPayDate());
         updateDO.setPaySerno(payTransDtlInfoDO.getPaySerno());
         updateDO.setCoreRetCode(bankCore996666Rsp.getCoreRetCode());
@@ -131,7 +131,7 @@ public class BankCoreProcessServiceImpl implements ICoreProcessService {
 
         try {
             //更新核心流水表
-            int updateNum = bankCoreAccTxnService.updateQryTradeRet(coreReqDate, coreReqSerno, bankCore996666Rsp);
+            int updateNum = bankCoreAccTxnServiceImpl.updateQryTradeRet(coreReqDate, coreReqSerno, bankCore996666Rsp);
             if(updateNum != 1){
                 logger.error("回查核心后更新核心流水表失败,平台日期：{}，平台流水：{}",
                         updateDO.getPayDate(),updateDO.getPaySerno() );
@@ -158,7 +158,7 @@ public class BankCoreProcessServiceImpl implements ICoreProcessService {
         BankCore351100InnerRsp bankCore351100InnerRsp;
 
         try {
-            bankCore351100InnerRsp = bankCoreImplDubboService.coreServer(bankCore351100InnerReq);
+            bankCore351100InnerRsp = bankCoreImplDubboServiceImpl.coreServer(bankCore351100InnerReq);
         } catch (Exception e) {
             logger.error("核心通讯异常：{}-{}", e.getMessage(), e);
             throw new EcnyTransException(AppConstant.TRXSTATUS_ABEND, EcnyTransError.GATEWAY_REQUEST_ERROR);
@@ -174,7 +174,7 @@ public class BankCoreProcessServiceImpl implements ICoreProcessService {
         String coreReqSerno = payTransDtlInfoDO.getCoreReqSerno();
 
         //更新核心流水表
-        bankCoreAccTxnService.updateQryTradeRet(coreReqDate, coreReqSerno, bankCore996666Rsp);
+        bankCoreAccTxnServiceImpl.updateQryTradeRet(coreReqDate, coreReqSerno, bankCore996666Rsp);
 
         //设置更新字段
         PayTransDtlInfoDO updateDO = new PayTransDtlInfoDO();
@@ -217,11 +217,11 @@ public class BankCoreProcessServiceImpl implements ICoreProcessService {
         String coreReqSerno = payTransDtlInfoDO.getCoreReqSerno();
 
         //更新核心流水表
-        bankCoreAccTxnService.updateQryTradeRet(coreReqDate, coreReqSerno, bankCore996666Rsp);
+        bankCoreAccTxnServiceImpl.updateQryTradeRet(coreReqDate, coreReqSerno, bankCore996666Rsp);
 
         //设置更新字段
         PayTransDtlInfoDO updateDO = new PayTransDtlInfoDO();
-        String coreProcStatus = bankCoreAccTxnService.getCoreStatusMap(bankCore996666Rsp.getTxnSts());
+        String coreProcStatus = bankCoreAccTxnServiceImpl.getCoreStatusMap(bankCore996666Rsp.getTxnSts());
         updateDO.setPayDate(payTransDtlInfoDO.getPayDate());
         updateDO.setPaySerno(payTransDtlInfoDO.getPaySerno());
         updateDO.setCoreRetCode(bankCore996666Rsp.getCoreRetCode());
@@ -313,7 +313,7 @@ public class BankCoreProcessServiceImpl implements ICoreProcessService {
 
         try {
             // 更新账户流水表
-            bankCoreAccTxnService.insertCoreFlow(bankCore351100InnerReq, coreReqSerno, coreReqDate);
+            bankCoreAccTxnServiceImpl.insertCoreFlow(bankCore351100InnerReq, coreReqSerno, coreReqDate);
             // 更新金融交易表
             int retCount = payTransDtlInfoRepository.update(payTransDtlInfoDO, stateMachine);
             if (retCount != 1) {
@@ -346,7 +346,7 @@ public class BankCoreProcessServiceImpl implements ICoreProcessService {
         setTradeResultDebit(payTransDtlInfoDO, bankCore351100InnerRsp);
         try {
             // 更新账户流水表
-            int retCount = bankCoreAccTxnService.updateCoreAccFlow(bankCore351100InnerRsp);
+            int retCount = bankCoreAccTxnServiceImpl.updateCoreAccFlow(bankCore351100InnerRsp);
             if (retCount != 1) {
                 logger.info("更新账务流水表失败");
                 throw new EcnyTransException(AppConstant.TRXSTATUS_ABEND, EcnyTransError.DATABASE_ERROR);
@@ -414,7 +414,7 @@ public class BankCoreProcessServiceImpl implements ICoreProcessService {
                 payTransDtlInfoDO.getPayDate(), payTransDtlInfoDO.getPaySerno());
 
         try {
-            bankCoreAccTxnService.insertCoreFlow(bankCore351100InnerReq, bankCore351100InnerReq.getCoreReqSerno(), bankCore351100InnerReq.getCoreReqDate());
+            bankCoreAccTxnServiceImpl.insertCoreFlow(bankCore351100InnerReq, bankCore351100InnerReq.getCoreReqSerno(), bankCore351100InnerReq.getCoreReqDate());
             int updateNum = payTransDtlInfoRepository.update(payTransDtlInfoDO, stateMachine);
             if (updateNum != 1) {
                 logger.error("更新交易登记簿失败");
@@ -435,7 +435,7 @@ public class BankCoreProcessServiceImpl implements ICoreProcessService {
     public void sendCoreDone(PayTransDtlInfoDO payTransDtlInfoDO, BankCore351100InnerRsp bankCore351100InnerRsp, StateMachine stateMachine) {
         try {
 
-            int updateNum = bankCoreAccTxnService.updateCoreAccFlow(bankCore351100InnerRsp);
+            int updateNum = bankCoreAccTxnServiceImpl.updateCoreAccFlow(bankCore351100InnerRsp);
             if (updateNum != 1) {
                 logger.error("更新核心流水表失败");
                 throw new EcnyTransException(EcnyTransError.DATABASE_ERROR);

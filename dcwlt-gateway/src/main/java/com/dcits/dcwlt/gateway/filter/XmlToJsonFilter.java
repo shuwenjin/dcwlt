@@ -65,7 +65,7 @@ public class XmlToJsonFilter extends
                             //xml2json
                             String json = null;
                             try {
-                                json = JsonXmlUtil.xmlToJson(body).getJSONObject("Envelope").toJSONString();
+                                json = JsonXmlUtil.soapToJson(body).toJSONString();
                             } catch (DocumentException e) {
                                 e.printStackTrace();
                             }

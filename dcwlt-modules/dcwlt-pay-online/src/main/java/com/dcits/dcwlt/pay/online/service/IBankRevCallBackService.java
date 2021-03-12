@@ -7,7 +7,7 @@ import com.dcits.dcwlt.common.pay.channel.event.msg.EventDealRspMsg;
 /**
  * 核心冲正异常事件回调
  */
-public interface IBankRevCallBack {
+public interface IBankRevCallBackService {
     public EventDealRspMsg bankRevSucc(EventDealRspMsg eventDealRspMsg, BankCore998889Rsp bankCore998889Rsp, JSONObject eventParam);
 
     public EventDealRspMsg bankRevHadSucc(EventDealRspMsg eventDealRspMsg, BankCore998889Rsp bankCore998889Rsp, JSONObject eventParam);

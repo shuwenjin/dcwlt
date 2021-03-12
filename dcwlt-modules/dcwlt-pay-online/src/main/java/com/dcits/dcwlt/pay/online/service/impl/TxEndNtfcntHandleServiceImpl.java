@@ -1,4 +1,4 @@
-package com.dcits.dcwlt.pay.online.service;
+package com.dcits.dcwlt.pay.online.service.impl;
 
 import com.alibaba.fastjson.JSONObject;
 import com.dcits.dcwlt.common.pay.channel.bankcore.dto.bankcore351100.BankCore351100InnerReq;
@@ -23,12 +23,13 @@ import com.dcits.dcwlt.pay.api.model.AccFlowDO;
 import com.dcits.dcwlt.pay.api.model.PayTransDtlInfoDO;
 import com.dcits.dcwlt.pay.api.model.RspCodeMapDO;
 import com.dcits.dcwlt.pay.api.model.StateMachine;
-import com.dcits.dcwlt.pay.online.base.Constant;
 import com.dcits.dcwlt.pay.online.config.EcnyTradeConfig;
 import com.dcits.dcwlt.pay.online.exception.EcnyTransError;
 import com.dcits.dcwlt.pay.online.exception.EcnyTransException;
-import com.dcits.dcwlt.pay.online.service.impl.*;
-import com.dcits.dcwlt.pay.online.service.impl.BankCoreQryCallBack;
+import com.dcits.dcwlt.pay.online.service.ICoreProcessService;
+import com.dcits.dcwlt.pay.online.service.IEventInfoService;
+import com.dcits.dcwlt.pay.online.service.IPayTransDtlInfoRepository;
+import com.dcits.dcwlt.pay.online.service.IPayTransDtlInfoService;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -42,9 +43,9 @@ import org.springframework.transaction.annotation.Transactional;
  * @author chenyanchun
  */
 @Service("txEndNtfcntHandleService")
-public class TxEndNtfcntHandleService {
+public class TxEndNtfcntHandleServiceImpl {
 
-    private static final Logger logger = LoggerFactory.getLogger(TxEndNtfcntHandleService.class);
+    private static final Logger logger = LoggerFactory.getLogger(TxEndNtfcntHandleServiceImpl.class);
 
     @Autowired
     private IPayTransDtlInfoRepository payTransDtlInfoRepository;
@@ -56,22 +57,22 @@ public class TxEndNtfcntHandleService {
     private ICoreProcessService bankCoreProcessService;
 
     @Autowired
-    private CoreEventService coreEventService;
+    private CoreEventServiceImpl coreEventServiceImpl;
 
     @Autowired
-    private BankCoreAccTxnService bankCoreAccTxnService;
+    private BankCoreAccTxnServiceImpl bankCoreAccTxnServiceImpl;
 
     @Autowired
-    private ReCreditService reCreditService;
+    private ReCreditServiceImpl reCreditServiceImpl;
 
     @Autowired
-    private BankCoreImplDubboService bankCoreImplDubboService;
+    private BankCoreImplDubboServiceImpl bankCoreImplDubboServiceImpl;
 
     @Autowired
     private GenerateCodeServiceImpl generateCodeService;
 
     @Autowired
-    private IEventInfoRepository eventInfoRepository;
+    private IEventInfoService eventInfoService;
 
     @Autowired(required = false)
     private EcnyTradeConfig ecnyTradeConfig;
@@ -323,7 +324,7 @@ public class TxEndNtfcntHandleService {
         //核心异常，回查核心
         if(status221 || status220){
             logger.info("调用核心回查事件,平台日期：{},平台流水：{}",payDate,paySerno);
-            coreEventService.registerCoreQry(payTransDtlInfoDO.getCoreReqDate(), payTransDtlInfoDO.getCoreReqSerno(),payTransDtlInfoDO.getPayDate(), payTransDtlInfoDO.getPaySerno(), TxEndNTCoreQryCallBack.class);
+            coreEventServiceImpl.registerCoreQry(payTransDtlInfoDO.getCoreReqDate(), payTransDtlInfoDO.getCoreReqSerno(),payTransDtlInfoDO.getPayDate(), payTransDtlInfoDO.getPaySerno(), TxEndNTCoreQryCallBackService.class);
         }
 
         //上核心失败，终态推定失败，拉起告警
@@ -335,7 +336,7 @@ public class TxEndNtfcntHandleService {
         //终态推定成功，未上核心或上核心失败，进行补入账
         if(status201 || status291 || status001 || status091){
             logger.info("登记事件进行补入账,平台日期：{},平台流水：{}",payDate,paySerno);
-            coreEventService.registerReCredit(payTransDtlInfoDO.getPayDate(), payTransDtlInfoDO.getPaySerno(), ReCreditCallBack.class);
+            coreEventServiceImpl.registerReCredit(payTransDtlInfoDO.getPayDate(), payTransDtlInfoDO.getPaySerno(), ReCreditCallBackServiceImpl.class);
         }
 
         logger.info("调用兑回推断处理结束,平台日期：{},平台流水：{}",payDate,paySerno);
@@ -399,7 +400,7 @@ public class TxEndNtfcntHandleService {
             logger.error("原兑出交易失败，不处理");
         } else {
             // 核心成功或者异常,登记异常事件冲正（异常事件冲正会先回查，所以核心异常可以直接登记冲正事件）
-            coreEventService.registerBankRev(payTransDtlInfoDO.getPayDate(), payTransDtlInfoDO.getPaySerno(), ConvertBankRevCallBack.class);
+            coreEventServiceImpl.registerBankRev(payTransDtlInfoDO.getPayDate(), payTransDtlInfoDO.getPaySerno(), ConvertBankRevCallBackServiceImpl.class);
         }
     }
 
@@ -442,7 +443,7 @@ public class TxEndNtfcntHandleService {
                 throw new EcnyTransException(EcnyTransError.DATABASE_ERROR);
             }
             // 登记冲正事件
-            coreEventService.registerBankRev(payTransDtlInfoDO.getPayDate(), payTransDtlInfoDO.getPaySerno(), ConvertBankRevCallBack.class);
+            coreEventServiceImpl.registerBankRev(payTransDtlInfoDO.getPayDate(), payTransDtlInfoDO.getPaySerno(), ConvertBankRevCallBackServiceImpl.class);
         } else {
             // 推定成功
             payTransDtlInfoDO.setTrxStatus(AppConstant.TRXSTATUS_SUCCESS);
@@ -596,8 +597,8 @@ public class TxEndNtfcntHandleService {
                         LogMonitorLevelCdEnum.ECNY_LOG_MONITOR_ERROR.getCode(), payTransDtlInfoDONEW.getPayDate(),payTransDtlInfoDONEW.getPaySerno());
                 if(StringUtils.equals(e.getErrorCode(),EcnyTransError.OTHER_TECH_ERROR.getErrorCode())){
                     //捕获异常发送核心回调事件
-                    AccFlowDO accFlowDO = bankCoreAccTxnService.selectByPayInfo(payTransDtlInfoDONEW.getPayDate(), payTransDtlInfoDONEW.getPaySerno());
-                    coreEventService.registerCoreQry(accFlowDO.getCoreReqDate(),accFlowDO.getCoreReqSerno(),accFlowDO.getPayDate(),accFlowDO.getPaySerno(), BankCoreQryCallBack.class);
+                    AccFlowDO accFlowDO = bankCoreAccTxnServiceImpl.selectByPayInfo(payTransDtlInfoDONEW.getPayDate(), payTransDtlInfoDONEW.getPaySerno());
+                    coreEventServiceImpl.registerCoreQry(accFlowDO.getCoreReqDate(),accFlowDO.getCoreReqSerno(),accFlowDO.getPayDate(),accFlowDO.getPaySerno(), BankCoreQryCallBackServiceImpl.class);
                 }
             }
         }else{
@@ -622,8 +623,8 @@ public class TxEndNtfcntHandleService {
                     && StringUtils.equals(pathProcStatus,AppConstant.PAYPATHSTATUS_SUCCESS));
             //有记录(221)发送核心回查事件  
             if(isStatus221){
-                AccFlowDO accFlowDO = bankCoreAccTxnService.selectByPayInfo(payTransDtlInfoDO.getPayDate(), payTransDtlInfoDO.getPaySerno());
-                coreEventService.registerCoreQry(accFlowDO.getCoreReqDate(),accFlowDO.getCoreReqSerno(),accFlowDO.getPayDate(),accFlowDO.getPaySerno(), BankCoreQryCallBack.class);
+                AccFlowDO accFlowDO = bankCoreAccTxnServiceImpl.selectByPayInfo(payTransDtlInfoDO.getPayDate(), payTransDtlInfoDO.getPaySerno());
+                coreEventServiceImpl.registerCoreQry(accFlowDO.getCoreReqDate(),accFlowDO.getCoreReqSerno(),accFlowDO.getPayDate(),accFlowDO.getPaySerno(), BankCoreQryCallBackServiceImpl.class);
             }
 
             //有记录（001或291）更新金融登记簿状态为221
@@ -650,8 +651,8 @@ public class TxEndNtfcntHandleService {
                     //捕获异常发送核心回调事件
                     if(StringUtils.equals(e.getErrorCode(),EcnyTransError.OTHER_TECH_ERROR.getErrorCode())){
                         logger.info("注册核心回查事件查询核心状态");
-                        AccFlowDO accFlowDO = bankCoreAccTxnService.selectByPayInfo(payTransDtlInfoDO.getPayDate(), payTransDtlInfoDO.getPaySerno());
-                        coreEventService.registerCoreQry(accFlowDO.getCoreReqDate(),accFlowDO.getCoreReqSerno(),accFlowDO.getPayDate(),accFlowDO.getPaySerno(), BankCoreQryCallBack.class);
+                        AccFlowDO accFlowDO = bankCoreAccTxnServiceImpl.selectByPayInfo(payTransDtlInfoDO.getPayDate(), payTransDtlInfoDO.getPaySerno());
+                        coreEventServiceImpl.registerCoreQry(accFlowDO.getCoreReqDate(),accFlowDO.getCoreReqSerno(),accFlowDO.getPayDate(),accFlowDO.getPaySerno(), BankCoreQryCallBackServiceImpl.class);
                     }
                 }
             }
@@ -692,8 +693,8 @@ public class TxEndNtfcntHandleService {
 
             //220（注册核心回调事件）
             if(isStatus220){
-                AccFlowDO accFlowDO = bankCoreAccTxnService.selectByPayInfo(payTransDtlInfoDO.getPayDate(), payTransDtlInfoDO.getPaySerno());
-                coreEventService.registerCoreQry(accFlowDO.getCoreReqDate(),accFlowDO.getCoreReqSerno(),accFlowDO.getPayDate(),accFlowDO.getPaySerno(), BankCoreQryCallBack.class);
+                AccFlowDO accFlowDO = bankCoreAccTxnServiceImpl.selectByPayInfo(payTransDtlInfoDO.getPayDate(), payTransDtlInfoDO.getPaySerno());
+                coreEventServiceImpl.registerCoreQry(accFlowDO.getCoreReqDate(),accFlowDO.getCoreReqSerno(),accFlowDO.getPayDate(),accFlowDO.getPaySerno(), BankCoreQryCallBackServiceImpl.class);
             }
             //业务状态失败存在记录290，更新为000
             if(isStatus290){
@@ -756,7 +757,7 @@ public class TxEndNtfcntHandleService {
         logger.info("sendToCore：上核心入账开始");
         BankCore351100InnerRsp bankCore351100InnerRsp = null;
         try{
-            bankCore351100InnerRsp = bankCoreImplDubboService.coreServer(bankCore351100InnerReq);
+            bankCore351100InnerRsp = bankCoreImplDubboServiceImpl.coreServer(bankCore351100InnerReq);
         } catch (Exception e) {
             logger.info("上核心入账失败:{}-{}", e.getMessage(), e);
             throw new EcnyTransException(AppConstant.TRXSTATUS_ABEND, EcnyTransError.OTHER_TECH_ERROR);
@@ -783,7 +784,7 @@ public class TxEndNtfcntHandleService {
         try {
             if (AppConstant.CORESTATUS_SUCCESS.equals(bankCore351100InnerRsp.getCoreStatus())
                     || AppConstant.CORESTATUS_FAILED.equals(bankCore351100InnerRsp.getCoreStatus())) {
-                bankCoreAccTxnService.updateCoreAccFlow(bankCore351100InnerRsp);
+                bankCoreAccTxnServiceImpl.updateCoreAccFlow(bankCore351100InnerRsp);
                 payTransDtlInfoRepository.update(payTransDtlInfoDO, stateMachine);
             }
         } catch (Exception e) {
@@ -872,7 +873,7 @@ public class TxEndNtfcntHandleService {
 
 
         try {
-            bankCoreAccTxnService.insertCoreFlow(bankCore351100InnerReq, coreReqSerno, coreReqDate);
+            bankCoreAccTxnServiceImpl.insertCoreFlow(bankCore351100InnerReq, coreReqSerno, coreReqDate);
             int updateNum = payTransDtlInfoRepository.update(payTransDtlInfoDO, stateMachine);
             if(updateNum != 1){
                 throw new EcnyTransException(EcnyTransError.OTHER_TECH_ERROR);

@@ -2,14 +2,13 @@ package com.dcits.dcwlt.pay.online.service.impl;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.dcits.dcwlt.common.pay.channel.bankcore.dto.BankCoreReqHeader;
-import com.dcits.dcwlt.common.pay.channel.bankcore.dto.BankCoreRspHeader;
-import com.dcits.dcwlt.common.pay.channel.bankcore.dto.IBankCoreBody;
-import com.dcits.dcwlt.common.pay.channel.bankcore.dto.IBankCoreBodyArrayInfo;
+import com.dcits.dcwlt.common.pay.channel.bankcore.dto.*;
+import com.dcits.dcwlt.common.pay.channel.bankcore.dto.bankcore358040.BankCore358040ArrayInfoRsp;
+import com.dcits.dcwlt.common.pay.channel.bankcore.dto.bankcore358040.BankCore358040Req;
+import com.dcits.dcwlt.common.pay.channel.bankcore.dto.bankcore358040.BankCore358040Rsp;
+import com.dcits.dcwlt.common.pay.channel.bankcore.dto.bankcore998889.BankCore998889Req;
 import com.dcits.dcwlt.common.pay.constant.Constant;
 import com.dcits.dcwlt.common.pay.util.DateUtil;
-import com.dcits.dcwlt.common.pay.channel.bankcore.dto.BankCoreReqMessage;
-import com.dcits.dcwlt.common.pay.channel.bankcore.dto.BankCoreRspMessage;
 import org.dom4j.DocumentException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -26,9 +25,9 @@ import java.util.List;
  * @Version <p> Description: 核心通讯服务 </p>
  */
 @Service
-public class BankCoreDubboService {
+public class BankCoreDubboServiceImpl {
 
-    private static final Logger logger = LoggerFactory.getLogger(BankCoreDubboService.class);
+    private static final Logger logger = LoggerFactory.getLogger(BankCoreDubboServiceImpl.class);
 
     private static final String CORE_HEAD_TAG = "coreHead";
 
@@ -60,7 +59,7 @@ public class BankCoreDubboService {
         coreHeader.setTrBank(Constant.REQ_TR_BANK);                       //交易银行号
         coreHeader.setTrBranch(brno);                                     //交易机构
         coreHeader.setTlId(Constant.REQ_TL_ID);                           //柜员
-       // coreHeader.setMercId(RtpUtil.getInstance().getProperty("app.mercId", ""));
+        //coreHeader.setMercId(RtpUtil.getInstance().getProperty("app.mercId", ""));
         return coreHeader;
     }
 
@@ -73,9 +72,9 @@ public class BankCoreDubboService {
      * @param arrayBody    核心请求报文循环数组
      * @return
      */
-    public <T extends IBankCoreBody, A extends IBankCoreBodyArrayInfo> BankCoreReqMessage<T, A> buildBankCoreMessage(BankCoreReqHeader codeHeadInfo, T body, List<A> arrayBody) {
+    public <T extends IBankCoreBody, A extends IBankCoreBodyArrayInfo> BankCoreReqMessage<T, A> buildBankCoreMessage(BankCoreReqHeader codeHeadInfo, BankCore998889Req body, List<A> arrayBody) {
 
-        return BankCoreReqMessage.newInstance(codeHeadInfo, body, arrayBody);
+        return (BankCoreReqMessage<T, A>) BankCoreReqMessage.newInstance(codeHeadInfo, body, arrayBody);
     }
 
 
@@ -112,15 +111,15 @@ public class BankCoreDubboService {
      * @return
      * @Description: 服务化调用请求核心
      */
-//    public <T extends IBankCoreBody, A extends IBankCoreBodyArrayInfo> BankCoreRspMessage<T, A> bankCoreRequest(BankCoreReqMessage<T, A> msg, Class<T> clazz, Class<A> arrayClazz) {
+    //public <T extends IBankCoreBody, A extends IBankCoreBodyArrayInfo> BankCoreRspMessage<T, A> bankCoreRequest(BankCoreReqMessage<IBankCoreBody, IBankCoreBodyArrayInfo> msg, Class<BankCore358040Rsp> clazz, Class<BankCore358040ArrayInfoRsp> arrayClazz) {
 
         //获取服务化报文头
-      //  String srvcCode = msg.getHead().getSrvcCode();
-      //  logger.info("核心接口[{}], 请求报文：{}", srvcCode, msg);
+//        String srvcCode = msg.getHead().getSrvcCode();
+//        logger.info("核心接口[{}], 请求报文：{}", srvcCode, msg);
 
         //设置通讯超时时间，
 //        HttpEntity[] httpEntities = new HttpEntity[]{
-//                new HttpEntity(readTimeOut, DynamicEntity.DType.timeout),
+//                new HttpEntity(readTimeOut),
 //                new HttpEntity(connectTimeOut, DynamicEntity.DType.cTimeout)
 //        };
 
@@ -128,11 +127,11 @@ public class BankCoreDubboService {
        // String retStr = RpcHttpJsonUtil.executeExt(srvcCode, JsonUtil.toJSONString(msg), httpEntities);
 
         //获取返回json报文
-       // JSONObject retObj = JSONObject.parseObject(retStr);
+        //JSONObject retObj = JSONObject.parseObject(retStr);
 
         // 构造返回实体
-//        BankCoreRspMessage rsp = jsonToBankCoreMessage(retObj, clazz, arrayClazz);
-//        logger.info("核心接口[{}], 响应报文:{}", srvcCode, rsp);
+//        BankCoreRspMessage rsp = jsonToBankCoreMessage( null,clazz, arrayClazz);
+//        logger.info("核心接口[{}], 响应报文:{}",  rsp);
 //        return rsp;
 //    }
 
@@ -148,7 +147,7 @@ public class BankCoreDubboService {
             JSONObject retObj, Class<T> clazz, Class<A> arrayClazz) {
         // 获取服务网关头，报文体 json-->String
         JSONObject headObj = retObj.getJSONObject(Constant.HEAD_TAG);
-      //  Head head = JSONObject.parseObject(headObj.toJSONString(), Head.class);
+       // Head head = JSONObject.parseObject(headObj.toJSONString(), Head.class);
 
         //获取核心响应报文头
         JSONObject coreHeadObj = retObj.getJSONObject(CORE_HEAD_TAG);
@@ -172,7 +171,7 @@ public class BankCoreDubboService {
         }
 
         // 构造BankCoreMessage实体对象
-        return BankCoreRspMessage.newInstance(coreHead, codeBodyInfo, codeBodyArrayInfo);
+        return BankCoreRspMessage.newInstance( coreHead, codeBodyInfo, codeBodyArrayInfo);
     }
 
     /**
@@ -191,4 +190,16 @@ public class BankCoreDubboService {
 
     }
 
+
+    public BankCoreReqMessage<IBankCoreBody, IBankCoreBodyArrayInfo> bankCoreRequest(BankCoreReqMessage<IBankCoreBody, IBankCoreBodyArrayInfo> msg, Class<BankCore358040Rsp> bankCore358040RspClass, Class<BankCore358040ArrayInfoRsp> bankCore358040ArrayInfoRspClass) {
+        return msg;
+    }
+
+    public BankCoreReqMessage<IBankCoreBody, IBankCoreBodyArrayInfo> buildBankCoreMessages(BankCoreReqHeader coreHead, BankCore358040Req req, Object o) {
+        return buildBankCoreMessages(coreHead,req,null);
+    }
+
+    public BankCoreRspMessage bankCoreRequests(BankCoreReqMessage msg, Class<BankCore998889Req> bankCore998889ReqClass, Object o) {
+        return bankCoreRequests(msg,bankCore998889ReqClass,o);
+    }
 }

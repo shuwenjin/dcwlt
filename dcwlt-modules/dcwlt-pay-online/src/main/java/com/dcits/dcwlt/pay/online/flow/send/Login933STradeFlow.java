@@ -25,8 +25,8 @@ import com.dcits.dcwlt.pay.online.exception.EcnyTransError;
 import com.dcits.dcwlt.pay.online.exception.EcnyTransException;
 import com.dcits.dcwlt.pay.online.flow.builder.EcnyTradeContext;
 import com.dcits.dcwlt.pay.online.flow.builder.EcnyTradeFlowBuilder;
-import com.dcits.dcwlt.pay.online.service.IPartyInfoRepository;
-import com.dcits.dcwlt.pay.online.service.IPayTransDtlNonfRepository;
+import com.dcits.dcwlt.pay.online.service.IPartyInfoservice;
+import com.dcits.dcwlt.pay.online.service.IPayTransDtlNonfService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -61,9 +61,9 @@ public class Login933STradeFlow {
 //    @Autowired
 //    DcepSendService dcepSendService;
     @Autowired
-    private IPayTransDtlNonfRepository payTransDtlNonfRepository;
+    private IPayTransDtlNonfService payTransDtlNonfRepository;
     @Autowired
-    private IPartyInfoRepository partyInfoRepository;
+    private IPartyInfoservice partyInfoRepository;
     @Autowired
     IGenerateCodeService generateCodeService;
 

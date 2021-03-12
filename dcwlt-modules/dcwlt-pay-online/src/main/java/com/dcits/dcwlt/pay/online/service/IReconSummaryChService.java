@@ -10,7 +10,7 @@ import com.dcits.dcwlt.pay.api.model.ReconSummaryChkDO;
  * @Version 1.0
  * Description:
  */
-public interface IReconSummaryChkRepository{
+public interface IReconSummaryChService {
     /**
      * 先检查是否有相同的数据，有则先删除再插入
      * @param reconSummaryChkDO

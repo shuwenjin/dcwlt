@@ -26,7 +26,7 @@ import com.dcits.dcwlt.pay.online.exception.EcnyTransException;
 import com.dcits.dcwlt.pay.online.flow.builder.EcnyTradeContext;
 import com.dcits.dcwlt.pay.online.flow.builder.EcnyTradeFlowBuilder;
 import com.dcits.dcwlt.pay.online.service.IPayNotifyService;
-import com.dcits.dcwlt.pay.online.service.TxEndNtfcntHandleService;
+import com.dcits.dcwlt.pay.online.service.impl.TxEndNtfcntHandleServiceImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -51,7 +51,7 @@ public class TxEndNtfcnt909RTradeFlow {
     private IGenerateCodeService generateCodeService;
 
     @Autowired
-    private TxEndNtfcntHandleService txEndNtfcntHandleService;
+    private TxEndNtfcntHandleServiceImpl txEndNtfcntHandleServiceImpl;
 
     @Bean(name = TXENDNTFCNT_TRADE_FLOW)
     public TradeFlow txEndNtfcntTradeFlow() {
@@ -153,7 +153,7 @@ public class TxEndNtfcnt909RTradeFlow {
     private void TxEndNtfcntHandle(TradeContext<?,?> context) {
         DCEPReqDTO<TxEndNtfcntReqDTO> reqMsg = EcnyTradeContext.getReqMsg(context);
         TxEndNtfctn txEndNtfctn = reqMsg.getBody().getTxEndNtfctn();
-        txEndNtfcntHandleService.txEndNtfcntHandle(txEndNtfctn);
+        txEndNtfcntHandleServiceImpl.txEndNtfcntHandle(txEndNtfctn);
     }
 
     /**

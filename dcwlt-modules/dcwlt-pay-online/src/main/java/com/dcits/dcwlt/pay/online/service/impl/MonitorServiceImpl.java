@@ -13,7 +13,7 @@ import org.springframework.stereotype.Repository;
  *
  */
 @Repository
-public class MonitorService implements IMonitorService {
+public class MonitorServiceImpl implements IMonitorService {
 
     @Autowired
     private ReconsummaryChkMapper reconsummaryChkMapper;

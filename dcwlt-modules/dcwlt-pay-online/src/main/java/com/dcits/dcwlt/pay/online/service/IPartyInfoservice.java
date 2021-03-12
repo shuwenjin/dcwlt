@@ -12,7 +12,7 @@ import java.util.List;
  * @date 2020/12/30
  */
 @Component
-public interface IPartyInfoRepository {
+public interface IPartyInfoservice {
 
     int addParty(PartyInfoDO partyInfoDO);
 

@@ -6,7 +6,7 @@ import com.dcits.dcwlt.common.pay.util.DateCompareUtil;
 import com.dcits.dcwlt.common.pay.util.DateUtil;
 import com.dcits.dcwlt.pay.api.model.PartyInfoDO;
 import com.dcits.dcwlt.pay.online.mapper.PartyInfoMapper;
-import com.dcits.dcwlt.pay.online.service.IPartyInfoRepository;
+import com.dcits.dcwlt.pay.online.service.IPartyInfoservice;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +21,7 @@ import java.util.List;
  * @date 2020/12/30
  */
 @Service
-public class PartyInfoServiceImpl implements IPartyInfoRepository {
+public class PartyInfoServiceImpl implements IPartyInfoservice {
     private static final Logger logger = LoggerFactory.getLogger(PartyInfoServiceImpl.class);
     private static final String INSERT_URL = "party.insertParty";
     private static final String UPDATE_URL = "party.updateParty";

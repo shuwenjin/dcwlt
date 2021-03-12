@@ -18,7 +18,7 @@ import java.util.Map;
  * Description:账务流水表数据访问组件
  */
 @Repository
-public class AccFlowRepository {
+public class AccFlowServiceImpl {
 
     private static final String INSERT_ACCFLOW_SQL = "accflowMapper.insert";
     private static final String QUERY_ACCFLOW_SQL = "accflowMapper.query";

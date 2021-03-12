@@ -12,7 +12,7 @@ import java.util.List;
  * @date 2020/12/29
  */
 @Service
-public interface IPayTransDtlNonfRepository {
+public interface IPayTransDtlNonfService {
 
     int addPayTransDtlNonf(PayTransDtlNonfDO payTransDtlNonfDO);
 

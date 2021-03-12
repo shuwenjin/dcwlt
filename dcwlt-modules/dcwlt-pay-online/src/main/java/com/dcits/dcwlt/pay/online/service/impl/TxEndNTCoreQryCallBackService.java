@@ -8,8 +8,7 @@ import com.dcits.dcwlt.pay.api.model.PayTransDtlInfoDO;
 import com.dcits.dcwlt.pay.api.model.StateMachine;
 import com.dcits.dcwlt.pay.online.service.ICoreProcessService;
 import com.dcits.dcwlt.pay.online.service.IPayTransDtlInfoRepository;
-import com.dcits.dcwlt.pay.online.service.TxEndNtfcntHandleService;
-import com.dcits.dcwlt.pay.online.service.ICoreQryCallBack;
+import com.dcits.dcwlt.pay.online.service.ICoreQryCallBackService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,10 +16,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 /**
  * 终态通知 220 或 221 回查核心后回调处理
  */
-public class TxEndNTCoreQryCallBack implements ICoreQryCallBack {
+public class TxEndNTCoreQryCallBackService implements ICoreQryCallBackService {
 
     @Autowired
-    private TxEndNtfcntHandleService handleService;
+    private TxEndNtfcntHandleServiceImpl handleService;
 
     @Autowired
     private IPayTransDtlInfoRepository payTransDtlInfoRepository;
@@ -28,7 +27,7 @@ public class TxEndNTCoreQryCallBack implements ICoreQryCallBack {
     @Autowired
     private ICoreProcessService bankCoreProcessService;
 
-    private static final Logger logger = LoggerFactory.getLogger(ReCreditCoreQryCallBack.class);
+    private static final Logger logger = LoggerFactory.getLogger(ReCreditCoreQryCallBackServiceImpl.class);
 
 
     @Override

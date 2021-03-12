@@ -38,7 +38,7 @@ public class PartyService implements IPartyService {
     @Autowired
     private IPartyToBeEffectiveRepository partyInfoTmpRepository;
     @Autowired
-    private IPartyInfoRepository partyInfoRepository;
+    private IPartyInfoservice partyInfoRepository;
     @Autowired
     private IAuthInfoRepository iAuthInfoRepository;
     @Autowired
