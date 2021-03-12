@@ -1,13 +1,13 @@
 package com.dcits.dcwlt.pay.online.service.impl;
 
-import com.dcits.dcwlt.pay.api.model.PayTransDtlInfoDO;
-import com.dcits.dcwlt.pay.api.model.StateMachine;
 import com.dcits.dcwlt.common.pay.channel.bankcore.dto.bankcore351100.BankCore351100InnerReq;
 import com.dcits.dcwlt.common.pay.channel.bankcore.dto.bankcore351100.BankCore351100InnerRsp;
+import com.dcits.dcwlt.pay.api.model.PayTransDtlInfoDO;
+import com.dcits.dcwlt.pay.api.model.StateMachine;
 import com.dcits.dcwlt.pay.online.exception.EcnyTransError;
 import com.dcits.dcwlt.pay.online.exception.EcnyTransException;
 import com.dcits.dcwlt.pay.online.service.ICoreProcessService;
-import com.dcits.dcwlt.pay.online.service.IPayTransDtlInfo1Service;
+import com.dcits.dcwlt.pay.online.service.IPayTransDtlInfoService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,7 +20,7 @@ public class BankCoreProcessServiceImpl implements ICoreProcessService {
     private static final Logger logger = LoggerFactory.getLogger(BankCoreProcessServiceImpl.class);
 
     @Autowired
-    private IPayTransDtlInfo1Service payTransDtlInfoRepository;
+    private IPayTransDtlInfoService payTransDtlInfoRepository;
 
     @Autowired
     private BankCoreAccTxnService bankCoreAccTxnService;

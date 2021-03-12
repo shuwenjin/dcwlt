@@ -60,7 +60,7 @@ public class DisputeInfo801RTradeFlow {
     private GenerateCodeServiceImpl generateCodeService;
 
     @Autowired
-    private IPayTransDtlInfo1Service payTransDtlInfoRepository;
+    private IPayTransDtlInfoService payTransDtlInfoRepository;
 
     @Autowired
     private IPartyService partyService;
