@@ -31,7 +31,7 @@ public class RspCodeMapTask {
     @Scheduled(cron = "0 0/1 * * * ?")
     public void cacheData() {
         List<RspCodeMapDO> rspCodeMapDOList = rspCodeMapRepository.getAllRspCodeMap();
-        logger.info("RspCodeMapDO init\r\n data:{}",rspCodeMapDOList.toArray());
+        logger.info("RspCodeMapDO init size:{}",rspCodeMapDOList.size());
         if (rspCodeMapDOList == null) {
             return;
         }

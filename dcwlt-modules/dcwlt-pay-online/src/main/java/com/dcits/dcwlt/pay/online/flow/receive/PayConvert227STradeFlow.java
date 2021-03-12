@@ -37,7 +37,7 @@ import com.dcits.dcwlt.pay.online.flow.builder.EcnyTradeFlowBuilder;
 import com.dcits.dcwlt.pay.online.mapper.SignInfoMapper;
 import com.dcits.dcwlt.pay.online.service.IAuthInfoService;
 import com.dcits.dcwlt.pay.online.service.ICoreProcessService;
-import com.dcits.dcwlt.pay.online.service.IPayTransDtlInfo1Service;
+import com.dcits.dcwlt.pay.online.service.IPayTransDtlInfoService;
 import com.dcits.dcwlt.pay.online.service.impl.*;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -70,7 +70,7 @@ public class PayConvert227STradeFlow {
     private SignInfoMapper signInfoRepository;
 
     @Autowired
-    private IPayTransDtlInfo1Service payTransDtlInfoRepository;
+    private IPayTransDtlInfoService payTransDtlInfoRepository;
 
     @Autowired
     private BankCoreAccTxnService bankCoreAccTxnService;

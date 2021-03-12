@@ -24,6 +24,7 @@ public interface PayTransDtlInfoMapper {
     int update(Map<String, String> param);
 
     int insert(PayTransDtlInfoDO payTransDtlInfoDO);
+
     PayTransDtlInfoDO queryByPayInfo(@Param("payDate") String payDate, @Param("paySerno")String paySerno);
 
 }

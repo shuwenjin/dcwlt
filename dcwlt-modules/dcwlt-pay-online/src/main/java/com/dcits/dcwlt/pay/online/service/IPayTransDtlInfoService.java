@@ -5,6 +5,9 @@ import com.dcits.dcwlt.pay.api.model.PayTransDtlInfoDO;
 import com.dcits.dcwlt.pay.api.model.StateMachine;
 import org.springframework.stereotype.Service;
 
+import java.lang.reflect.InvocationTargetException;
+import java.util.List;
+
 
 public interface IPayTransDtlInfoService {
     /**
@@ -96,4 +99,20 @@ public interface IPayTransDtlInfoService {
      * @return
      */
     boolean checkMsgType(PayTransDtlInfoDO payTransDtlInfoDO);
+
+
+    //----------------------------数据库交互-----------------------------------------------
+    int insert(PayTransDtlInfoDO payTransDtlInfoDO);
+
+    int update(PayTransDtlInfoDO payTransDtlInfoDO, StateMachine stateMachine) throws IllegalAccessException, NoSuchMethodException, InvocationTargetException;
+
+    int update(PayTransDtlInfoDO payTransDtlInfoDO);
+
+    PayTransDtlInfoDO query(String payDate, String paySerno);
+
+    PayTransDtlInfoDO query(String msgId);
+
+    PayTransDtlInfoDO queryOriTxn(String busiSysSerno);
+
+    List<PayTransDtlInfoDO> queryList(String origPayPathSerno);
 }

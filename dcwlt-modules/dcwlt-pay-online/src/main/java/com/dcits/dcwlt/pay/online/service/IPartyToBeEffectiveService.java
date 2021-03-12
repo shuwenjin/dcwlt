@@ -1,7 +1,6 @@
 package com.dcits.dcwlt.pay.online.service;
 
 import com.dcits.dcwlt.pay.api.model.PartyToBeEffectiveDO;
-import org.springframework.stereotype.Component;
 
 import java.util.List;
 
@@ -11,7 +10,6 @@ import java.util.List;
  * @author majun
  * @date 2020/12/30
  */
-@Component
 public interface IPartyToBeEffectiveService {
 
     int addPartyTmp(PartyToBeEffectiveDO partyToBeEffectiveDO);

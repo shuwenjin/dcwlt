@@ -1,10 +1,11 @@
 package com.dcits.dcwlt.pay.online.flow.receive;
 
 
+import com.dcits.dcwlt.common.pay.channel.bankcore.dto.bankcore351100.BankCore351100InnerReq;
+import com.dcits.dcwlt.common.pay.channel.bankcore.dto.bankcore351100.BankCore351100InnerRsp;
 import com.dcits.dcwlt.common.pay.constant.AppConstant;
 import com.dcits.dcwlt.common.pay.enums.*;
 import com.dcits.dcwlt.common.pay.sequence.service.IGenerateCodeService;
-import com.dcits.dcwlt.pay.online.base.Constant;
 import com.dcits.dcwlt.common.pay.tradeflow.TradeContext;
 import com.dcits.dcwlt.common.pay.tradeflow.TradeFlow;
 import com.dcits.dcwlt.common.pay.util.AmountUtil;
@@ -18,14 +19,15 @@ import com.dcits.dcwlt.pay.api.domain.dcep.convert.*;
 import com.dcits.dcwlt.pay.api.model.PayTransDtlInfoDO;
 import com.dcits.dcwlt.pay.api.model.SignInfoDO;
 import com.dcits.dcwlt.pay.api.model.StateMachine;
-import com.dcits.dcwlt.common.pay.channel.bankcore.dto.bankcore351100.BankCore351100InnerReq;
-import com.dcits.dcwlt.common.pay.channel.bankcore.dto.bankcore351100.BankCore351100InnerRsp;
+import com.dcits.dcwlt.pay.online.base.Constant;
 import com.dcits.dcwlt.pay.online.exception.EcnyTransError;
 import com.dcits.dcwlt.pay.online.exception.EcnyTransException;
 import com.dcits.dcwlt.pay.online.flow.builder.EcnyTradeContext;
 import com.dcits.dcwlt.pay.online.flow.builder.EcnyTradeFlowBuilder;
 import com.dcits.dcwlt.pay.online.mapper.SignInfoMapper;
-import com.dcits.dcwlt.pay.online.service.*;
+import com.dcits.dcwlt.pay.online.service.IAuthInfoService;
+import com.dcits.dcwlt.pay.online.service.ICoreProcessService;
+import com.dcits.dcwlt.pay.online.service.IPayTransDtlInfoService;
 import com.dcits.dcwlt.pay.online.service.impl.BankCoreImplDubboService;
 import com.dcits.dcwlt.pay.online.service.impl.PartyService;
 import com.dcits.dcwlt.pay.online.task.ParamConfigCheckTask;
@@ -50,10 +52,10 @@ public class Convert225RTradeFlow {
     private static final String BUSINESS_TYPE = "BIZTP";
 
     @Autowired
-    private SignInfoMapper signInfoRepository;
+    private SignInfoMapper signInfoMapper;
 
     @Autowired
-    private IPayTransDtlInfo1Service payTransDtlInfoRepository;
+    private IPayTransDtlInfoService iPayTransDtlInfoService;
 
     @Autowired
     private BankCoreImplDubboService bankCoreImplDubboService;
@@ -164,7 +166,7 @@ public class Convert225RTradeFlow {
         payTransDtlInfoDO.setLastUpTime(DateUtil.getDefaultTime());
         payTransDtlInfoDO.setRemark(grpHdr.getRmk());
         try {
-            payTransDtlInfoRepository.insert(payTransDtlInfoDO);
+            iPayTransDtlInfoService.insert(payTransDtlInfoDO);
         } catch (Exception e) {
             logger.info("金融流水表入库失败:{}-{}", e.getMessage(), e);
             throw new EcnyTransException(AppConstant.TRXSTATUS_FAILED, EcnyTransError.DATABASE_ERROR);
@@ -238,7 +240,7 @@ public class Convert225RTradeFlow {
         DCEPReqDTO<ConvertReqDTO> reqMsg = EcnyTradeContext.getReqMsg(tradeContext);
         logger.info("检查协议信息，协议号:{}", reqMsg.getBody().getConvertReq().getDbtrInf().getSgnNo());
         // 查询协议
-        SignInfoDO signInfoDO = signInfoRepository.selectBySignNo(reqMsg.getBody().getConvertReq().getDbtrInf().getSgnNo());
+        SignInfoDO signInfoDO = signInfoMapper.selectBySignNo(reqMsg.getBody().getConvertReq().getDbtrInf().getSgnNo());
         // 协议存在
         if (null != signInfoDO) {
             // 检查协议是否已失效
@@ -525,7 +527,7 @@ public class Convert225RTradeFlow {
 
             try {
                 // 更新金融交易表
-                payTransDtlInfoRepository.update(updateDO,oldStatus);
+                iPayTransDtlInfoService.update(updateDO,oldStatus);
             } catch (Exception e) {
                 logger.error("兑回异常处理时更新交易状态异常：{}-{}", e.getMessage(), e);
                 throw new EcnyTransException(EcnyTransError.DATABASE_ERROR);

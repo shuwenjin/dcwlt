@@ -67,7 +67,7 @@
         select partyid, partytype, partyname, partyalias, partystatus, status, contact, telephone, mail, fax, effectdate, ineffectivedate, changenumber, changecircletimes, lastupdate, lastuptime from pay_comm_party
     </sql>
 
-    <select id="queryParty" parameterType="String" resultMap="com.dcits.dcwlt.pay.api.model.PartyInfoDO">
+    <select id="queryParty" parameterType="String" resultType="com.dcits.dcwlt.pay.api.model.PartyInfoDO">
         <include refid="selectPartyInfoDOVo"/>
         where partyid = #{partyID}
     </select>
