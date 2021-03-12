@@ -3,6 +3,7 @@ package com.dcits.dcwlt.pay.batch.mapper;
 
 import com.dcits.dcwlt.pay.api.model.CheckPathDetialDO;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -18,7 +19,7 @@ public interface SettleCheckPathDetailMapper {
 
      int insert(CheckPathDetialDO checkPathDetialDO);
 
-     List<CheckPathDetialDO> selectPathDetail(String workdate, String batchId);
+     List<CheckPathDetialDO> selectPathDetail(@Param("workdate")String workdate, @Param("batchId")String batchId);
 
      int insertByBatch(List<CheckPathDetialDO> checkPathDetialDOS);
 
@@ -29,18 +30,18 @@ public interface SettleCheckPathDetailMapper {
      * @param batchId
      * @return
      */
-     int selectCheckDetailCount(String workdate, String batchId);
+     int selectCheckDetailCount(@Param("workdate")String workdate, @Param("batchId")String batchId);
 
     /**
      * 对人行的交易明细和我行的交易明细进行状态比对，然后更新结果状态, 不限制更新的条数
      */
-     int updateCheckStatusForMsgMatchWithoutLimit(String workdate, String batchId, List<String> msgIdList);
+     int updateCheckStatusForMsgMatchWithoutLimit(@Param("workdate")String workdate, @Param("batchId")String batchId, @Param("list")List<String> msgIdList);
     /**
      * 对人行的交易明细和我行的交易明细进行状态比对，然后更新结果状态, 限制更新的条数
      * @param updateNumber 每次更新的记录数
      */
 
-     int updateCheckStatusForMsgMatchWithLimit(String workdate, String batchId, int updateNumber);
+     int updateCheckStatusForMsgMatchWithLimit(@Param("workdate")String workdate, @Param("batchId")String batchId, @Param("updateNumber")int updateNumber);
     /**
      * 使用主键更新对账后的状态
      *
@@ -49,7 +50,7 @@ public interface SettleCheckPathDetailMapper {
      * @param checkStatus
      * @return
      */
-     int updateStatus(String msgId,String date,String time, String dtlMsgId, String checkStatus);
+     int updateStatus(@Param("msgId")String msgId,@Param("lastUpDate")String date,@Param("lastUpTime")String time, @Param("dtlMsgId")String dtlMsgId, @Param("checkStatus")String checkStatus);
 
     /**
      * 查找当前日期下，给定的批次号中人行有数据，但我行没有的明细数据的总数
@@ -57,7 +58,7 @@ public interface SettleCheckPathDetailMapper {
      * @param batchId
      * @return
      */
-     int selectPathDetailWhitCgbNotFoundCount(String workdate, String batchId);
+     int selectPathDetailWhitCgbNotFoundCount(@Param("workdate")String workdate, @Param("batchId")String batchId);
     /**
      * 查找当前日期下，给定的批次号中人行有数据，但我行没有的明细数据
      *
@@ -65,7 +66,7 @@ public interface SettleCheckPathDetailMapper {
      * @param batchId
      * @return
      */
-     List<CheckPathDetialDO> selectPathDetailWhitCgbNotFound(String workdate, String batchId, Integer offset, Integer limit);
+     List<CheckPathDetialDO> selectPathDetailWhitCgbNotFound(@Param("workdate")String workdate, @Param("batchId")String batchId, @Param("offset")Integer offset, @Param("limit")Integer limit);
 
 
 }

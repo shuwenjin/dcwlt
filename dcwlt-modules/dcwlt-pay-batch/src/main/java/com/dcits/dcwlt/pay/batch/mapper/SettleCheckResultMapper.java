@@ -3,6 +3,7 @@ package com.dcits.dcwlt.pay.batch.mapper;
 import com.dcits.dcwlt.pay.api.domain.dcep.check.CheckWrongQueryResDTO;
 import com.dcits.dcwlt.pay.api.model.CheckResultDO;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -34,13 +35,13 @@ public interface SettleCheckResultMapper {
      * @param paySerno
      * @return
      */
-    public CheckResultDO selectCheckResult(String payDate, String paySerno);
+    public CheckResultDO selectCheckResult(@Param("payDate") String payDate, @Param("paySerno")String paySerno);
     /**
      * 查询需要处理的对账结果表
      * @param batchId
      * @return
      */
-    public List<CheckResultDO> selectCheckResultByStatus(String payDate, String batchId);
+    public List<CheckResultDO> selectCheckResultByStatus(@Param("payDate") String payDate, @Param("batchId")String batchId);
 
     /**
      * 对账不平记录查询
@@ -54,8 +55,9 @@ public interface SettleCheckResultMapper {
      * @param queryPageFlag --上下翻页操作, 必输, 0首页; 1上翻; 2下翻 只按升序排序
      * @return
      */
-    public List<CheckWrongQueryResDTO> selectWrongMatchCheckResult(String payDate, String batchId, String msgType,
-                                                                   String checkStatus, String procStatus, String msgId, int count, int queryPageFlag, String queryPageKey);
+    public List<CheckWrongQueryResDTO> selectWrongMatchCheckResult(@Param("payDate")String payDate, @Param("batchId")String batchId, @Param("msgType")String msgType,
+                                                                   @Param("checkStatus")String checkStatus, @Param("procStatus")String procStatus, @Param("msgId")String msgId, @Param("count")int count,
+                                                                   @Param("queryPageFlag")int queryPageFlag, @Param("queryPageKey")String queryPageKey);
 
 
     /**
