@@ -38,7 +38,7 @@ public class PartyService implements IPartyService {
     private static final Logger logger = LoggerFactory.getLogger(PartyService.class);
 
     @Autowired
-    private IPartyToBeEffectiveRepository partyInfoTmpRepository;
+    private IPartyToBeEffectiveService partyInfoTmpRepository;
     @Autowired
     private PartyInfoMapper partyInfoRepository;
     @Autowired

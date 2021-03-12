@@ -17,7 +17,7 @@ import java.util.*;
  */
 
 @Service
-public class ParamConfigCheckService implements CacheDataExecutor {
+public class ParamConfigCheckService {
 
     private static final Logger logger = LoggerFactory.getLogger(ParamConfigCheckService.class);
 

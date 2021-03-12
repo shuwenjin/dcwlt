@@ -4,7 +4,6 @@ import com.alibaba.fastjson.JSONObject;
 import com.dcits.dcwlt.common.pay.constant.AppConstant;
 import com.dcits.dcwlt.common.pay.constant.Constant;
 import com.dcits.dcwlt.common.pay.enums.AuthInfoDrctEnum;
-import com.dcits.dcwlt.common.pay.enums.CheckStatusEnum;
 import com.dcits.dcwlt.common.pay.enums.DsptChnlRspEnum;
 import com.dcits.dcwlt.common.pay.enums.MsgTpEnum;
 import com.dcits.dcwlt.common.pay.enums.OperTypeEnum;
@@ -49,7 +48,7 @@ import com.dcits.dcwlt.pay.online.flow.builder.EcnyTradeContext;
 import com.dcits.dcwlt.pay.online.flow.builder.EcnyTradeFlowBuilder;
 import com.dcits.dcwlt.pay.online.service.IAuthInfoService;
 import com.dcits.dcwlt.pay.online.service.IPartyService;
-import com.dcits.dcwlt.pay.online.service.IPayTransDtlInfoRepository;
+import com.dcits.dcwlt.pay.online.service.IPayTransDtlInfo1Service;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -78,7 +77,7 @@ public class Dispute801STradeFlow {
     //private DcepSendService dcepSendService;
 
     @Autowired
-    private IPayTransDtlInfoRepository payTransDtlInfoRepository;
+    private IPayTransDtlInfo1Service payTransDtlInfoRepository;
 
     @Autowired
     private IAuthInfoService authInfoService;
