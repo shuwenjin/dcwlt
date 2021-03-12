@@ -1,5 +1,7 @@
 package com.dcits.dcwlt.common.pay.exception;
 
+import com.dcits.dcwlt.common.pay.enums.SettleTaskErrorEnum;
+
 /**
  * 清算批次异常类
  *

@@ -1,0 +1,196 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dcits.dcwlt.pay.batch.mapper.SettleCheckPathDetailMapper">
+    <!--通道对账明细表入库-->
+    <insert id="insert" parameterType="com.dcits.dcwlt.pay.api.model.CheckPathDetialDO">
+        INSERT INTO PAY_BATCH_CHECKPATHDTL
+        (WORKDATE, MSGID, BATCHID, FILENAME, DTLBIZTIME, MSGTYPE, DTLMSGID, INSTGDRCTPTY,
+        DBITPARTY, CRDTPARTY, CCY, AMOUNT, DTLBIZSTATUS, DTLDESC, PAYEENAME, PAYEEACCOUNT, PAYEEWALLETID,
+        PAYERACCOUNT, OGNLMSGTYPE, OGNLMSGID, CHECKSTATUS, LASTUPDATE, LASTUPTIME)
+        VALUES(#{workdate}, #{msgId}, #{batchId}, #{fileName}, #{dtlBizTime}, #{msgType},
+        #{dtlMsgId}, #{instgDrctPty}, #{dBITParty}, #{cRDTParty}, #{ccy}, #{amount}, #{dtlBizStatus},
+        #{dtlDesc}, #{payeeName}, #{payeeAccount}, #{payeeWalletId}, #{payerAccount}, #{ognlMsgType},
+        #{ognlMsgId}, #{checkStatus}, #{lastUpDate}, #{lastUpTime})
+    </insert>
+	
+	<!--通道对账明细表入库-->
+    <insert id="insertByBatch">
+        INSERT INTO PAY_BATCH_CHECKPATHDTL
+        (WORKDATE, MSGID, BATCHID, FILENAME, DTLBIZTIME, MSGTYPE, DTLMSGID, INSTGDRCTPTY,
+        DBITPARTY, CRDTPARTY, CCY, AMOUNT, DTLBIZSTATUS, DTLDESC, PAYEENAME, PAYEEACCOUNT, PAYEEWALLETID,
+        PAYERACCOUNT, OGNLMSGTYPE, OGNLMSGID, CHECKSTATUS, LASTUPDATE, LASTUPTIME)
+        VALUES 
+        <foreach collection="list" item="item" index="index" separator=",">
+        (#{item.workdate}, #{item.msgId}, #{item.batchId}, #{item.fileName}, #{item.dtlBizTime}, #{item.msgType},
+        #{item.dtlMsgId}, #{item.instgDrctPty}, #{item.dBITParty}, #{item.cRDTParty}, #{item.ccy}, #{item.amount}, #{item.dtlBizStatus},
+        #{item.dtlDesc}, #{item.payeeName}, #{item.payeeAccount}, #{item.payeeWalletId}, #{item.payerAccount}, #{item.ognlMsgType},
+        #{item.ognlMsgId}, #{item.checkStatus}, #{item.lastUpDate}, #{item.lastUpTime})
+        </foreach>
+    </insert>
+    
+    <!--通道对账明细表入库-->
+    <insert id="replace">
+        REPLACE INTO PAY_BATCH_CHECKPATHDTL
+        (WORKDATE, MSGID, BATCHID,  FILENAME, DTLBIZTIME, MSGTYPE, DTLMSGID, INSTGDRCTPTY,
+        DBITPARTY, CRDTPARTY, CCY, AMOUNT, DTLBIZSTATUS, DTLDESC, PAYEENAME, PAYEEACCOUNT, PAYEEWALLETID,
+        PAYERACCOUNT, OGNLMSGTYPE, OGNLMSGID, CHECKSTATUS, LASTUPDATE, LASTUPTIME)
+        VALUES(#{workdate}, #{msgId}, #{batchId}, #{fileName}, #{dtlBizTime}, #{msgType},
+        #{dtlMsgId}, #{instgDrctPty}, #{dBITParty}, #{cRDTParty}, #{ccy}, #{amount}, #{dtlBizStatus},
+        #{dtlDesc}, #{payeeName}, #{payeeAccount}, #{payeeWalletId}, #{payerAccount}, #{ognlMsgType},
+        #{ognlMsgId}, #{checkStatus}, #{lastUpDate}, #{lastUpTime})
+    </insert>
+
+    <!-- 查询通道对账明细表 -->
+    <select id ="selectPathDetail" resultType="com.dcits.dcwlt.pay.api.model.CheckPathDetialDO">
+        SELECT t.WORKDATE  workdate,
+        t.MSGID     msgId,
+        t.BATCHID    batchId,
+        t.FILENAME    fileName,
+        t.DTLBIZTIME   dtlBizTime,
+        t.MSGTYPE    msgType,
+        t.DTLMSGID    dtlMsgId,
+        t.INSTGDRCTPTY      instgDrctPty,
+        t.DBITPARTY    dBITParty,
+        t.CRDTPARTY    cRDTParty,
+        t.CCY     ccy,
+        t.AMOUNT    amount,
+        t.DTLBIZSTATUS      dtlBizStatus,
+        t.DTLDESC    dtlDesc,
+        t.PAYEENAME    payeeName,
+        t.PAYEEACCOUNT      payeeAccount,
+        t.PAYEEWALLETID      payeeWalletId,
+        t.PAYERACCOUNT      payerAccount,
+        t.OGNLMSGTYPE   ognlMsgType,
+        t.OGNLMSGID    ognlMsgId,
+        t.CHECKSTATUS   checkStatus,
+        t.LASTUPDATE   lastUpDate,
+        t.LASTUPTIME   lastUpTime
+        FROM PAY_BATCH_CHECKPATHDTL t
+        where t.WORKDATE = #{workdate}
+          AND t.BATCHID = #{batchId}
+    </select>
+    
+    <update id="updateStatus">
+        UPDATE PAY_BATCH_CHECKPATHDTL
+        SET CHECKSTATUS = #{checkStatus}, LASTUPDATE = #{lastUpDate}, LASTUPTIME = #{lastUpTime}
+        WHERE MSGID = #{msgId}
+        AND DTLMSGID = #{dtlMsgId}
+    </update>
+    
+    <!-- 统计当前批次两方都存在的情况下需要对账的总数 -->
+    <select id="selectCheckDetailCount" resultType="int">
+    	select  count(1) from PAY_BATCH_CHECKPATHDTL a 
+		inner join PAY_BATCH_CHECKCOLLECT b 
+		on a.BATCHID = b.BATCHID and a.DTLMSGID = b.MSGID
+		where a.WORKDATE = #{workdate}
+		   and a.BATCHID = #{batchId}
+		   and a.CHECKSTATUS = 'INIT'
+    </select>
+    
+    <!-- 勾兑互联互通和我行的对账明细，不限制更新的条数 -->
+    <update id="updateCheckStatusForMsgMatchWithoutLimit">
+    	update PAY_BATCH_CHECKPATHDTL a 
+		 inner join PAY_BATCH_CHECKCOLLECT b 
+		    on a.BATCHID = b.BATCHID and a.DTLMSGID = b.MSGID
+		    set a.CHECKSTATUS = case when a.DTLBIZSTATUS in ('PR00', 'PR03')  then         /*互联互通交易成功*/
+		    							case when b.TRADESTATUS in ('1', 'A') then 'SAME'  /*-我行成功*/
+		    							     when b.TRADESTATUS in ('0', '3') then 'FANS'  /*我行失败*/
+		    							     else 'EANS'                                   /*我行异常*/
+		    							end
+		                             when a.DTLBIZSTATUS in ('PR01', 'PR04') then          /*互联互通交易失败*/
+		                             	case when b.TRADESTATUS in ('1', 'A') then 'SANF'  /*我行成功*/
+		    							     when b.TRADESTATUS in ('0', '3') then 'SAME'  /*我行失败*/
+		    							     else 'EANF'                                   /*我行异常*/
+		    							end 
+		                             else 'PROC'                                           /*互联互通交易处理中*/     
+		                        end
+		    where a.WORKDATE = #{workdate}
+		      and a.BATCHID = #{batchId}
+		    <if test="list == null">  
+		      and a.CHECKSTATUS = 'INIT'
+		    </if>
+			<if test="list != null">
+	         	and a.DTLMSGID in 
+		        <foreach collection="list" item="item" index="index" open="(" close=")" separator=",">
+		        	#{item}
+		        </foreach>
+	        </if>	      
+    </update>
+    
+    <!-- 勾兑互联互通和我行的对账明细，限制每次更新的条数 -->
+    <update id="updateCheckStatusForMsgMatchWithLimit">
+    	update PAY_BATCH_CHECKPATHDTL a 
+		inner join PAY_BATCH_CHECKCOLLECT b 
+		on a.BATCHID = b.BATCHID and a.DTLMSGID = b.MSGID
+		set a.CHECKSTATUS = case when a.DTLBIZSTATUS in ('PR00', 'PR03')  then         /*互联互通交易成功*/
+								case when b.TRADESTATUS in ('1', 'A') then 'SAME'  /*-我行成功*/
+								     when b.TRADESTATUS in ('0', '3') then 'FANS'  /*我行失败*/
+								     else 'EANS'                                   /*我行异常*/
+								end
+		                     when a.DTLBIZSTATUS in ('PR01', 'PR04') then          /*互联互通交易失败*/
+		                     	case when b.TRADESTATUS in ('1', 'A') then 'SANF'  /*我行成功*/
+								     when b.TRADESTATUS in ('0', '3') then 'SAME'  /*我行失败*/
+								     else 'EANF'                                   /*我行异常*/
+								end 
+		                     else 'PROC'                                           /*互联互通交易处理中*/     
+		                	end
+		where a.DTLMSGID in (select t.DTLMSGID from (select c.DTLMSGID
+                       from PAY_BATCH_CHECKPATHDTL c 
+                       inner join PAY_BATCH_CHECKCOLLECT d on c.BATCHID = d.BATCHID and c.DTLMSGID = d.MSGID
+                       where c.WORKDATE = #{workdate}
+                       and c.BATCHID = #{batchId}
+  					   and c.CHECKSTATUS = 'INIT'
+					  order by c.MSGID, c.DTLMSGID asc limit #{updateNumber}) t)
+    </update>
+    
+    <!-- 查询通道对账明细表 -->
+    <select id ="selectPathDetailWhitCgbNotFoundCount" resultType="int">
+        SELECT count(*)
+        FROM PAY_BATCH_CHECKPATHDTL t 
+        left join PAY_BATCH_CHECKCOLLECT b 
+    		on t.BATCHID = b.BATCHID and t.DTLMSGID = b.MSGID
+        where t.WORKDATE = #{workdate} AND t.BATCHID = #{batchId} and b.MSGID is null
+         
+     </select>
+     
+    <!-- 查询通道对账明细表 -->
+    <select id ="selectPathDetailWhitCgbNotFound" resultType="com.dcits.dcwlt.pay.api.model.CheckPathDetialDO">
+        SELECT t.WORKDATE  workdate,
+        t.MSGID     msgId,
+        t.BATCHID    batchId,
+        t.FILENAME    fileName,
+        t.DTLBIZTIME   dtlBizTime,
+        t.MSGTYPE    msgType,
+        t.DTLMSGID    dtlMsgId,
+        t.INSTGDRCTPTY      instgDrctPty,
+        t.DBITPARTY    dBITParty,
+        t.CRDTPARTY    cRDTParty,
+        t.CCY     ccy,
+        t.AMOUNT    amount,
+        t.DTLBIZSTATUS      dtlBizStatus,
+        t.DTLDESC    dtlDesc,
+        t.PAYEENAME    payeeName,
+        t.PAYEEACCOUNT      payeeAccount,
+        t.PAYEEWALLETID      payeeWalletId,
+        t.PAYERACCOUNT      payerAccount,
+        t.OGNLMSGTYPE   ognlMsgType,
+        t.OGNLMSGID    ognlMsgId,
+        t.CHECKSTATUS   checkStatus,
+        t.LASTUPDATE   lastUpDate,
+        t.LASTUPTIME   lastUpTime
+        FROM PAY_BATCH_CHECKPATHDTL t 
+        left join PAY_BATCH_CHECKCOLLECT b 
+    		on t.BATCHID = b.BATCHID and t.DTLMSGID = b.MSGID
+        where t.WORKDATE = #{workdate} AND t.BATCHID = #{batchId} and b.MSGID is null
+        <if test="limit != null">
+        	<if test="offset != null">
+        		limit #{offset}, #{limit}
+        	</if>
+        	<if test="offset == null">
+        		limit #{limit}
+        	</if>
+        </if> 
+     </select>
+    
+    
+</mapper>

@@ -1,4 +1,4 @@
-package com.dcits.dcwlt.common.pay.exception;
+package com.dcits.dcwlt.common.pay.enums;
 
 import java.util.Arrays;
 import java.util.HashSet;

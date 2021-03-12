@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dcits.dcwlt.pay.batch.mapper.SettledtlFileInfoBatchMapper">
+
+    <sql id="querySql">
+        SELECT
+        MSGID msgId,
+        BATCHID batchId,
+        SRCFILEPATH srcFilePath,
+        DESTFILEPATH destFilePath,
+        LOCALFILEPATH localFilePath,
+        FILENAME fileName,
+        FILEPROCSTATUS fileProcStatus,
+        LASTUPDATE lastUpDate,
+        LASTUPTIME lastUpTime
+        FROM pay_batch_checkfilelist
+    </sql>
+
+    <insert id="replaceDtlFileInfo">
+        REPLACE INTO pay_batch_checkfilelist(
+        MSGID,
+        BATCHID,
+        SRCFILEPATH,
+        DESTFILEPATH,
+        LOCALFILEPATH,
+        FILENAME,
+        FILEPROCSTATUS,
+        LASTUPDATE,
+        LASTUPTIME
+        ) VALUE
+        (#{msgId},
+        #{batchId},
+        #{srcFilePath},
+        #{destFilePath},
+        #{localFilePath},
+        #{fileName},
+        #{fileProcStatus},
+        #{lastUpDate},
+        #{lastUpTime})
+    </insert>
+    <select id="queryDtlFileInfoByBatchId" resultType="com.dcits.dcwlt.pay.api.model.DtlFileInfDO">
+        <include refid="querySql"></include>
+        WHERE BATCHID = #{batchId}
+    </select>
+
+    <select id="queryByFileName" resultType="com.dcits.dcwlt.pay.api.model.DtlFileInfDO">
+        <include refid="querySql"></include>
+        WHERE FILENAME = #{fileName}
+    </select>
+
+    <select id="queryDtlFileInfoByBatchIdStatus" resultType="com.dcits.dcwlt.pay.api.model.DtlFileInfDO">
+        <include refid="querySql"></include>
+        WHERE BATCHID = #{batchId} AND FILEPROCSTATUS = #{fileProcStatus}
+    </select>
+
+    <select id="queryDtlFileInfoByBatchIdUnStatus" resultType="com.dcits.dcwlt.pay.api.model.DtlFileInfDO">
+        <include refid="querySql"></include>
+        WHERE BATCHID = #{batchId} AND FILEPROCSTATUS != #{fileProcStatus}
+    </select>
+
+    <update id="updateDtlFileInfo">
+        UPDATE pay_batch_checkfilelist SET
+        SRCFILEPATH = #{srcFilePath},
+        DESTFILEPATH = #{destFilePath},
+        LOCALFILEPATH = #{localFilePath},
+        FILEPROCSTATUS = #{fileProcStatus},
+        LASTUPDATE = #{lastUpDate},
+        LASTUPTIME = #{lastUpTime}
+        WHERE MSGID = #{msgId} AND BATCHID = #{batchId} AND FILENAME = #{fileName}
+    </update>
+
+    <update id="updateDtlFileInfoProcessStatus">
+        UPDATE pay_batch_checkfilelist
+        SET
+        FILEPROCSTATUS = #{fileProcStatus},
+        LASTUPDATE = #{lastUpDate},
+        LASTUPTIME = #{lastUpTime}
+        WHERE FILENAME = #{fileName}
+    </update>
+
+    <update id="updateDtlFileInfoLastProcessStatus">
+        UPDATE pay_batch_checkfilelist
+        SET
+        LOCALFILEPATH = #{localFilePath},
+        FILEPROCSTATUS = #{fileProcStatus},
+        LASTUPDATE = #{lastUpDate},
+        LASTUPTIME = #{lastUpTime}
+        WHERE FILENAME = #{fileName}
+    </update>
+
+    <delete id="deleteByBatchId">
+        DELETE FROM pay_batch_checkfilelist WHERE BATCHID = #{batchId}
+    </delete>
+</mapper>

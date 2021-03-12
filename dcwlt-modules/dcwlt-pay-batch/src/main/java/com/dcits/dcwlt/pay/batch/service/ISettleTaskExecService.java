@@ -34,4 +34,8 @@ public interface ISettleTaskExecService {
 
     public int updateTaskExecState(SettleTaskExecDO taskExec);
     public int updateTaskExecDone(SettleTaskExecDO taskExec);
+
+    public SettleTaskExecDO queryTaskExecByCode(String settleDate, String taskGroupCode, String taskCode, String batchId);
+
+    public int deleteExecTaskByGroupId(String settleDate, String taskGroupCode, String batchId);
 }

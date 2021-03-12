@@ -20,6 +20,10 @@ public class DtlFileInfDO {
     private String lastUpDate;
     //最后更新时间
     private String lastUpTime;
+    //init:未下载proc:下载中succ:已下载
+    private String fileProcStatus;
+    //本地文件路径
+    private String localFilePath;
 
     public String getMsgId() {
         return msgId;
@@ -69,6 +73,22 @@ public class DtlFileInfDO {
         this.lastUpTime = lastUpTime;
     }
 
+    public String getFileProcStatus() {
+        return fileProcStatus;
+    }
+
+    public void setFileProcStatus(String fileProcStatus) {
+        this.fileProcStatus = fileProcStatus;
+    }
+
+    public String getLocalFilePath() {
+        return localFilePath;
+    }
+
+    public void setLocalFilePath(String localFilePath) {
+        this.localFilePath = localFilePath;
+    }
+
     @Override
     public String toString() {
         return "CheckFilelistDO{" +
@@ -80,5 +100,7 @@ public class DtlFileInfDO {
                 ", lastUpTime='" + lastUpTime + '\'' +
                 '}';
     }
+
+
 
 }

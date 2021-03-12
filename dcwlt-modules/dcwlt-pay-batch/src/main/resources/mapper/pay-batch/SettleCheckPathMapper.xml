@@ -1,0 +1,219 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dcits.dcwlt.pay.batch.mapper.SettleCheckPathMapper">
+    <!--通道对账汇总表入库-->
+    <insert id="insert" parameterType="com.dcits.dcwlt.pay.api.model.CheckPathDO">
+        INSERT INTO PAY_BATCH_CHECKPATH
+        (PAYDATE, PAYSERNO, PAYTIME, MSGID, SENDERDATETIME, INSTGDRCTPTY, INSTDDRCTPTY, REMARK, DIGITALENVELOPE,
+        BATCHDATE, BATCHID, COUNTNUM, COUNTAMT, CCY, DBITCOUNTNUM, DBITCOUNTAMT, CRDTCOUNTNUM, CRDTCOUNTAMT,
+        MSGTYPE, MSGBIZSTATUS, MSGCOUNTNUM, MSGCOUNTAMT, MSGDBITCOUNTNUM, MSGDBITCOUNTAMT,
+        MSGCRDTCOUNTNUM, MSGCRDTCOUNTAMT, CHECKSTATUS, LASTUPDATE, LASTUPTIME)
+        VALUES(#{payDate}, #{paySerno}, #{payTime}, #{msgId}, #{senderDateTime}, #{instgDrctPty}, #{instdDrctPty},
+        #{remark}, #{digitalEnvelope}, #{batchDate}, #{batchId}, #{countNum}, #{countAmt}, #{ccy}, #{dBITCountNum},
+        #{dBITCountAmt}, #{cRDTCountNum}, #{cRDTCountAmt}, #{msgType}, #{msgBizStatus}, #{msgCountNum}, #{msgCountAmt},
+        #{msgDBITCountNum}, #{msgDBITCountAmt}, #{msgCRDTCountNum},
+        #{msgCRDTCountAmt}, #{checkStatus}, #{lastUpDate}, #{lastUpTime})
+    </insert>
+
+    <!--通道对账汇总表批量入库-->
+    <insert id="insertByBatch" parameterType="com.dcits.dcwlt.pay.api.model.CheckPathDO">
+        INSERT INTO PAY_BATCH_CHECKPATH
+        (PAYDATE, PAYSERNO, PAYTIME, MSGID, SENDERDATETIME, INSTGDRCTPTY, INSTDDRCTPTY, REMARK, DIGITALENVELOPE,
+        BATCHDATE, BATCHID, COUNTNUM, COUNTAMT, CCY, DBITCOUNTNUM, DBITCOUNTAMT, CRDTCOUNTNUM, CRDTCOUNTAMT,
+        MSGTYPE, MSGBIZSTATUS, MSGCOUNTNUM, MSGCOUNTAMT, MSGDBITCOUNTNUM, MSGDBITCOUNTAMT,
+        MSGCRDTCOUNTNUM, MSGCRDTCOUNTAMT, CHECKSTATUS, LASTUPDATE, LASTUPTIME)
+        VALUE
+        <foreach collection="list" item="item" index="index" separator=",">
+            (#{item.payDate}, #{item.paySerno}, #{item.payTime}, #{item.msgId}, #{item.senderDateTime},
+            #{item.instgDrctPty}, #{item.instdDrctPty}, #{item.remark}, #{item.digitalEnvelope}, #{item.batchDate},
+            #{item.batchId}, #{item.countNum}, #{item.countAmt}, #{item.ccy}, #{item.dBITCountNum},
+            #{item.dBITCountAmt}, #{item.cRDTCountNum}, #{item.cRDTCountAmt}, #{item.msgType}, #{item.msgBizStatus},
+            #{item.msgCountNum}, #{item.msgCountAmt}, #{item.msgDBITCountNum}, #{item.msgDBITCountAmt},
+            #{item.msgCRDTCountNum}, #{item.msgCRDTCountAmt}, #{item.checkStatus}, #{item.lastUpDate},
+            #{item.lastUpTime})
+        </foreach>
+    </insert>
+
+    <!-- 查询通道对账汇总表 -->
+    <select id="selectPath" resultType="com.dcits.dcwlt.pay.api.model.CheckPathDO">
+        SELECT t.PAYDATE payDate,
+        t.PAYSERNO paySerno,
+        t.PAYTIME payTime ,
+        t.MSGID msgId,
+        t.SENDERDATETIME senderDateTime,
+        t.INSTGDRCTPTY instgDrctPty,
+        t.INSTDDRCTPTY instdDrctPty,
+        t.REMARK remark,
+        t.DIGITALENVELOPE digitalEnvelope,
+        t.BATCHDATE batchDate,
+        t.BATCHID batchId,
+        t.COUNTNUM countNum,
+        t.COUNTAMT countAmt,
+        t.CCY ccy,
+        t.DBITCOUNTNUM dBITCountNum,
+        t.DBITCOUNTAMT dBITCountAmt,
+        t.CRDTCOUNTNUM cRDTCountNum,
+        t.CRDTCOUNTAMT cRDTCountAmt,
+        t.MSGTYPE msgType,
+        t.MSGBIZSTATUS msgBizStatus,
+        t.MSGCOUNTNUM msgCountNum,
+        t.MSGCOUNTAMT msgCountAmt,
+        t.MSGDBITCOUNTNUM msgDBITCountNum,
+        t.MSGDBITCOUNTAMT msgDBITCountAmt,
+        t.MSGCRDTCOUNTNUM msgCRDTCountNum,
+        t.MSGCRDTCOUNTAMT msgCRDTCountAmt,
+        t.CHECKSTATUS checkStatus,
+        t.LASTUPDATE lastUpDate,
+        t.LASTUPTIME lastUpTime
+        FROM PAY_BATCH_CHECKPATH t
+        where t.BATCHDATE = #{batchDate}
+        AND t.BATCHID = #{batchId}
+    </select>
+
+    <!-- 在联机库中查询通道对账汇总数据 -->
+    <select id="selectPathInOnline" resultType="com.dcits.dcwlt.pay.api.model.CheckPathDO">
+        SELECT t.PAYDATE payDate,
+        t.PAYSERNO paySerno,
+        t.PAYTIME payTime ,
+        t.MSGID msgId,
+        t.SENDERDATETIME senderDateTime,
+        t.INSTGDRCTPTY instgDrctPty,
+        t.INSTDDRCTPTY instdDrctPty,
+        t.REMARK remark,
+        t.DIGITALENVELOPE digitalEnvelope,
+        t.BATCHDATE batchDate,
+        t.BATCHID batchId,
+        t.COUNTNUM countNum,
+        t.COUNTAMT countAmt,
+        t.CCY ccy,
+        t.DBITCOUNTNUM dBITCountNum,
+        t.DBITCOUNTAMT dBITCountAmt,
+        t.CRDTCOUNTNUM cRDTCountNum,
+        t.CRDTCOUNTAMT cRDTCountAmt,
+        d.MSGTYPE msgType,
+        d.MSGBIZSTATUS msgBizStatus,
+        d.MSGCOUNTNUM msgCountNum,
+        d.MSGCOUNTAMT msgCountAmt,
+        d.MSGDBITCOUNTNUM msgDBITCountNum,
+        d.MSGDBITCOUNTAMT msgDBITCountAmt,
+        d.MSGCRDTCOUNTNUM msgCRDTCountNum,
+        d.MSGCRDTCOUNTAMT msgCRDTCountAmt,
+        'INIT' checkStatus
+        FROM PAY_ONLINE_CHECKPATH_MAIN t,
+        (select S.MSGID, S.BATCHDATE, S.BATCHID, S.MSGTYPE, case when s.MSGBIZSTATUS in ('PR00', 'PR03') then 'PR00'
+        when s.MSGBIZSTATUS in ('PR01', 'PR04') then 'PR01'
+        else 'PR02'
+        end MSGBIZSTATUS, sum(convert(s.MSGCOUNTNUM, DECIMAL)) MSGCOUNTNUM,
+        sum(convert(s.MSGCOUNTAMT, DECIMAL)) MSGCOUNTAMT, sum(convert(s.MSGDBITCOUNTNUM, DECIMAL)) MSGDBITCOUNTNUM,
+        sum(convert(s.MSGDBITCOUNTAMT, DECIMAL)) MSGDBITCOUNTAMT, sum(convert(s.MSGCRDTCOUNTNUM, DECIMAL))
+        MSGCRDTCOUNTNUM,
+        sum(convert(s.MSGCRDTCOUNTAMT, DECIMAL)) MSGCRDTCOUNTAMT
+        from PAY_ONLINE_CHECKPATH_SUB s
+        where s.BATCHDATE = #{batchDate} and s.BATCHID = #{batchId}
+        group by S.MSGID, S.BATCHDATE, S.BATCHID, S.MSGTYPE, case when s.MSGBIZSTATUS in ('PR00', 'PR03') then 'PR00'
+        when s.MSGBIZSTATUS in ('PR01', 'PR04') then 'PR01'
+        else 'PR02'
+        end) d
+        where t.MSGID = d.MSGID
+        AND t.BATCHID = d.BATCHID
+        AND t.BATCHDATE = #{batchDate}
+        AND t.BATCHID = #{batchId}
+    </select>
+
+    <update id="updateStatus">
+        UPDATE PAY_BATCH_CHECKPATH
+        SET CHECKSTATUS = #{checkStatus}, LASTUPDATE = #{lastUpDate}, LASTUPTIME = #{lastUpTime}
+        WHERE PAYDATE = #{payDate}
+        AND PAYSERNO = #{paySerno}
+    </update>
+
+
+    <sql id="checkPathQuery">
+        select
+        PAYDATE payDate,
+        PAYSERNO paySerno,
+        MSGID msgId,
+        MSGTYPE msgType,
+        MSGBIZSTATUS msgBizStatus,
+        MSGCOUNTNUM msgCountNum,
+        MSGCOUNTAMT msgCountAmt,
+        BATCHID batchId,
+        MSGDBITCOUNTNUM msgDbitCountNum,
+        MSGDBITCOUNTAMT msgDbitCountAmt,
+        MSGCRDTCOUNTNUM msgCrdtCountNum,
+        MSGCRDTCOUNTAMT msgCrdtCountAmt,
+        CHECKSTATUS checkStatus
+        from PAY_BATCH_CHECKPATH
+    </sql>
+    <!--首页-->
+    <select id="queryPageDateFirst" resultType="java.util.Map">
+        <include refid="checkPathQuery"></include>
+        <where>
+            PAYDATE= #{payDate}
+            <if test="checkStatus!=null and checkStatus!='' ">
+                and CHECKSTATUS = #{checkStatus}
+            </if>
+            <if test="msgType!=null and msgType!='' ">
+                and MSGTYPE = #{msgType}
+            </if>
+            <if test="batchId!=null and batchId!='' ">
+                and BATCHID = #{batchId}
+            </if>
+            <if test="msgBizStatus!=null and msgBizStatus!='' ">
+                and MSGBIZSTATUS = #{msgBizStatus}
+            </if>
+            ORDER BY BATCHID,MSGTYPE,MSGBIZSTATUS limit 0,#{count}
+        </where>
+    </select>
+    <!--下一页-->
+    <select id="queryPageDateDown" resultType="java.util.Map">
+        select A.* from(
+        <include refid="checkPathQuery"></include>
+        ORDER BY BATCHID ASC,MSGTYPE ASC,MSGBIZSTATUS ASC)A
+        <where>
+            A.PAYDATE= #{payDate}
+            <if test="checkStatus!=null and checkStatus!='' ">
+                and A.CHECKSTATUS = #{checkStatus}
+            </if>
+            <if test="batchId!=null and batchId!='' ">
+                and A.BATCHID= #{batchId}
+            </if>
+            <if test="msgType!=null and msgType!='' ">
+                and A.MSGTYPE= #{msgType}
+            </if>
+            <if test="msgBizStatus!=null and msgBizStatus!='' ">
+                and A.MSGBIZSTATUS= #{msgBizStatus}
+            </if>
+            <if test="queryPageKey!=null and queryPageKey!='' ">
+                and concat(A.BATCHID,A.MSGTYPE,A.MSGBIZSTATUS) > #{queryPageKey}
+            </if>
+        </where>
+        ORDER BY A.BATCHID ASC,A.MSGTYPE ASC,A.MSGBIZSTATUS ASC limit 0,#{count}
+    </select>
+
+    <!--上一页-->
+    <select id="queryPageDateUp" resultType="java.util.Map">
+        select A.* from (
+        <include refid="checkPathQuery"></include>
+        where
+        PAYDATE= #{payDate}
+        <if test="checkStatus!=null and checkStatus!='' ">
+            and CHECKSTATUS= #{checkStatus}
+        </if>
+        <if test="batchId!=null and batchId!='' ">
+            and BATCHID= #{batchId}
+        </if>
+        <if test="msgType!=null and msgType!='' ">
+            and MSGTYPE= #{msgType}
+        </if>
+        <if test="msgBizStatus!=null and msgBizStatus!='' ">
+            and MSGBIZSTATUS= #{msgBizStatus}
+        </if>
+        <if test="queryPageKey!=null and queryPageKey!=''">
+            and concat(BATCHID,MSGTYPE,MSGBIZSTATUS) &lt; #{queryPageKey}
+        </if>
+        ORDER BY BATCHID DESC,MSGTYPE DESC,MSGBIZSTATUS DESC limit 0, #{count}
+        ) A
+        ORDER BY A.BATCHID,A.MSGTYPE,A.MSGBIZSTATUS
+    </select>
+</mapper>

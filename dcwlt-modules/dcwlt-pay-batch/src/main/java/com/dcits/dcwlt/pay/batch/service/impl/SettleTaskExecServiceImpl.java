@@ -2,7 +2,7 @@ package com.dcits.dcwlt.pay.batch.service.impl;
 
 
 import com.dcits.dcwlt.common.pay.enums.TaskExecStatusEnum;
-import com.dcits.dcwlt.common.pay.exception.SettleTaskErrorEnum;
+import com.dcits.dcwlt.common.pay.enums.SettleTaskErrorEnum;
 import com.dcits.dcwlt.common.pay.exception.SettleTaskException;
 import com.dcits.dcwlt.pay.api.model.SettleTaskExecDO;
 import com.dcits.dcwlt.pay.api.model.SettleTaskGroupExecDO;
@@ -321,4 +321,19 @@ public class SettleTaskExecServiceImpl implements ISettleTaskExecService {
 	public int updateTaskExecDone(SettleTaskExecDO taskExec) {
 		return settleTaskExecMapper.updateTaskExecDone(taskExec);
 	}
+
+
+	@Override
+	public SettleTaskExecDO queryTaskExecByCode(String settleDate, String taskGroupCode, String taskCode, String batchId)
+	{
+		SettleTaskExecDO taskExec = settleTaskExecMapper.queryTaskExecByCode(settleDate, taskGroupCode, taskCode, batchId);
+		return taskExec;
+	}
+
+	@Override
+	public int deleteExecTaskByGroupId(String settleDate, String taskGroupCode, String batchId){
+
+		return settleTaskExecMapper.deleteExecTaskByGroupId( settleDate,  taskGroupCode,  batchId);
+	}
+
 }
