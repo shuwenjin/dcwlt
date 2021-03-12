@@ -29,7 +29,7 @@ public class BankCoreProcessServiceImpl implements ICoreProcessService {
     private static final String TRANS_TYPE_CREDIT = "04";
 
     @Autowired
-    private IPayTransDtlInfoService payTransDtlInfoRepository;
+    private IPayTransDtlInfoService payTransDtlInfoService;
 
     @Autowired
     private BankCoreAccTxnServiceImpl bankCoreAccTxnServiceImpl;
@@ -37,12 +37,6 @@ public class BankCoreProcessServiceImpl implements ICoreProcessService {
 
     @Autowired
     private BankCoreImplDubboServiceImpl bankCoreImplDubboServiceImpl;
-
-    @Autowired
-    private IPayTransDtlInfoService payTransDtlInfoService;
-
-    @Autowired
-    private CoreEventServiceImpl coreEventServiceImpl;
 
     @Autowired
     private GenerateCodeServiceImpl generateCodeService;
@@ -134,7 +128,7 @@ public class BankCoreProcessServiceImpl implements ICoreProcessService {
                 throw new EcnyTransException(EcnyTransError.OTHER_TECH_ERROR);
             }
 
-            updateNum = payTransDtlInfoRepository.update(updateDO, stateMachine);
+            updateNum = payTransDtlInfoService.update(updateDO, stateMachine);
             if(updateNum != 1){
                 logger.error("回查核心后更新登记簿失败,平台日期：{}，平台流水：{}",
                         updateDO.getPayDate(),updateDO.getPaySerno() );
@@ -187,7 +181,7 @@ public class BankCoreProcessServiceImpl implements ICoreProcessService {
         updateDO.setCoreProcStatus(payTransDtlInfoDO.getCoreProcStatus());
         updateDO.setPathProcStatus(payTransDtlInfoDO.getPathProcStatus());
         try {
-            int updateNum = payTransDtlInfoRepository.update(updateDO, stateMachine);
+            int updateNum = payTransDtlInfoService.update(updateDO, stateMachine);
             if(updateNum != 1){
                 logger.error("终态通知差错贷记调账回查核心后更新登记簿失败,平台日期：{}，平台流水：{}",
                         updateDO.getPayDate(),updateDO.getPaySerno() );
@@ -233,7 +227,7 @@ public class BankCoreProcessServiceImpl implements ICoreProcessService {
         updateDO.setLastUpTime(DateUtil.getDefaultTime());
 
         try {
-            int updateNum = payTransDtlInfoRepository.update(updateDO, stateMachine);
+            int updateNum = payTransDtlInfoService.update(updateDO, stateMachine);
             if(updateNum != 1){
                 logger.error("差错调账回查核心后更新登记簿失败,平台日期：{}，平台流水：{}",
                         updateDO.getPayDate(),updateDO.getPaySerno() );
@@ -311,7 +305,7 @@ public class BankCoreProcessServiceImpl implements ICoreProcessService {
             // 更新账户流水表
             bankCoreAccTxnServiceImpl.insertCoreFlow(bankCore351100InnerReq, coreReqSerno, coreReqDate);
             // 更新金融交易表
-            int retCount = payTransDtlInfoRepository.update(payTransDtlInfoDO, stateMachine);
+            int retCount = payTransDtlInfoService.update(payTransDtlInfoDO, stateMachine);
             if (retCount != 1) {
                 logger.info("更新金融信息表失败");
                 throw new EcnyTransException(AppConstant.TRXSTATUS_FAILED, EcnyTransError.DATABASE_ERROR);
@@ -348,7 +342,7 @@ public class BankCoreProcessServiceImpl implements ICoreProcessService {
                 throw new EcnyTransException(AppConstant.TRXSTATUS_ABEND, EcnyTransError.DATABASE_ERROR);
             }
             // 更新金融交易表
-            retCount = payTransDtlInfoRepository.update(payTransDtlInfoDO, stateMachine);
+            retCount = payTransDtlInfoService.update(payTransDtlInfoDO, stateMachine);
             if (retCount != 1) {
                 logger.info("更新金融信息表失败");
                 throw new EcnyTransException(AppConstant.TRXSTATUS_ABEND, EcnyTransError.DATABASE_ERROR);
@@ -411,7 +405,7 @@ public class BankCoreProcessServiceImpl implements ICoreProcessService {
 
         try {
             bankCoreAccTxnServiceImpl.insertCoreFlow(bankCore351100InnerReq, bankCore351100InnerReq.getCoreReqSerno(), bankCore351100InnerReq.getCoreReqDate());
-            int updateNum = payTransDtlInfoRepository.update(payTransDtlInfoDO, stateMachine);
+            int updateNum = payTransDtlInfoService.update(payTransDtlInfoDO, stateMachine);
             if (updateNum != 1) {
                 logger.error("更新交易登记簿失败");
                 throw new EcnyTransException(EcnyTransError.OTHER_TECH_ERROR);
@@ -437,7 +431,7 @@ public class BankCoreProcessServiceImpl implements ICoreProcessService {
                 throw new EcnyTransException(EcnyTransError.DATABASE_ERROR);
             }
 
-            updateNum = payTransDtlInfoRepository.update(payTransDtlInfoDO, stateMachine);
+            updateNum = payTransDtlInfoService.update(payTransDtlInfoDO, stateMachine);
             if (updateNum != 1) {
                 logger.error("更新交易登记簿失败");
                 throw new EcnyTransException(EcnyTransError.OTHER_TECH_ERROR);

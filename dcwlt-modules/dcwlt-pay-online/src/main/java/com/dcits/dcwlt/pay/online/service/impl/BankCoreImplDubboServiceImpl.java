@@ -22,6 +22,7 @@ import com.dcits.dcwlt.common.pay.constant.Constant;
 import com.dcits.dcwlt.common.pay.exception.PlatformError;
 import com.dcits.dcwlt.common.pay.sequence.service.impl.GenerateCodeServiceImpl;
 import com.dcits.dcwlt.common.pay.util.APPUtil;
+import com.dcits.dcwlt.common.pay.util.DateUtil;
 import com.dcits.dcwlt.common.pay.util.IOCheckUtil;
 import com.dcits.dcwlt.pay.api.model.CoreTradeTypeDO;
 import org.apache.commons.lang3.StringUtils;
@@ -292,48 +293,53 @@ public class BankCoreImplDubboServiceImpl {
      */
     public BankCore351100InnerRsp coreServer(BankCoreReqHeader bankCoreReqHeader, BankCore351100InnerReq bankCore351100InnerReq) {
         // 核心请求日期
-        String coreReqDate = bankCore351100InnerReq.getCoreReqDate();
-        // 获取服务化调用请求流水 --核心请求流水
-        String seqNo = bankCore351100InnerReq.getCoreReqSerno();
-        Map<String, Object> map = initBankCore351100ReqMsg(bankCore351100InnerReq);
-        BankCore351100Req bankCore351100Req = null;
-        if (!map.isEmpty()) {
-            if ("0000".equals(map.get(Constant.CONSTANT_ERRORCODE))) {
-                bankCore351100Req = (BankCore351100Req) map.get("entity");
-            } else {
-                return new BankCore351100InnerRsp(Constant.CORESTATUS_FAILED, (String) map.get(Constant.CONSTANT_ERRORCODE),
-                        (String) map.get(Constant.CONSTANT_ERRORMSG));
-            }
-        } else {
-            return new BankCore351100InnerRsp(Constant.CORESTATUS_FAILED, "9999", "调用核心服务赋值失败");
-        }
-
-        // 构造服务化报文头
-        //Head head = bankCoreDubboService.bulidServerHead(seqNo, Constant.SRVCCODE_351100,
-          //      bankCore351100InnerReq.getSrcCnsmrSysId(), bankCore351100InnerReq.getSrcCnsmrSysSeqNo();
-
-        //应用设置重发标识为Y或者Q的时候则上送resdFlag,核心根据Y则做重发，Q则做查询
+//        String coreReqDate = bankCore351100InnerReq.getCoreReqDate();
+//        // 获取服务化调用请求流水 --核心请求流水
+//        String seqNo = bankCore351100InnerReq.getCoreReqSerno();
+//        Map<String, Object> map = initBankCore351100ReqMsg(bankCore351100InnerReq);
+//        BankCore351100Req bankCore351100Req = null;
+//        if (!map.isEmpty()) {
+//            if ("0000".equals(map.get(Constant.CONSTANT_ERRORCODE))) {
+//                bankCore351100Req = (BankCore351100Req) map.get("entity");
+//            } else {
+//                return new BankCore351100InnerRsp(Constant.CORESTATUS_FAILED, (String) map.get(Constant.CONSTANT_ERRORCODE),
+//                        (String) map.get(Constant.CONSTANT_ERRORMSG));
+//            }
+//        } else {
+//            return new BankCore351100InnerRsp(Constant.CORESTATUS_FAILED, "9999", "调用核心服务赋值失败");
+//        }
+//
+//        // 构造服务化报文头
+//        Head head = bankCoreDubboService.bulidServerHead(seqNo, Constant.SRVCCODE_351100,
+//                bankCore351100InnerReq.getSrcCnsmrSysId(), bankCore351100InnerReq.getSrcCnsmrSysSeqNo();
+//
+//        应用设置重发标识为Y或者Q的时候则上送resdFlag,核心根据Y则做重发，Q则做查询
 //        if (StringUtils.equalsAny(bankCore351100InnerReq.getResendFlag(), "Q")) {
 //            head.setResdFlag(bankCore351100InnerReq.getResendFlag());
 //        }
-
-        // 获取核心请求报文
-       // BankCoreReqMessage msg = bankCoreDubboService.buildBankCoreMessage(bankCoreReqHeader, bankCore351100Req, null);
-
-        // 请求核心并返回响应报文实体
-        //BankCoreRspMessage<BankCore351100Rsp, IBankCoreBodyArrayInfo> rspMsg = bankCoreDubboService.bankCoreRequest(msg,
-            //    BankCore351100Rsp.class, BankCore351100ArrayInfoReq.class);
-
-        // 核心网关超时 核心不返回请求日期、流水 需手动先设置
-        //Head rspHead = rspMsg.getHead();
-
+//
+//         //获取核心请求报文
+//        BankCoreReqMessage msg = bankCoreDubboService.buildBankCoreMessage(bankCoreReqHeader, bankCore351100Req, null);
+//
+//         //请求核心并返回响应报文实体
+//        BankCoreRspMessage<BankCore351100Rsp, IBankCoreBodyArrayInfo> rspMsg = bankCoreDubboService.bankCoreRequest(msg,
+//                BankCore351100Rsp.class, BankCore351100ArrayInfoReq.class);
+//
+//         //核心网关超时 核心不返回请求日期、流水 需手动先设置
+//        Head rspHead = rspMsg.getHead();
+//
 //        rspHead.setTranDate(coreReqDate);
 //        rspHead.setSeqNo(seqNo);
-
-        // 处理返回结果
-       // return dealRspCoreMsg(rspMsg, bankCore351100InnerReq.getReqType());
-
-        return  null;
+//
+//         //处理返回结果
+//        return dealRspCoreMsg(rspMsg, bankCore351100InnerReq.getReqType());
+        BankCore351100InnerRsp bankCore351100InnerRsp = new BankCore351100InnerRsp();
+        bankCore351100InnerRsp.setCoreRspSerno("12334");
+        bankCore351100InnerRsp.setCoreStatus("1");
+        bankCore351100InnerRsp.setErrorCode("CI0016");
+        bankCore351100InnerRsp.setErrorMsg("客户名称不一致");
+        bankCore351100InnerRsp.setCoreRspDate(DateUtil.getDefaultDate());
+        return  bankCore351100InnerRsp;
 
     }
 
