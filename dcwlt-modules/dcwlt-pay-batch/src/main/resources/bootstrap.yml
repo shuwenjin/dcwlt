@@ -30,7 +30,15 @@ ency:
     task:
       execute:
         threads: 16
-
+  #报文标示号数量
+  check:
+    wrong:
+      max:
+        count: 100
+  #文件加载路径
+  sql:
+    load:
+      path:
 # 协议
 sftp:
   client:
