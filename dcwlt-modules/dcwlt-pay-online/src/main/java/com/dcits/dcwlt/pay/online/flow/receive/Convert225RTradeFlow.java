@@ -53,7 +53,7 @@ public class Convert225RTradeFlow {
     private SignInfoMapper signInfoRepository;
 
     @Autowired
-    private IPayTransDtlInfoRepository payTransDtlInfoRepository;
+    private IPayTransDtlInfo1Service payTransDtlInfoRepository;
 
     @Autowired
     private BankCoreImplDubboService bankCoreImplDubboService;

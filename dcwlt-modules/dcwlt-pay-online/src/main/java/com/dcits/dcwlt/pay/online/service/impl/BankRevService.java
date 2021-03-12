@@ -9,7 +9,7 @@ import com.dcits.dcwlt.common.pay.channel.bankcore.dto.bankcore998889.BankCore99
 import com.dcits.dcwlt.pay.online.exception.EcnyTransError;
 import com.dcits.dcwlt.pay.online.exception.EcnyTransException;
 import com.dcits.dcwlt.pay.online.service.IEventService;
-import com.dcits.dcwlt.pay.online.service.IPayTransDtlInfoRepository;
+import com.dcits.dcwlt.pay.online.service.IPayTransDtlInfo1Service;
 import org.apache.commons.lang3.StringUtils;
 import org.mybatis.logging.Logger;
 import org.mybatis.logging.LoggerFactory;
@@ -42,7 +42,7 @@ public class BankRevService implements IEventService {
     private GenerateCodeServiceImpl generateCodeService;
 
     @Autowired
-    private IPayTransDtlInfoRepository payTransDtlInfoRepository;
+    private IPayTransDtlInfo1Service payTransDtlInfoRepository;
 
 //    @Autowired
 //    private BankCoreDubboService bankCoreDubboService;

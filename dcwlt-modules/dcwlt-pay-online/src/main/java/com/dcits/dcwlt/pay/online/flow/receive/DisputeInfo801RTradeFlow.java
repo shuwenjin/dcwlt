@@ -29,6 +29,7 @@ import com.dcits.dcwlt.pay.online.flow.builder.EcnyTradeFlowBuilder;
 import com.dcits.dcwlt.pay.online.service.*;
 import com.dcits.dcwlt.pay.online.service.impl.BankCoreAccTxnService;
 import com.dcits.dcwlt.pay.online.service.impl.CoreEventService;
+import com.dcits.dcwlt.pay.online.service.impl.ECNYSerNoService;
 import com.dcits.dcwlt.pay.online.service.impl.ParamConfigCheckService;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
@@ -59,7 +60,7 @@ public class DisputeInfo801RTradeFlow {
     private GenerateCodeServiceImpl generateCodeService;
 
     @Autowired
-    private IPayTransDtlInfoRepository payTransDtlInfoRepository;
+    private IPayTransDtlInfo1Service payTransDtlInfoRepository;
 
     @Autowired
     private IPartyService partyService;
