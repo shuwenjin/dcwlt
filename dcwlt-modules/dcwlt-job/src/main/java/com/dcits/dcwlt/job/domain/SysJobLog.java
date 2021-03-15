@@ -1,6 +1,8 @@
 package com.dcits.dcwlt.job.domain;
 
 import java.util.Date;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 import com.dcits.dcwlt.common.core.annotation.Excel;
@@ -22,6 +24,18 @@ public class SysJobLog extends BaseEntity
     /** 任务ID */
     @Excel(name = "任务序号", cellType = Excel.ColumnType.NUMERIC)
     private Long jobId;
+
+    /** 父实例ID */
+    @Excel(name = "父实例序号", cellType = Excel.ColumnType.NUMERIC)
+    private Long fid;
+
+    /** 父任务ID*/
+    @Excel(name = "父任务序号", cellType = Excel.ColumnType.NUMERIC)
+    private Long fjobId;
+
+    /** 任务类型（0父任务 1子任务） */
+    @Excel(name = "任务类型", readConverterExp = "0=父任务,1=子任务")
+    private String jobType;
 
     /** 任务名称 */
     @Excel(name = "任务名称")
@@ -48,10 +62,18 @@ public class SysJobLog extends BaseEntity
     private String exceptionInfo;
 
     /** 开始时间 */
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @Excel(name = "开始时间", width = 30, dateFormat = "yyyy-MM-dd HH:mm:ss")
     private Date startTime;
 
     /** 停止时间 */
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @Excel(name = "停止时间", width = 30, dateFormat = "yyyy-MM-dd HH:mm:ss")
     private Date stopTime;
+
+    /** 执行返回值 */
+    @Excel(name = "执行返回值")
+    private String excuteRet;
 
     public Long getJobLogId()
     {
@@ -153,18 +175,54 @@ public class SysJobLog extends BaseEntity
         this.stopTime = stopTime;
     }
 
+    public Long getFid() {
+        return fid;
+    }
+
+    public void setFid(Long fid) {
+        this.fid = fid;
+    }
+
+    public Long getFjobId() {
+        return fjobId;
+    }
+
+    public void setFjobId(Long fjobId) {
+        this.fjobId = fjobId;
+    }
+
+    public String getJobType() {
+        return jobType;
+    }
+
+    public void setJobType(String jobType) {
+        this.jobType = jobType;
+    }
+
+    public String getExcuteRet() {
+        return excuteRet;
+    }
+
+    public void setExcuteRet(String excuteRet) {
+        this.excuteRet = excuteRet;
+    }
+
     @Override
     public String toString() {
-        return new ToStringBuilder(this,ToStringStyle.MULTI_LINE_STYLE)
-            .append("jobLogId", getJobLogId())
-            .append("jobId", getJobId())
-            .append("jobName", getJobName())
-            .append("jobGroup", getJobGroup())
-            .append("jobMessage", getJobMessage())
-            .append("status", getStatus())
-            .append("exceptionInfo", getExceptionInfo())
-            .append("startTime", getStartTime())
-            .append("stopTime", getStopTime())
-            .toString();
+        return "SysJobLog{" +
+                "jobLogId=" + jobLogId +
+                ", jobId=" + jobId +
+                ", fid=" + fid +
+                ", fjobId=" + fjobId +
+                ", jobType='" + jobType + '\'' +
+                ", jobName='" + jobName + '\'' +
+                ", jobGroup='" + jobGroup + '\'' +
+                ", invokeTarget='" + invokeTarget + '\'' +
+                ", jobMessage='" + jobMessage + '\'' +
+                ", status='" + status + '\'' +
+                ", exceptionInfo='" + exceptionInfo + '\'' +
+                ", startTime=" + startTime +
+                ", stopTime=" + stopTime +
+                '}';
     }
 }

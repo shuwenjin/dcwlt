@@ -12,12 +12,20 @@ import com.dcits.dcwlt.job.domain.SysJob;
 public interface SysJobMapper
 {
     /**
-     * 查询调度任务日志集合
+     * 查询调度任务集合
      * 
      * @param job 调度信息
-     * @return 操作日志集合
+     * @return 调度任务集合
      */
     public List<SysJob> selectJobList(SysJob job);
+
+    /**
+     * 查询失败重试调度任务集合
+     * 
+     * @param job 调度信息
+     * @return 调度任务集合
+     */
+    public List<SysJob> selectRetryJobList(SysJob job);
 
     /**
      * 查询所有调度任务
@@ -25,6 +33,13 @@ public interface SysJobMapper
      * @return 调度任务列表
      */
     public List<SysJob> selectJobAll();
+
+    /**
+     * 查询所有失败重试调度任务
+     * 
+     * @return 调度任务列表
+     */
+    public List<SysJob> selectRetryJobAll();
 
     /**
      * 通过调度ID查询调度任务信息
@@ -57,6 +72,13 @@ public interface SysJobMapper
      * @return 结果
      */
     public int updateJob(SysJob job);
+
+    /**
+     * 获取自增主键jobId的下一个自增值
+     *
+     * @return
+     */
+    public Long nextJobId();
 
     /**
      * 新增调度任务信息

@@ -18,7 +18,7 @@ public class SysJobLogServiceImpl implements ISysJobLogService
     private SysJobLogMapper jobLogMapper;
 
     /**
-     * 获取quartz调度器日志的计划任务
+     * 调度任务日志查询
      * 
      * @param jobLog 调度日志信息
      * @return 调度任务日志集合
@@ -27,6 +27,18 @@ public class SysJobLogServiceImpl implements ISysJobLogService
     public List<SysJobLog> selectJobLogList(SysJobLog jobLog)
     {
         return jobLogMapper.selectJobLogList(jobLog);
+    }
+
+    /**
+     * 失败重试调度任务日志查询
+     * 
+     * @param jobLog 调度日志信息
+     * @return 调度任务日志集合
+     */
+    @Override
+    public List<SysJobLog> selectRetryJobLogList(SysJobLog jobLog)
+    {
+        return jobLogMapper.selectRetryJobLogList(jobLog);
     }
 
     /**
@@ -39,6 +51,16 @@ public class SysJobLogServiceImpl implements ISysJobLogService
     public SysJobLog selectJobLogById(Long jobLogId)
     {
         return jobLogMapper.selectJobLogById(jobLogId);
+    }
+
+    /**
+     * 获取自增主键jobLogId的下一个自增值
+     *
+     * @return
+     */
+    @Override
+    public Long nextJobLogId() {
+        return jobLogMapper.nextJobLogId();
     }
 
     /**

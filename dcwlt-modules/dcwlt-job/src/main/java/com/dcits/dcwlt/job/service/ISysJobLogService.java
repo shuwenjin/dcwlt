@@ -11,12 +11,20 @@ import com.dcits.dcwlt.job.domain.SysJobLog;
 public interface ISysJobLogService
 {
     /**
-     * 获取quartz调度器日志的计划任务
+     * 调度任务日志查询
      * 
      * @param jobLog 调度日志信息
      * @return 调度任务日志集合
      */
     public List<SysJobLog> selectJobLogList(SysJobLog jobLog);
+
+    /**
+     * 失败重试调度任务日志查询
+     * 
+     * @param jobLog 调度日志信息
+     * @return 调度任务日志集合
+     */
+    public List<SysJobLog> selectRetryJobLogList(SysJobLog jobLog);
 
     /**
      * 通过调度任务日志ID查询调度信息
@@ -25,6 +33,13 @@ public interface ISysJobLogService
      * @return 调度任务日志对象信息
      */
     public SysJobLog selectJobLogById(Long jobLogId);
+
+    /**
+     * 获取自增主键jobLogId的下一个自增值
+     *
+     * @return
+     */
+    public Long nextJobLogId();
 
     /**
      * 新增任务日志

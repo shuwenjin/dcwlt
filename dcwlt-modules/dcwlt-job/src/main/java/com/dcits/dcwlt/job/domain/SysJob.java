@@ -28,6 +28,18 @@ public class SysJob extends BaseEntity implements Serializable
     @Excel(name = "任务序号", cellType = ColumnType.NUMERIC)
     private Long jobId;
 
+    /** 父实例ID */
+    @Excel(name = "父实例序号", cellType = ColumnType.NUMERIC)
+    private Long fid;
+
+    /** 父任务ID*/
+    @Excel(name = "父任务序号", cellType = ColumnType.NUMERIC)
+    private Long fjobId;
+
+    /** 任务类型（0父任务 1子任务） */
+    @Excel(name = "任务类型", readConverterExp = "0=父任务,1=子任务")
+    private String jobType;
+
     /** 任务名称 */
     @Excel(name = "任务名称")
     private String jobName;
@@ -67,6 +79,14 @@ public class SysJob extends BaseEntity implements Serializable
     /** 重试最大次数 */
     @Excel(name = "重试最大次数")
     private Integer retryMaxNum;
+
+    /** 重试是否成功（0成功 1失败） */
+    @Excel(name = "重试是否成功", readConverterExp = "0=成功,1=失败")
+    private String retryJobStatus;
+
+    /** 当前重试次数 */
+    @Excel(name = "当前重试次数")
+    private Integer retryNum;
 
     public Long getJobId()
     {
@@ -173,6 +193,7 @@ public class SysJob extends BaseEntity implements Serializable
     {
         return retryCron;
     }
+
     public void setRetryStatus(String retryStatus)
     {
         this.retryStatus = retryStatus;
@@ -182,6 +203,7 @@ public class SysJob extends BaseEntity implements Serializable
     {
         return retryStatus;
     }
+
     public void setRetryMaxNum(Integer retryMaxNum)
     {
         this.retryMaxNum = retryMaxNum;
@@ -192,25 +214,65 @@ public class SysJob extends BaseEntity implements Serializable
         return retryMaxNum;
     }
 
+    public Long getFid() {
+        return fid;
+    }
+
+    public void setFid(Long fid) {
+        this.fid = fid;
+    }
+
+    public Long getFjobId() {
+        return fjobId;
+    }
+
+    public void setFjobId(Long fjobId) {
+        this.fjobId = fjobId;
+    }
+
+    public String getJobType() {
+        return jobType;
+    }
+
+    public void setJobType(String jobType) {
+        this.jobType = jobType;
+    }
+
+    public String getRetryJobStatus() {
+        return retryJobStatus;
+    }
+
+    public void setRetryJobStatus(String retryJobStatus) {
+        this.retryJobStatus = retryJobStatus;
+    }
+
+    public Integer getRetryNum() {
+        return retryNum;
+    }
+
+    public void setRetryNum(Integer retryNum) {
+        this.retryNum = retryNum;
+    }
+
     @Override
     public String toString() {
-        return new ToStringBuilder(this,ToStringStyle.MULTI_LINE_STYLE)
-            .append("jobId", getJobId())
-            .append("jobName", getJobName())
-            .append("jobGroup", getJobGroup())
-            .append("cronExpression", getCronExpression())
-            .append("nextValidTime", getNextValidTime())
-            .append("misfirePolicy", getMisfirePolicy())
-            .append("concurrent", getConcurrent())
-            .append("status", getStatus())
-            .append("retryCron", getRetryCron())
-            .append("retryStatus", getRetryStatus())
-            .append("retryMaxNum", getRetryMaxNum())
-            .append("createBy", getCreateBy())
-            .append("createTime", getCreateTime())
-            .append("updateBy", getUpdateBy())
-            .append("updateTime", getUpdateTime())
-            .append("remark", getRemark())
-            .toString();
+        return "SysJob{" +
+                "jobId=" + jobId +
+                ", fid=" + fid +
+                ", fjobId=" + fjobId +
+                ", jobType='" + jobType + '\'' +
+                ", jobName='" + jobName + '\'' +
+                ", jobGroup='" + jobGroup + '\'' +
+                ", invokeTarget='" + invokeTarget + '\'' +
+                ", cronExpression='" + cronExpression + '\'' +
+                ", misfirePolicy='" + misfirePolicy + '\'' +
+                ", concurrent='" + concurrent + '\'' +
+                ", status='" + status + '\'' +
+                ", retryCron='" + retryCron + '\'' +
+                ", retryStatus='" + retryStatus + '\'' +
+                ", retryMaxNum=" + retryMaxNum +
+                ", retryJobStatus='" + retryJobStatus + '\'' +
+                ", retryNum=" + retryNum +
+                '}';
     }
 }

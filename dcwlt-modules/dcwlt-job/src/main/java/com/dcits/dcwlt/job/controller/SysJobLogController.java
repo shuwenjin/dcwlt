@@ -45,6 +45,18 @@ public class SysJobLogController extends BaseController
     }
 
     /**
+     * 查询定时任务调度日志列表
+     */
+    @PreAuthorize(hasPermi = "monitor:job:list")
+    @GetMapping("/retryList")
+    public TableDataInfo retryList(SysJobLog sysJobLog)
+    {
+        startPage();
+        List<SysJobLog> list = jobLogService.selectRetryJobLogList(sysJobLog);
+        return getDataTable(list);
+    }
+
+    /**
      * 导出定时任务调度日志列表
      */
     @PreAuthorize(hasPermi = "monitor:job:export")

@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.List;
 import javax.servlet.http.HttpServletResponse;
 
+import com.dcits.dcwlt.common.core.constant.SysJobConstants;
 import com.dcits.dcwlt.common.core.exception.job.TaskException;
 import org.quartz.SchedulerException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -52,6 +53,18 @@ public class SysJobController extends BaseController
     }
 
     /**
+     * 查询定时任务列表
+     */
+    @PreAuthorize(hasPermi = "monitor:job:list")
+    @GetMapping("/retryList")
+    public TableDataInfo retryList(SysJob sysJob)
+    {
+        startPage();
+        List<SysJob> list = jobService.selectRetryJobList(sysJob);
+        return getDataTable(list);
+    }
+
+    /**
      * 导出定时任务列表
      */
     @PreAuthorize(hasPermi = "monitor:job:export")
@@ -91,6 +104,8 @@ public class SysJobController extends BaseController
             return AjaxResult.error("失败重试cron表达式不正确");
         }
         sysJob.setCreateBy(SecurityUtils.getUsername());
+        // 设置任务类型为主任务
+        sysJob.setJobType(SysJobConstants.MAINJOB);
         return toAjax(jobService.insertJob(sysJob));
     }
 

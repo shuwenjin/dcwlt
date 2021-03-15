@@ -22,6 +22,14 @@ public interface ISysJobService
     public List<SysJob> selectJobList(SysJob job);
 
     /**
+     * 获取quartz调度器的失败重试计划任务
+     * 
+     * @param job 调度信息
+     * @return 调度任务集合
+     */
+    public List<SysJob> selectRetryJobList(SysJob job);
+
+    /**
      * 通过调度任务ID查询调度信息
      * 
      * @param jobId 调度任务ID
@@ -70,6 +78,13 @@ public interface ISysJobService
     public int deleteJob(SysJob job) throws SchedulerException;
 
     /**
+     * 删除quartz计划任务
+     * @param job
+     * @throws SchedulerException
+     */
+    public void deleteSchedulerJob(SysJob job) throws SchedulerException;
+
+    /**
      * 批量删除调度信息
      * 
      * @param jobIds 需要删除的任务ID
@@ -103,6 +118,13 @@ public interface ISysJobService
     public void run(SysJob job) throws SchedulerException;
 
     /**
+     * 获取自增主键jobId的下一个自增值
+     *
+     * @return
+     */
+    public Long nextJobId();
+
+    /**
      * 新增任务
      * 
      * @param job 调度信息
@@ -130,7 +152,6 @@ public interface ISysJobService
      * 更新失败重试任务
      *
      * @param job 任务对象
-     * @param jobGroup 任务组名
      */
-    public void updateSchedulerRetryJob(SysJob job, String jobGroup) throws SchedulerException, TaskException;
+    public void createSchedulerRetryJob(SysJob job) throws SchedulerException, TaskException;
 }

@@ -21,8 +21,9 @@ public class JobInvokeUtil
      *
      * @param sysJob 系统任务
      */
-    public static void invokeMethod(SysJob sysJob) throws Exception
+    public static Object invokeMethod(SysJob sysJob) throws Exception
     {
+        Object ret = null;
         String invokeTarget = sysJob.getInvokeTarget();
         String beanName = getBeanName(invokeTarget);
         String methodName = getMethodName(invokeTarget);
@@ -31,13 +32,14 @@ public class JobInvokeUtil
         if (!isValidClassName(beanName))
         {
             Object bean = SpringUtils.getBean(beanName);
-            invokeMethod(bean, methodName, methodParams);
+            ret = invokeMethod(bean, methodName, methodParams);
         }
         else
         {
             Object bean = Class.forName(beanName).newInstance();
-            invokeMethod(bean, methodName, methodParams);
+            ret = invokeMethod(bean, methodName, methodParams);
         }
+        return ret;
     }
 
     /**
@@ -47,20 +49,24 @@ public class JobInvokeUtil
      * @param methodName 方法名称
      * @param methodParams 方法参数
      */
-    private static void invokeMethod(Object bean, String methodName, List<Object[]> methodParams)
+    private static Object invokeMethod(Object bean, String methodName, List<Object[]> methodParams)
             throws NoSuchMethodException, SecurityException, IllegalAccessException, IllegalArgumentException,
             InvocationTargetException
     {
+        Object ret = null;
+
         if (StringUtils.isNotNull(methodParams) && methodParams.size() > 0)
         {
             Method method = bean.getClass().getDeclaredMethod(methodName, getMethodParamsType(methodParams));
-            method.invoke(bean, getMethodParamsValue(methodParams));
+            ret = method.invoke(bean, getMethodParamsValue(methodParams));
         }
         else
         {
             Method method = bean.getClass().getDeclaredMethod(methodName);
-            method.invoke(bean);
+            ret = method.invoke(bean);
         }
+
+        return ret;
     }
 
     /**

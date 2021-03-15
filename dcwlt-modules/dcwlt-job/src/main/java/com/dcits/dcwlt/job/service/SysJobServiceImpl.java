@@ -4,6 +4,7 @@ import java.util.List;
 import javax.annotation.PostConstruct;
 
 import com.dcits.dcwlt.common.core.constant.ScheduleConstants;
+import com.dcits.dcwlt.common.core.constant.SysJobConstants;
 import com.dcits.dcwlt.common.core.exception.job.TaskException;
 import org.quartz.JobDataMap;
 import org.quartz.JobKey;
@@ -58,6 +59,18 @@ public class SysJobServiceImpl implements ISysJobService
     }
 
     /**
+     * 获取quartz调度器的失败重试计划任务列表
+     * 
+     * @param job 调度信息
+     * @return
+     */
+    @Override
+    public List<SysJob> selectRetryJobList(SysJob job)
+    {
+        return jobMapper.selectRetryJobList(job);
+    }
+
+    /**
      * 通过调度任务ID查询调度信息
      * 
      * @param jobId 调度任务ID
@@ -104,7 +117,7 @@ public class SysJobServiceImpl implements ISysJobService
         int rows = jobMapper.updateJob(job);
         if (rows > 0)
         {
-            scheduler.pauseJob(ScheduleUtils.getRetryJobKey(jobId, jobGroup));
+            scheduler.pauseJob(ScheduleUtils.getJobKey(jobId, jobGroup));
         }
         return rows;
     }
@@ -144,7 +157,7 @@ public class SysJobServiceImpl implements ISysJobService
         int rows = jobMapper.updateJob(job);
         if (rows > 0)
         {
-            scheduler.resumeJob(ScheduleUtils.getRetryJobKey(jobId, jobGroup));
+            scheduler.resumeJob(ScheduleUtils.getJobKey(jobId, jobGroup));
         }
         return rows;
     }
@@ -164,9 +177,21 @@ public class SysJobServiceImpl implements ISysJobService
         if (rows > 0)
         {
             scheduler.deleteJob(ScheduleUtils.getJobKey(jobId, jobGroup));
-            scheduler.deleteJob(ScheduleUtils.getRetryJobKey(jobId, jobGroup));
         }
         return rows;
+    }
+
+    /**
+     * 删除quartz计划任务
+     * @param job
+     * @throws SchedulerException
+     */
+    @Override
+    public void deleteSchedulerJob(SysJob job) throws SchedulerException
+    {
+        Long jobId = job.getJobId();
+        String jobGroup = job.getJobGroup();
+        scheduler.deleteJob(ScheduleUtils.getJobKey(jobId, jobGroup));
     }
 
     /**
@@ -255,6 +280,16 @@ public class SysJobServiceImpl implements ISysJobService
     }
 
     /**
+     * 获取自增主键jobId的下一个自增值
+     *
+     * @return
+     */
+    @Override
+    public Long nextJobId() {
+        return jobMapper.nextJobId();
+    }
+
+    /**
      * 新增任务
      * 
      * @param job 调度信息 调度信息
@@ -263,14 +298,16 @@ public class SysJobServiceImpl implements ISysJobService
     @Transactional
     public int insertJob(SysJob job) throws SchedulerException, TaskException
     {
-        job.setStatus(ScheduleConstants.Status.PAUSE.getValue());
-        // 失败重试状态初始化为暂停，当主任务失败时触发
-        job.setRetryStatus(ScheduleConstants.Status.PAUSE.getValue());
+        if (SysJobConstants.MAINJOB.equals(job.getJobType())) {
+            job.setStatus(ScheduleConstants.Status.PAUSE.getValue());
+        }
+
         int rows = jobMapper.insertJob(job);
         if (rows > 0)
         {
-            ScheduleUtils.createScheduleJob(scheduler, job);
-            ScheduleUtils.createScheduleRetryJob(scheduler, job);
+            if (SysJobConstants.MAINJOB.equals(job.getJobType())) {
+                ScheduleUtils.createScheduleJob(scheduler, job);
+            }
         }
         return rows;
     }
@@ -305,13 +342,12 @@ public class SysJobServiceImpl implements ISysJobService
     }
 
     /**
-     * 更新失败重试任务
+     * 创建失败重试任务
      *
      * @param job 任务对象
-     * @param jobGroup 任务组名
      */
     @Override
-    public void updateSchedulerRetryJob(SysJob job, String jobGroup) throws SchedulerException, TaskException
+    public void createSchedulerRetryJob(SysJob job) throws SchedulerException, TaskException
     {
         ScheduleUtils.createScheduleRetryJob(scheduler, job);
     }

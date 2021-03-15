@@ -99,7 +99,6 @@
     <el-table v-loading="loading" :data="jobLogList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
       <el-table-column label="日志编号" width="80" align="center" prop="jobLogId" />
-      <el-table-column label="任务编号" width="80" align="center" prop="jobId" />
       <el-table-column label="任务名称" align="center" prop="jobName" :show-overflow-tooltip="true" />
       <el-table-column label="任务组名" align="center" prop="jobGroup" :formatter="jobGroupFormat" :show-overflow-tooltip="true" />
       <el-table-column label="调用目标字符串" align="center" prop="invokeTarget" :show-overflow-tooltip="true" />
@@ -135,11 +134,8 @@
     <el-dialog title="调度日志详细" :visible.sync="open" width="700px" append-to-body>
       <el-form ref="form" :model="form" label-width="100px" size="mini">
         <el-row>
-          <el-col :span="24">
-            <el-form-item label="日志序号：">{{ form.jobLogId }}</el-form-item>
-          </el-col>
           <el-col :span="12">
-            <el-form-item label="任务编号：">{{ form.jobId }}</el-form-item>
+            <el-form-item label="日志序号：">{{ form.jobLogId }}</el-form-item>
             <el-form-item label="任务名称：">{{ form.jobName }}</el-form-item>
           </el-col>
           <el-col :span="12">

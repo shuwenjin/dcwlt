@@ -104,6 +104,33 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils
     }
 
     /**
+     * 日期路径 按照parsePatterns数组里格式进行格式化日期
+     */
+    public static final String dateTime(String pattern)
+    {
+        if (isVaildPattern(pattern)) {
+            Date now = new Date();
+            return DateFormatUtils.format(now, pattern);
+        } else {
+            return null;
+        }
+    }
+
+    /**
+     * 日期格式串正确性校验
+     * @param pattern
+     * @return
+     */
+    public static boolean isVaildPattern(String pattern) {
+        for (String str : parsePatterns) {
+            if (str.equals(pattern)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
      * 日期型字符串转化为日期 格式
      */
     public static Date parseDate(Object str)
