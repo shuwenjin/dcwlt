@@ -1,6 +1,7 @@
 package com.dcits.dcwlt.pay.batch.service.impl;
 
 
+import com.dcits.dcwlt.common.core.utils.SpringUtils;
 import com.dcits.dcwlt.common.pay.enums.TaskExecStatusEnum;
 import com.dcits.dcwlt.common.pay.enums.SettleTaskErrorEnum;
 import com.dcits.dcwlt.common.pay.exception.SettleTaskException;
@@ -260,10 +261,12 @@ public class SettleTaskExecServiceImpl implements ISettleTaskExecService {
 		
 		ISettleTask settleTask = null;
 		try {
+
 			Class<?> clazz = Class.forName(taskClassName);
 //			
 //			settleTask = (ISettleTask)clazz.newInstance();
-			Object bean = clazz.newInstance();
+			//Object bean = clazz.newInstance();
+			Object bean = SpringUtils.getBean(clazz);
 			settleTask = (ISettleTask) bean;
 		} catch (Exception e) {
 			logger.error("加载任务执行任务失败", e);
