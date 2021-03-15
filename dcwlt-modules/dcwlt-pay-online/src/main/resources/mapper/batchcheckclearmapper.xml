@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dcits.dcwlt.pay.online.mapper.BatchCheckClearMapper">
+
+    <!-- 根据报文标识号查询资金调整汇总核对信息 -->
+    <select id="findBatchCheckClear" resultType="com.dcits.dcwlt.pay.api.model.BatchCheckClearDO">
+        SELECT
+        MSGID ,
+        SENDERDATETIME ,
+        INSTGDRCTPTY ,
+        INSTDDRCTPTY ,
+        REMARK ,
+        CLEARDATE ,
+        CLEARCOUNTNUM ,
+        CLEARDBTTOTAMT ,
+        CLEARCBTTOTAMT ,
+        CLEARNETNUM ,
+        CLEARMSGID ,
+        CLEARDRCT ,
+        CLEARAMT ,
+        BATCHID ,
+        BATCHDRCT ,
+        BATCHNETAMT ,
+        LASTUPDATE ,
+        LASTUPTIME
+        FROM pay_online_checkclear
+        <where>
+            <if test="msgId != null">
+                MSGID = #{msgId}
+            </if>
+            <if test="clearNetNum != null">
+                AND CLEARNETNUM = #{clearNetNum}
+            </if>
+            <if test="batchId != null">
+                AND BATCHID = #{batchId}
+            </if>
+        </where>
+    </select>
+
+    <!-- 插入资金调整汇总核对信息-->
+    <insert id="addBatchCheckClear">
+        INSERT INTO pay_online_checkclear(
+        MSGID,
+        SENDERDATETIME,
+        INSTGDRCTPTY,
+        INSTDDRCTPTY,
+        REMARK,
+        CLEARDATE,
+        CLEARCOUNTNUM,
+        CLEARDBTTOTAMT,
+        CLEARCBTTOTAMT,
+        CLEARNETNUM,
+        CLEARMSGID,
+        CLEARDRCT,
+        CLEARAMT,
+        BATCHID,
+        BATCHDRCT,
+        BATCHNETAMT,
+        LASTUPDATE,
+        LASTUPTIME
+        )
+        VALUE(
+        #{msgId},
+        #{senderDateTime},
+        #{instgDrctPty},
+        #{instdDrctPty},
+        #{remark},
+        #{clearDate},
+        #{clearCountNum},
+        #{clearDbtTotAmt},
+        #{clearCbtTotAmt},
+        #{clearNetNum},
+        #{clearMsgId},
+        #{clearDrct},
+        #{clearAmt},
+        #{batchId},
+        #{batchDrct},
+        #{batchNetAmt},
+        #{lastUpDate},
+        #{lastUpTime}
+        )
+    </insert>
+</mapper>
