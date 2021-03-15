@@ -20,6 +20,7 @@ import com.dcits.dcwlt.pay.online.exception.EcnyTransError;
 import com.dcits.dcwlt.pay.online.exception.EcnyTransException;
 import com.dcits.dcwlt.pay.online.flow.builder.EcnyTradeContext;
 import com.dcits.dcwlt.pay.online.flow.builder.EcnyTradeFlowBuilder;
+import com.dcits.dcwlt.pay.online.flow.builder.TradeFlowRuner;
 import com.dcits.dcwlt.pay.online.mapper.SignJrnMapper;
 import com.dcits.dcwlt.pay.online.service.IAuthInfoService;
 import com.dcits.dcwlt.pay.online.service.impl.BankAccountVerifyService;
@@ -103,7 +104,7 @@ public class BankAttAcctManage433RTradeFlow {
 
     private static final String DEBIT_CARD_TYPE = "借记卡";
 
-
+//Todo
 //    @Autowired
 //    private SmsService smsService;
 
@@ -127,7 +128,7 @@ public class BankAttAcctManage433RTradeFlow {
 
     @Autowired
     private IAuthInfoService authInfoService;
-
+//
 //    @Autowired
 //    private ECIFService ecifService;
 
@@ -314,10 +315,10 @@ public class BankAttAcctManage433RTradeFlow {
             throw new EcnyTransException(EcnyTransError.UN_SUPPORTED_MANAGEMENT_TP);
         }
         //检查钱包类型 2021/1/13确定不用校验钱包类型
-//        if (!(WalletTpCdEnum.WT01.getCode().equals(walletTp) || WalletTpCdEnum.WT02.getCode().equals(walletTp))) {
-//            logger.error("不支持{}钱包类型,本次请求报文标识号为：{}", walletTp, reqBody.getGrpHdr().getMsgId());
-//            throw new EcnyTransException(EcnyTransError.UN_SUPPORTED_WALLET_TP);
-//        }
+        if (!(WalletTpCdEnum.WT01.getCode().equals(walletTp) || WalletTpCdEnum.WT02.getCode().equals(walletTp))) {
+            logger.error("不支持{}钱包类型,本次请求报文标识号为：{}", walletTp, reqBody.getGrpHdr().getMsgId());
+            throw new EcnyTransException(EcnyTransError.UN_SUPPORTED_WALLET_TP);
+        }
         //暂不支持只做身份认证的交易
         if (ManagementTpCdEnum.MT01.getCode().equals(manageTp) && SignTpCdEnum.SG00.getCode().equals(reqBody.getSgnInf().getSgnTp())) {
             logger.error("不支持只做身份认证的交易,本次请求报文标识号为：{}", reqBody.getGrpHdr().getMsgId());
@@ -348,8 +349,8 @@ public class BankAttAcctManage433RTradeFlow {
         BankAttAcctReq reqBody = getReqBody(tradeContext);
         String manageTp = reqBody.getMgmtTp();
         TradeFlow tradeFlow = getStrategy(manageTp);
-        //Todo
-//        TradeFlowRuner.execute(tradeFlow, tradeContext);
+
+        TradeFlowRuner.execute(tradeFlow, tradeContext);
     }
 
     /**
@@ -426,7 +427,7 @@ public class BankAttAcctManage433RTradeFlow {
             throw new EcnyTransException(EcnyTransError.INVALID_ACCT_STATUS);
         }
         //ECIF检查
-        //bankAccountVerifyService.ecifCheckAcctBaseInfo(bankCore358040Rsp);
+//        bankAccountVerifyService.ecifCheckAcctBaseInfo(bankCore358040Rsp);
 //Todo
 //        ecifService.checkAcctInfoByEcif(bankCore358040Rsp);
     }
