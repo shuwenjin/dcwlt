@@ -11,6 +11,7 @@ import com.dcits.dcwlt.common.pay.util.DateUtil;
 import com.dcits.dcwlt.common.pay.util.FileUtil;
 
 import com.dcits.dcwlt.pay.api.model.DtlFileInfDO;
+import com.dcits.dcwlt.pay.batch.mapper.SettledtlFileInfoBatchMapper;
 import com.dcits.dcwlt.pay.batch.service.IDtlFileInfoBatchService;
 import org.apache.commons.lang.StringEscapeUtils;
 import org.slf4j.Logger;
@@ -26,6 +27,9 @@ import java.util.*;
 @Service
 public class FileScanningService implements SchedulerBaseService {
     //private final static String UPDATE_DLT = "dtlfile_batch.updateDtlFileInfoLastProcessStatus";
+
+    @Autowired
+    private SettledtlFileInfoBatchMapper settledtlFileInfoBatchMapper;
 
     @Autowired
     private IDtlFileInfoBatchService dtlFileInfoBatchService;
@@ -228,6 +232,7 @@ public class FileScanningService implements SchedulerBaseService {
                     dtlFileInfDO.setLastUpTime(DateUtil.getDefaultTime());
                     try {
                         //DBUtil.update(UPDATE_DLT, dtlFileInfDO);
+                        settledtlFileInfoBatchMapper.updateDtlFileInfoLastProcessStatus(dtlFileInfDO);
                         dtlFileInfoBatchService.updateDtlFileInfoLastProcessStatus(dtlFileInfDO);
                     } catch (Exception e) {
                         logger.warn("文件移动入库记录失败，原因{}", e.getMessage());
