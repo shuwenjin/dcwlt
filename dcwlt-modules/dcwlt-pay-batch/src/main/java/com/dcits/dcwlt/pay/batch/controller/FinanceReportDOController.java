@@ -38,7 +38,7 @@ public class FinanceReportDOController extends BaseController
     /**
      * 查询金融交易统计报表列表
      */
-//    @PreAuthorize(hasPermi = "pay-batch:financereport:list")
+    @PreAuthorize(hasPermi = "pay-batch:financereport:list")
     @GetMapping("/list")
     public TableDataInfo list(FinanceReportDO financeReportDO)
     {
@@ -50,7 +50,7 @@ public class FinanceReportDOController extends BaseController
     /**
      * 导出金融交易统计报表列表
      */
-//    @PreAuthorize(hasPermi = "pay-batch:financereport:export")
+    @PreAuthorize(hasPermi = "pay-batch:financereport:export")
     @Log(title = "金融交易统计报表", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
     public void export(HttpServletResponse response, FinanceReportDO financeReportDO) throws IOException

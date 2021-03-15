@@ -37,7 +37,7 @@ public class NonfinanceReportDOController extends BaseController
     /**
      * 查询非金融交易统计报表列表
      */
-//    @PreAuthorize(hasPermi = "pay-batch:nonfinancereport:list")
+    @PreAuthorize(hasPermi = "pay-batch:nonfinancereport:list")
     @GetMapping("/list")
     public TableDataInfo list(NonfinanceReportDO nonfinanceReportDO)
     {
@@ -49,7 +49,7 @@ public class NonfinanceReportDOController extends BaseController
     /**
      * 导出非金融交易统计报表列表
      */
-//    @PreAuthorize(hasPermi = "pay-batch:nonfinancereport:export")
+    @PreAuthorize(hasPermi = "pay-batch:nonfinancereport:export")
     @Log(title = "非金融交易统计报表", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
     public void export(HttpServletResponse response, NonfinanceReportDO nonfinanceReportDO) throws IOException

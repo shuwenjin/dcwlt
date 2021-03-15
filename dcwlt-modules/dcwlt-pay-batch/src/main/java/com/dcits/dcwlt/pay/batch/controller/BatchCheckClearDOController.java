@@ -35,7 +35,7 @@ public class BatchCheckClearDOController extends BaseController
     /**
      * 查询资金调整汇总核对列表
      */
-//    @PreAuthorize(hasPermi = "pay-batch:checkclear:list")
+    @PreAuthorize(hasPermi = "pay-batch:checkclear:list")
     @GetMapping("/list")
     public TableDataInfo list(BatchCheckClearDO batchCheckClearDO)
     {
@@ -47,7 +47,7 @@ public class BatchCheckClearDOController extends BaseController
     /**
      * 导出资金调整汇总核对列表
      */
-//    @PreAuthorize(hasPermi = "pay-batch:checkclear:export")
+    @PreAuthorize(hasPermi = "pay-batch:checkclear:export")
     @Log(title = "资金调整汇总核对", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
     public void export(HttpServletResponse response, BatchCheckClearDO batchCheckClearDO) throws IOException

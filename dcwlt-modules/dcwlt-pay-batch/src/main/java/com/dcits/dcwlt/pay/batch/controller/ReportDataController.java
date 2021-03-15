@@ -19,7 +19,6 @@ public class ReportDataController {
     /**
      * 统计报表数据
      */
-//    @PreAuthorize(hasPermi = "pay-batch:reportdata:statistics")
     @PostMapping("/statistics")
     public void statistics(String reportDate)
     {
