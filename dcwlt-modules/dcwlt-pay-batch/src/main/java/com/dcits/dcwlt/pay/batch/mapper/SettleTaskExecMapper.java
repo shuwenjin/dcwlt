@@ -3,6 +3,8 @@ package com.dcits.dcwlt.pay.batch.mapper;
 
 import com.dcits.dcwlt.pay.api.model.SettleTaskExecDO;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
+
 import java.util.List;
 
 /**
@@ -16,16 +18,16 @@ public interface SettleTaskExecMapper {
 
     public int insert(SettleTaskExecDO taskExec);
 
-    public SettleTaskExecDO queryTaskExecByCode(String settleDate, String taskGroupCode, String taskCode, String batchId);
+    public SettleTaskExecDO queryTaskExecByCode(@Param("settleDate")String settleDate, @Param("taskGroupCode")String taskGroupCode, @Param("taskCode")String taskCode, @Param("batchId")String batchId);
 
 
     public int updateTaskExecState(SettleTaskExecDO taskExec);
 
     public int updateTaskExecDone(SettleTaskExecDO taskExec);
 
-    public List<SettleTaskExecDO> queryTaskExecListByCode(String settleDate, String taskGroupCode, String batchId);
+    public List<SettleTaskExecDO> queryTaskExecListByCode(@Param("settleDate")String settleDate, @Param("taskGroupCode")String taskGroupCode, @Param("batchId")String batchId);
 
-    public List<SettleTaskExecDO> queryTaskExecFailure(String settleDate);
+    public List<SettleTaskExecDO> queryTaskExecFailure(@Param("settleDate")String settleDate);
 
-    public int deleteExecTaskByGroupId(String settleDate, String taskGroupCode, String batchId);
+    public int deleteExecTaskByGroupId(@Param("settleDate")String settleDate, @Param("taskGroupCode")String taskGroupCode, @Param("batchId")String batchId);
 }

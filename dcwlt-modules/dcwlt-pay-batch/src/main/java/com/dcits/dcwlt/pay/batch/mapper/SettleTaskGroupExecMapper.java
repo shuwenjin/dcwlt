@@ -3,6 +3,7 @@ package com.dcits.dcwlt.pay.batch.mapper;
 import com.dcits.dcwlt.pay.api.model.SettleTaskGroupExecDO;
 
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -21,10 +22,10 @@ public interface SettleTaskGroupExecMapper {
 
     public int updateTaskGroupExecState(SettleTaskGroupExecDO taskGroupExec);
 
-    public SettleTaskGroupExecDO queryTaskGroupExec(String settleDate, String batchId, String taskGroupCode);
+    public SettleTaskGroupExecDO queryTaskGroupExec(@Param("settleDate")String settleDate, @Param("batchId")String batchId, @Param("taskGroupCode")String taskGroupCode);
 
-    public List<SettleTaskGroupExecDO> queryTaskGroupExecFailure(String settleDate);
+    public List<SettleTaskGroupExecDO> queryTaskGroupExecFailure(@Param("settleDate")String settleDate);
 
-    public int deleteTaskGroupByGroupId(String settleDate, String taskGroupCode, String batchId);
+    public int deleteTaskGroupByGroupId(@Param("settleDate")String settleDate, @Param("taskGroupCode")String taskGroupCode, @Param("batchId")String batchId);
 
 }
