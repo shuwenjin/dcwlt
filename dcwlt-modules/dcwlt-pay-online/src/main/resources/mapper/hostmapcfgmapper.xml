@@ -5,7 +5,7 @@
     <select id="query" resultType="String">
         SELECT
         SERVERCLASS
-        FROM ECNY_COMM_CORE_CONFIG T
+        FROM PAY_COMM_CORE_CONFIG T
         WHERE T.SERVERID = #{serverId}
         AND T.ACCTMETH = #{acctMeth}
     </select>
