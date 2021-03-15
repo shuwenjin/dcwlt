@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dcits.dcwlt.pay.batch.mapper.NonfinanceReportDOMapper">
+    
+    <resultMap type="com.dcits.dcwlt.pay.api.model.NonfinanceReportDO" id="NonfinanceReportDOResult">
+        <result property="tiedCardNumber"    column="tied_card_number"    />
+        <result property="untieNumber"    column="untie_number"    />
+        <result property="reportDate"    column="report_date"    />
+    </resultMap>
+
+    <sql id="selectNonfinanceReportDOVo">
+        select tied_card_number, untie_number, report_date from pay_batch_nonfinance_report
+    </sql>
+
+    <select id="selectNonfinanceReportDOList" parameterType="com.dcits.dcwlt.pay.api.model.NonfinanceReportDO" resultMap="NonfinanceReportDOResult">
+        <include refid="selectNonfinanceReportDOVo"/>
+        <where>  
+            <if test="params.beginReportDate != null and params.beginReportDate != '' and params.endReportDate != null and params.endReportDate != ''"> and report_date between #{params.beginReportDate} and #{params.endReportDate}</if>
+        </where>
+        order by report_date desc
+    </select>
+    
+    <select id="selectNonfinanceReportDOById" parameterType="String" resultMap="NonfinanceReportDOResult">
+        <include refid="selectNonfinanceReportDOVo"/>
+        where report_date = #{reportDate}
+    </select>
+        
+    <insert id="insertNonfinanceReportDO" parameterType="com.dcits.dcwlt.pay.api.model.NonfinanceReportDO">
+        insert into pay_batch_nonfinance_report
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="tiedCardNumber != null">tied_card_number,</if>
+            <if test="untieNumber != null">untie_number,</if>
+            <if test="reportDate != null">report_date,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="tiedCardNumber != null">#{tiedCardNumber},</if>
+            <if test="untieNumber != null">#{untieNumber},</if>
+            <if test="reportDate != null">#{reportDate},</if>
+         </trim>
+    </insert>
+
+    <update id="updateNonfinanceReportDO" parameterType="com.dcits.dcwlt.pay.api.model.NonfinanceReportDO">
+        update pay_batch_nonfinance_report
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="tiedCardNumber != null">tied_card_number = #{tiedCardNumber},</if>
+            <if test="untieNumber != null">untie_number = #{untieNumber},</if>
+        </trim>
+        where report_date = #{reportDate}
+    </update>
+
+</mapper>
