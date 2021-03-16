@@ -17,6 +17,7 @@ import com.dcits.dcwlt.pay.api.domain.dcep.common.OrgnlGrpHdr;
 import com.dcits.dcwlt.pay.api.domain.dcep.common.RspsnInf;
 import com.dcits.dcwlt.pay.api.domain.dcep.convert.*;
 import com.dcits.dcwlt.pay.api.model.PayTransDtlInfoDO;
+import com.dcits.dcwlt.pay.api.model.RspCodeMapDO;
 import com.dcits.dcwlt.pay.api.model.SignInfoDO;
 import com.dcits.dcwlt.pay.api.model.StateMachine;
 import com.dcits.dcwlt.pay.online.baffle.dcep.impl.BankCoreImplDubboService;
@@ -440,9 +441,9 @@ public class Convert225RTradeFlow {
             payTransDtlInfoDO.setTrxRetMsg(bankCore351100InnerRsp.getErrorMsg());
             payTransDtlInfoDO.setPathProcStatus(AppConstant.PAYPATHSTATUS_FAILED);
             payTransDtlInfoDO.setPayPathRspStatus(ProcessStsCdEnum.PR01.getCode());
-//            RspCodeMapDO rspCodeMapDO = EcnyTransException.convertRspCode(Constant.CORE_SYS_ID, Constant.DCEP_SYS_ID, bankCore351100InnerRsp.getErrorCode(), bankCore351100InnerRsp.getErrorMsg());
-//            payTransDtlInfoDO.setPayPathRetCode(rspCodeMapDO.getDestRspCode());
-//            payTransDtlInfoDO.setPayPathRetMsg(rspCodeMapDO.getRspCodeDsp());
+            RspCodeMapDO rspCodeMapDO = EcnyTransException.convertRspCode(Constant.CORE_SYS_ID, Constant.DCEP_SYS_ID, bankCore351100InnerRsp.getErrorCode(), bankCore351100InnerRsp.getErrorMsg());
+            payTransDtlInfoDO.setPayPathRetCode(rspCodeMapDO.getDestRspCode());
+            payTransDtlInfoDO.setPayPathRetMsg(rspCodeMapDO.getRspCodeDsp());
         } else {
             // 核心异常
             payTransDtlInfoDO.setOperStatus(AppConstant.OPERSTATUS_EXPT);
@@ -451,9 +452,9 @@ public class Convert225RTradeFlow {
             payTransDtlInfoDO.setTrxRetMsg(bankCore351100InnerRsp.getErrorMsg());
             payTransDtlInfoDO.setPathProcStatus(AppConstant.PAYPATHSTATUS_RECIPE);
             payTransDtlInfoDO.setPayPathRspStatus(ProcessStsCdEnum.PR02.getCode());
-//            RspCodeMapDO rspCodeMapDO = EcnyTransException.convertRspCode(Constant.CORE_SYS_ID, Constant.DCEP_SYS_ID, bankCore351100InnerRsp.getErrorCode(), bankCore351100InnerRsp.getErrorMsg());
-//            payTransDtlInfoDO.setPayPathRetCode(rspCodeMapDO.getDestRspCode());
-//            payTransDtlInfoDO.setPayPathRetMsg(rspCodeMapDO.getRspCodeDsp());
+            RspCodeMapDO rspCodeMapDO = EcnyTransException.convertRspCode(Constant.CORE_SYS_ID, Constant.DCEP_SYS_ID, bankCore351100InnerRsp.getErrorCode(), bankCore351100InnerRsp.getErrorMsg());
+            payTransDtlInfoDO.setPayPathRetCode(rspCodeMapDO.getDestRspCode());
+            payTransDtlInfoDO.setPayPathRetMsg(rspCodeMapDO.getRspCodeDsp());
         }
     }
 
@@ -490,7 +491,7 @@ public class Convert225RTradeFlow {
         DCEPRspDTO<ConvertRspDTO> dcepRspDTO = EcnyTradeContext.getRspMsg(tradeContext);
         RspsnInf rspsnInf = dcepRspDTO.getBody().getConvertRsp().getRspsnInf();
         // 错误码映射
-//        RspCodeMapDO rspCodeMapDO = EcnyTransException.convertRspCode(exception);
+        RspCodeMapDO rspCodeMapDO = EcnyTransException.convertRspCode(exception);
         // 获取流水表实体
         PayTransDtlInfoDO payTransDtlInfoDO = (PayTransDtlInfoDO) EcnyTradeContext.getTempContext(tradeContext).get("payTransDtlInfoDO");
         if (null != payTransDtlInfoDO) {
@@ -515,8 +516,8 @@ public class Convert225RTradeFlow {
             updateDO.setTrxRetCode(code);
             updateDO.setTrxRetMsg(msg);
             updateDO.setPathProcStatus(AppConstant.PAYPATHSTATUS_ABEND);
-//            updateDO.setPayPathRetCode(rspCodeMapDO.getDestRspCode());
-//            updateDO.setPayPathRetMsg(rspCodeMapDO.getRspCodeDsp());
+            updateDO.setPayPathRetCode(rspCodeMapDO.getDestRspCode());
+            updateDO.setPayPathRetMsg(rspCodeMapDO.getRspCodeDsp());
             updateDO.setPayPathRetDate(DateUtil.getDefaultDate());
             // 交易失败
             if (AppConstant.TRXSTATUS_FAILED.equals(status)) {
@@ -539,8 +540,8 @@ public class Convert225RTradeFlow {
             // 未入库，返回失败
             rspsnInf.setRspsnSts(ProcessStsCdEnum.PR01.getCode());
         }
-//        rspsnInf.setRjctCd(rspCodeMapDO.getDestRspCode());
-//        rspsnInf.setRjctInf(rspCodeMapDO.getRspCodeDsp());
+        rspsnInf.setRjctCd(rspCodeMapDO.getDestRspCode());
+        rspsnInf.setRjctInf(rspCodeMapDO.getRspCodeDsp());
 
         logger.info("应答报文的业务回执状态:{},错误码:{},错误信息:{}", rspsnInf.getRspsnSts(), rspsnInf.getRjctCd(), rspsnInf.getRjctInf());
     }
