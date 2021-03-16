@@ -1,9 +1,6 @@
 # Tomcat
 server:
   port: 9203
-  #mybatis:
-    #configuration:
-  #log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
 # Spring
 spring: 
   application:
