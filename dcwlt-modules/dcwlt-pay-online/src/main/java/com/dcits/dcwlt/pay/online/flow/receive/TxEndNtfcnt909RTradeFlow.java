@@ -103,7 +103,7 @@ public class TxEndNtfcnt909RTradeFlow {
 
             logger.info("终态通知原报文对象转换：兑回");
             JSONObject jsonObj = JSONObject.parseObject(cntt);
-            ReconvertReqDTO reconvertReqDTO = JSONObject.toJavaObject(jsonObj.getJSONObject("body"), ReconvertReqDTO.class);
+            ReconvertReqDTO reconvertReqDTO = JSONObject.toJavaObject(jsonObj.getJSONObject("Body"), ReconvertReqDTO.class);
             payNotifyDO.setInstdpty(reconvertReqDTO.getReconvertReq().getGrpHdr().getInstdPty().getInstdDrctPty());
             payNotifyDO.setAmount(AmountUtil.yuanToFen(reconvertReqDTO.getReconvertReq().getTrxInf().getTrxAmt().getValue()));
             payNotifyDO.setCcy(reconvertReqDTO.getReconvertReq().getTrxInf().getTrxAmt().getCcy());

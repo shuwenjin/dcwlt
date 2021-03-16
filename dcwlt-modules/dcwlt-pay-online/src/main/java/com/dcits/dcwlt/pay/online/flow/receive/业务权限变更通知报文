@@ -1,0 +1,43 @@
+{
+    "Header":{
+        "Sender":"G4001011000013",
+        "Ver":"01",
+        "SignSN":"4",
+        "Receiver":"C1030644021075",
+        "SndDtTm":"2021-01-13T17:55:29",
+        "MsgSN":"202101130001915202815629446000000001",
+        "MsgTp":"dcep.915.001.01"
+    },
+    "Body":{
+        "AuthrtyChngNtfctn":{
+            "AuthrtyInf":[
+                {
+                    "ChngCtrl":{
+                        "FctvDt":"2021-01-13T17:55:29",
+                        "FctvTp":"EF00",
+                        "ChngTp":"CC01"
+                    },
+                     "ptcpt":"C1030644021075",
+                     "BizAuthrtyInf":[
+                        {"MT":"dcep.401.001.01",
+                        "TrdCtgyCd":"11",
+                        "InitAuthrtySgnCd":"AS01",
+                        "RcvAuthrtySgnCd":"AS00"}
+                    ]
+                }
+
+            ],
+            "GrpHdr":{
+                "Rmk":"rmk",
+                "CreDtTm":"2021-01-13T17:55:29",
+                "InstdPty":{
+                    "InstdDrctPty":"C1030644021075"
+                },
+                "InstgPty":{
+                    "InstgDrctPty":"G4001011000013"
+                },
+                "MsgId":"20210113000191520281562944600000"
+            }
+        }
+    }
+}

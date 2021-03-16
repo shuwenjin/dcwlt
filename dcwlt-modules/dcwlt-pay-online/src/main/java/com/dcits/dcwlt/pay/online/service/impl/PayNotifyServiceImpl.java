@@ -24,7 +24,7 @@ public class PayNotifyServiceImpl implements IPayNotifyService {
         payNotifyDO.setLastUpDate(DateUtil.getDefaultDate());
         payNotifyDO.setLastUpTime(DateUtil.getDefaultTime());
         payNotifyDO.setLastMicroSecond(DateUtil.formatMilliTime());
-        return payNotifyMapper.insert(INSERT_PAY_NOTIFY_SQL, payNotifyDO);
+        return payNotifyMapper.insert(payNotifyDO);
     }
 
     @Override

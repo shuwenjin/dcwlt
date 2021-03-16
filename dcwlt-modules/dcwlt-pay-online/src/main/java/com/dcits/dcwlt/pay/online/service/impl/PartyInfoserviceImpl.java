@@ -187,7 +187,7 @@ public class PartyInfoserviceImpl implements IPartyInfoservice {
 
 
     private List<PartyInfoDO> queryEffectivePartyByCondition(PartyInfoDO partyInfoDO) {
-        return partyInfoMapper.queryEffectiveParty(QUERY_EFFECTIVE_URL, partyInfoDO);
+        return partyInfoMapper.queryEffectiveParty(partyInfoDO);
     }
 
     /**
@@ -231,7 +231,7 @@ public class PartyInfoserviceImpl implements IPartyInfoservice {
      * @return
      */
     private int updatePartyInfo(PartyInfoDO partyInfoDO) {
-        return partyInfoMapper.updateParty(UPDATE_URL, partyInfoDO);
+        return partyInfoMapper.updateParty(partyInfoDO);
     }
 
     /**
@@ -241,7 +241,7 @@ public class PartyInfoserviceImpl implements IPartyInfoservice {
      * @return
      */
     private List<PartyInfoDO> queryPartyInfo(PartyInfoDO partyInfoDO) {
-        return partyInfoMapper.queryParty(QUERY_URL, partyInfoDO);
+        return partyInfoMapper.querysParty(partyInfoDO);
     }
 
     /**
@@ -275,6 +275,6 @@ public class PartyInfoserviceImpl implements IPartyInfoservice {
     private List<PartyInfoDO> queryLoseEffectiveParty() {
         //拿到今天日期， 查询今天以前失效的
         String inEffectiveDate = DateUtil.getSysDate();
-        return partyInfoMapper.queryLoseEffectiveParty(QUERY_INEFFECTIVE_URL, inEffectiveDate);
+        return partyInfoMapper.queryLoseEffectiveParty(inEffectiveDate);
     }
 }

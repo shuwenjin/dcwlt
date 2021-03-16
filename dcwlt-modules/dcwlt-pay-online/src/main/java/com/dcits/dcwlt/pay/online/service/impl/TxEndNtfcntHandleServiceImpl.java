@@ -145,7 +145,7 @@ public class TxEndNtfcntHandleServiceImpl {
     private PayTransDtlInfoDO savePayTransDtlInfoDO(OrgnlMsgCntt orgnlMsgCntt) {
         //将原业务报文原文转换成对象
         JSONObject jsonObject = JSONObject.parseObject(orgnlMsgCntt.getCntt());
-        ReconvertReqDTO body = JSONObject.toJavaObject(jsonObject.getJSONObject("body"), ReconvertReqDTO.class);//互联互通报文体json对象-->DCEPReqBody实体
+        ReconvertReqDTO body = JSONObject.toJavaObject(jsonObject.getJSONObject("Body"), ReconvertReqDTO.class);//互联互通报文体json对象-->DCEPReqBody实体
 
         ReconvertReq reqDTO = body.getReconvertReq();
         String prcSts = orgnlMsgCntt.getPrcSts();

@@ -13,8 +13,6 @@ public interface PartyInfoMapper {
 
 	int updateParty(String updateUrl, PartyInfoDO partyInfoDO);
 
-	List<PartyInfoDO> queryParty(String queryUrl, PartyInfoDO partyInfoDO);
-
 	List<PartyInfoDO> queryLoseEffectiveParty(String queryIneffectiveUrl, String inEffectiveDate);
 
 	List<PartyInfoDO> queryEffectiveParty(PartyInfoDO partyInfoDO);
@@ -22,6 +20,9 @@ public interface PartyInfoMapper {
 
 	int updateParty(PartyInfoDO partyInfoDO);
 
-
 	PartyInfoDO queryParty(@Param("partyID") String partyID);
+
+	List<PartyInfoDO> queryLoseEffectiveParty(String inEffectiveDate);
+
+	List<PartyInfoDO> querysParty(PartyInfoDO partyInfoDO);
 }

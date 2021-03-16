@@ -6,7 +6,7 @@ import org.mapstruct.Mapper;
 
 @Mapper
 public interface PayNotifyMapper {
-	int insert(String insertPayNotifySql, PayNotifyDO payNotifyDO);
+	int insert(PayNotifyDO payNotifyDO);
 
 	PayNotifyDO queryByMsgId(String queryPayNotifyByMsgidSql, String msgId);
 }
