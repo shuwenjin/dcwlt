@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?><!--兑出是指用户将银行存款兑换为钱包中的DC/EP。-->
+<soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/" xmlns:head="http://www.dcep.com/dcep/header/">
+    <soap:Header>
+        <head:Ver>01</head:Ver> <!--版本号,目前固定填写01-->
+        <head:SndDtTm>2021-01-13T20:47:02</head:SndDtTm><!--系统时间6分钟以内-->
+        <head:MsgTp>dcep.225.001.01</head:MsgTp>  <!--报文编号-->
+        <head:MsgSN>202101130001225329103085909000000001</head:MsgSN>
+        <!--业务的通信层标识，同一笔业务可以发起多次通信请求（如超时重试等），MsgId一样，MsgSN不一样,前32位取MsgId，后四位从0001开始递增-->
+        <head:Sender>C1010411000013</head:Sender> <!--发起方运营机构-->
+        <head:Receiver>C1030644021075</head:Receiver> <!--接收方运营机构 农业银行-->
+        <head:SignSN>4</head:SignSN><!--签名证书序列号-->
+
+    </soap:Header>
+    <soap:Body>
+        <wstxns1:ConvertReq xmlns:wstxns1="http://www.dcep.com/dcep/22500101/">
+            <GrpHdr>
+                <MsgId>20210113000122532910308590900000</MsgId>  <!--报文标识号、最后一位必须是0、1、2、3-->
+                <CreDtTm>2021-01-13T20:47:02</CreDtTm><!---->
+                <InstgPty>
+                    <InstgDrctPty>C1010411000013</InstgDrctPty><!---->
+                </InstgPty>
+                <InstdPty>
+                    <InstdDrctPty>C1030644021075</InstdDrctPty><!---->
+                </InstdPty>
+                <Rmk>rmk</Rmk><!---->
+            </GrpHdr>
+            <TrxInf>
+                <TrxBizTp>C201</TrxBizTp><!--业务类型编码-->
+                <TrxCtgyPurpCd>03011</TrxCtgyPurpCd><!--业务种类编码-->
+                <TrxAmt Ccy="CNY">123.11</TrxAmt><!--交易金额-->
+                <BatchId>B202101132000</BatchId>    <!--交易批次号-->
+            </TrxInf>
+            <DbtrInf><!--付款账户信息-->
+                <DbtrPtyId>C1030644021075</DbtrPtyId><!--付款人账户所属运营机构-->
+                <DbtAcctTp>AT03</DbtAcctTp><!--付款人账户类型-->
+                <DbtrNm>付款人名称</DbtrNm><!--付款人名称-->
+                <DbtrAcct>6214622121003305144</DbtrAcct><!--付款人账户账号-->
+                <SgnNo>123456</SgnNo><!--挂接协议号-->
+            </DbtrInf>
+            <CdtrInf><!--兑出钱包信息--><!--兑出是指用户将银行存款兑换为钱包中的DC/EP。-->
+                <CdtrPtyId>C1010411000013</CdtrPtyId><!--收款人钱包开立所属运营机构-->
+                <CdtrNm>收款人名称</CdtrNm><!--收款人名称-->
+                <CdtrWltId>23534645224653442</CdtrWltId><!--收款人钱包ID-->
+                <CdtrWltLvl>WL01</CdtrWltLvl><!--收款人钱包等级,仅支持一类、二类钱包-->
+                <CdtrWltTp>WT01</CdtrWltTp><!--收款人钱包类型-->
+                <CdtrWltNm>收款人钱包名称</CdtrWltNm><!--收款人钱包名称-->
+            </CdtrInf>
+        </wstxns1:ConvertReq>
+    </soap:Body>
+</soap:Envelope>
