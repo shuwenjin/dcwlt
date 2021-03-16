@@ -1,6 +1,7 @@
 package com.dcits.dcwlt.pay.online.flow.receive;
 
 
+import com.dcits.dcwlt.common.pay.constant.AppConstant;
 import com.dcits.dcwlt.common.pay.tradeflow.TradeContext;
 import com.dcits.dcwlt.common.pay.tradeflow.TradeFlow;
 import com.dcits.dcwlt.pay.api.domain.dcep.DCEPReqDTO;
@@ -10,7 +11,9 @@ import com.dcits.dcwlt.pay.api.domain.dcep.fault.Fault;
 import com.dcits.dcwlt.pay.api.domain.dcep.fault.FaultDTO;
 import com.dcits.dcwlt.pay.api.domain.dcep.party.chng.FinCdChngNtfctnDTO;
 import com.dcits.dcwlt.pay.api.domain.dcep.party.trblntfctn.TrblNtfctnDTO;
+import com.dcits.dcwlt.pay.api.model.RspCodeMapDO;
 import com.dcits.dcwlt.pay.online.base.Constant;
+import com.dcits.dcwlt.pay.online.exception.EcnyTransException;
 import com.dcits.dcwlt.pay.online.flow.builder.EcnyTradeContext;
 import com.dcits.dcwlt.pay.online.flow.builder.EcnyTradeFlowBuilder;
 import com.dcits.dcwlt.pay.online.service.INotificationProcess;
@@ -27,8 +30,8 @@ import org.springframework.context.annotation.Configuration;
  */
 @Configuration
 public class PartyStatus931RTradeFlow {
-    private static final Logger logger = LoggerFactory.getLogger(PartyStatus931RTradeFlow.class);
 
+    private static final Logger logger = LoggerFactory.getLogger(PartyStatus931RTradeFlow.class);
     public static final String PARTY_TRADE_SIGN = "PartyStatus931RTradeFlow";
     //原报文编号占位符
     private static final String ORIGINAL_MESSAGE_TYPE = "msgTp";
@@ -63,7 +66,7 @@ public class PartyStatus931RTradeFlow {
     public void process(TradeContext<?, ?> context) {
         DCEPReqDTO<TrblNtfctnDTO> reqMsg = EcnyTradeContext.getReqMsg(context);
         logger.info("开始处理机构状态变更，报文标识号：{}", reqMsg.getBody().getTrblNtfctn().getGrpHdr().getMsgId());
-        TrblNtfctnDTO trblNtfctn = (TrblNtfctnDTO)reqMsg.getBody();
+        TrblNtfctnDTO trblNtfctn = reqMsg.getBody();
         try {
             //处理变更，将机构变更状态更新，如果发现当前机构不在库，那么使用请求报文中现有的数据新插入一条数据
             notificationProcess.process(trblNtfctn, context);
@@ -89,13 +92,13 @@ public class PartyStatus931RTradeFlow {
         faultDTO.setFault(fault);
 
         // 错误码映射
-//        RspCodeMapDO rspCodeMapDO = EcnyTransException.convertRspCode(e);
-//
-//        //设置911报文体数据
-//        //业务故障信息, 911失败时，响应机构编码
-//        fault.setFaultActor(AppConstant.CGB_FINANCIAL_INSTITUTION_CD);        //业务故障信息
-//        fault.setFaultCode(rspCodeMapDO.getDestRspCode());                    //业务故障代码
-//        fault.setFaultString(rspCodeMapDO.getRspCodeDsp());                   //业务故障说明
+        RspCodeMapDO rspCodeMapDO = EcnyTransException.convertRspCode(e);
+
+        //设置911报文体数据
+        //业务故障信息, 911失败时，响应机构编码
+        fault.setFaultActor(AppConstant.CGB_FINANCIAL_INSTITUTION_CD);        //业务故障信息
+        fault.setFaultCode(rspCodeMapDO.getDestRspCode());                    //业务故障代码
+        fault.setFaultString(rspCodeMapDO.getRspCodeDsp());                   //业务故障说明
 
         //响应实体
         DCEPRspDTO dcepRspDTO = DCEPRspDTO.newInstance(reqMsg, Constant.DCEP_911, faultDTO);
