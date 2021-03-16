@@ -186,8 +186,7 @@ public class    FreeFrmt401STradeFlow {
 
         //报文合法,插入数据库
         try {
-            throw new EcnyTransException(EcnyTransError.DATABASE_ERROR);
-            //freeFormatServiceimpl.insertOrUpdateFreeFormat(freeFrmt, AppConstant.DIRECT_SEND, tlrNo, AppConstant.TRXSTATUS_INIT);
+            freeFormatServiceimpl.insertOrUpdateFreeFormat(freeFrmt, AppConstant.DIRECT_SEND, tlrNo, AppConstant.TRXSTATUS_INIT);
         } catch (Exception e) {
             //初始化异常内容
             retCode = EcnyTransError.INSERT_DATABASE_ERROR.getErrorCode();
