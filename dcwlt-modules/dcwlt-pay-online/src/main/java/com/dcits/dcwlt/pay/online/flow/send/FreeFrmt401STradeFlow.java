@@ -29,6 +29,8 @@ import com.dcits.dcwlt.pay.api.domain.ecny.ECNYReqDTO;
 import com.dcits.dcwlt.pay.api.domain.ecny.ECNYRspDTO;
 import com.dcits.dcwlt.pay.api.domain.ecny.ECNYRspHead;
 import com.dcits.dcwlt.pay.api.model.MonitorDO;
+import com.dcits.dcwlt.pay.api.model.RspCodeMapDO;
+import com.dcits.dcwlt.pay.online.baffle.dcep.DcepService;
 import com.dcits.dcwlt.pay.online.exception.EcnyTransError;
 import com.dcits.dcwlt.pay.online.exception.EcnyTransException;
 import com.dcits.dcwlt.pay.online.flow.DcepTransInTradeFlow;
@@ -84,8 +86,8 @@ public class    FreeFrmt401STradeFlow {
     //@Autowired
     //private DcepSendService dcepSendService;
 
-
-
+    @Autowired
+    private DcepService dcepService;
 
     @Bean(name = FREEFRMT_TRADE_FLOW)
     public TradeFlow freeFrmtTradeFlow() {
@@ -184,7 +186,8 @@ public class    FreeFrmt401STradeFlow {
 
         //报文合法,插入数据库
         try {
-            freeFormatServiceimpl.insertOrUpdateFreeFormat(freeFrmt, AppConstant.DIRECT_SEND, tlrNo, AppConstant.TRXSTATUS_INIT);
+            throw new EcnyTransException(EcnyTransError.DATABASE_ERROR);
+            //freeFormatServiceimpl.insertOrUpdateFreeFormat(freeFrmt, AppConstant.DIRECT_SEND, tlrNo, AppConstant.TRXSTATUS_INIT);
         } catch (Exception e) {
             //初始化异常内容
             retCode = EcnyTransError.INSERT_DATABASE_ERROR.getErrorCode();
@@ -201,32 +204,7 @@ public class    FreeFrmt401STradeFlow {
         DCEPReqDTO<FreeFrmtDTO> dcepReqDTO = (DCEPReqDTO<FreeFrmtDTO>) EcnyTradeContext.getTempContext(context).get("dcepReqDTO");
         //发送请求报文,接收响应 TODO
         //JSONObject rspObj = dcepSendService.sendDcep(dcepReqDTO);
-        JSONObject rspObj = JSONObject.parseObject("{\n" +
-                "    \"ecnyHead\": {\n" +
-                "        \"Sender\": \"C1010311000014\",\n" +
-                "        \"DgtlEnvlp\": null,\n" +
-                "        \"SignSN\": \"01\",\n" +
-                "        \"Ver\": \"01\",\n" +
-                "        \"NcrptnSN\": null,\n" +
-                "        \"Receiver\": \"C1030644021075\",\n" +
-                "        \"MsgSN\": \"20210113106040120333044574013001\",\n" +
-                "        \"SndDtTm\": \"2021-03-08T14:18:20\",\n" +
-                "        \"MsgTp\": \"dcep.902.001.01\"\n" +
-                "    },\n" +
-                "    \"body\": {\n" +
-                "        \"ComConf\": {\n" +
-                "            \"ConfInf\": {\n" +
-                "                \"OrgnlMsgId\": \"20210113106040120333044574013001\",\n" +
-                "                \"OrgnlInstgPty\": \"C1030644021075\",\n" +
-                "                \"PrcSts\": \"PR00\",\n" +
-                "                \"OrgnlMT\": \"dcep.401.001.01\",\n" +
-                "                \"OrigSndDtTm\": \"2021-01-13T20:37:31\",\n" +
-                "                \"Remark\": null\n" +
-                "            }\n" +
-                "        }\n" +
-                "    },\n" +
-                "\t\"head\":{\"retCode\":\"000000\"}\n" +
-                "}");
+        JSONObject rspObj = dcepService.receive902From401(dcepReqDTO);
         EcnyTradeContext.getTempContext(context).put("rspObj", rspObj);
     }
 
@@ -304,9 +282,8 @@ public class    FreeFrmt401STradeFlow {
     public void freeFrmtTradeErrHandler(TradeContext<?, ?> context, Throwable e) {
         logger.error("进入异常处理模块！");
         if (e instanceof EcnyTransException) {
-            // TODO
-            //RspCodeMapDO rspCodeMapDO = EcnyTransException.convertRspCode(e);
-            //logger.error("映射后错误码错误信息：" + rspCodeMapDO);
+            RspCodeMapDO rspCodeMapDO = EcnyTransException.convertRspCode(e);
+            logger.error("映射后错误码错误信息：" + rspCodeMapDO);
         }
 
         //处理失败响应失败报文
