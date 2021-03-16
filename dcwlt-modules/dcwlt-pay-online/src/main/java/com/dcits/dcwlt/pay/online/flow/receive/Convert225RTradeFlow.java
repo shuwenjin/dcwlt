@@ -19,6 +19,7 @@ import com.dcits.dcwlt.pay.api.domain.dcep.convert.*;
 import com.dcits.dcwlt.pay.api.model.PayTransDtlInfoDO;
 import com.dcits.dcwlt.pay.api.model.SignInfoDO;
 import com.dcits.dcwlt.pay.api.model.StateMachine;
+import com.dcits.dcwlt.pay.online.baffle.dcep.impl.BankCoreImplDubboService;
 import com.dcits.dcwlt.pay.online.base.Constant;
 import com.dcits.dcwlt.pay.online.exception.EcnyTransError;
 import com.dcits.dcwlt.pay.online.exception.EcnyTransException;
@@ -28,7 +29,6 @@ import com.dcits.dcwlt.pay.online.mapper.SignInfoMapper;
 import com.dcits.dcwlt.pay.online.service.IAuthInfoService;
 import com.dcits.dcwlt.pay.online.service.ICoreProcessService;
 import com.dcits.dcwlt.pay.online.service.IPayTransDtlInfoService;
-import com.dcits.dcwlt.pay.online.service.impl.BankCoreImplDubboService;
 import com.dcits.dcwlt.pay.online.service.impl.PartyService;
 import com.dcits.dcwlt.pay.online.task.ParamConfigCheckTask;
 import org.apache.commons.lang3.StringUtils;
@@ -55,7 +55,7 @@ public class Convert225RTradeFlow {
     private SignInfoMapper signInfoMapper;
 
     @Autowired
-    private IPayTransDtlInfoService iPayTransDtlInfoService;
+    private IPayTransDtlInfoService iPayTransDtlInfo1Service;
 
     @Autowired
     private BankCoreImplDubboService bankCoreImplDubboService;
@@ -166,7 +166,7 @@ public class Convert225RTradeFlow {
         payTransDtlInfoDO.setLastUpTime(DateUtil.getDefaultTime());
         payTransDtlInfoDO.setRemark(grpHdr.getRmk());
         try {
-            iPayTransDtlInfoService.insert(payTransDtlInfoDO);
+            iPayTransDtlInfo1Service.insert(payTransDtlInfoDO);
         } catch (Exception e) {
             logger.info("金融流水表入库失败:{}-{}", e.getMessage(), e);
             throw new EcnyTransException(AppConstant.TRXSTATUS_FAILED, EcnyTransError.DATABASE_ERROR);
@@ -208,7 +208,7 @@ public class Convert225RTradeFlow {
             throw new EcnyTransException(AppConstant.TRXSTATUS_FAILED, EcnyTransError.WALLET_LEVEL_ERROR);
         }
         //业务种类、业务类型校验
-        if (!AppConstant.BUSINESS_TYPE_CONVERT.equals(busiType) || !ParamConfigCheckTask.checkConfigValue(BUSINESS_TYPE,
+        if (!AppConstant.BUSINESS_TYPE_RECONVERT.equals(busiType) || !ParamConfigCheckTask.checkConfigValue(BUSINESS_TYPE,
                 busiType, busiKind)
         ) {
             logger.error("业务类型:{},业务种类:{}校验不通过,", busiType, busiKind);
@@ -527,7 +527,7 @@ public class Convert225RTradeFlow {
 
             try {
                 // 更新金融交易表
-                iPayTransDtlInfoService.update(updateDO,oldStatus);
+                iPayTransDtlInfo1Service.update(updateDO,oldStatus);
             } catch (Exception e) {
                 logger.error("兑回异常处理时更新交易状态异常：{}-{}", e.getMessage(), e);
                 throw new EcnyTransException(EcnyTransError.DATABASE_ERROR);
