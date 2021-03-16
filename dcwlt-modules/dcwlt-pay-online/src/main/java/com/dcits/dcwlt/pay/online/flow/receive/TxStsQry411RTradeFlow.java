@@ -12,6 +12,7 @@ import com.dcits.dcwlt.pay.api.domain.dcep.txstsqryreq.*;
 import com.dcits.dcwlt.pay.api.model.PayTransDtlInfoDO;
 import com.dcits.dcwlt.pay.api.model.RspCodeMapDO;
 import com.dcits.dcwlt.pay.api.model.StateMachine;
+import com.dcits.dcwlt.pay.online.baffle.core.IBankCoreService;
 import com.dcits.dcwlt.pay.online.exception.EcnyTransError;
 import com.dcits.dcwlt.pay.online.exception.EcnyTransException;
 import com.dcits.dcwlt.pay.online.flow.builder.EcnyTradeContext;
@@ -40,7 +41,7 @@ public class TxStsQry411RTradeFlow {
     private static final String TXSTSQRY_TRADE_FLOW = "TxStsQry411RTradeFlow";
 
     @Autowired
-    private BankCoreImplDubboService bankCoreImplDubboService;
+    private IBankCoreService bankCoreImplDubboService;
 
     @Autowired
     private BankCoreAccTxnServiceImpl bankCoreAccTxnService;
