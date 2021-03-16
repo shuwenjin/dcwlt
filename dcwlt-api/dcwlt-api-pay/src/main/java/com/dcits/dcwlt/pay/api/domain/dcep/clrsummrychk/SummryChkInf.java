@@ -32,18 +32,18 @@ public class SummryChkInf {
      * 调整借方金额
      * */
 //    @Sensitive(type = FilterType.AMT)
-    @Valid
+//    @Valid
     private TrxAmt DbtCntAmt;
     /*
      * 调整贷方金额
      * */
 //    @Sensitive(type = FilterType.AMT)
-    @Valid
+//    @Valid
     private TrxAmt CdtCntAmt;
     /*
      *调整场次列表
      * */
-    @Valid
+//    @Valid
     private List<ClrList> clrList;
 
     @JSONField(name = "ClrDt")
