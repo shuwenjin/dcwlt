@@ -21,7 +21,6 @@ import com.dcits.dcwlt.pay.online.mapper.PayTransDtlInfoMapper;
 import com.dcits.dcwlt.pay.online.service.ICoreProcessService;
 import com.dcits.dcwlt.pay.online.service.IPayTransDtlInfoService;
 import com.dcits.dcwlt.pay.online.service.impl.BankCoreAccTxnServiceImpl;
-import com.dcits.dcwlt.pay.online.service.impl.BankCoreImplDubboService;
 import com.dcits.dcwlt.pay.online.service.impl.CoreEventServiceImpl;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
