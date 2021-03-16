@@ -168,12 +168,13 @@ insert into sys_menu values('107',  '通知公告',       '1',   '9',  'notice',
 insert into sys_menu values('108',  '日志管理',       '1',   '10', 'log',                                 '',                        1, 0, 'M', '0', '0', '',                        'log',           'admin', '2018-03-16 11-33-00', 'admin', '2018-03-16 11-33-00', '日志管理菜单');
 insert into sys_menu values('109',  '在线用户',       '2',   '1',  'online',                              'monitor/online/index',    1, 0, 'C', '0', '0', 'monitor:online:list',     'online',        'admin', '2018-03-16 11-33-00', 'admin', '2018-03-16 11-33-00', '在线用户菜单');
 insert into sys_menu values('110',  '定时任务',       '2',   '2',  'job',                                 'monitor/job/index',       1, 0, 'C', '0', '0', 'monitor:job:list',        'job',           'admin', '2018-03-16 11-33-00', 'admin', '2018-03-16 11-33-00', '定时任务菜单');
-insert into sys_menu values('111',  'Sentinel控制台', '2',   '3',  'http://localhost:8718',                '',                       1, 0, 'C', '0', '0', 'monitor:sentinel:list',   'sentinel',      'admin', '2018-03-16 11-33-00', 'admin', '2018-03-16 11-33-00', '流量控制菜单');
-insert into sys_menu values('112',  'Nacos控制台',    '2',   '4',  'http://localhost:8848/nacos',          '',                       1, 0, 'C', '0', '0', 'monitor:nacos:list',      'nacos',         'admin', '2018-03-16 11-33-00', 'admin', '2018-03-16 11-33-00', '服务治理菜单');
-insert into sys_menu values('113',  'Admin控制台',    '2',   '5',  'http://localhost:9100/login',          '',                       1, 0, 'C', '0', '0', 'monitor:server:list',     'server',        'admin', '2018-03-16 11-33-00', 'admin', '2018-03-16 11-33-00', '服务监控菜单');
-insert into sys_menu values('114',  '表单构建',       '3',   '1',  'build',                                'tool/build/index',       1, 0, 'C', '0', '0', 'tool:build:list',         'build',         'admin', '2018-03-16 11-33-00', 'admin', '2018-03-16 11-33-00', '表单构建菜单');
-insert into sys_menu values('115',  '代码生成',       '3',   '2',  'gen',                                  'tool/gen/index',         1, 0, 'C', '0', '0', 'tool:gen:list',           'code',          'admin', '2018-03-16 11-33-00', 'admin', '2018-03-16 11-33-00', '代码生成菜单');
-insert into sys_menu values('116',  '系统接口',       '3',   '3',  'http://localhost:8000/swagger-ui.html', '',                      1, 0, 'C', '0', '0', 'tool:swagger:list',       'swagger',       'admin', '2018-03-16 11-33-00', 'admin', '2018-03-16 11-33-00', '系统接口菜单');
+insert into sys_menu values('111',  '调度日志',       '2',   '2',  'jobLog',                              'monitor/job/log',         1, 0, 'C', '0', '0', 'monitor:job:list',        'log',           'admin', '2018-03-16 11-33-00', 'admin', '2018-03-16 11-33-00', '调度日志菜单');
+insert into sys_menu values('112',  'Sentinel控制台', '2',   '3',  'http://localhost:8718',                '',                       1, 0, 'C', '0', '0', 'monitor:sentinel:list',   'sentinel',      'admin', '2018-03-16 11-33-00', 'admin', '2018-03-16 11-33-00', '流量控制菜单');
+insert into sys_menu values('113',  'Nacos控制台',    '2',   '4',  'http://localhost:8848/nacos',          '',                       1, 0, 'C', '0', '0', 'monitor:nacos:list',      'nacos',         'admin', '2018-03-16 11-33-00', 'admin', '2018-03-16 11-33-00', '服务治理菜单');
+insert into sys_menu values('114',  'Admin控制台',    '2',   '5',  'http://localhost:9100/login',          '',                       1, 0, 'C', '0', '0', 'monitor:server:list',     'server',        'admin', '2018-03-16 11-33-00', 'admin', '2018-03-16 11-33-00', '服务监控菜单');
+insert into sys_menu values('115',  '表单构建',       '3',   '1',  'build',                                'tool/build/index',       1, 0, 'C', '0', '0', 'tool:build:list',         'build',         'admin', '2018-03-16 11-33-00', 'admin', '2018-03-16 11-33-00', '表单构建菜单');
+insert into sys_menu values('116',  '代码生成',       '3',   '2',  'gen',                                  'tool/gen/index',         1, 0, 'C', '0', '0', 'tool:gen:list',           'code',          'admin', '2018-03-16 11-33-00', 'admin', '2018-03-16 11-33-00', '代码生成菜单');
+insert into sys_menu values('117',  '系统接口',       '3',   '3',  'http://localhost:8000/swagger-ui.html', '',                      1, 0, 'C', '0', '0', 'tool:swagger:list',       'swagger',       'admin', '2018-03-16 11-33-00', 'admin', '2018-03-16 11-33-00', '系统接口菜单');
 insert into sys_menu values('2006', '机构管理',    '2012',   '1',  'party'                              , 'system/party/index'     , 1, 0, 'C', '0', '0', 'system:party:list',       'party',         'admin', '2018-03-01 00-00-00', 'admin', '2021-02-26 17:55:04', '机构菜单');
 
 -- 三级菜单
@@ -577,58 +578,60 @@ create table sys_logininfor (
 -- ----------------------------
 -- 15、定时任务调度表
 -- ----------------------------
-drop table if exists sys_job;
-create table sys_job (
-  job_id              bigint(20)    not null auto_increment    comment '任务ID',
-  fid                 bigint(20)                               comment '父实例ID',
-  fjob_id             bigint(20)                               comment '父任务ID',
-  job_type            char(1)       default '0'                comment '任务类型（0父任务 1子任务）',
-  job_name            varchar(64)   default ''                 comment '任务名称',
-  job_group           varchar(64)   default 'DEFAULT'          comment '任务组名',
-  invoke_target       varchar(500)  not null                   comment '调用目标字符串',
-  cron_expression     varchar(20)   default ''                 comment 'cron执行表达式',
-  misfire_policy      varchar(20)   default '3'                comment '计划执行错误策略（1立即执行 2执行一次 3放弃执行）',
-  concurrent          char(1)       default '1'                comment '是否并发执行（0允许 1禁止）',
-  status              char(1)       default '0'                comment '状态（0正常 1暂停）',
-  retry_cron          varchar(20)   default ''                 comment '失败重试cron',
-  retry_status        char(1)       default '0'                comment '失败重试状态（0正常 1暂停）',
-  retry_job_status    char(1)                                  comment '重试是否成功（0成功 1失败）',
-  retry_num           int(4)        default null               comment '当前重试次数',
-  retry_max_num       int(4)        default 0                  comment '重试最大次数',
-  create_by           varchar(64)   default ''                 comment '创建者',
-  create_time         datetime                                 comment '创建时间',
-  update_by           varchar(64)   default ''                 comment '更新者',
-  update_time         datetime                                 comment '更新时间',
-  remark              varchar(500)  default ''                 comment '备注信息',
-  primary key (job_id, job_name, job_group)
-) engine=innodb auto_increment=1 comment = '定时任务调度表';
-insert into sys_job values(1, null, '0', '0', '系统默认（无参）', 'DEFAULT', 'ryTask.ryNoParams',        '0/30 * * * * ?', '3', '1', '0', '0/2 * * * * ?', '0', null, null, 5, 'admin', '2018-03-16 11-33-00', 'admin', '2018-03-16 11-33-00', '');
-insert into sys_job values(2, null, '0', '0', '系统默认（有参）', 'DEFAULT', 'ryTask.ryParams(\'yyyy-MM-dd\')',  '0/30 * * * * ?', '3', '1', '0', '0/2 * * * * ?', '0', null, null, 5, 'admin', '2018-03-16 11-33-00', 'admin', '2018-03-16 11-33-00', '');
-insert into sys_job values(3, null, '0', '0', '系统默认（多参）', 'DEFAULT', 'ryTask.ryMultipleParams(\'yyyy-MM-dd HH:mm:ss\', true, 2000L, 316.50D, 100)', '0/30 * * * * ?', '3', '1', '0', '0/2 * * * * ?', '0', null, null, 5, 'admin', '2018-03-16 11-33-00', 'admin', '2018-03-16 11-33-00', '');
+DROP TABLE IF EXISTS `sys_job`;
+CREATE TABLE `sys_job`  (
+    `job_id` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '任务ID',
+    `fid` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '父实例ID',
+    `fjob_id` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '父任务ID',
+    `job_type` char(1) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT '0' COMMENT '任务类型（0父任务 1子任务）',
+    `job_name` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '' COMMENT '任务名称',
+    `job_group` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT 'DEFAULT' COMMENT '任务组名',
+    `invoke_target` varchar(500) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '调用目标字符串',
+    `cron_expression` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT '' COMMENT 'cron执行表达式',
+    `misfire_policy` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT '3' COMMENT '计划执行错误策略（1立即执行 2执行一次 3放弃执行）',
+    `concurrent` char(1) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT '1' COMMENT '是否并发执行（0允许 1禁止）',
+    `status` char(1) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT '0' COMMENT '状态（0正常 1暂停）',
+    `retry_cron` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT '' COMMENT '失败重试cron',
+    `retry_status` char(1) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT '0' COMMENT '失败重试状态（0正常 1暂停）',
+    `fail_time` datetime(0) NULL DEFAULT NULL COMMENT '父任务失败时间',
+    `retry_job_status` char(1) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '重试是否成功（0成功 1失败）',
+    `retry_num` int(4) NULL DEFAULT NULL COMMENT '当前重试次数',
+    `retry_max_num` int(4) NULL DEFAULT 0 COMMENT '重试最大次数',
+    `create_by` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT '' COMMENT '创建者',
+    `create_time` datetime(0) NULL DEFAULT NULL COMMENT '创建时间',
+    `update_by` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT '' COMMENT '更新者',
+    `update_time` datetime(0) NULL DEFAULT NULL COMMENT '更新时间',
+    `remark` varchar(500) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT '' COMMENT '备注信息',
+    PRIMARY KEY (`job_id`, `job_name`, `job_group`) USING BTREE
+) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '定时任务调度表' ROW_FORMAT = Dynamic;
+insert into sys_job values(uuid(), null, null, '0', '系统默认（无参）', 'DEFAULT', 'ryTask.ryNoParams',        '0/30 * * * * ?', '3', '1', '0', '0/2 * * * * ?', '0', null, null, null, 5, 'admin', '2018-03-16 11-33-00', 'admin', '2018-03-16 11-33-00', '');
+insert into sys_job values(uuid(), null, null, '0', '系统默认（有参）', 'DEFAULT', 'ryTask.ryParams(\'yyyy-MM-dd\')',  '0/30 * * * * ?', '3', '1', '0', '0/2 * * * * ?', '0', null, null, null, 5, 'admin', '2018-03-16 11-33-00', 'admin', '2018-03-16 11-33-00', '');
+insert into sys_job values(uuid(), null, null, '0', '系统默认（多参）', 'DEFAULT', 'ryTask.ryMultipleParams(\'yyyy-MM-dd HH:mm:ss\', true, 2000L, 316.50D, 100)', '0/30 * * * * ?', '3', '1', '0', '0/2 * * * * ?', '0', null, null, null, 5, 'admin', '2018-03-16 11-33-00', 'admin', '2018-03-16 11-33-00', '');
 
 
 -- ----------------------------
 -- 16、定时任务调度日志表
 -- ----------------------------
-drop table if exists sys_job_log;
-create table sys_job_log (
-  job_log_id          bigint(20)     not null auto_increment    comment '任务日志ID',
-  job_id              bigint(20)     not null                   comment '任务ID',
-  fid                 bigint(20)                                comment '父实例ID',
-  fjob_id             bigint(20)                                comment '父任务ID',
-  job_type            char(1)       default '0'                 comment '任务类型（0父任务 1子任务）',
-  job_name            varchar(64)    not null                   comment '任务名称',
-  job_group           varchar(64)    not null                   comment '任务组名',
-  invoke_target       varchar(500)   not null                   comment '调用目标字符串',
-  job_message         varchar(500)                              comment '日志信息',
-  status              char(1)        default '0'                comment '执行状态（0成功 1失败）',
-  exception_info      varchar(2000)  default ''                 comment '异常信息',
-  start_time          datetime                                  comment '开始时间',
-  stop_time           datetime                                  comment '停止时间',
-  create_time         datetime                                  comment '创建时间',
-  excute_ret          text                                      comment '执行返回值',
-  primary key (job_log_id)
-) engine=innodb  auto_increment=1 comment = '定时任务调度日志表';
+DROP TABLE IF EXISTS `sys_job_log`;
+CREATE TABLE `sys_job_log`  (
+    `job_log_id` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '任务日志ID',
+    `job_id` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '任务ID',
+    `fid` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '父实例ID',
+    `fjob_id` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '父任务ID',
+    `fail_time` datetime(0) NULL DEFAULT NULL COMMENT '父任务失败时间',
+    `job_type` char(1) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT '0' COMMENT '任务类型（0父任务 1子任务）',
+    `job_name` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '任务名称',
+    `job_group` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '任务组名',
+    `invoke_target` varchar(500) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '调用目标字符串',
+    `job_message` varchar(500) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '日志信息',
+    `status` char(1) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT '0' COMMENT '执行状态（0成功 1失败）',
+    `exception_info` varchar(2000) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT '' COMMENT '异常信息',
+    `start_time` datetime(0) NULL DEFAULT NULL COMMENT '开始时间',
+    `stop_time` datetime(0) NULL DEFAULT NULL COMMENT '停止时间',
+    `create_time` datetime(0) NULL DEFAULT NULL COMMENT '创建时间',
+    `excute_ret` text CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL COMMENT '执行返回值',
+    PRIMARY KEY (`job_log_id`) USING BTREE
+) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '定时任务调度日志表' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- 17、通知公告表

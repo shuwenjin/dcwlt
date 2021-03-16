@@ -1,7 +1,14 @@
 import request from '@/utils/request'
 
 // 查询定时任务调度列表
-export function listJob(query) {
+export function listJob(query, isRetryJob) {
+  if (isRetryJob) {
+    return request({
+      url: '/schedule/job/retryList',
+      method: 'get',
+      params: query
+    })
+  }
   return request({
     url: '/schedule/job/list',
     method: 'get',

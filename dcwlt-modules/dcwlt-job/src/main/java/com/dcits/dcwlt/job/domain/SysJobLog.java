@@ -3,10 +3,9 @@ package com.dcits.dcwlt.job.domain;
 import java.util.Date;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import org.apache.commons.lang3.builder.ToStringBuilder;
-import org.apache.commons.lang3.builder.ToStringStyle;
 import com.dcits.dcwlt.common.core.annotation.Excel;
 import com.dcits.dcwlt.common.core.web.domain.BaseEntity;
+import org.springframework.data.annotation.Id;
 
 /**
  * 定时任务调度日志表 sys_job_log
@@ -18,20 +17,26 @@ public class SysJobLog extends BaseEntity
     private static final long serialVersionUID = 1L;
 
     /** ID */
-    @Excel(name = "日志序号")
-    private Long jobLogId;
+    @Id
+    @Excel(name = "日志编号")
+    private String jobLogId;
 
     /** 任务ID */
-    @Excel(name = "任务序号", cellType = Excel.ColumnType.NUMERIC)
-    private Long jobId;
+    @Excel(name = "任务编号")
+    private String jobId;
 
     /** 父实例ID */
-    @Excel(name = "父实例序号", cellType = Excel.ColumnType.NUMERIC)
-    private Long fid;
+    @Excel(name = "父实例编号")
+    private String fid;
 
     /** 父任务ID*/
-    @Excel(name = "父任务序号", cellType = Excel.ColumnType.NUMERIC)
-    private Long fjobId;
+    @Excel(name = "父任务编号")
+    private String fjobId;
+
+    /** 主任务失败时间 */
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @Excel(name = "主任务失败时间", width = 30, dateFormat = "yyyy-MM-dd HH:mm:ss")
+    private Date failTime;
 
     /** 任务类型（0父任务 1子任务） */
     @Excel(name = "任务类型", readConverterExp = "0=父任务,1=子任务")
@@ -75,22 +80,22 @@ public class SysJobLog extends BaseEntity
     @Excel(name = "执行返回值")
     private String excuteRet;
 
-    public Long getJobLogId()
+    public String getJobLogId()
     {
         return jobLogId;
     }
 
-    public void setJobLogId(Long jobLogId)
+    public void setJobLogId(String jobLogId)
     {
         this.jobLogId = jobLogId;
     }
 
-    public Long getJobId()
+    public String getJobId()
     {
         return jobId;
     }
 
-    public void setJobId(Long jobId)
+    public void setJobId(String jobId)
     {
         this.jobId = jobId;
     }
@@ -175,20 +180,28 @@ public class SysJobLog extends BaseEntity
         this.stopTime = stopTime;
     }
 
-    public Long getFid() {
+    public String getFid() {
         return fid;
     }
 
-    public void setFid(Long fid) {
+    public void setFid(String fid) {
         this.fid = fid;
     }
 
-    public Long getFjobId() {
+    public String getFjobId() {
         return fjobId;
     }
 
-    public void setFjobId(Long fjobId) {
+    public void setFjobId(String fjobId) {
         this.fjobId = fjobId;
+    }
+
+    public Date getFailTime() {
+        return failTime;
+    }
+
+    public void setFailTime(Date failTime) {
+        this.failTime = failTime;
     }
 
     public String getJobType() {

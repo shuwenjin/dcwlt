@@ -22,20 +22,12 @@ public interface ISysJobService
     public List<SysJob> selectJobList(SysJob job);
 
     /**
-     * 获取quartz调度器的失败重试计划任务
-     * 
-     * @param job 调度信息
-     * @return 调度任务集合
-     */
-    public List<SysJob> selectRetryJobList(SysJob job);
-
-    /**
      * 通过调度任务ID查询调度信息
      * 
      * @param jobId 调度任务ID
      * @return 调度任务对象信息
      */
-    public SysJob selectJobById(Long jobId);
+    public SysJob selectJobById(String jobId);
 
     /**
      * 暂停任务
@@ -90,7 +82,7 @@ public interface ISysJobService
      * @param jobIds 需要删除的任务ID
      * @return 结果
      */
-    public void deleteJobByIds(Long[] jobIds) throws SchedulerException;
+    public void deleteJobByIds(String[] jobIds) throws SchedulerException;
 
     /**
      * 任务调度状态修改
@@ -116,13 +108,6 @@ public interface ISysJobService
      * @return 结果
      */
     public void run(SysJob job) throws SchedulerException;
-
-    /**
-     * 获取自增主键jobId的下一个自增值
-     *
-     * @return
-     */
-    public Long nextJobId();
 
     /**
      * 新增任务

@@ -6,14 +6,12 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
 import com.dcits.dcwlt.common.core.constant.ScheduleConstants;
-import org.apache.commons.lang3.builder.ToStringBuilder;
-import org.apache.commons.lang3.builder.ToStringStyle;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.dcits.dcwlt.common.core.annotation.Excel;
-import com.dcits.dcwlt.common.core.annotation.Excel.ColumnType;
 import com.dcits.dcwlt.common.core.utils.StringUtils;
 import com.dcits.dcwlt.common.core.web.domain.BaseEntity;
 import com.dcits.dcwlt.job.util.CronUtils;
+import org.springframework.data.annotation.Id;
 
 /**
  * 定时任务调度表 sys_job
@@ -25,16 +23,17 @@ public class SysJob extends BaseEntity implements Serializable
     private static final long serialVersionUID = 1L;
 
     /** 任务ID */
-    @Excel(name = "任务序号", cellType = ColumnType.NUMERIC)
-    private Long jobId;
+    @Id
+    @Excel(name = "任务编号")
+    private String jobId;
 
     /** 父实例ID */
-    @Excel(name = "父实例序号", cellType = ColumnType.NUMERIC)
-    private Long fid;
+    @Excel(name = "父实例编号")
+    private String fid;
 
     /** 父任务ID*/
-    @Excel(name = "父任务序号", cellType = ColumnType.NUMERIC)
-    private Long fjobId;
+    @Excel(name = "父任务编号")
+    private String fjobId;
 
     /** 任务类型（0父任务 1子任务） */
     @Excel(name = "任务类型", readConverterExp = "0=父任务,1=子任务")
@@ -76,6 +75,11 @@ public class SysJob extends BaseEntity implements Serializable
     @Excel(name = "失败重试状态", readConverterExp = "0=正常,1=暂停")
     private String retryStatus;
 
+    /** 主任务失败时间 */
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @Excel(name = "主任务失败时间", width = 30, dateFormat = "yyyy-MM-dd HH:mm:ss")
+    private Date failTime;
+
     /** 重试最大次数 */
     @Excel(name = "重试最大次数")
     private Integer retryMaxNum;
@@ -88,12 +92,12 @@ public class SysJob extends BaseEntity implements Serializable
     @Excel(name = "当前重试次数")
     private Integer retryNum;
 
-    public Long getJobId()
+    public String getJobId()
     {
         return jobId;
     }
 
-    public void setJobId(Long jobId)
+    public void setJobId(String jobId)
     {
         this.jobId = jobId;
     }
@@ -154,6 +158,16 @@ public class SysJob extends BaseEntity implements Serializable
         return null;
     }
 
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    public Date getNextRetryValidTime()
+    {
+        if (StringUtils.isNotEmpty(retryCron))
+        {
+            return CronUtils.getNextExecution(retryCron);
+        }
+        return null;
+    }
+
     public String getMisfirePolicy()
     {
         return misfirePolicy;
@@ -204,6 +218,14 @@ public class SysJob extends BaseEntity implements Serializable
         return retryStatus;
     }
 
+    public Date getFailTime() {
+        return failTime;
+    }
+
+    public void setFailTime(Date failTime) {
+        this.failTime = failTime;
+    }
+
     public void setRetryMaxNum(Integer retryMaxNum)
     {
         this.retryMaxNum = retryMaxNum;
@@ -214,19 +236,19 @@ public class SysJob extends BaseEntity implements Serializable
         return retryMaxNum;
     }
 
-    public Long getFid() {
+    public String getFid() {
         return fid;
     }
 
-    public void setFid(Long fid) {
+    public void setFid(String fid) {
         this.fid = fid;
     }
 
-    public Long getFjobId() {
+    public String getFjobId() {
         return fjobId;
     }
 
-    public void setFjobId(Long fjobId) {
+    public void setFjobId(String fjobId) {
         this.fjobId = fjobId;
     }
 

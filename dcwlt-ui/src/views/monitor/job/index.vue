@@ -1,17 +1,28 @@
 <template>
   <div class="app-container">
     <el-form :model="queryParams" ref="queryForm" :inline="true" v-show="showSearch" label-width="68px">
+      <el-form-item label="任务编号" prop="jobId">
+        <el-input
+          v-model="queryParams.jobId"
+          placeholder="请输入任务编号"
+          clearable
+          size="small"
+          style="width: 240px"
+          @keyup.enter.native="handleQuery"
+        />
+      </el-form-item>
       <el-form-item label="任务名称" prop="jobName">
         <el-input
           v-model="queryParams.jobName"
           placeholder="请输入任务名称"
           clearable
           size="small"
+          style="width: 240px"
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
       <el-form-item label="任务组名" prop="jobGroup">
-        <el-select v-model="queryParams.jobGroup" placeholder="请选择任务组名" clearable size="small">
+        <el-select style="width: 240px" v-model="queryParams.jobGroup" placeholder="请选择任务组名" clearable size="small">
           <el-option
             v-for="dict in jobGroupOptions"
             :key="dict.dictValue"
@@ -21,7 +32,7 @@
         </el-select>
       </el-form-item>
       <el-form-item label="任务状态" prop="status">
-        <el-select v-model="queryParams.status" placeholder="请选择任务状态" clearable size="small">
+        <el-select style="width: 240px" v-model="queryParams.status" placeholder="请选择任务状态" clearable size="small">
           <el-option
             v-for="dict in statusOptions"
             :key="dict.dictValue"
@@ -506,7 +517,7 @@ export default {
     },
     /** 任务日志列表查询 */
     handleJobLog() {
-      this.$router.push("/job/log");
+      this.$router.push({name: 'JobLog', params: {jobIds: this.ids}});
     },
     /** 新增按钮操作 */
     handleAdd() {

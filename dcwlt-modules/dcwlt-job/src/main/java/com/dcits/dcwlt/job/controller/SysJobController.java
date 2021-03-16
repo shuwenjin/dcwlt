@@ -48,19 +48,21 @@ public class SysJobController extends BaseController
     public TableDataInfo list(SysJob sysJob)
     {
         startPage();
+        sysJob.setJobType(SysJobConstants.MAINJOB);
         List<SysJob> list = jobService.selectJobList(sysJob);
         return getDataTable(list);
     }
 
     /**
-     * 查询定时任务列表
+     * 查询重试定时任务列表
      */
     @PreAuthorize(hasPermi = "monitor:job:list")
     @GetMapping("/retryList")
     public TableDataInfo retryList(SysJob sysJob)
     {
         startPage();
-        List<SysJob> list = jobService.selectRetryJobList(sysJob);
+        sysJob.setJobType(SysJobConstants.RETRYJOB);
+        List<SysJob> list = jobService.selectJobList(sysJob);
         return getDataTable(list);
     }
 
@@ -72,6 +74,21 @@ public class SysJobController extends BaseController
     @PostMapping("/export")
     public void export(HttpServletResponse response, SysJob sysJob) throws IOException
     {
+        sysJob.setJobType(SysJobConstants.MAINJOB);
+        List<SysJob> list = jobService.selectJobList(sysJob);
+        ExcelUtil<SysJob> util = new ExcelUtil<SysJob>(SysJob.class);
+        util.exportExcel(response, list, "定时任务");
+    }
+
+    /**
+     * 导出失败重试定时任务列表
+     */
+    @PreAuthorize(hasPermi = "monitor:job:export")
+    @Log(title = "定时任务", businessType = BusinessType.EXPORT)
+    @PostMapping("/retryExport")
+    public void retryExport(HttpServletResponse response, SysJob sysJob) throws IOException
+    {
+        sysJob.setJobType(SysJobConstants.RETRYJOB);
         List<SysJob> list = jobService.selectJobList(sysJob);
         ExcelUtil<SysJob> util = new ExcelUtil<SysJob>(SysJob.class);
         util.exportExcel(response, list, "定时任务");
@@ -82,7 +99,7 @@ public class SysJobController extends BaseController
      */
     @PreAuthorize(hasPermi = "monitor:job:query")
     @GetMapping(value = "/{jobId}")
-    public AjaxResult getInfo(@PathVariable("jobId") Long jobId)
+    public AjaxResult getInfo(@PathVariable("jobId") String jobId)
     {
         return AjaxResult.success(jobService.selectJobById(jobId));
     }
@@ -173,7 +190,7 @@ public class SysJobController extends BaseController
     @PreAuthorize(hasPermi = "monitor:job:remove")
     @Log(title = "定时任务", businessType = BusinessType.DELETE)
     @DeleteMapping("/{jobIds}")
-    public AjaxResult remove(@PathVariable Long[] jobIds) throws SchedulerException, TaskException
+    public AjaxResult remove(@PathVariable String[] jobIds) throws SchedulerException, TaskException
     {
         jobService.deleteJobByIds(jobIds);
         return AjaxResult.success();

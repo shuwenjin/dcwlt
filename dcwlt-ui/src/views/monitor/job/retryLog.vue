@@ -1,6 +1,58 @@
 <template>
   <div class="app-container">
     <el-form :model="queryParams" ref="queryForm" :inline="true" v-show="showSearch" label-width="68px">
+      <el-form-item label="日志编号" prop="jobLogId">
+        <el-input
+          v-model="queryParams.jobLogId"
+          placeholder="请输入日志编号"
+          clearable
+          size="small"
+          style="width: 240px"
+          @keyup.enter.native="handleQuery"
+        />
+      </el-form-item>
+      <el-form-item label="任务编号" prop="jobId">
+        <el-input
+          v-model="queryParams.jobId"
+          placeholder="请输入任务编号"
+          clearable
+          size="small"
+          style="width: 240px"
+          @keyup.enter.native="handleQuery"
+        />
+      </el-form-item>
+      <el-form-item label="父实例Id" prop="fid">
+        <el-input
+          v-model="queryParams.fid"
+          placeholder="请输入父实例编号"
+          clearable
+          size="small"
+          style="width: 240px"
+          @keyup.enter.native="handleQuery"
+        />
+      </el-form-item>
+      <el-form-item label="父任务Id" prop="fjobId">
+        <el-input
+          v-model="queryParams.fjobId"
+          placeholder="请输入父任务编号"
+          clearable
+          size="small"
+          style="width: 240px"
+          @keyup.enter.native="handleQuery"
+        />
+      </el-form-item>
+      <el-form-item label="失败时间">
+        <el-date-picker
+          v-model="failDateRange"
+          size="small"
+          style="width: 240px"
+          value-format="yyyy-MM-dd HH:mm:ss"
+          type="datetimerange"
+          range-separator="-"
+          start-placeholder="开始时间"
+          end-placeholder="结束时间"
+        ></el-date-picker>
+      </el-form-item>
       <el-form-item label="任务名称" prop="jobName">
         <el-input
           v-model="queryParams.jobName"
@@ -48,11 +100,11 @@
           v-model="dateRange"
           size="small"
           style="width: 240px"
-          value-format="yyyy-MM-dd"
-          type="daterange"
+          value-format="yyyy-MM-dd HH:mm:ss"
+          type="datetimerange"
           range-separator="-"
-          start-placeholder="开始日期"
-          end-placeholder="结束日期"
+          start-placeholder="开始时间"
+          end-placeholder="结束时间"
         ></el-date-picker>
       </el-form-item>
       <el-form-item>
@@ -93,20 +145,29 @@
           v-hasPermi="['monitor:job:export']"
         >导出</el-button>
       </el-col>
-      <right-toolbar :showSearch.sync="showSearch" @queryTable="getList"></right-toolbar>
+      <right-toolbar :showSearch.sync="showSearch" @queryTable="getList" :columns="columns"></right-toolbar>
     </el-row>
 
     <el-table v-loading="loading" :data="jobLogList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
-      <el-table-column label="日志编号" width="80" align="center" prop="jobLogId" />
-      <el-table-column label="任务名称" align="center" prop="jobName" :show-overflow-tooltip="true" />
-      <el-table-column label="任务组名" align="center" prop="jobGroup" :formatter="jobGroupFormat" :show-overflow-tooltip="true" />
-      <el-table-column label="调用目标字符串" align="center" prop="invokeTarget" :show-overflow-tooltip="true" />
-      <el-table-column label="日志信息" align="center" prop="jobMessage" :show-overflow-tooltip="true" />
-      <el-table-column label="执行状态" align="center" prop="status" :formatter="statusFormat" />
-      <el-table-column label="执行时间" align="center" prop="createTime" width="180">
+      <el-table-column label="日志编号" align="center" prop="jobLogId" v-if="columns[0].visible" />
+      <el-table-column label="任务编号" align="center" prop="jobId" v-if="columns[1].visible" />
+      <el-table-column label="父实例编号" align="center" prop="fid" v-if="columns[2].visible" />
+      <el-table-column label="父任务编号" align="center" prop="fjobId" v-if="columns[3].visible" />
+      <el-table-column label="主任务失败时间" align="center" prop="failTime" v-if="columns[4].visible" >
         <template slot-scope="scope">
-          <span>{{ parseTime(scope.row.createTime) }}</span>
+          <span>{{ parseTime(scope.row.failTime) }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column label="任务名称" align="center" prop="jobName" v-if="columns[5].visible" :show-overflow-tooltip="true" />
+      <el-table-column label="任务组名" align="center" prop="jobGroup" v-if="columns[6].visible" :formatter="jobGroupFormat" :show-overflow-tooltip="true" />
+      <el-table-column label="调用目标字符串" align="center" prop="invokeTarget" v-if="columns[7].visible" :show-overflow-tooltip="true" />
+      <el-table-column label="日志信息" align="center" prop="jobMessage" v-if="columns[8].visible" :show-overflow-tooltip="true" />
+      <el-table-column label="执行状态" align="center" prop="status" v-if="columns[9].visible" :formatter="statusFormat" />
+      <el-table-column label="返回值" align="center" prop="excuteRet" v-if="columns[10].visible" />
+      <el-table-column label="执行时间" align="center" prop="startTime" v-if="columns[11].visible" >
+        <template slot-scope="scope">
+          <span>{{ parseTime(scope.row.startTime) }}</span>
         </template>
       </el-table-column>
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
@@ -134,25 +195,25 @@
     <el-dialog title="调度日志详细" :visible.sync="open" width="700px" append-to-body>
       <el-form ref="form" :model="form" label-width="100px" size="mini">
         <el-row>
-          <el-col :span="12">
-            <el-form-item label="日志序号：">{{ form.jobLogId }}</el-form-item>
-            <el-form-item label="任务名称：">{{ form.jobName }}</el-form-item>
+          <el-col :span="24">
+            <el-form-item label="日志编号：">{{ form.jobLogId }}</el-form-item>
+            <el-form-item label="任务编号：">{{ form.jobId }}</el-form-item>
+            <el-form-item label="父实例编号：">{{ form.fid }}</el-form-item>
+            <el-form-item label="父任务编号：">{{ form.fjobId }}</el-form-item>
           </el-col>
           <el-col :span="12">
+            <el-form-item label="任务名称：">{{ form.jobName }}</el-form-item>
             <el-form-item label="任务分组：">{{ form.jobGroup }}</el-form-item>
-            <el-form-item label="执行时间：">{{ form.createTime }}</el-form-item>
+            <el-form-item label="执行状态：">{{ form.status === '0' ? '成功' : '失败' }}</el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="失败时间：">{{ form.failTime }}</el-form-item>
+            <el-form-item label="执行时间：">{{ form.startTime }}</el-form-item>
+            <el-form-item label="返回结果："  >{{ form.excuteRet }}</el-form-item>
           </el-col>
           <el-col :span="24">
             <el-form-item label="调用方法：">{{ form.invokeTarget }}</el-form-item>
-          </el-col>
-          <el-col :span="24">
             <el-form-item label="日志信息：">{{ form.jobMessage }}</el-form-item>
-          </el-col>
-          <el-col :span="24">
-            <el-form-item label="执行状态：">
-              <div v-if="form.status == 0">正常</div>
-              <div v-else-if="form.status == 1">失败</div>
-            </el-form-item>
           </el-col>
           <el-col :span="24">
             <el-form-item label="异常信息：" v-if="form.status == 1">{{ form.exceptionInfo }}</el-form-item>
@@ -187,8 +248,10 @@ export default {
       jobLogList: [],
       // 是否显示弹出层
       open: false,
-      // 日期范围
+      // 执行时间范围
       dateRange: [],
+      // 主任务执行失败时间范围
+      failDateRange: [],
       // 表单参数
       form: {},
       // 执行状态字典
@@ -202,7 +265,22 @@ export default {
         jobName: undefined,
         jobGroup: undefined,
         status: undefined
-      }
+      },
+      // 列信息
+      columns: [
+        { key: 0, label: `日志编号`, visible: true },
+        { key: 1, label: `任务编号`, visible: true },
+        { key: 2, label: `父实例编号`, visible: true },
+        { key: 3, label: `父任务编号`, visible: true },
+        { key: 4, label: `主任务失败时间`, visible: true },
+        { key: 5, label: `任务名称`, visible: true },
+        { key: 6, label: `任务组名`, visible: true },
+        { key: 7, label: `调用目标字符串`, visible: true },
+        { key: 8, label: `日志信息`, visible: true },
+        { key: 9, label: `执行状态`, visible: true },
+        { key: 10, label: `返回值`, visible: true },
+        { key: 11, label: `执行时间`, visible: true },
+      ],
     };
   },
   created() {
@@ -218,7 +296,13 @@ export default {
     /** 查询调度日志列表 */
     getList() {
       this.loading = true;
-      listJobLog(this.addDateRange(this.queryParams, this.dateRange)).then(response => {
+      let search = this.addDateRange(this.queryParams, this.dateRange);
+      search = this.addDateRange(this.queryParams, this.failDateRange, 'FailTime');
+      let jobIds = this.$route.params && this.$route.params.jobIds;
+      if (jobIds instanceof Array && jobIds.length > 0) {
+        search.params.jobIds = jobIds;
+      }
+      listJobLog(search, true).then(response => {
           this.jobLogList = response.rows;
           this.total = response.total;
           this.loading = false;
@@ -241,6 +325,7 @@ export default {
     /** 重置按钮操作 */
     resetQuery() {
       this.dateRange = [];
+      this.failDateRange = [];
       this.resetForm("queryForm");
       this.handleQuery();
     },
@@ -275,7 +360,7 @@ export default {
           cancelButtonText: "取消",
           type: "warning"
         }).then(function() {
-          return cleanJobLog();
+          return cleanJobLog(true);
         }).then(() => {
           this.getList();
           this.msgSuccess("清空成功");
@@ -283,9 +368,9 @@ export default {
     },
     /** 导出按钮操作 */
     handleExport() {
-      this.download('schedule/job/log/export', {
+      this.download('schedule/job/log/retryExport', {
         ...this.queryParams
-      }, `log_${new Date().getTime()}.xlsx`)
+      }, `retryLog_${new Date().getTime()}.xlsx`)
     }
   }
 };

@@ -1,6 +1,8 @@
 package com.dcits.dcwlt.job.service;
 
 import java.util.List;
+import java.util.UUID;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.dcits.dcwlt.job.domain.SysJobLog;
@@ -30,18 +32,6 @@ public class SysJobLogServiceImpl implements ISysJobLogService
     }
 
     /**
-     * 失败重试调度任务日志查询
-     * 
-     * @param jobLog 调度日志信息
-     * @return 调度任务日志集合
-     */
-    @Override
-    public List<SysJobLog> selectRetryJobLogList(SysJobLog jobLog)
-    {
-        return jobLogMapper.selectRetryJobLogList(jobLog);
-    }
-
-    /**
      * 通过调度任务日志ID查询调度信息
      * 
      * @param jobLogId 调度任务日志ID
@@ -54,16 +44,6 @@ public class SysJobLogServiceImpl implements ISysJobLogService
     }
 
     /**
-     * 获取自增主键jobLogId的下一个自增值
-     *
-     * @return
-     */
-    @Override
-    public Long nextJobLogId() {
-        return jobLogMapper.nextJobLogId();
-    }
-
-    /**
      * 新增任务日志
      * 
      * @param jobLog 调度日志信息
@@ -71,6 +51,9 @@ public class SysJobLogServiceImpl implements ISysJobLogService
     @Override
     public void addJobLog(SysJobLog jobLog)
     {
+        if (null == jobLog.getJobLogId() || "".equals(jobLog.getJobLogId())) {
+            jobLog.setJobLogId(UUID.randomUUID().toString());
+        }
         jobLogMapper.insertJobLog(jobLog);
     }
 
@@ -92,17 +75,26 @@ public class SysJobLogServiceImpl implements ISysJobLogService
      * @param jobId 调度日志ID
      */
     @Override
-    public int deleteJobLogById(Long jobId)
+    public int deleteJobLogById(String jobId)
     {
         return jobLogMapper.deleteJobLogById(jobId);
     }
 
     /**
-     * 清空任务日志
+     * 清空主任务日志
      */
     @Override
     public void cleanJobLog()
     {
         jobLogMapper.cleanJobLog();
+    }
+
+    /**
+     * 清空失败重试任务日志
+     */
+    @Override
+    public void cleanRetryJobLog()
+    {
+        jobLogMapper.cleanRetryJobLog();
     }
 }

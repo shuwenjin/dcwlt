@@ -6,9 +6,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
 	<resultMap type="SysJobLog" id="SysJobLogResult">
 		<id     property="jobLogId"       column="job_log_id"      />
-		<result property="jobId"          column="job_id"        />
-		<result property="fid"            column="fid"        />
-		<result property="fjobId"         column="fjob_id"        />
+		<result property="jobId"          column="job_id"          />
+		<result property="fid"            column="fid"             />
+		<result property="fjobId"         column="fjob_id"         />
+		<result property="failTime"       column="fail_time"       />
 		<result property="jobType"        column="job_type"        />
 		<result property="jobName"        column="job_name"        />
 		<result property="jobGroup"       column="job_group"       />
@@ -17,59 +18,35 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		<result property="status"         column="status"          />
 		<result property="exceptionInfo"  column="exception_info"  />
 		<result property="createTime"     column="create_time"     />
-		<result property="startTime"      column="start_time"     />
-		<result property="stopTime"       column="stop_time"     />
-		<result property="excuteRet"      column="excute_ret"     />
+		<result property="startTime"      column="start_time"      />
+		<result property="stopTime"       column="stop_time"       />
+		<result property="excuteRet"      column="excute_ret"      />
 	</resultMap>
-
-	<select id="nextJobLogId" resultType="Long">
-		select auto_increment from information_schema.tables where table_schema='dcwlt-app-online' and table_name='sys_job_log';
-	</select>
 	
 	<sql id="selectJobLogVo">
-		select job_log_id, job_id, fid, fjob_id, job_type, job_name, job_group, invoke_target, job_message, status, exception_info, start_time, stop_time, excute_ret, create_time
+		select job_log_id, job_id, fid, fjob_id, fail_time, job_type, job_name, job_group, invoke_target, job_message, status, exception_info, start_time, stop_time, excute_ret, create_time
 		from sys_job_log
 	</sql>
-	
+
 	<select id="selectJobLogList" parameterType="SysJobLog" resultMap="SysJobLogResult">
 		<include refid="selectJobLogVo"/>
 		<where>
-			job_type = 0
-			<if test="jobId != null and jobId != 0">
+			<if test="jobType != null and jobType != ''">
+				AND job_type = #{jobType}
+			</if>
+			<if test="jobId != null and jobId != ''">
 				AND job_id = #{jobId}
 			</if>
-			<if test="jobName != null and jobName != ''">
-				AND job_name like concat('%', #{jobName}, '%')
+			<if test="jobId == null and params.jobIds != null and params.jobIds != ''">
+				AND job_id in
+				<foreach collection="params.jobIds.split(',')" item="jobId" open="(" separator="," close=")">
+					#{jobId}
+				</foreach>
 			</if>
-			<if test="jobGroup != null and jobGroup != ''">
-				AND job_group = #{jobGroup}
-			</if>
-			<if test="status != null and status != ''">
-				AND status = #{status}
-			</if>
-			<if test="invokeTarget != null and invokeTarget != ''">
-				AND invoke_target like concat('%', #{invokeTarget}, '%')
-			</if>
-			<if test="params.beginTime != null and params.beginTime != ''"><!-- 开始时间检索 -->
-				and date_format(create_time,'%y%m%d') &gt;= date_format(#{params.beginTime},'%y%m%d')
-			</if>
-			<if test="params.endTime != null and params.endTime != ''"><!-- 结束时间检索 -->
-				and date_format(create_time,'%y%m%d') &lt;= date_format(#{params.endTime},'%y%m%d')
-			</if>
-		</where>
-	</select>
-
-	<select id="selectRetryJobLogList" parameterType="SysJobLog" resultMap="SysJobLogResult">
-		<include refid="selectJobLogVo"/>
-		<where>
-			job_type = 1
-			<if test="jobId != null and jobId != 0">
-				AND job_id = #{jobId}
-			</if>
-			<if test="fid != null and fid != 0">
+			<if test="fid != null and fid != ''">
 				AND fid = #{fid}
 			</if>
-			<if test="fjobId != null and fjobId != 0">
+			<if test="fjobId != null and fjobId != ''">
 				AND fjob_id = #{fjobId}
 			</if>
 			<if test="jobName != null and jobName != ''">
@@ -85,10 +62,16 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 				AND invoke_target like concat('%', #{invokeTarget}, '%')
 			</if>
 			<if test="params.beginTime != null and params.beginTime != ''"><!-- 开始时间检索 -->
-				and date_format(create_time,'%y%m%d') &gt;= date_format(#{params.beginTime},'%y%m%d')
+				and date_format(start_time,'%y%m%d %H%i%s') &gt;= date_format(#{params.beginTime},'%y%m%d %H%i%s')
 			</if>
 			<if test="params.endTime != null and params.endTime != ''"><!-- 结束时间检索 -->
-				and date_format(create_time,'%y%m%d') &lt;= date_format(#{params.endTime},'%y%m%d')
+				and date_format(start_time,'%y%m%d %H%i%s') &lt;= date_format(#{params.endTime},'%y%m%d %H%i%s')
+			</if>
+			<if test="params.beginFailTime != null and params.beginFailTime != ''"><!-- 开始时间检索 -->
+				and date_format(fail_time,'%y%m%d %H%i%s') &gt;= date_format(#{params.beginFailTime},'%y%m%d %H%i%s')
+			</if>
+			<if test="params.endFailTime != null and params.endFailTime != ''"><!-- 结束时间检索 -->
+				and date_format(fail_time,'%y%m%d %H%i%s') &lt;= date_format(#{params.endFailTime},'%y%m%d %H%i%s')
 			</if>
 		</where>
 	</select>
@@ -103,33 +86,38 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		where job_type = '1'
 	</select>
 	
-	<select id="selectJobLogById" parameterType="Long" resultMap="SysJobLogResult">
+	<select id="selectJobLogById" parameterType="String" resultMap="SysJobLogResult">
 		<include refid="selectJobLogVo"/>
 		where job_log_id = #{jobLogId}
 	</select>
 	
-	<delete id="deleteJobLogById" parameterType="Long">
+	<delete id="deleteJobLogById" parameterType="String">
  		delete from sys_job_log where job_log_id = #{jobLogId}
  	</delete>
  	
- 	<delete id="deleteJobLogByIds" parameterType="Long">
+ 	<delete id="deleteJobLogByIds" parameterType="String">
  		delete from sys_job_log where job_log_id in
  		<foreach collection="array" item="jobLogId" open="(" separator="," close=")">
  			#{jobLogId}
         </foreach> 
  	</delete>
  	
- 	<update id="cleanJobLog">
-		truncate table sys_job_log
-	</update>
+ 	<delete id="cleanJobLog">
+		delete from sys_job_log where job_type = '0'
+	</delete>
+
+	<delete id="cleanRetryJobLog">
+		delete from sys_job_log where job_type = '0'
+	</delete>
  	
  	<insert id="insertJobLog" parameterType="SysJobLog">
  		insert into sys_job_log(
- 			<if test="jobLogId != null and jobLogId != 0">job_log_id,</if>
-			<if test="jobId != null and jobId != 0">job_id,</if>
-			<if test="fid != null and fid != 0">fid,</if>
-			<if test="fjobId != null and fjobId != 0">fjob_id,</if>
-			<if test="jobType != null and jobType != 0">job_type,</if>
+ 			<if test="jobLogId != null and jobLogId != ''">job_log_id,</if>
+			<if test="jobId != null and jobId != ''">job_id,</if>
+			<if test="fid != null and fid != ''">fid,</if>
+			<if test="fjobId != null and fjobId != ''">fjob_id,</if>
+			<if test="failTime != null">fail_time,</if>
+			<if test="jobType != null and jobType != ''">job_type,</if>
  			<if test="jobName != null and jobName != ''">job_name,</if>
  			<if test="jobGroup != null and jobGroup != ''">job_group,</if>
  			<if test="invokeTarget != null and invokeTarget != ''">invoke_target,</if>
@@ -141,11 +129,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			<if test="excuteRet != null and excuteRet != ''">excute_ret,</if>
  			create_time
  		)values(
- 			<if test="jobLogId != null and jobLogId != 0">#{jobLogId},</if>
-			<if test="jobId != null and jobId != 0">#{jobId},</if>
-			<if test="fid != null and fid != 0">#{fid},</if>
-			<if test="fjobId != null and fjobId != 0">#{fjobId},</if>
-			<if test="jobType != null and jobType != 0">#{jobType},</if>
+ 			<if test="jobLogId != null and jobLogId != ''">#{jobLogId},</if>
+			<if test="jobId != null and jobId != ''">#{jobId},</if>
+			<if test="fid != null and fid != ''">#{fid},</if>
+			<if test="fjobId != null and fjobId != ''">#{fjobId},</if>
+			<if test="failTime != null">#{failTime},</if>
+			<if test="jobType != null and jobType != ''">#{jobType},</if>
  			<if test="jobName != null and jobName != ''">#{jobName},</if>
  			<if test="jobGroup != null and jobGroup != ''">#{jobGroup},</if>
  			<if test="invokeTarget != null and invokeTarget != ''">#{invokeTarget},</if>

@@ -25,14 +25,14 @@ public class RyTask
         }
         TaskResult result = new TaskResult();
         // 调用目标字符串
-        result.setInvokeTarget("ryMultipleParams(" + params + "," + b + "," + l + "L," + d + "D," + i + ")");
+        result.setInvokeTarget("ryTask.ryMultipleParams(" + params + "," + b + "," + l + "L," + d + "D," + i + ")");
         // 初始化执行结果为失败
         result.setSussess(false);
 
-        System.out.println("执行多参方法：ryMultipleParams(" + s + "," + b + "," + l + ",L" + d + "D," + i + ")");
+        System.out.println("执行多参方法：ryTask.ryMultipleParams(" + s + "," + b + "," + l + ",L" + d + "D," + i + ")");
 
         double random = Math.random();
-        if (random > 0.8) {
+        if (random > 0.6) {
             throw new Exception(JSONObject.toJSONString(result));
         }
 
@@ -49,14 +49,14 @@ public class RyTask
         }
         TaskResult result = new TaskResult();
         // 调用目标字符串
-        result.setInvokeTarget("ryParams(" + params + ")");
+        result.setInvokeTarget("ryTask.ryParams(" + params + ")");
         // 初始化执行结果为失败
         result.setSussess(false);
 
-        System.out.println("执行有参方法：" + "ryParams(" + str + ")");
+        System.out.println("执行有参方法：" + "ryTask.ryParams(" + str + ")");
 
         double random = Math.random();
-        if (random > 0.2) {
+        if (random > 0.1) {
             throw new Exception(JSONObject.toJSONString(result));
         }
 
@@ -68,7 +68,7 @@ public class RyTask
     public TaskResult ryNoParams() throws Exception {
         TaskResult result = new TaskResult();
         // 调用目标字符串
-        result.setInvokeTarget("ryNoParams()");
+        result.setInvokeTarget("ryTask.ryNoParams()");
         // 初始化执行结果为失败
         result.setSussess(false);
 

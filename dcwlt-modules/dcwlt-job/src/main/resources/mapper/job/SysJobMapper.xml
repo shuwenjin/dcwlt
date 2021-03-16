@@ -8,6 +8,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		<id     property="jobId"          column="job_id"          />
 		<result property="fid"            column="fid"             />
 		<result property="fjobId"         column="fjob_id"         />
+		<result property="failTime"       column="fail_time"       />
 		<result property="jobType"        column="job_type"        />
 		<result property="jobName"        column="job_name"        />
 		<result property="jobGroup"       column="job_group"       />
@@ -27,21 +28,22 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		<result property="updateTime"     column="update_time"     />
 		<result property="remark"         column="remark"          />
 	</resultMap>
-
-	<select id="nextJobId" resultType="Long">
-		select auto_increment from information_schema.tables where table_schema='dcwlt-app-online' and table_name='sys_job';
-	</select>
 	
 	<sql id="selectJobVo">
-        select job_id, fid, fjob_id, job_type, job_name, job_group, invoke_target, cron_expression, misfire_policy, concurrent, status,
+        select job_id, fid, fjob_id, fail_time, job_type, job_name, job_group, invoke_target, cron_expression, misfire_policy, concurrent, status,
         retry_cron, retry_status, retry_max_num, retry_job_status, retry_num, create_by, create_time, remark
 		from sys_job
     </sql>
-	
+
 	<select id="selectJobList" parameterType="SysJob" resultMap="SysJobResult">
 		<include refid="selectJobVo"/>
 		<where>
-			job_type = 0
+			<if test="jobType != null and jobType != ''">
+				AND job_type = #{jobType}
+			</if>
+			<if test="jobId != null and jobId != ''">
+				AND job_id like concat('%', #{jobId}, '%')
+			</if>
 			<if test="jobName != null and jobName != ''">
 				AND job_name like concat('%', #{jobName}, '%')
 			</if>
@@ -51,30 +53,14 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			<if test="status != null and status != ''">
 				AND status = #{status}
 			</if>
-			<if test="invokeTarget != null and invokeTarget != ''">
-				AND invoke_target like concat('%', #{invokeTarget}, '%')
-			</if>
-		</where>
-	</select>
-
-	<select id="selectRetryJobList" parameterType="SysJob" resultMap="SysJobResult">
-		<include refid="selectJobVo"/>
-		<where>
-			job_type = 1
-			<if test="jobName != null and jobName != ''">
-				AND job_name like concat('%', #{jobName}, '%')
-			</if>
-			<if test="jobGroup != null and jobGroup != ''">
-				AND job_group = #{jobGroup}
-			</if>
-			<if test="status != null and status != ''">
-				AND status = #{status}
-			</if>
-			<if test="fid != null and fid != 0">
+			<if test="fid != null and fid != ''">
 				AND fid = #{fid}
 			</if>
-			<if test="fjobId != null and fjobId != 0">
+			<if test="fjobId != null and fjobId != ''">
 				AND fjob_id = #{fjobId}
+			</if>
+			<if test="retryStatus != null and retryStatus != ''">
+				AND retry_status = #{retryStatus}
 			</if>
 			<if test="retryJobStatus != null and retryJobStatus != ''">
 				AND retry_job_status = #{retryJobStatus}
@@ -82,29 +68,35 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			<if test="invokeTarget != null and invokeTarget != ''">
 				AND invoke_target like concat('%', #{invokeTarget}, '%')
 			</if>
+			<if test="fid == null and params.fids != null and params.fids != ''">
+				AND fid in
+				<foreach collection="params.fids.split(',')" item="fid" open="(" separator="," close=")">
+					#{fid}
+				</foreach>
+			</if>
 		</where>
 	</select>
 	
 	<select id="selectJobAll" resultMap="SysJobResult">
 		<include refid="selectJobVo"/>
-		where job_type = 0
+		where job_type = '0'
 	</select>
 
 	<select id="selectRetryJobAll" resultMap="SysJobResult">
 		<include refid="selectJobVo"/>
-		where job_type = 1
+		where job_type = '1'
 	</select>
 	
-	<select id="selectJobById" parameterType="Long" resultMap="SysJobResult">
+	<select id="selectJobById" parameterType="String" resultMap="SysJobResult">
 		<include refid="selectJobVo"/>
 		where job_id = #{jobId}
 	</select>
 	
-	<delete id="deleteJobById" parameterType="Long">
+	<delete id="deleteJobById" parameterType="String">
  		delete from sys_job where job_id = #{jobId}
  	</delete>
  	
- 	<delete id="deleteJobByIds" parameterType="Long">
+ 	<delete id="deleteJobByIds" parameterType="String">
  		delete from sys_job where job_id in
  		<foreach collection="array" item="jobId" open="(" separator="," close=")">
  			#{jobId}
@@ -135,10 +127,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
  	
  	<insert id="insertJob" parameterType="SysJob" useGeneratedKeys="true" keyProperty="jobId">
  		insert into sys_job(
- 			<if test="jobId != null and jobId != 0">job_id,</if>
- 			<if test="fid != null and fid != 0">fid,</if>
- 			<if test="fjobId != null and fjobId != 0">fjob_id,</if>
- 			<if test="jobType != null and jobType != 0">job_type,</if>
+ 			<if test="jobId != null and jobId != ''">job_id,</if>
+ 			<if test="fid != null and fid != ''">fid,</if>
+ 			<if test="fjobId != null and fjobId != ''">fjob_id,</if>
+			<if test="failTime != null">fail_time,</if>
+ 			<if test="jobType != null and jobType != ''">job_type,</if>
  			<if test="jobName != null and jobName != ''">job_name,</if>
  			<if test="jobGroup != null and jobGroup != ''">job_group,</if>
  			<if test="invokeTarget != null and invokeTarget != ''">invoke_target,</if>
@@ -155,10 +148,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
  			<if test="createBy != null and createBy != ''">create_by,</if>
  			create_time
  		)values(
- 			<if test="jobId != null and jobId != 0">#{jobId},</if>
- 			<if test="fid != null and fid != 0">#{fid},</if>
- 			<if test="fjobId != null and fjobId != 0">#{fjobId},</if>
- 			<if test="jobType != null and jobType != 0">#{jobType},</if>
+ 			<if test="jobId != null and jobId != ''">#{jobId},</if>
+ 			<if test="fid != null and fid != ''">#{fid},</if>
+ 			<if test="fjobId != null and fjobId != ''">#{fjobId},</if>
+			<if test="failTime != null">#{failTime},</if>
+ 			<if test="jobType != null and jobType != ''">#{jobType},</if>
  			<if test="jobName != null and jobName != ''">#{jobName},</if>
  			<if test="jobGroup != null and jobGroup != ''">#{jobGroup},</if>
  			<if test="invokeTarget != null and invokeTarget != ''">#{invokeTarget},</if>

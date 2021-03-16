@@ -2,14 +2,15 @@ package com.dcits.dcwlt.job.util;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.Date;
+import java.util.UUID;
 
 import com.alibaba.fastjson.JSONObject;
 import com.dcits.dcwlt.common.core.constant.ScheduleConstants;
 import com.dcits.dcwlt.common.core.constant.SysJobConstants;
+import com.dcits.dcwlt.common.core.utils.SpringUtils;
 import com.dcits.dcwlt.common.core.utils.bean.BeanUtils;
 import com.dcits.dcwlt.job.domain.SysJob;
 import com.dcits.dcwlt.job.domain.SysJobLog;
-import com.dcits.dcwlt.job.mapper.SysJobMapper;
 import com.dcits.dcwlt.job.service.ISysJobLogService;
 import com.dcits.dcwlt.job.service.ISysJobService;
 import com.dcits.dcwlt.job.task.TaskResult;
@@ -30,9 +31,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 public abstract class AbstractQuartzJob implements Job
 {
     private static final Logger log = LoggerFactory.getLogger(AbstractQuartzJob.class);
-
-    @Autowired
-    private SysJobMapper jobMapper;
 
     @Autowired
     ISysJobService jobService;
@@ -104,39 +102,42 @@ public abstract class AbstractQuartzJob implements Job
         Date startTime = threadLocal.get();
         threadLocal.remove();
 
-        //synchronized (this) {
-            final SysJobLog sysJobLog = new SysJobLog();
-            BeanUtils.copyBeanProp(sysJobLog, sysJob);
-            Long jobLogId = jobLogService.nextJobLogId();
-            sysJobLog.setJobLogId(jobLogId);
-            sysJobLog.setStartTime(startTime);
-            sysJobLog.setStopTime(new Date());
+        final SysJobLog sysJobLog = new SysJobLog();
+        BeanUtils.copyBeanProp(sysJobLog, sysJob);
+        String jobLogId = UUID.randomUUID().toString();
+        sysJobLog.setJobLogId(jobLogId);
+        sysJobLog.setStartTime(startTime);
+        sysJobLog.setStopTime(new Date());
 
-            long runMs = sysJobLog.getStopTime().getTime() - sysJobLog.getStartTime().getTime();
-            sysJobLog.setJobMessage(sysJobLog.getJobName() + " 总共耗时：" + runMs + "毫秒");
-            if (e != null || isSuccess == false) {
-                sysJobLog.setStatus(SysJobConstants.FAIL);
-                String errorMsg = StringUtils.substring(ExceptionUtil.getExceptionMessage(e), 0, 2000);
-                sysJobLog.setExceptionInfo(errorMsg);
+        long runMs = sysJobLog.getStopTime().getTime() - sysJobLog.getStartTime().getTime();
+        sysJobLog.setJobMessage(sysJobLog.getJobName() + " 总共耗时：" + runMs + "毫秒");
+        if (e != null || isSuccess == false) {
+            sysJobLog.setStatus(SysJobConstants.FAIL);
+            String errorMsg = StringUtils.substring(ExceptionUtil.getExceptionMessage(e), 0, 2000);
+            sysJobLog.setExceptionInfo(errorMsg);
 
-                // 任务执行失败
-                if (SysJobConstants.MAINJOB.equals(sysJob.getJobType())) {
-                    log.error("任务执行异常  - ：" + e + ", jobId: " + sysJob.getJobId());
-                } else {
-                    log.error("重试任务执行异常  - ：" + e + ", jobId: " + sysJob.getJobId());
-                }
-
-                handleSysJobException(sysJob, jobLogId, e);
+            // 任务执行失败
+            if (SysJobConstants.MAINJOB.equals(sysJob.getJobType())) {
+                // 主任务执行失败时间为当前任务开始时间
+                sysJobLog.setFailTime(startTime);
+                log.error("任务执行异常  - ：" + e + ", jobId: " + sysJob.getJobId());
             } else {
-                sysJobLog.setStatus(SysJobConstants.SUCCESS);
-                if (null != taskResult) {
-                    sysJobLog.setExcuteRet(taskResult.getRet().toString());
-                }
+                // 失败重试任务的失败时间为主任务实例的失败时间
+                sysJobLog.setFailTime(sysJob.getFailTime());
+                log.error("重试任务执行异常  - ：" + e + ", jobId: " + sysJob.getJobId());
             }
 
-            // 写入数据库当中
-            jobLogService.addJobLog(sysJobLog);
-        //}
+            handleSysJobException(sysJob, jobLogId, startTime, e);
+        } else {
+            log.info("任务执行成功  -  jobId: " + sysJob.getJobId() + ", taskResult: " + taskResult.toString());
+            sysJobLog.setStatus(SysJobConstants.SUCCESS);
+            if (null != taskResult) {
+                sysJobLog.setExcuteRet(taskResult.getRet().toString());
+            }
+        }
+
+        // 写入数据库当中
+        jobLogService.addJobLog(sysJobLog);
     }
 
     /**
@@ -144,7 +145,7 @@ public abstract class AbstractQuartzJob implements Job
      * @param sysJob 系统计划任务
      * @param jobLogId  主任务日志Id, 作为重试任务的fid
      */
-    protected void handleSysJobException(SysJob sysJob, Long jobLogId, Exception e) {
+    protected void handleSysJobException(SysJob sysJob, String jobLogId, Date startTime, Exception e) {
         if (null == sysJob) {
             return;
         }
@@ -155,12 +156,14 @@ public abstract class AbstractQuartzJob implements Job
                 SysJob sysRetryJob = new SysJob();
                 BeanUtils.copyBeanProp(sysRetryJob, sysJob);
                 // 生成新的jobId
-                Long retryJobId = jobService.nextJobId();
+                String retryJobId = UUID.randomUUID().toString();
                 sysRetryJob.setJobId(retryJobId);
                 // 设置父任务Id
                 sysRetryJob.setFjobId(sysJob.getJobId());
                 // 设置父任务实例Id
                 sysRetryJob.setFid(jobLogId);
+                // 父任务实例执行时间
+                sysRetryJob.setFailTime(startTime);
                 // 设置任务类型为1重试任务
                 sysRetryJob.setJobType(SysJobConstants.RETRYJOB);
                 // 初始化重试重试状态为1失败
@@ -181,8 +184,7 @@ public abstract class AbstractQuartzJob implements Job
                 }
 
                 // 写入数据库当中
-                // jobService.insertJob(sysRetryJob);
-                jobMapper.insertJob(sysRetryJob);
+                jobService.insertJob(sysRetryJob);
                 if (ScheduleConstants.Status.NORMAL.getValue().equals(sysJob.getRetryStatus())) {
                     // 创建失败重试计划任务
                     jobService.createSchedulerRetryJob(sysRetryJob);
@@ -191,12 +193,18 @@ public abstract class AbstractQuartzJob implements Job
                 log.error("失败重试任务启动异常  - ：", e1);
             }
         } else {
-            // 失败重启任务执行异常， 失败次数达到最大时删除当前重试任务
-            Integer retryNum = sysJob.getRetryNum();
-            if (null == retryNum) {
-                retryNum = 0;
+            Integer retryNum = 0;
+            // 失败重启任务执行异常， 失败次数达到最大时暂停当前重试任务
+            SysJob sysJobDb = jobService.selectJobById(sysJob.getJobId());
+            if (null != sysJobDb) {
+                retryNum = sysJobDb.getRetryNum();
+                if (null == retryNum) {
+                    retryNum = 0;
+                }
             }
+
             ++retryNum;
+            sysJob.setRetryNum(retryNum);
             Integer retryMaxNum = sysJob.getRetryMaxNum();
             if (null == retryMaxNum) {
                 retryMaxNum = 0;
@@ -204,13 +212,15 @@ public abstract class AbstractQuartzJob implements Job
             }
             if (retryNum >= retryMaxNum) {
                 try {
-                    jobService.deleteJob(sysJob);
+                    // 修改重试状态为暂停
+                    sysJob.setRetryStatus(ScheduleConstants.Status.PAUSE.getValue());
+                    // 重试次数达到最大时暂停重试定时任务
+                    jobService.pauseRetryJob(sysJob);
                 } catch (Exception deleteException) {
-                    log.error("删除失败重试任务异常： ", deleteException);
+                    log.error("暂停重试任务异常： ", deleteException);
                 }
             } else {
                 try {
-                    sysJob.setRetryNum(retryNum);
                     jobService.updateJob(sysJob);
                 } catch (Exception updateException) {
                     log.error("更新重试任务异常： ", updateException);
@@ -227,18 +237,27 @@ public abstract class AbstractQuartzJob implements Job
         if (null == sysRetryJob) {
             return;
         }
-        // 如果当前任务是重试任务，关闭重试任务，修改重试任务重试成功状态为成功
+        // 如果当前任务是重试任务，暂停重试任务，修改重试任务重试成功状态为成功
         if(SysJobConstants.RETRYJOB.equals(sysRetryJob.getJobType())) {
             try {
+                Integer retryNum = 0;
+                SysJob sysRetryJobDb = jobService.selectJobById(sysRetryJob.getJobId());
+                if (null != sysRetryJobDb) {
+                    retryNum = sysRetryJobDb.getRetryNum();
+                    if (null == retryNum) {
+                        retryNum = 0;
+                    }
+                }
+                ++retryNum;
+                sysRetryJob.setRetryNum(retryNum);
                 // 修改重试重试状态为成功
                 sysRetryJob.setRetryJobStatus(SysJobConstants.SUCCESS);
                 // 修改重试状态为暂停
                 sysRetryJob.setRetryStatus(ScheduleConstants.Status.PAUSE.getValue());
-                // 写入数据库当中
-                jobService.updateJob(sysRetryJob);
-                jobService.deleteSchedulerJob(sysRetryJob);
+                // 暂停重试任务
+                jobService.pauseRetryJob(sysRetryJob);
             } catch (Exception deleteJobException) {
-                log.error("删除失败重试任务异常  - ：", deleteJobException);
+                log.error("暂停失败重试任务异常  - ：", deleteJobException);
             }
         }
     }
