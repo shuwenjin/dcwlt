@@ -229,5 +229,239 @@ public class BankAccountVerifyService {
         return null;
     }
 
+
+    /**
+     * 账户验证
+     *
+     * @param msgType 交易类型
+     * @param req     账户验证银行核心请求报文体
+     * @return BankCore358040Rsp
+     */
+    public BankCore358040Rsp verifyAccount(String msgType, BankCore358040Req req) {
+        BankCore358040Rsp body = queryAccount(msgType,req);
+        doVerifyAccount(body);
+        return body;
+    }
+
+    /**
+     * check account status
+     *
+     * @param rsp 358040响应报文
+     */
+    private void doVerifyAccount(BankCore358040Rsp rsp) {
+        //客户状态
+        String ciSts = rsp.getCiSts();
+        //客户类型
+        String type = rsp.getType();
+        //账户状态
+        String acSts = rsp.getAcSts();
+        //账户冻结状态
+        String acBlockSts = rsp.getAcBlockSts();
+        //账户状态字
+        String acStsw = rsp.getAcStsw();
+        //客户状态字
+        String ciStsw = rsp.getCiStsw();
+        //账户分类
+        String acClass = rsp.getAcClass();
+        //账户类型
+        String acAttr = rsp.getAcAttr();
+        //卡联名标志
+        String cardJointTyp = rsp.getCardJointTyp();
+
+        doVerifyCiSts(ciSts);
+        doVerifyType(type);
+        doVerifyAcSts(acSts);
+        doVerifyAcBlockSts(acBlockSts);
+        doVerifyAcStsw(acStsw);
+        doVerifyCistsw(ciStsw);
+        doVerifyAcClass(acClass);
+        doVerifyAcAttr(acAttr);
+        doVerifyCardJointTyp(cardJointTyp);
+
+    }
+    /**
+     * 校验客户状态
+     *
+     * @param ciSts 客户状态 0-正常 1-暂禁 2-销户
+     */
+    private void doVerifyCiSts(String ciSts) {
+        if (!"0".equals(ciSts)) {
+            logger.info("银行核心358040校验失败,客户状态异常");
+            throw new EcnyTransException(AppConstant.TRXSTATUS_FAILED, EcnyTransError.INVALID_CUSTOMER_STATUS);
+        }
+    }
+    /**
+     * 账户不为个人账户  （TYPE为1-个人客户）
+     *
+     * @param type
+     */
+    private void doVerifyType(String type) {
+        if (!"1".equals(type)) {
+            logger.error("校验账户不通过--账户类型不为个人账户");
+            throw new EcnyTransException(AppConstant.TRXSTATUS_FAILED, EcnyTransError.UN_SUPPORTED_ACC_TP);
+        }
+    }
+
+    /**
+     * 校验客户状态（"N"表示正常）
+     *
+     * @param acSts 客户状态
+     */
+    private void doVerifyAcSts(String acSts) {
+        if (!"N".equals(acSts)) {
+            logger.error("银行核心358040校验失败--客户状态异常");
+            throw new EcnyTransException(AppConstant.TRXSTATUS_FAILED, EcnyTransError.INVALID_ACCT_STATUS);
+        }
+    }
+
+
+    /**
+     * 校验账户冻结状态
+     *
+     * @param acBlockSts 账户冻结状态 N-正常;Y-账户冻结
+     */
+    private void doVerifyAcBlockSts(String acBlockSts) {
+        if (!"N".equals(acBlockSts)) {
+            logger.error("银行核心358040校验失败--账户冻结状态");
+            throw new EcnyTransException(AppConstant.TRXSTATUS_FAILED, EcnyTransError.FROZEN_ACCOUNT);
+        }
+    }
+
+
+    /**
+     * 校验账户状态字
+     * 4-睡眠户
+     * 5-密码待重置
+     * 6-密码锁定
+     * 7-凭证口挂
+     * 8-凭证挂失
+     * 9-账户冻结
+     * 11-销户
+     * 15-联名卡标志
+     * 16-银行内部暂禁（不收不付）
+     * 17-有权机关暂禁（不收不付），提示对应信息
+     *
+     * @param acStsw 账户状态字
+     */
+    private void doVerifyAcStsw(String acStsw) {
+        if (StringUtils.isEmpty(acStsw)) {
+            return;
+        }
+        if (acStsw.length() > 3 && acStsw.charAt(3) == '1') {
+            logger.error("银行核心358040校验账户状态字不通过--睡眠户");
+            throw new EcnyTransException(AppConstant.TRXSTATUS_FAILED, EcnyTransError.SLEEP_ACCOUNT);
+        }
+        if (acStsw.length() > 4 && acStsw.charAt(4) == '1') {
+            logger.error("银行核心358040校验账户状态字不通过--账户密码待重置");
+            throw new EcnyTransException(AppConstant.TRXSTATUS_FAILED, EcnyTransError.PASSWORD_NEED_TO_RESET);
+        }
+        if (acStsw.length() > 5 && acStsw.charAt(5) == '1') {
+            logger.error("银行核心358040校验账户状态字不通过--密码已锁定");
+            throw new EcnyTransException(AppConstant.TRXSTATUS_FAILED, EcnyTransError.PASSWORD_BLOCKED);
+        }
+        if (acStsw.length() > 6 && acStsw.charAt(6) == '1') {
+            logger.error("银行核心358040校验账户状态字不通过--凭证口挂");
+            throw new EcnyTransException(AppConstant.TRXSTATUS_FAILED, EcnyTransError.REPORT_LOSS);
+        }
+        if (acStsw.length() > 7 && acStsw.charAt(7) == '1') {
+            logger.error("银行核心358040校验账户状态字不通过--凭证挂失");
+            throw new EcnyTransException(AppConstant.TRXSTATUS_FAILED, EcnyTransError.REPORT_LOSS);
+        }
+        if (acStsw.length() > 8 && acStsw.charAt(8) == '1') {
+            logger.error("银行核心358040校验账户状态字不通过--账户状态为冻结");
+            throw new EcnyTransException(AppConstant.TRXSTATUS_FAILED, EcnyTransError.FROZEN_ACCOUNT);
+        }
+        if (acStsw.length() > 10 && acStsw.charAt(10) == '1') {
+            logger.error("银行核心358040校验账户状态字不通过--账户状态为销户");
+            throw new EcnyTransException(AppConstant.TRXSTATUS_FAILED, EcnyTransError.CANCELLED_ACCOUNT);
+        }
+        if(acStsw.length() > 14 && acStsw.charAt(14) == '1'){
+            logger.error("银行核心358040校验账户状态字不通过--卡为联名卡");
+            throw new EcnyTransException(AppConstant.TRXSTATUS_FAILED,EcnyTransError.UN_SUPPORTED_CARD_TYPE);
+        }
+        if (acStsw.length() > 15 && acStsw.charAt(15) == '1') {
+            logger.error("银行核心358040校验账户状态字不通过--账户状态为银行内部暂禁（不收不付）");
+            throw new EcnyTransException(AppConstant.TRXSTATUS_FAILED, EcnyTransError.INVALID_CUSTOMER_STATUS);
+        }
+        if (acStsw.length() > 16 && acStsw.charAt(16) == '1') {
+            logger.error("银行核心358040校验账户状态字不通过--有权机关暂禁（不收不付）");
+            throw new EcnyTransException(AppConstant.TRXSTATUS_FAILED, EcnyTransError.INVALID_CUSTOMER_STATUS);
+        }
+
+    }
+
+
+    /**
+     * 校验客户状态字
+     * 第2位-暂禁/冻结
+     * 第3位-销户
+     * 第12位-死亡
+     * 第22位-证件到期
+     *
+     * @param ciStsw 客户状态字
+     */
+    private void doVerifyCistsw(String ciStsw) {
+        if (StringUtils.isEmpty(ciStsw)) {
+            return;
+        }
+        if (ciStsw.length() > 1 && ciStsw.charAt(1) == '1') {
+            logger.error("银行核心358040校验失败--账户暂禁或冻结");
+            throw new EcnyTransException(AppConstant.TRXSTATUS_FAILED, EcnyTransError.FORBIDDEN_OR_FROZEN);
+        }
+        if (ciStsw.length() > 2 && ciStsw.charAt(2) == '1') {
+            logger.error("银行核心358040校验失败--账户销户");
+            throw new EcnyTransException(AppConstant.TRXSTATUS_FAILED, EcnyTransError.CANCELLED_ACCOUNT);
+        }
+        if (ciStsw.length() > 11 && ciStsw.charAt(11) == '1') {
+            logger.error("银行核心358040校验失败--账户处于死亡");
+            throw new EcnyTransException(AppConstant.TRXSTATUS_FAILED, EcnyTransError.INVALID_ACCT_STATUS);
+        }
+        if (ciStsw.length() > 21 && ciStsw.charAt(21) == '1') {
+            logger.error("银行核心358040校验失败--账户证件到期");
+            throw new EcnyTransException(AppConstant.TRXSTATUS_FAILED, EcnyTransError.ACCT_CERT_EXPIRED);
+        }
+
+
+    }
+
+
+    /**
+     * 校验是否为一类户 一类户（1）
+     *
+     * @param acClass
+     */
+    private void doVerifyAcClass(String acClass) {
+        if (!"1".equals(acClass)) {
+            logger.error("校验账户状态不通过--该账户为二、三类户");
+            throw new EcnyTransException(AppConstant.TRXSTATUS_FAILED, EcnyTransError.UN_SUPPORTED_ACC_CLASS_TP);
+        }
+    }
+
+
+    /**
+     * 校验账户类型
+     *
+     * @param acAttr 账户类型
+     */
+    private void doVerifyAcAttr(String acAttr) {
+        if (!"26".equals(acAttr)) {
+            logger.error("账户校验不通过--该业务开展范围只限个人借记卡客户");
+            throw new EcnyTransException(AppConstant.TRXSTATUS_FAILED, EcnyTransError.UN_SUPPORTED_ACC_TP);
+        }
+    }
+
+
+    /**
+     * Y-是;
+     * N-否
+     * @param cardJointTyp 联名卡标志
+     */
+    private void doVerifyCardJointTyp(String cardJointTyp) {
+        if("Y".equals(cardJointTyp)){
+            logger.error("银行核心358040校验失败--不支持联名卡");
+            throw new EcnyTransException(EcnyTransError.UN_SUPPORTED_CARD_TYPE);
+        }
+    }
+
 }
 

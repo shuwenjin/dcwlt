@@ -1,6 +1,5 @@
 package com.dcits.dcwlt.pay.online.flow.receive;
 
-
 import com.dcits.dcwlt.common.pay.channel.bankcore.dto.bankcore358040.BankCore358040Req;
 import com.dcits.dcwlt.common.pay.channel.bankcore.dto.bankcore358040.BankCore358040Rsp;
 import com.dcits.dcwlt.common.pay.constant.AppConstant;
@@ -16,13 +15,17 @@ import com.dcits.dcwlt.pay.api.domain.dcep.common.*;
 import com.dcits.dcwlt.pay.api.model.RspCodeMapDO;
 import com.dcits.dcwlt.pay.api.model.SignInfoDO;
 import com.dcits.dcwlt.pay.api.model.SignJrnDO;
+import com.dcits.dcwlt.pay.online.baffle.core.impl.ECIFService;
+import com.dcits.dcwlt.pay.online.baffle.core.impl.SmsService;
+import com.dcits.dcwlt.pay.online.base.Constant;
 import com.dcits.dcwlt.pay.online.exception.EcnyTransError;
 import com.dcits.dcwlt.pay.online.exception.EcnyTransException;
 import com.dcits.dcwlt.pay.online.flow.builder.EcnyTradeContext;
 import com.dcits.dcwlt.pay.online.flow.builder.EcnyTradeFlowBuilder;
 import com.dcits.dcwlt.pay.online.flow.builder.TradeFlowRuner;
+import com.dcits.dcwlt.pay.online.mapper.SignInfoMapper;
 import com.dcits.dcwlt.pay.online.mapper.SignJrnMapper;
-import com.dcits.dcwlt.pay.online.service.IAuthInfoService;
+import com.dcits.dcwlt.pay.online.service.impl.AuthInfoServiceimpl;
 import com.dcits.dcwlt.pay.online.service.impl.BankAccountVerifyService;
 import com.dcits.dcwlt.pay.online.service.impl.ECNYSerNoService;
 import com.dcits.dcwlt.pay.online.service.impl.PartyService;
@@ -30,13 +33,14 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.util.StringUtils;
 
 import java.util.HashMap;
 import java.util.Map;
-import com.dcits.dcwlt.pay.online.mapper.SignInfoMapper;
+
 /**
  * @author zhangwang
  * @version 1.0.0
@@ -104,9 +108,11 @@ public class BankAttAcctManage433RTradeFlow {
 
     private static final String DEBIT_CARD_TYPE = "借记卡";
 
-//Todo
-//    @Autowired
-//    private SmsService smsService;
+    @Autowired
+    private ApplicationContext applicationContext;
+
+    @Autowired
+    private SmsService smsService;
 
     @Autowired
     private BankAccountVerifyService bankAccountVerifyService;
@@ -127,10 +133,10 @@ public class BankAttAcctManage433RTradeFlow {
     private PartyService partyService;
 
     @Autowired
-    private IAuthInfoService authInfoService;
-//
-//    @Autowired
-//    private ECIFService ecifService;
+    private AuthInfoServiceimpl authInfoService;
+
+    @Autowired
+    private ECIFService ecifService;
 
 
     @Bean(name = TRADE_FLOW_NAME)
@@ -256,9 +262,7 @@ public class BankAttAcctManage433RTradeFlow {
         map.put("TRADETIME", DateUtil.getCurTime());
         map.put("RSPDESC", signResult);
         try {
-            //Todo
-//            boolean sendMsgResult = smsService.sendMsg(reqBody.getSgnInf().getTel(), SIGN_CONFIRM_TEMPCODE, SMSID, CHANNELCODE, SENDBRANCH, map, true);
-            boolean sendMsgResult=true;
+            boolean sendMsgResult = smsService.sendMsg(reqBody.getSgnInf().getTel(), SIGN_CONFIRM_TEMPCODE, SMSID, CHANNELCODE, SENDBRANCH, map, true);
             if (sendMsgResult) {
                 logger.info("短信发送成功，本次请求报文标识号为：{}", reqBody.getGrpHdr().getMsgId());
             } else {
@@ -315,10 +319,10 @@ public class BankAttAcctManage433RTradeFlow {
             throw new EcnyTransException(EcnyTransError.UN_SUPPORTED_MANAGEMENT_TP);
         }
         //检查钱包类型 2021/1/13确定不用校验钱包类型
-        if (!(WalletTpCdEnum.WT01.getCode().equals(walletTp) || WalletTpCdEnum.WT02.getCode().equals(walletTp))) {
-            logger.error("不支持{}钱包类型,本次请求报文标识号为：{}", walletTp, reqBody.getGrpHdr().getMsgId());
-            throw new EcnyTransException(EcnyTransError.UN_SUPPORTED_WALLET_TP);
-        }
+//        if (!(WalletTpCdEnum.WT01.getCode().equals(walletTp) || WalletTpCdEnum.WT02.getCode().equals(walletTp))) {
+//            logger.error("不支持{}钱包类型,本次请求报文标识号为：{}", walletTp, reqBody.getGrpHdr().getMsgId());
+//            throw new EcnyTransException(EcnyTransError.UN_SUPPORTED_WALLET_TP);
+//        }
         //暂不支持只做身份认证的交易
         if (ManagementTpCdEnum.MT01.getCode().equals(manageTp) && SignTpCdEnum.SG00.getCode().equals(reqBody.getSgnInf().getSgnTp())) {
             logger.error("不支持只做身份认证的交易,本次请求报文标识号为：{}", reqBody.getGrpHdr().getMsgId());
@@ -349,7 +353,6 @@ public class BankAttAcctManage433RTradeFlow {
         BankAttAcctReq reqBody = getReqBody(tradeContext);
         String manageTp = reqBody.getMgmtTp();
         TradeFlow tradeFlow = getStrategy(manageTp);
-
         TradeFlowRuner.execute(tradeFlow, tradeContext);
     }
 
@@ -360,19 +363,17 @@ public class BankAttAcctManage433RTradeFlow {
      * @return TradeFlow
      */
     private TradeFlow getStrategy(String manageType) {
-        return null;
-        //Todo
 //        final RtpUtil rtpUtil = RtpUtil.getInstance();
-//        if (ManagementTpCdEnum.MT01.getCode().equals(manageType)) {
-//            return rtpUtil.getBean(ACC_AUTH_FLOW);
-//        } else if (ManagementTpCdEnum.MT02.getCode().equals(manageType)) {
-//            return rtpUtil.getBean(ACC_CONFIRM_FLOW);
-//        } else if (ManagementTpCdEnum.MT03.getCode().equals(manageType)) {
-//            return rtpUtil.getBean(ACC_RESCIND_FLOW);
-//        } else {
-//            logger.error("不支持{}管理类型", manageType);
-//            throw new EcnyTransException(EcnyTransError.UN_SUPPORTED_MANAGEMENT_TP);
-//        }
+        if (ManagementTpCdEnum.MT01.getCode().equals(manageType)) {
+            return (TradeFlow) applicationContext.getBean(ACC_AUTH_FLOW);
+        } else if (ManagementTpCdEnum.MT02.getCode().equals(manageType)) {
+            return (TradeFlow) applicationContext.getBean(ACC_CONFIRM_FLOW);
+        } else if (ManagementTpCdEnum.MT03.getCode().equals(manageType)) {
+            return (TradeFlow) applicationContext.getBean(ACC_RESCIND_FLOW);
+        } else {
+            logger.error("不支持{}管理类型", manageType);
+            throw new EcnyTransException(EcnyTransError.UN_SUPPORTED_MANAGEMENT_TP);
+        }
     }
 
 
@@ -417,7 +418,7 @@ public class BankAttAcctManage433RTradeFlow {
         String acctIdNo = reqBody.getSgnInf().getIdNo();
         String acctType = bankCore358040Rsp.getType();
         String acctName = reqBody.getSgnInf().getSgnAcctNm();
-  //      Map<String, String> errMap = bankAccountVerifyService.geteWayLSFK43Imp(acctIdNo, acctType, acctName, DateTimeUtil.getCurrentDateStr(), DateTimeUtil.getCurrentTimeStr(), ecnySerNoService.getNBitsRandNum(6));
+        //      Map<String, String> errMap = bankAccountVerifyService.geteWayLSFK43Imp(acctIdNo, acctType, acctName, DateTimeUtil.getCurrentDateStr(), DateTimeUtil.getCurrentTimeStr(), ecnySerNoService.getNBitsRandNum(6));
         Map<String, String> errMap = bankAccountVerifyService.invokeLSFK43(acctIdNo, acctType, acctName, DateUtil.getCurDay(), DateUtil.getCurTime(), ecnySerNoService.getNBitsRandNum(6));
         String errorCode = errMap.get(ERRORCODE);
         String errorMsg = errMap.get(ERRORMSG);
@@ -427,9 +428,9 @@ public class BankAttAcctManage433RTradeFlow {
             throw new EcnyTransException(EcnyTransError.INVALID_ACCT_STATUS);
         }
         //ECIF检查
-//        bankAccountVerifyService.ecifCheckAcctBaseInfo(bankCore358040Rsp);
-//Todo
-//        ecifService.checkAcctInfoByEcif(bankCore358040Rsp);
+        //bankAccountVerifyService.ecifCheckAcctBaseInfo(bankCore358040Rsp);
+
+        ecifService.checkAcctInfoByEcif(bankCore358040Rsp);
     }
 
 
@@ -440,9 +441,7 @@ public class BankAttAcctManage433RTradeFlow {
      */
     private BankCore358040Rsp BankCore358040Verify(TradeContext<?, ?> tradeContext) {
         BankAttAcctReq reqBody = getReqBody(tradeContext);
-        //Todo
-        return null;
-//        return bankAccountVerifyService.verifyAccount(TrxTpCdEnum.SIGN.getCode(), buildBankCore358040Req(reqBody));
+        return bankAccountVerifyService.verifyAccount(TrxTpCdEnum.SIGN.getCode(), buildBankCore358040Req(reqBody));
     }
 
     /**
@@ -492,8 +491,7 @@ public class BankAttAcctManage433RTradeFlow {
         //校验短信验证码
         String sendMsgTime = oriSignJrnDO.getLastUpDate() + oriSignJrnDO.getLastUpTime();
         String oriEncAuthMsg = oriSignJrnDO.getMsgVerifyCode();
-        //Todo
-//        smsService.verifyAuthMsg(reqBody.getPtcInf().getMsgVrfy(), oriEncAuthMsg, sendMsgTime);
+        smsService.verifyAuthMsg(reqBody.getPtcInf().getMsgVrfy(), oriEncAuthMsg, sendMsgTime);
     }
 
     /**
@@ -546,42 +544,41 @@ public class BankAttAcctManage433RTradeFlow {
      * 身份认证处理
      */
     private void sendAuthCode(TradeContext<?, ?> tradeContext) {
-//        DCEPReqDTO<BankAttAcctReqDTO> reqMsg = EcnyTradeContext.getReqMsg(tradeContext);
-//        BankAttAcctReq reqBody = reqMsg.getBody().getBankAttAcctReq();
-//        PmtPtcMgmtRsp rspBody = getRspBody(tradeContext);
-//        //获取待更新流水
-//        SignJrnDO signUpdateJrnDO = getSignUpdateJrnDOFromContext(tradeContext);
+        DCEPReqDTO<BankAttAcctReqDTO> reqMsg = EcnyTradeContext.getReqMsg(tradeContext);
+        BankAttAcctReq reqBody = reqMsg.getBody().getBankAttAcctReq();
+        PmtPtcMgmtRsp rspBody = getRspBody(tradeContext);
+        //获取待更新流水
+        SignJrnDO signUpdateJrnDO = getSignUpdateJrnDOFromContext(tradeContext);
+        //todo
 //        SmsFactory factory = SmsFactory.getInstance(Constant.SM3);
 //        String smsCode = factory.getSmsCode();
-//        //获取短信验证码的sm3散列值，用于存数据库
+        //获取短信验证码的sm3散列值，用于存数据库
+        //todo
 //        String encryptSmsCode = factory.encryptSmsCode(smsCode);
-//        //设置动态关联码 = 平台日期 + 平台流水
-//        String dynAssCode = DateUtil.getCurDay() + generateCodeService.generatePlatformFlowNo();
-//        rspBody.getRspsnInf().setMsgSndCd(dynAssCode);
+        //设置动态关联码 = 平台日期 + 平台流水
+        String dynAssCode = DateUtil.getCurDay() + generateCodeService.generatePlatformFlowNo();
+        rspBody.getRspsnInf().setMsgSndCd(dynAssCode);
 //        signUpdateJrnDO.setMsgVerifyCode(encryptSmsCode);
-//        signUpdateJrnDO.setMsgSendCode(dynAssCode);
-//        String cardNo = reqBody.getSgnInf().getSgnAcctId();
+        signUpdateJrnDO.setMsgSendCode(dynAssCode);
+        String cardNo = reqBody.getSgnInf().getSgnAcctId();
 //        logger.debug("生产短信验证码的散列值为smsCode：{}->{}", smsCode, encryptSmsCode);
-//        Map<String, String> map = new HashMap<>();
+        Map<String, String> map = new HashMap<>();
 //        map.put("MSGCODE", smsCode);
-//        map.put("ACCTNO", cardNo.substring(cardNo.length() - 4));
-//        map.put("CARDTY", DEBIT_CARD_TYPE);
-//        try {
-//            //Todo
-////            boolean sendMsgResult = smsService.sendMsg(reqBody.getSgnInf().getTel(), SIGN_AUTH_TEMPCODE, SMSID, CHANNELCODE, SENDBRANCH, map, true);
-//            boolean sendMsgResult =true;
-//            if (sendMsgResult) {
-//                logger.info("短信发送成功，本次请求报文标识号为：{}", reqBody.getGrpHdr().getMsgId());
-//                signUpdateJrnDO.setTrxStatus(AppConstant.TRXSTATUS_SUCCESS);
-//            } else {
-//                logger.info("短信发送失败，本次请求报文标识号为：{}", reqBody.getGrpHdr().getMsgId());
-//                signUpdateJrnDO.setTrxStatus(AppConstant.TRXSTATUS_FAILED);
-//            }
-//        } catch (Exception e) {
-//            logger.error("短信发送异常{}-{}", e.getMessage(), e);
-//            throw new EcnyTransException(EcnyTransError.SEND_SMS_ERROR);
-//        }
-        return;
+        map.put("ACCTNO", cardNo.substring(cardNo.length() - 4));
+        map.put("CARDTY", DEBIT_CARD_TYPE);
+        try {
+            boolean sendMsgResult = smsService.sendMsg(reqBody.getSgnInf().getTel(), SIGN_AUTH_TEMPCODE, SMSID, CHANNELCODE, SENDBRANCH, map, true);
+            if (sendMsgResult) {
+                logger.info("短信发送成功，本次请求报文标识号为：{}", reqBody.getGrpHdr().getMsgId());
+                signUpdateJrnDO.setTrxStatus(AppConstant.TRXSTATUS_SUCCESS);
+            } else {
+                logger.info("短信发送失败，本次请求报文标识号为：{}", reqBody.getGrpHdr().getMsgId());
+                signUpdateJrnDO.setTrxStatus(AppConstant.TRXSTATUS_FAILED);
+            }
+        } catch (Exception e) {
+            logger.error("短信发送异常{}-{}", e.getMessage(), e);
+            throw new EcnyTransException(EcnyTransError.SEND_SMS_ERROR);
+        }
 
     }
 
@@ -649,7 +646,7 @@ public class BankAttAcctManage433RTradeFlow {
         signInfoDO.setWalletLevel(reqBody.getWltInf().getWltLvl());                     //钱包等级
         signInfoDO.setWalletType(reqBody.getWltInf().getWltTp());                       //钱包类型
         signInfoDO.setLastUpDate(DateUtil.getCurDay());                     //最后更新日期
-        signInfoDO.setLastUpTime(DateUtil.getCurTime());                     //最后更新时间
+        signInfoDO.setLastUpTime(DateUtil.getDefaultTime());                     //最后更新时间
         return signInfoDO;
     }
 
@@ -675,7 +672,7 @@ public class BankAttAcctManage433RTradeFlow {
     private void updateJrn(TradeContext<?, ?> tradeContext) {
         SignJrnDO signUpdateJrnDO = getSignUpdateJrnDOFromContext(tradeContext);
         signUpdateJrnDO.setLastUpDate(DateUtil.getCurDay());
-        signUpdateJrnDO.setLastUpTime(DateUtil.getCurTime());
+        signUpdateJrnDO.setLastUpTime(DateUtil.getDefaultTime());
         signJrnMapper.update(signUpdateJrnDO);
     }
 
@@ -716,7 +713,7 @@ public class BankAttAcctManage433RTradeFlow {
         //更新错误码和错误信息到待插入流水信息
         SignJrnDO signUpdateJrnDO = getSignUpdateJrnDOFromContext(tradeContext);
         signUpdateJrnDO.setLastUpDate(DateUtil.getCurDay());
-        signUpdateJrnDO.setLastUpTime(DateUtil.getCurTime());
+        signUpdateJrnDO.setLastUpTime(DateUtil.getDefaultTime());
         signUpdateJrnDO.setTrxStatus(TrxStatusEnum.FAIL.getCode());
         signUpdateJrnDO.setTrxRetCode(AppConstant.TRX_RET_CODE_FAILED);
         signUpdateJrnDO.setRspStatus(ProcessStsCdEnum.PR01.getCode());
@@ -736,9 +733,7 @@ public class BankAttAcctManage433RTradeFlow {
             signUpdateJrnDO.setRspMsg(EcnyTransError.OTHER_TECH_ERROR.getErrorMsg());
         }
         //错误码映射
-        RspCodeMapDO rspCodeMapDO=null;
-        //Todo
-//        RspCodeMapDO rspCodeMapDO = EcnyTransException.convertRspCode(throwable, TrxTpCdEnum.SIGN.getCode(), AppConstant.DCEP_SYS_ID);
+        RspCodeMapDO rspCodeMapDO = EcnyTransException.convertRspCode(throwable, TrxTpCdEnum.SIGN.getCode(), AppConstant.DCEP_SYS_ID);
         if (null != rspCodeMapDO) {
             rspsnInf.setRjctCd(rspCodeMapDO.getDestRspCode());
             rspsnInf.setRjctInf(rspCodeMapDO.getRspCodeDsp());
@@ -768,11 +763,10 @@ public class BankAttAcctManage433RTradeFlow {
         PtcInf ptcInf = req.getPtcInf();                                                         //协议信息
         SgnInf sgnInf = req.getSgnInf();                                                         //签约人信息
         WltInf wltInf = req.getWltInf();                                                         //钱包信息
-        //Todo
 //        SmsFactory factory = SmsFactory.getInstance(Constant.SM3);
         SignJrnDO signJrnDO = new SignJrnDO();
         signJrnDO.setPayDate(DateUtil.getCurDay());                                  //设置平台日期
-        signJrnDO.setPayTime(DateUtil.getCurTime());                                  //设置平台时间
+        signJrnDO.setPayTime(DateUtil.getDefaultTime());                                  //设置平台时间
         signJrnDO.setPaySerNo(generateCodeService.generatePlatformFlowNo());                     //设置平台流水号
         signJrnDO.setMsgId(req.getGrpHdr().getMsgId());                                          //设置报文标识号
         signJrnDO.setInstGpTy(req.getGrpHdr().getInstgPty().getInstgDrctPty());                  //设置发起机构
@@ -782,7 +776,7 @@ public class BankAttAcctManage433RTradeFlow {
         signJrnDO.setSignType(sgnInf.getSgnTp());                                                //签约类型
         if (ptcInf != null) {
             if (ptcInf.getMsgVrfy() != null) {
-                //Todo
+                //todo
 //                signJrnDO.setMsgVerifyCode(factory.encryptSmsCode(ptcInf.getMsgVrfy()));         //动态验证码(sm3加密存储)
             }
             signJrnDO.setSignNo(ptcInf.getPtcId());                                              //挂接协议号
@@ -802,7 +796,7 @@ public class BankAttAcctManage433RTradeFlow {
         signJrnDO.setWalletType(wltInf.getWltTp());                                              //钱包类型
         signJrnDO.setWalletLevel(wltInf.getWltLvl());                                            //钱包等级
         signJrnDO.setLastUpDate(DateUtil.getCurDay());                               //设置当前日期
-        signJrnDO.setLastUpTime(DateUtil.getCurTime());                               //设置当前时间
+        signJrnDO.setLastUpTime(DateUtil.getDefaultTime());                               //设置当前时间
         signJrnDO.setRemark(req.getGrpHdr().getRmk());                                           //设置备注
         signJrnDO.setTrxRetCode(AppConstant.TRX_RET_CODE_PROCESSING);                            //平台业务处理码
         signJrnDO.setTrxRetMsg(AppConstant.TRX_RET_MSG_PROCESSING);                              //平台业务处理信息
@@ -823,7 +817,7 @@ public class BankAttAcctManage433RTradeFlow {
         PmtPtcMgmtRsp pmtPtcMgmtRsp = new PmtPtcMgmtRsp();
         GrpHdr grpHdr = new GrpHdr();                                                           //业务组件头
         OrgnlGrpHdr orgnlGrpHdr = new OrgnlGrpHdr();                                            //原报文主键组件
-        RspsnInf rspsnInf = new RspsnInf();                                                     //响应信息
+        BankAttRspsnInf rspsnInf = new BankAttRspsnInf();                                                     //响应信息
         SgnInf sgnInf = new SgnInf();                                                           //签约人信息
         WltInf wltInf = new WltInf();                                                           //钱包信息
         //初始化业务组件头
@@ -839,7 +833,7 @@ public class BankAttAcctManage433RTradeFlow {
         orgnlGrpHdr.setOrgnlInstgPty(req.getGrpHdr().getInstgPty().getInstgDrctPty());          //设置发起机构
         //初始化响应信息
         rspsnInf.setRspsnSts(ProcessStsCdEnum.PR01.getCode());                                  //初始化时设置业务回执状态为失败状态
-//        rspsnInf.setMgmtTp(req.getMgmtTp());                                                    //设置管理类型
+        rspsnInf.setMgmtTp(req.getMgmtTp());                                                    //设置管理类型
         //初始化签约人信息
         sgnInf.setSgnAcctTp(req.getSgnInf().getSgnAcctTp());                                    //设置签约人银行账户类型
         sgnInf.setSgnAcctId(req.getSgnInf().getSgnAcctId());                                    //设置签约人银行账户账号
@@ -852,8 +846,7 @@ public class BankAttAcctManage433RTradeFlow {
         //为响应报文赋值
         pmtPtcMgmtRsp.setGrpHdr(grpHdr);                                                        //设置业务组件头
         pmtPtcMgmtRsp.setOrgnlGrpHdr(orgnlGrpHdr);                                              //设置原报文主键组件
-        //Todo
-//        pmtPtcMgmtRsp.setRspsnInf(rspsnInf);                                                    //设置响应信息
+        pmtPtcMgmtRsp.setRspsnInf(rspsnInf);                                                    //设置响应信息
         pmtPtcMgmtRsp.setSgnInf(sgnInf);                                                        //设置签约人信息
         pmtPtcMgmtRsp.setWltInf(wltInf);                                                        //设置钱包信息
         logger.info("[--buildRspMsg--] 初始化响应报文结束,本次请求报文标识号为：{}", req.getGrpHdr().getMsgId());
@@ -945,7 +938,7 @@ public class BankAttAcctManage433RTradeFlow {
         //更新原协议信息
         signInfoDO.setSignStatus(CLOSE_SIGN_STATUS);
         signInfoDO.setLastUpDate(DateUtil.getCurDay());
-        signInfoDO.setLastUpTime(DateUtil.getCurTime());
+        signInfoDO.setLastUpTime(DateUtil.getDefaultTime());
         signInfoMapper.updateBySignNo(signInfoDO);
     }
 
