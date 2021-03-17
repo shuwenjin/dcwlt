@@ -604,9 +604,9 @@ CREATE TABLE `sys_job`  (
     `remark` varchar(500) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT '' COMMENT '备注信息',
     PRIMARY KEY (`job_id`, `job_name`, `job_group`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '定时任务调度表' ROW_FORMAT = Dynamic;
-insert into sys_job values(uuid(), null, null, '0', '系统默认（无参）', 'DEFAULT', 'ryTask.ryNoParams',        '0/30 * * * * ?', '3', '1', '0', '0/2 * * * * ?', '0', null, null, null, 5, 'admin', '2018-03-16 11-33-00', 'admin', '2018-03-16 11-33-00', '');
-insert into sys_job values(uuid(), null, null, '0', '系统默认（有参）', 'DEFAULT', 'ryTask.ryParams(\'yyyy-MM-dd\')',  '0/30 * * * * ?', '3', '1', '0', '0/2 * * * * ?', '0', null, null, null, 5, 'admin', '2018-03-16 11-33-00', 'admin', '2018-03-16 11-33-00', '');
-insert into sys_job values(uuid(), null, null, '0', '系统默认（多参）', 'DEFAULT', 'ryTask.ryMultipleParams(\'yyyy-MM-dd HH:mm:ss\', true, 2000L, 316.50D, 100)', '0/30 * * * * ?', '3', '1', '0', '0/2 * * * * ?', '0', null, null, null, 5, 'admin', '2018-03-16 11-33-00', 'admin', '2018-03-16 11-33-00', '');
+insert into sys_job values(uuid(), null, null, '0', '系统默认（无参）', 'DEFAULT', 'ryTask.ryNoParams',        '0/30 * * * * ?', '3', '1', '0', '0/2 * * * * ?', '1', null, null, null, 5, 'admin', '2018-03-16 11-33-00', 'admin', '2018-03-16 11-33-00', '');
+insert into sys_job values(uuid(), null, null, '0', '系统默认（有参）', 'DEFAULT', 'ryTask.ryParams(\'yyyy-MM-dd\')',  '0/30 * * * * ?', '3', '1', '0', '0/2 * * * * ?', '1', null, null, null, 5, 'admin', '2018-03-16 11-33-00', 'admin', '2018-03-16 11-33-00', '');
+insert into sys_job values(uuid(), null, null, '0', '系统默认（多参）', 'DEFAULT', 'ryTask.ryMultipleParams(\'yyyy-MM-dd HH:mm:ss\', true, 2000L, 316.50D, 100)', '0/30 * * * * ?', '3', '1', '0', '0/2 * * * * ?', '1', null, null, null, 5, 'admin', '2018-03-16 11-33-00', 'admin', '2018-03-16 11-33-00', '');
 
 
 -- ----------------------------
