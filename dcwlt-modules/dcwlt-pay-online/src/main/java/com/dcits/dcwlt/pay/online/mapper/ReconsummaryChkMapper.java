@@ -7,7 +7,9 @@ import com.dcits.dcwlt.pay.api.model.DtlFileInfDO;
 import com.dcits.dcwlt.pay.api.model.MonitorDO;
 import com.dcits.dcwlt.pay.api.model.ReconSummaryChkDO;
 import com.dcits.dcwlt.pay.api.model.SummaryInfoDO;
+import org.apache.ibatis.annotations.Mapper;
 
+@Mapper
 public interface ReconsummaryChkMapper {
 
     EventConfigDO queryEventConfig(String eventCode);

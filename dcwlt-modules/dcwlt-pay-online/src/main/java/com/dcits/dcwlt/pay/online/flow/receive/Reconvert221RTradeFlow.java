@@ -1,27 +1,38 @@
 package com.dcits.dcwlt.pay.online.flow.receive;
 
+import com.dcits.dcwlt.common.pay.channel.bankcore.dto.bankcore351100.BankCore351100InnerReq;
+import com.dcits.dcwlt.common.pay.channel.bankcore.dto.bankcore351100.BankCore351100InnerRsp;
 import com.dcits.dcwlt.common.pay.constant.AppConstant;
-import com.dcits.dcwlt.common.pay.enums.*;
+import com.dcits.dcwlt.common.pay.constant.Constant;
+import com.dcits.dcwlt.common.pay.enums.AuthInfoDrctEnum;
+import com.dcits.dcwlt.common.pay.enums.MsgTpEnum;
+import com.dcits.dcwlt.common.pay.enums.ProcessStsCdEnum;
+import com.dcits.dcwlt.common.pay.enums.RejectCdEnum;
+import com.dcits.dcwlt.common.pay.enums.WalletTpCdEnum;
+import com.dcits.dcwlt.common.pay.sequence.service.impl.GenerateCodeServiceImpl;
 import com.dcits.dcwlt.common.pay.tradeflow.TradeContext;
 import com.dcits.dcwlt.common.pay.tradeflow.TradeFlow;
 import com.dcits.dcwlt.common.pay.util.DateUtil;
 import com.dcits.dcwlt.pay.api.domain.dcep.DCEPReqDTO;
 import com.dcits.dcwlt.pay.api.domain.dcep.DCEPRspDTO;
-import com.dcits.dcwlt.pay.api.domain.dcep.bankattachedmanagement.BankAttRspsnInf;
 import com.dcits.dcwlt.pay.api.domain.dcep.common.GrpHdr;
 import com.dcits.dcwlt.pay.api.domain.dcep.common.OrgnlGrpHdr;
+import com.dcits.dcwlt.pay.api.domain.dcep.common.RspsnInf;
 import com.dcits.dcwlt.pay.api.domain.dcep.reconvert.ReconvertReq;
 import com.dcits.dcwlt.pay.api.domain.dcep.reconvert.ReconvertReqDTO;
 import com.dcits.dcwlt.pay.api.domain.dcep.reconvert.ReconvertRspDTO;
 import com.dcits.dcwlt.pay.api.model.PayTransDtlInfoDO;
+import com.dcits.dcwlt.pay.api.model.RspCodeMapDO;
 import com.dcits.dcwlt.pay.api.model.StateMachine;
 import com.dcits.dcwlt.pay.online.exception.EcnyTransError;
 import com.dcits.dcwlt.pay.online.exception.EcnyTransException;
 import com.dcits.dcwlt.pay.online.flow.builder.EcnyTradeContext;
 import com.dcits.dcwlt.pay.online.flow.builder.EcnyTradeFlowBuilder;
-import com.dcits.dcwlt.pay.online.mapper.ReconvertRTradeMapper;
-import com.dcits.dcwlt.pay.online.service.*;
-import com.dcits.dcwlt.pay.online.service.impl.PartyService;
+import com.dcits.dcwlt.pay.online.service.IAuthInfoService;
+import com.dcits.dcwlt.pay.online.service.ICoreProcessService;
+import com.dcits.dcwlt.pay.online.service.IPartyService;
+import com.dcits.dcwlt.pay.online.service.IPayTransDtlInfoService;
+import com.dcits.dcwlt.pay.online.task.ParamConfigCheckTask;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -36,28 +47,24 @@ import org.springframework.context.annotation.Configuration;
  */
 @Configuration
 public class Reconvert221RTradeFlow {
-
-    private static final Logger logger = LoggerFactory.getLogger(Reconvert221RTradeFlow.class);
+    private static final Logger logger = LoggerFactory.getLogger(FreeFrmt401RTradeFlow.class);
 
     private static final String RECONVERT_TRADE_FLOW = "Reconvert221RTradeFlow";
 
     private static final String BUSINESS_TYPE = "BIZTP";
 
     @Autowired
-    private ReconvertRTradeMapper reconvertRTradeMapper;
-
-//    @Autowired
-//    private GenerateCodeServiceImpl generateCodeService;
-
-    @Autowired
     private IPayTransDtlInfoService payTransDtlInfoService;
 
+    @Autowired
+    private GenerateCodeServiceImpl generateCodeService;
+
 
     @Autowired
-    private ParamConfigCheckService paramConfigCheckService;
+    private ICoreProcessService bankCoreProcessService;
 
     @Autowired
-    private PartyService partyService;
+    private IPartyService partyService;
 
     @Autowired
     private IAuthInfoService authInfoService;
@@ -69,9 +76,9 @@ public class Reconvert221RTradeFlow {
                 .initRspMsg(this::initRspMsg)      //初始化响应报文
                 .initTxn(this::initTxn)            //初始化和保存交易登记簿
                 .checkMsg(this::checkMsg)          //校验数据
-//                .process(this::coreProcess)        // 上核心
-//                .response(this::packRspMsg)        //响应保存封装
-//                .errHandler(this::reconverErrHandler)
+                .process(this::coreProcess)        // 上核心
+                .response(this::packRspMsg)        //响应保存封装
+                .errHandler(this::reconverErrHandler)
                 .build();
     }
 
@@ -95,12 +102,12 @@ public class Reconvert221RTradeFlow {
         }
 
         //业务种类、业务类型校验
-//        if (!paramConfigCheckService.checkConfigValue(BUSINESS_TYPE,
-//                trxBizTp, reconvertReq.getTrxInf().getTrxCtgyPurpCd())
-//                || !AppConstant.BUSINESS_TYPE_RECONVERT.equals(trxBizTp)) {
-//            logger.error("业务种类、业务类型校验不通过");
-//            throw new EcnyTransException(AppConstant.TRXSTATUS_FAILED, EcnyTransError.BUSINESS_TYPE_INVALID);
-//        }
+        if (!ParamConfigCheckTask.checkConfigValue(BUSINESS_TYPE,
+                trxBizTp, reconvertReq.getTrxInf().getTrxCtgyPurpCd())
+                || !AppConstant.BUSINESS_TYPE_RECONVERT.equals(trxBizTp)) {
+            logger.error("业务种类、业务类型校验不通过");
+            throw new EcnyTransException(AppConstant.TRXSTATUS_FAILED, EcnyTransError.BUSINESS_TYPE_INVALID);
+        }
 
         //判断接收机构是否广发银行 及校验机构状态
         if (!AppConstant.CGB_FINANCIAL_INSTITUTION_CD.equals(instdPtyId)) {
@@ -141,8 +148,8 @@ public class Reconvert221RTradeFlow {
         OrgnlGrpHdr orgnlGrpHdr = OrgnlGrpHdr.getInstance(reqMsg.getBody().getReconvertReq().getGrpHdr(), reqMsg);
 
         //响应信息
-        BankAttRspsnInf rspsnInf = new BankAttRspsnInf();
-//        rspsnInf.setBatchId(reqDTO.getTrxInf().getBatchId());
+        RspsnInf rspsnInf = new RspsnInf();
+        rspsnInf.setBatchId(reqDTO.getTrxInf().getBatchId());
         rspsnInf.setRspsnSts(ProcessStsCdEnum.PR02.getCode());
 
         ReconvertRspDTO rspDTO = new ReconvertRspDTO(grpHdr, orgnlGrpHdr, rspsnInf);
@@ -162,10 +169,8 @@ public class Reconvert221RTradeFlow {
         ReconvertReq reqDTO = reqMsg.getBody().getReconvertReq();
 
         PayTransDtlInfoDO payTransDtlInfoDO = payTransDtlInfoService.init(reqDTO);
-        System.out.println("lastuptime:"+payTransDtlInfoDO.getLastUpTime());
-        payTransDtlInfoDO.setLastUpTime("12345");
         try {
-            reconvertRTradeMapper.insertReconvertRTrade(payTransDtlInfoDO);
+            payTransDtlInfoService.insert(payTransDtlInfoDO);
         } catch (Exception e) {
             logger.info("金融登记簿入库失败:{}-{}", e.getMessage(), e);
             throw new EcnyTransException(AppConstant.TRXSTATUS_FAILED, EcnyTransError.DATABASE_ERROR);
@@ -188,7 +193,7 @@ public class Reconvert221RTradeFlow {
      *
      * @param context
      */
- /*   private void coreProcess(TradeContext<?, ?> context) {
+    private void coreProcess(TradeContext<?, ?> context) {
 
         PayTransDtlInfoDO payTransDtlInfoDO = (PayTransDtlInfoDO) EcnyTradeContext.getTxn(context);
 
@@ -218,7 +223,7 @@ public class Reconvert221RTradeFlow {
         EcnyTradeContext.getTempContext(context).put("oldStatus", oldStatus);
 
         EcnyTradeContext.getTempContext(context).put("bankCore351100InnerRsp", bankCore351100InnerRsp);
-    }*/
+    }
 
     /**
      * 上核心前处理
@@ -226,11 +231,11 @@ public class Reconvert221RTradeFlow {
      *
      * @param payTransDtlInfoDO
      */
-/*    private BankCore351100InnerReq sendCoreInit(PayTransDtlInfoDO payTransDtlInfoDO) {
+    private BankCore351100InnerReq sendCoreInit(PayTransDtlInfoDO payTransDtlInfoDO) {
         logger.info("初始化核心报文");
         BankCore351100InnerReq bankCore351100InnerReq = bankCoreProcessService.initBankCore351100InnerReq(payTransDtlInfoDO);
         return bankCore351100InnerReq;
-    }*/
+    }
 
 
     /**
@@ -239,14 +244,13 @@ public class Reconvert221RTradeFlow {
      * @param payTransDtlInfoDO
      * @param bankCore351100InnerReq
      */
- /*   public void sendCorePre(PayTransDtlInfoDO payTransDtlInfoDO, BankCore351100InnerReq bankCore351100InnerReq) {
+    public void sendCorePre(PayTransDtlInfoDO payTransDtlInfoDO, BankCore351100InnerReq bankCore351100InnerReq) {
 
         logger.info("心前处理，入账务流水表，更新登记簿为状态为处理中开始");
 
-//        String coreReqDate = generateCodeService.getCoreReqDate(payTransDtlInfoDO.getBatchId());
-//        String coreReqSerno = generateCodeService.generateCoreReqSerno();
-        String coreReqDate = GenerateCodeUtil.getCoreReqDate(payTransDtlInfoDO.getBatchId());
-        String coreReqSerno = GenerateCodeUtil.generateCoreReqSerno();
+        String coreReqDate = generateCodeService.getCoreReqDate(payTransDtlInfoDO.getBatchId());
+        String coreReqSerno = generateCodeService.generateCoreReqSerno();
+
         bankCore351100InnerReq.setCoreReqDate(coreReqDate);
         bankCore351100InnerReq.setCoreReqSerno(coreReqSerno);
 
@@ -270,7 +274,7 @@ public class Reconvert221RTradeFlow {
             throw new EcnyTransException(AppConstant.TRXSTATUS_FAILED, EcnyTransError.OTHER_TECH_ERROR);
         }
 
-    }*/
+    }
 
 
     /**
@@ -279,7 +283,7 @@ public class Reconvert221RTradeFlow {
      * @param payTransDtlInfoDO
      * @param bankCore351100InnerRsp
      */
- /*   public void sendCoreDone(PayTransDtlInfoDO payTransDtlInfoDO, BankCore351100InnerRsp bankCore351100InnerRsp) {
+    public void sendCoreDone(PayTransDtlInfoDO payTransDtlInfoDO, BankCore351100InnerRsp bankCore351100InnerRsp) {
         logger.info("核心返回，核心状态：{}，核心返回码：{}，核心返回信息：{}",
                 bankCore351100InnerRsp.getCoreStatus(), bankCore351100InnerRsp.getErrorCode(), bankCore351100InnerRsp.getErrorMsg());
         setTradeResult(payTransDtlInfoDO, bankCore351100InnerRsp);
@@ -290,12 +294,12 @@ public class Reconvert221RTradeFlow {
         stateMachine.setPrePathProcStatus(AppConstant.PAYPATHSTATUS_RECIPE);
 
         try {
-            bankCoreProcessService.sendCoreDone(payTransDtlInfoDO,bankCore351100InnerRsp,stateMachine);
+            bankCoreProcessService.sendCoreDone(payTransDtlInfoDO, bankCore351100InnerRsp, stateMachine);
         } catch (Exception e) {
             logger.error("afterSendCoreDeal：接收核心结果，更新对应状态异常：{}-{}", e.getMessage(), e);
             throw new EcnyTransException(AppConstant.TRXSTATUS_ABEND, EcnyTransError.OTHER_TECH_ERROR);
         }
-    }*/
+    }
 
     /**
      * 设置核心返回结果
@@ -303,7 +307,7 @@ public class Reconvert221RTradeFlow {
      * @param payTransDtlInfoDO
      * @param bankCore351100InnerRsp
      */
-   /* private void setTradeResult(PayTransDtlInfoDO payTransDtlInfoDO, BankCore351100InnerRsp bankCore351100InnerRsp) {
+    private void setTradeResult(PayTransDtlInfoDO payTransDtlInfoDO, BankCore351100InnerRsp bankCore351100InnerRsp) {
 
         logger.info("设置核心返回结果开始");
         String coreStatus = bankCore351100InnerRsp.getCoreStatus();
@@ -325,7 +329,7 @@ public class Reconvert221RTradeFlow {
         payTransDtlInfoDO.setOperStep(AppConstant.OPERSTEP_CRDT);
         payTransDtlInfoDO.setPayPathRetDate(DateUtil.getDefaultDate());
 
-//        RspCodeMapDO rspCodeMapDO = EcnyTransException.convertRspCode(Constant.CORE_SYS_ID, AppConstant.DCEP_SYS_ID, bankCore351100InnerRsp.getErrorCode(), bankCore351100InnerRsp.getErrorMsg());
+        RspCodeMapDO rspCodeMapDO = EcnyTransException.convertRspCode(Constant.CORE_SYS_ID, AppConstant.DCEP_SYS_ID, bankCore351100InnerRsp.getErrorCode(), bankCore351100InnerRsp.getErrorMsg());
 
         switch (coreStatus) {
             case AppConstant.CORESTATUS_SUCCESS:
@@ -348,8 +352,8 @@ public class Reconvert221RTradeFlow {
                 payTransDtlInfoDO.setTrxRetMsg(bankCore351100InnerRsp.getErrorMsg());
                 payTransDtlInfoDO.setPathProcStatus(AppConstant.PAYPATHSTATUS_FAILED);
                 payTransDtlInfoDO.setPayPathRspStatus(ProcessStsCdEnum.PR01.getCode());
-//                payTransDtlInfoDO.setPayPathRetCode(rspCodeMapDO.getDestRspCode());
-//                payTransDtlInfoDO.setPayPathRetMsg(rspCodeMapDO.getRspCodeDsp());
+                payTransDtlInfoDO.setPayPathRetCode(rspCodeMapDO.getDestRspCode());
+                payTransDtlInfoDO.setPayPathRetMsg(rspCodeMapDO.getRspCodeDsp());
                 break;
             default:
                 logger.error("核心异常");
@@ -358,14 +362,14 @@ public class Reconvert221RTradeFlow {
                 payTransDtlInfoDO.setTrxRetCode(bankCore351100InnerRsp.getErrorCode());
                 payTransDtlInfoDO.setTrxRetMsg(bankCore351100InnerRsp.getErrorMsg());
                 payTransDtlInfoDO.setPayPathRspStatus(ProcessStsCdEnum.PR02.getCode());
-//                payTransDtlInfoDO.setPayPathRetCode(rspCodeMapDO.getDestRspCode());
-//                payTransDtlInfoDO.setPayPathRetMsg(rspCodeMapDO.getRspCodeDsp());
+                payTransDtlInfoDO.setPayPathRetCode(rspCodeMapDO.getDestRspCode());
+                payTransDtlInfoDO.setPayPathRetMsg(rspCodeMapDO.getRspCodeDsp());
                 break;
         }
 
         logger.info("设置核心返回结果结束，核心日期：{}，核心请求流水：{}",
                 bankCore351100InnerRsp.getCoreReqDate(), bankCore351100InnerRsp.getCoreReqSerno());
-    }*/
+    }
 
 
     /**
@@ -373,13 +377,13 @@ public class Reconvert221RTradeFlow {
      *
      * @param context
      */
-/*    private void packRspMsg(TradeContext<?, ?> context) {
+    private void packRspMsg(TradeContext<?, ?> context) {
         DCEPRspDTO<ReconvertRspDTO> dcepRspDTO = EcnyTradeContext.getRspMsg(context);
-        BankAttRspsnInf rspsnInf = dcepRspDTO.getBody().getReconvertRsp().getRspsnInf();
+        RspsnInf rspsnInf = dcepRspDTO.getBody().getReconvertRsp().getRspsnInf();
 
         BankCore351100InnerRsp bankCore351100InnerRsp = (BankCore351100InnerRsp) EcnyTradeContext.getTempContext(context).get("bankCore351100InnerRsp");
         String coreStatus = bankCore351100InnerRsp.getCoreStatus();
-//        RspCodeMapDO rspCodeMapDO = EcnyTransException.convertRspCode(Constant.CORE_SYS_ID, AppConstant.DCEP_SYS_ID, bankCore351100InnerRsp.getErrorCode(), bankCore351100InnerRsp.getErrorMsg());
+        RspCodeMapDO rspCodeMapDO = EcnyTransException.convertRspCode(Constant.CORE_SYS_ID, AppConstant.DCEP_SYS_ID, bankCore351100InnerRsp.getErrorCode(), bankCore351100InnerRsp.getErrorMsg());
 
         switch (coreStatus) {
             case AppConstant.CORESTATUS_SUCCESS:
@@ -389,19 +393,19 @@ public class Reconvert221RTradeFlow {
             case AppConstant.CORESTATUS_FAILED:
                 logger.info("上核心入账失败，返回失败");
                 rspsnInf.setRspsnSts(ProcessStsCdEnum.PR01.getCode());
-//                rspsnInf.setRjctCd(rspCodeMapDO.getDestRspCode());
-//                rspsnInf.setRjctInf(rspCodeMapDO.getRspCodeDsp());
+                rspsnInf.setRjctCd(rspCodeMapDO.getDestRspCode());
+                rspsnInf.setRjctInf(rspCodeMapDO.getRspCodeDsp());
                 break;
             default:
                 logger.error("核心异常，返回异常");
                 rspsnInf.setRspsnSts(ProcessStsCdEnum.PR02.getCode());
-//                rspsnInf.setRjctCd(rspCodeMapDO.getDestRspCode());
-//                rspsnInf.setRjctInf(rspCodeMapDO.getRspCodeDsp());
+                rspsnInf.setRjctCd(rspCodeMapDO.getDestRspCode());
+                rspsnInf.setRjctInf(rspCodeMapDO.getRspCodeDsp());
                 break;
         }
 
         logger.info("兑回222应答报文的业务回执状态:{}", rspsnInf.getRspsnSts());
-    }*/
+    }
 
     /**
      * 兑回异常处理
@@ -414,19 +418,19 @@ public class Reconvert221RTradeFlow {
 
         // 获取响应报文
         DCEPRspDTO<ReconvertRspDTO> dcepRspDTO = EcnyTradeContext.getRspMsg(context);
-        BankAttRspsnInf rspsnInf = dcepRspDTO.getBody().getReconvertRsp().getRspsnInf();
+        RspsnInf rspsnInf = dcepRspDTO.getBody().getReconvertRsp().getRspsnInf();
 
         // 初始化错误码，返回结果初始化为异常
-//        RspCodeMapDO rspCodeMapDO = EcnyTransException.convertRspCode(exception);
-//        rspsnInf.setRjctCd(rspCodeMapDO.getDestRspCode());
-//        rspsnInf.setRjctInf(rspCodeMapDO.getRspCodeDsp());
+        RspCodeMapDO rspCodeMapDO = EcnyTransException.convertRspCode(exception);
+        rspsnInf.setRjctCd(rspCodeMapDO.getDestRspCode());
+        rspsnInf.setRjctInf(rspCodeMapDO.getRspCodeDsp());
 
         // 获取流水表实体
         PayTransDtlInfoDO payTransDtlInfoDO = (PayTransDtlInfoDO) EcnyTradeContext.getTxn(context);
 
         if (null != payTransDtlInfoDO) {
 
-            StateMachine oldStatus = (StateMachine)EcnyTradeContext.getTempContext(context).get("oldStatus");
+            StateMachine oldStatus = (StateMachine) EcnyTradeContext.getTempContext(context).get("oldStatus");
 
             PayTransDtlInfoDO updateDO = new PayTransDtlInfoDO();
             updateDO.setPayDate(payTransDtlInfoDO.getPayDate());
@@ -449,14 +453,14 @@ public class Reconvert221RTradeFlow {
             }
 
             // 更新流水表
-//            updateDO.setPayPathRetCode(rspCodeMapDO.getDestRspCode());
-//            updateDO.setPayPathRetMsg(rspCodeMapDO.getRspCodeDsp());
+            updateDO.setPayPathRetCode(rspCodeMapDO.getDestRspCode());
+            updateDO.setPayPathRetMsg(rspCodeMapDO.getRspCodeDsp());
             updateDO.setPayPathRspStatus(rspsnInf.getRspsnSts());
             updateDO.setPayPathRetDate(DateUtil.getDefaultDate());
 
             try {
                 // 更新金融交易表
-                reconvertRTradeMapper.updateReconvertRTrade(updateDO,oldStatus);
+                payTransDtlInfoService.update(updateDO, oldStatus);
             } catch (Exception e) {
                 logger.error("兑回异常处理时更新交易状态异常：{}-{}", e.getMessage(), e);
                 throw new EcnyTransException(EcnyTransError.DATABASE_ERROR);

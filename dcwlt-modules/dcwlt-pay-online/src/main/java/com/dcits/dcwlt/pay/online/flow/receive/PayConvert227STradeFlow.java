@@ -1,6 +1,10 @@
 package com.dcits.dcwlt.pay.online.flow.receive;
 
 import com.alibaba.fastjson.JSONObject;
+import com.dcits.dcwlt.common.pay.channel.bankcore.dto.bankcore351100.BankCore351100InnerReq;
+import com.dcits.dcwlt.common.pay.channel.bankcore.dto.bankcore351100.BankCore351100InnerRsp;
+import com.dcits.dcwlt.common.pay.channel.bankcore.dto.bankcore358040.BankCore358040Req;
+import com.dcits.dcwlt.common.pay.channel.bankcore.dto.bankcore358040.BankCore358040Rsp;
 import com.dcits.dcwlt.common.pay.constant.AppConstant;
 import com.dcits.dcwlt.common.pay.enums.*;
 import com.dcits.dcwlt.common.pay.sequence.service.impl.GenerateCodeServiceImpl;
@@ -17,22 +21,23 @@ import com.dcits.dcwlt.pay.api.domain.dcep.common.GrpHdr;
 import com.dcits.dcwlt.pay.api.domain.dcep.fault.Fault;
 import com.dcits.dcwlt.pay.api.domain.dcep.fault.FaultDTO;
 import com.dcits.dcwlt.pay.api.domain.dcep.payconvert.*;
+import com.dcits.dcwlt.pay.api.domain.ecny.ECNYReqDTO;
+import com.dcits.dcwlt.pay.api.domain.ecny.ECNYReqHead;
+import com.dcits.dcwlt.pay.api.domain.ecny.ECNYRspDTO;
+import com.dcits.dcwlt.pay.api.domain.ecny.ECNYRspHead;
+import com.dcits.dcwlt.pay.api.domain.ecny.payconvert.PayConvertChnlReqDTO;
+import com.dcits.dcwlt.pay.api.domain.ecny.payconvert.PayConvertStsQryRspDTO;
 import com.dcits.dcwlt.pay.api.model.PayTransDtlInfoDO;
-import com.dcits.dcwlt.pay.online.base.Constant;
 import com.dcits.dcwlt.pay.api.model.StateMachine;
-import com.dcits.dcwlt.pay.online.bankcore351100.BankCore351100InnerReq;
-import com.dcits.dcwlt.pay.online.bankcore351100.BankCore351100InnerRsp;
-import com.dcits.dcwlt.pay.online.bankcore358040.BankCore358040Req;
-import com.dcits.dcwlt.pay.online.bankcore358040.BankCore358040Rsp;
+import com.dcits.dcwlt.pay.online.base.Constant;
 import com.dcits.dcwlt.pay.online.exception.EcnyTransError;
 import com.dcits.dcwlt.pay.online.exception.EcnyTransException;
 import com.dcits.dcwlt.pay.online.flow.builder.EcnyTradeContext;
 import com.dcits.dcwlt.pay.online.flow.builder.EcnyTradeFlowBuilder;
-import com.dcits.dcwlt.pay.online.payconvert.PayConvertChnlReqDTO;
-import com.dcits.dcwlt.pay.online.payconvertstsqry.*;
+import com.dcits.dcwlt.pay.online.mapper.SignInfoMapper;
+import com.dcits.dcwlt.pay.online.service.IAuthInfoService;
 import com.dcits.dcwlt.pay.online.service.ICoreProcessService;
-import com.dcits.dcwlt.pay.online.service.IPayTransDtlInfoRepository;
-import com.dcits.dcwlt.pay.online.service.ISignInfoRepository;
+import com.dcits.dcwlt.pay.online.service.IPayTransDtlInfoService;
 import com.dcits.dcwlt.pay.online.service.impl.*;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -42,6 +47,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import java.util.Map;
+
 
 /**
  * 兑出交易处理配置
@@ -61,13 +67,13 @@ public class PayConvert227STradeFlow {
     private static final String LIMIT_CONFIG_KEY = "ecny.payCounvert.limit.amount";
 
     @Autowired
-    private ISignInfoRepository signInfoRepository;
+    private SignInfoMapper signInfoRepository;
 
     @Autowired
-    private IPayTransDtlInfoRepository payTransDtlInfoRepository;
+    private IPayTransDtlInfoService payTransDtlInfoRepository;
 
     @Autowired
-    private BankCoreAccTxnService bankCoreAccTxnService;
+    private BankCoreAccTxnServiceImpl bankCoreAccTxnService;
 
 //    @Autowired
 //    private BankCoreImplDubboService bankCoreImplDubboService;
@@ -76,7 +82,7 @@ public class PayConvert227STradeFlow {
     private BankAccountVerifyService bankAccountVerifyService;
 
     @Autowired
-    private CoreEventService coreEventService;
+    private CoreEventServiceImpl coreEventService;
 
     @Autowired
     private DcepSendService dcepSendService;
@@ -94,7 +100,7 @@ public class PayConvert227STradeFlow {
     private PartyService partyService;
 
     @Autowired
-    private AuthInfoService authInfoService;
+    private IAuthInfoService authInfoService;
 
     @Autowired
     private ICoreProcessService bankCoreProcessService;
@@ -622,7 +628,7 @@ public class PayConvert227STradeFlow {
         rspDTO.setCoreSerno(payTransDtlInfoDO.getCoreSerno());
         rspDTO.setPayPathSerno(payTransDtlInfoDO.getPayPathSerno());
 
-        ECNYRspDTO ecnyRspDTO = ECNYRspDTO.newInstance(ecnyReqDTO, head, rspDTO, payTransDtlInfoDO.getTrxRetCode(), payTransDtlInfoDO.getTrxRetMsg());
+        ECNYRspDTO ecnyRspDTO = ECNYRspDTO.newInstance(ecnyReqDTO, head, null, payTransDtlInfoDO.getTrxRetCode(), payTransDtlInfoDO.getTrxRetMsg());
         EcnyTradeContext.setRspMsg(tradeContext, ecnyRspDTO);
     }
 

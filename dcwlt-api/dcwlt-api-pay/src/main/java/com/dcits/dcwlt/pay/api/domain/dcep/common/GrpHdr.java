@@ -1,8 +1,6 @@
 package com.dcits.dcwlt.pay.api.domain.dcep.common;
 
 import com.alibaba.fastjson.annotation.JSONField;
-
-
 import com.dcits.dcwlt.common.pay.constant.AppConstant;
 import com.dcits.dcwlt.common.pay.util.DateUtil;
 import com.dcits.dcwlt.common.pay.validator.annotation.ISODateTime;
@@ -62,7 +60,7 @@ public class GrpHdr {
     public static GrpHdr getInstance(String msgId, String receiver) {
         GrpHdr grpHdr = new GrpHdr();
         grpHdr.setMsgId(msgId);
-        grpHdr.setCreDtTm(DateUtil.getISODateTime());
+        grpHdr.setCreDtTm(DateUtil.formatISODateTimeToDate(grpHdr.getCreDtTm()));
         grpHdr.setInstdPty(new InstdPty(receiver));
         grpHdr.setInstgPty(new InstgPty(AppConstant.CGB_FINANCIAL_INSTITUTION_CD));
         return grpHdr;
@@ -77,7 +75,7 @@ public class GrpHdr {
     public static GrpHdr getInstance(GrpHdr origGrpHdr) {
         GrpHdr grpHdr = new GrpHdr();
         grpHdr.setMsgId(origGrpHdr.getMsgId());
-        grpHdr.setCreDtTm(DateUtil.getISODateTime());
+        grpHdr.setCreDtTm(DateUtil.formatISODateTimeToDate(grpHdr.getCreDtTm()));
         grpHdr.setInstdPty(new InstdPty(origGrpHdr.getInstgPty().getInstgDrctPty()));
         grpHdr.setInstgPty(new InstgPty(origGrpHdr.getInstdPty().getInstdDrctPty()));
         grpHdr.setRmk(origGrpHdr.getRmk());
@@ -87,7 +85,7 @@ public class GrpHdr {
     public static GrpHdr getInstance(String msgId) {
         GrpHdr grpHdr = new GrpHdr();
         grpHdr.setMsgId(msgId);
-        grpHdr.setCreDtTm(DateUtil.getISODateTime());
+        grpHdr.setCreDtTm(grpHdr.getCreDtTm());
         grpHdr.setInstdPty(new InstdPty(AppConstant.NET_PARTY_ID));
         grpHdr.setInstgPty(new InstgPty(AppConstant.CGB_FINANCIAL_INSTITUTION_CD));
         return grpHdr;

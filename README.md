@@ -2,6 +2,7 @@
 基于开源框架 http://doc.ruoyi.vip/ruoyi-cloud/ 构建，参考文档。
 #### 环境要求
 1. jdk8、maven、mysql、redis、nacos、sentinel
+npm run dev
 
 #### 初始化工作
 1. 创建应用数据库 dcwlt-app-online 执行对应初始化SQL

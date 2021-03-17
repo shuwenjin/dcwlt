@@ -39,7 +39,7 @@ public class ReconSummaryChkServiceImpl implements IReconSummaryChkService {
     @Autowired
     private GenerateCodeServiceImpl generateCodeService;
     @Autowired
-    private SummaryInfoService summaryInfoRepository;
+    private SummaryInfoServiceImpl summaryInfoRepository;
 
 
     /**
@@ -67,7 +67,7 @@ public class ReconSummaryChkServiceImpl implements IReconSummaryChkService {
                 logger.info("对总信息入库成功，汇总信息：{}", saveReconSummaryChkDTO);
             } catch (Exception e) {
                 logger.error("汇总信息入库失败,报文标识号为：{}", reconSummaryChkDO.getMsgId());
-                throw new EcnyTransException(e.getMessage(), EcnyTransError.DATABASE_ERROR.getErrorCode(), EcnyTransError.DATABASE_ERROR.getErrorMsg());
+                throw new EcnyTransException(e.getMessage(), EcnyTransError.DATABASE_ERROR.getErrorCode(),EcnyTransError.DATABASE_ERROR.getErrorMsg());
             }
         }
         /********step2: 业务对账清单信息    入库前先检查是否存在相同标识，存在则删除，否则入库***************/
@@ -80,7 +80,7 @@ public class ReconSummaryChkServiceImpl implements IReconSummaryChkService {
                     logger.info("对账汇总业务对账清单信息入库成功，对账明细信息为：{}", summaryInfo);
                 } catch (Exception e) {
                     logger.error("对账清单信息入库失败,对账明细信息为：{}", summaryInfoDOS);
-                    throw new EcnyTransException(e.getMessage(), EcnyTransError.DATABASE_ERROR.getErrorCode(), EcnyTransError.DATABASE_ERROR.getErrorMsg());
+                    throw new EcnyTransException(e.getMessage(), EcnyTransError.DATABASE_ERROR.getErrorCode(),EcnyTransError.DATABASE_ERROR.getErrorMsg());
                 }
             }
         }
@@ -95,7 +95,7 @@ public class ReconSummaryChkServiceImpl implements IReconSummaryChkService {
                     logger.info("对账文件明细入库成功，明细文件信息为：{}", dtlFileInf);
                 } catch (Exception e) {
                     logger.error("对账明细文件入库失败，明细文件信息为：{}", dtlFileInf);
-                    throw new EcnyTransException(e.getMessage(), EcnyTransError.DATABASE_ERROR.getErrorCode(), EcnyTransError.DATABASE_ERROR.getErrorMsg());
+                    throw new EcnyTransException(e.getMessage(), EcnyTransError.DATABASE_ERROR.getErrorCode(),EcnyTransError.DATABASE_ERROR.getErrorMsg());
                 }
             }
         }

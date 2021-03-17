@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dcits.dcwlt.pay.batch.mapper.FinanceReportDOMapper">
+    
+    <resultMap type="com.dcits.dcwlt.pay.api.model.FinanceReportDO" id="FinanceReportDOResult">
+        <result property="cashoutAmount"    column="cashout_amount"    />
+        <result property="cashoutSuccessNumber"    column="cashout_success_number"    />
+        <result property="cashoutTotalNumber"    column="cashout_total_number"    />
+        <result property="cashinAmount"    column="cashin_amount"    />
+        <result property="cashinSuccessNumber"    column="cashin_success_number"    />
+        <result property="cashinTotalNumber"    column="cashin_total_number"    />
+        <result property="remitoutAmount"    column="remitout_amount"    />
+        <result property="remitoutSuccessNumber"    column="remitout_success_number"    />
+        <result property="remitoutTotalNumber"    column="remitout_total_number"    />
+        <result property="reportDate"    column="report_date"    />
+    </resultMap>
+
+    <sql id="selectFinanceReportDOVo">
+        select cashout_amount, cashout_success_number, cashout_total_number, cashin_amount, cashin_success_number, cashin_total_number, remitout_amount, remitout_success_number, remitout_total_number, report_date from pay_batch_finance_report
+    </sql>
+
+    <select id="selectFinanceReportDOList" parameterType="com.dcits.dcwlt.pay.api.model.FinanceReportDO" resultMap="FinanceReportDOResult">
+        <include refid="selectFinanceReportDOVo"/>
+        <where>  
+            <if test="params.beginReportDate != null and params.beginReportDate != '' and params.endReportDate != null and params.endReportDate != ''"> and report_date between #{params.beginReportDate} and #{params.endReportDate}</if>
+        </where>
+        order by report_date desc
+    </select>
+    
+    <select id="selectFinanceReportDOById" parameterType="String" resultMap="FinanceReportDOResult">
+        <include refid="selectFinanceReportDOVo"/>
+        where report_date = #{reportDate}
+    </select>
+        
+    <insert id="insertFinanceReportDO" parameterType="com.dcits.dcwlt.pay.api.model.FinanceReportDO">
+        insert into pay_batch_finance_report
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="cashoutAmount != null">cashout_amount,</if>
+            <if test="cashoutSuccessNumber != null">cashout_success_number,</if>
+            <if test="cashoutTotalNumber != null">cashout_total_number,</if>
+            <if test="cashinAmount != null">cashin_amount,</if>
+            <if test="cashinSuccessNumber != null">cashin_success_number,</if>
+            <if test="cashinTotalNumber != null">cashin_total_number,</if>
+            <if test="remitoutAmount != null">remitout_amount,</if>
+            <if test="remitoutSuccessNumber != null">remitout_success_number,</if>
+            <if test="remitoutTotalNumber != null">remitout_total_number,</if>
+            <if test="reportDate != null and reportDate != ''">report_date,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="cashoutAmount != null">#{cashoutAmount},</if>
+            <if test="cashoutSuccessNumber != null">#{cashoutSuccessNumber},</if>
+            <if test="cashoutTotalNumber != null">#{cashoutTotalNumber},</if>
+            <if test="cashinAmount != null">#{cashinAmount},</if>
+            <if test="cashinSuccessNumber != null">#{cashinSuccessNumber},</if>
+            <if test="cashinTotalNumber != null">#{cashinTotalNumber},</if>
+            <if test="remitoutAmount != null">#{remitoutAmount},</if>
+            <if test="remitoutSuccessNumber != null">#{remitoutSuccessNumber},</if>
+            <if test="remitoutTotalNumber != null">#{remitoutTotalNumber},</if>
+            <if test="reportDate != null and reportDate != ''">#{reportDate},</if>
+         </trim>
+    </insert>
+
+    <update id="updateFinanceReportDO" parameterType="com.dcits.dcwlt.pay.api.model.FinanceReportDO">
+        update pay_batch_finance_report
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="cashoutAmount != null">cashout_amount = #{cashoutAmount},</if>
+            <if test="cashoutSuccessNumber != null">cashout_success_number = #{cashoutSuccessNumber},</if>
+            <if test="cashoutTotalNumber != null">cashout_total_number = #{cashoutTotalNumber},</if>
+            <if test="cashinAmount != null">cashin_amount = #{cashinAmount},</if>
+            <if test="cashinSuccessNumber != null">cashin_success_number = #{cashinSuccessNumber},</if>
+            <if test="cashinTotalNumber != null">cashin_total_number = #{cashinTotalNumber},</if>
+            <if test="remitoutAmount != null">remitout_amount = #{remitoutAmount},</if>
+            <if test="remitoutSuccessNumber != null">remitout_success_number = #{remitoutSuccessNumber},</if>
+            <if test="remitoutTotalNumber != null">remitout_total_number = #{remitoutTotalNumber},</if>
+        </trim>
+        where report_date = #{reportDate}
+    </update>
+</mapper>

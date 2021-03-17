@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dcits.dcwlt.pay.batch.mapper.SettledtlFileInfoOnlineMapper" >
+
+    <select id="queryDtlFileInfoByBatchId" resultType="com.dcits.dcwlt.pay.api.model.DtlFileInfDO">
+        SELECT
+        MSGID msgId,
+        BATCHID batchId,
+        SRCFILEPATH srcFilePath,
+        FILENAME fileName,
+        LASTUPDATE lastUpDate,
+        LASTUPTIME lastUpTime
+        FROM pay_online_checkfilelist
+        WHERE BATCHID = #{batchId}
+    </select>
+</mapper>

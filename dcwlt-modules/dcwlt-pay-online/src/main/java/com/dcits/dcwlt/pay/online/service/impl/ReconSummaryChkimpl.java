@@ -1,7 +1,7 @@
 package com.dcits.dcwlt.pay.online.service.impl;
 import com.dcits.dcwlt.pay.api.model.ReconSummaryChkDO;
 import com.dcits.dcwlt.pay.online.mapper.ReconsummaryChkMapper;
-import com.dcits.dcwlt.pay.online.service.IReconSummaryChkRepository;
+import com.dcits.dcwlt.pay.online.service.IReconSummaryChService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -12,7 +12,7 @@ import org.springframework.stereotype.Repository;
  * Description:
  */
 @Repository
-public class ReconSummaryChkimpl implements IReconSummaryChkRepository {
+public class ReconSummaryChkimpl implements IReconSummaryChService {
     private static final String REPLACE_SQL = "reconsummarychkmapper.replaceReconSummaryChkDO";
 
     @Autowired

@@ -24,6 +24,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.Resource;
 import java.util.List;
 
 /**
@@ -52,7 +53,7 @@ public class AuthInfoServiceimpl implements IAuthInfoService {
             //校验数据变更组件
             ChngCtrl chngCtrl = authrtyInf.getChngCtrl();
             //校验数据变更组件
-//            chngCtrl.validate();
+ //           chngCtrl.validate();
             //生效类型
             String fctvTp = chngCtrl.getFctvTp();
             //变更类型

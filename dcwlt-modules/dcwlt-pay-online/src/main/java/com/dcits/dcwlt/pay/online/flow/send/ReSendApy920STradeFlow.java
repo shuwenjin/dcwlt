@@ -22,8 +22,7 @@ import com.dcits.dcwlt.pay.online.exception.EcnyTransError;
 import com.dcits.dcwlt.pay.online.exception.EcnyTransException;
 import com.dcits.dcwlt.pay.online.flow.builder.EcnyTradeContext;
 import com.dcits.dcwlt.pay.online.flow.builder.EcnyTradeFlowBuilder;
-import com.dcits.dcwlt.pay.online.service.ECNYSerNoService;
-import com.dcits.dcwlt.pay.online.service.IPayTransDtlNonfRepository;
+import com.dcits.dcwlt.pay.online.mapper.PayTransDtlNonfMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
@@ -68,14 +67,17 @@ public class ReSendApy920STradeFlow {
     private static final String RES_STS_FAILED = "failed";
 
 
-    @Autowired
-    private ECNYSerNoService ecnySerNoService;
+//    @Autowired
+//    private ECNYSerNoService ecnySerNoService;
 
 //    @Autowired
 //    private DcepSendService dcepSendService;
 
+//    @Autowired
+//    private IPayTransDtlNonfRepository payTransDtlNonfRepository;
+
     @Autowired
-    private IPayTransDtlNonfRepository payTransDtlNonfRepository;
+    private PayTransDtlNonfMapper payTransDtlNonfmapper;
 
     @Autowired
     private GenerateCodeServiceImpl generateCodeService;
@@ -226,7 +228,7 @@ public class ReSendApy920STradeFlow {
     private void insertJrnDO(TradeContext<?, ?> tradeContext) {
         PayTransDtlNonfDO insertPayTransDtlNonfDO = (PayTransDtlNonfDO) tradeContext.getTempCtx().get(INSERT_JRN_DO);
         try {
-            payTransDtlNonfRepository.addPayTransDtlNonf(insertPayTransDtlNonfDO);
+            payTransDtlNonfmapper.insertPayTransDtlNonf(insertPayTransDtlNonfDO);
         } catch (Exception e) {
             logger.error("插入信息登记簿异常：{}", e);
             throw e;
@@ -241,7 +243,7 @@ public class ReSendApy920STradeFlow {
     private void updateJrnDO(TradeContext<?, ?> tradeContext) {
         PayTransDtlNonfDO updatePayTransDtlNonfDO = (PayTransDtlNonfDO) tradeContext.getTempCtx().get(UPDATE_JRN_DO);
         try {
-            payTransDtlNonfRepository.updatePayTransDtlNonf(updatePayTransDtlNonfDO);
+            payTransDtlNonfmapper.updatePayTransDtlNonf(updatePayTransDtlNonfDO);
         } catch (Exception e) {
             logger.error("更新信息登记簿异常：{}", e);
             throw e;
@@ -331,7 +333,7 @@ public class ReSendApy920STradeFlow {
         //设置交易状态为失败状态
         updatePayTransDtlNonfDO.setTradeStatus(TrxStatusEnum.FAIL.getCode());
         try {
-            payTransDtlNonfRepository.updatePayTransDtlNonf(updatePayTransDtlNonfDO);
+            payTransDtlNonfmapper.updatePayTransDtlNonf(updatePayTransDtlNonfDO);
         } catch (Exception e) {
             logger.error("更新信息报文登记簿异常，{}", e);
         } finally {

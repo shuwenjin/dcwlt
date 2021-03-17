@@ -4,7 +4,7 @@
     
     <!-- 更新事件处理结果 -->
     <update id="updateEventInfo">
-         UPDATE ECNY_COMM_EXCEPTEVENTINFO T
+         UPDATE pay_comm_excepteventinfo T
 	        SET 
 	        	<trim prefix="" suffix="" suffixOverrides=",">
 				<if test="exceptEventErrorCode != null and exceptEventErrorCode != ''">  T.EXCEPTEVENTERRORCODE = #{exceptEventErrorCode}, </if>
@@ -19,7 +19,7 @@
     
       <!-- 更新处理次数，若新增违反唯一索引冲突，则更新处理次数 -->
     <update id="updateEventDealNum">
-         UPDATE ECNY_COMM_EXCEPTEVENTINFO T
+         UPDATE pay_comm_excepteventinfo T
 	        SET T.EXCEPTEVENTDEALCOUNT = ifnull(T.EXCEPTEVENTDEALCOUNT,0) + 1
 	      WHERE T.EXCEPTEVENTCODE = #{exceptEventCode}
 	        AND T.EXCEPTEVENTSEQNO = #{exceptEventSeqNo}
@@ -36,14 +36,14 @@
 			T.EXCEPTEVENTDEALTYPE,
 			T.EXCEPTEVENTDEALINTERVALMIN,
 			T.EXCEPTEVENTREMARK
-		FROM ECNY_COMM_EXCEPTEVENTCONFIG T
+		FROM pay_comm_excepteventconfig T
 		WHERE T.EXCEPTEVENTCODE = #{exceptEventCode}
 
     </select>
     
     <!-- 插入异常事件信息 -->
     <insert id="insertEventInfo">
-		INSERT INTO ECNY_COMM_EXCEPTEVENTINFO
+		INSERT INTO pay_comm_excepteventinfo
 			(EXCEPTEVENTDATE, EXCEPTEVENTSERNO, EXCEPTEVENTTIME, EXCEPTEVENTCODE, EXCEPTEVENTSEQNO, EXCEPTEVENTDEALCOUNT,
 			 EXCEPTEVENTSYSSTATUS, EXCEPTEVENTERRORCODE, EXCEPTEVENTERRORMSG, EXCEPTEVENTDEALPATH, EXCEPTEVENTCONTEXT, LASTUPDATE, LASTUPTIME)
 		VALUES(#{exceptEventDate},#{exceptEventSerno},#{exceptEventTime},#{exceptEventCode},#{exceptEventSeqNo},#{exceptEventDealCount},
@@ -52,7 +52,7 @@
 
 	<!--新增监控数据-->
 	<insert id="insertMonitorData">
-		INSERT INTO ecny_comm_monitor(
+		INSERT INTO pay_comm_monitor(
 		EXCEPTDATE,
 		EXCEPTSERNO,
 		EXCEPTTIME,
@@ -87,7 +87,7 @@
 
 	<!--更新监控数据-->
 	<update id="updateMonitorData">
-		UPDATE ecny_comm_monitor
+		UPDATE pay_comm_monitor
 		SET
 		<if test="exceptTime != null and exceptTime!='' ">
 			EXCEPTTIME = #{exceptTime},
@@ -114,7 +114,7 @@
 	</update>
 
 	<insert id="update" parameterType="com.dcits.dcwlt.pay.api.model.SummaryInfoDO">
-        REPLACE INTO ECNY_ONLINE_CHECKPATH_SUB(
+        REPLACE INTO pay_online_checkpath_sub(
         MSGID,
         BATCHDATE,
         BATCHID,
@@ -160,7 +160,7 @@
     </insert>
 
 	<insert id="replaceDtlFileInfDO" >
-        REPLACE INTO ecny_online_checkfilelist
+        REPLACE INTO pay_online_checkfilelist
         (MSGID,
         BATCHID,
         SRCFILEPATH,
@@ -172,7 +172,7 @@
     </insert>
 
 	<insert id="insertReconSummaryChkDO" parameterType="com.dcits.dcwlt.pay.api.model.ReconSummaryChkDO">
-        REPLACE INTO ECNY_ONLINE_CHECKPATH_MAIN(
+        REPLACE INTO pay_online_checkpath_main(
         PAYDATE,
         PAYSERNO,
         PAYTIME,
@@ -219,7 +219,7 @@
     </insert>
 
     <insert id="insertDtlFileInfDO" parameterType="com.dcits.dcwlt.pay.api.model.DtlFileInfDO">
-        REPLACE INTO ecny_online_checkfilelist
+        REPLACE INTO pay_online_checkfilelist
         (MSGID,
         BATCHID,
         SRCFILEPATH,

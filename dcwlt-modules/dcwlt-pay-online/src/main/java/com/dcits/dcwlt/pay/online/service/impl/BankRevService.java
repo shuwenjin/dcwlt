@@ -1,15 +1,15 @@
 package com.dcits.dcwlt.pay.online.service.impl;
 
+import com.dcits.dcwlt.common.pay.channel.bankcore.dto.bankcore998889.BankCore998889Rsp;
 import com.dcits.dcwlt.common.pay.constant.AppConstant;
 import com.dcits.dcwlt.common.pay.sequence.service.impl.GenerateCodeServiceImpl;
 import com.dcits.dcwlt.common.pay.util.DateUtil;
 import com.dcits.dcwlt.pay.api.model.PayTransDtlInfoDO;
 import com.dcits.dcwlt.pay.api.model.StateMachine;
-import com.dcits.dcwlt.pay.online.bankcore998889.BankCore998889Rsp;
 import com.dcits.dcwlt.pay.online.exception.EcnyTransError;
 import com.dcits.dcwlt.pay.online.exception.EcnyTransException;
 import com.dcits.dcwlt.pay.online.service.IEventService;
-import com.dcits.dcwlt.pay.online.service.IPayTransDtlInfoRepository;
+import com.dcits.dcwlt.pay.online.service.IPayTransDtlInfoService;
 import org.apache.commons.lang3.StringUtils;
 import org.mybatis.logging.Logger;
 import org.mybatis.logging.LoggerFactory;
@@ -30,7 +30,7 @@ public class BankRevService implements IEventService {
 //    private BankCoreImplDubboService bankCoreImplDubboService;
 
     @Autowired
-    private BankCoreAccTxnService bankCoreAccTxnService;
+    private BankCoreAccTxnServiceImpl bankCoreAccTxnService;
 
 //    @Autowired
 //    private SernoService sernoService;
@@ -42,7 +42,7 @@ public class BankRevService implements IEventService {
     private GenerateCodeServiceImpl generateCodeService;
 
     @Autowired
-    private IPayTransDtlInfoRepository payTransDtlInfoRepository;
+    private IPayTransDtlInfoService payTransDtlInfoRepository;
 
 //    @Autowired
 //    private BankCoreDubboService bankCoreDubboService;

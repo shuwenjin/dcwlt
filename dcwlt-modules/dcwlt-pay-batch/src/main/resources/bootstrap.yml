@@ -14,12 +14,47 @@ spring:
     nacos:
       discovery:
         # 服务注册地址
-        server-addr: 127.0.0.1:8848
+        server-addr: 10.0.23.169:8848
       config:
         # 配置中心地址
-        server-addr: 127.0.0.1:8848
+        server-addr: 10.0.23.169:8848
         # 配置文件格式
         file-extension: yml
         # 共享配置
         shared-configs:
           - application-${spring.profiles.active}.${spring.cloud.nacos.config.file-extension}
+
+# 线程数量
+ency:
+  batch:
+    task:
+      execute:
+        threads: 16
+  #报文标示号数量
+  check:
+    wrong:
+      max:
+        count: 100
+  #文件加载路径
+  sql:
+    load:
+      path:
+# 协议
+sftp:
+  client:
+    protocol: sftp
+    host: 127.0.0.1
+    port: 22
+    username: sftp
+    password: sftp
+  # 根路径
+    root: /home/sftp/
+  # 密钥文件路径
+    privateKey:
+  # 密钥的密码
+    passphrase:
+    sessionStrictHostKeyChecking: no
+  # session连接超时时间
+    sessionConnectTimeout: 15000
+  # channel连接超时时间
+    channelConnectedTimeout: 15000

@@ -24,4 +24,9 @@ public class TradeFlowRuner {
 
         return context.getRspMsg();
     }
+
+    public static <T, R> R execute(TradeFlow tradeFlow, TradeContext<T, R> context){
+        tradeFlow.execute(context);
+        return context.getRspMsg();
+    }
 }

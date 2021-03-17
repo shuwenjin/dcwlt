@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dcits.dcwlt.pay.batch.mapper.BatchCheckClearDOMapper">
+    
+    <resultMap type="com.dcits.dcwlt.pay.api.model.BatchCheckClearDO" id="BatchCheckClearDOResult">
+        <result property="msgId"    column="msgid"    />
+        <result property="senderDateTime"    column="senderdatetime"    />
+        <result property="instgDrctPty"    column="instgdrctpty"    />
+        <result property="instdDrctPty"    column="instddrctpty"    />
+        <result property="remark"    column="remark"    />
+        <result property="clearDate"    column="cleardate"    />
+        <result property="clearCountNum"    column="clearcountnum"    />
+        <result property="clearDbtTotAmt"    column="cleardbttotamt"    />
+        <result property="clearCbtTotAmt"    column="clearcbttotamt"    />
+        <result property="clearNetNum"    column="clearnetnum"    />
+        <result property="clearMsgId"    column="clearmsgid"    />
+        <result property="clearDrct"    column="cleardrct"    />
+        <result property="clearAmt"    column="clearamt"    />
+        <result property="batchId"    column="batchid"    />
+        <result property="batchDrct"    column="batchdrct"    />
+        <result property="batchNetAmt"    column="batchnetamt"    />
+        <result property="lastUpDate"    column="lastupdate"    />
+        <result property="lastUpTime"    column="lastuptime"    />
+    </resultMap>
+
+    <sql id="selectBatchCheckClearDOVo">
+        select msgid, senderdatetime, instgdrctpty, instddrctpty, remark, cleardate, clearcountnum, cleardbttotamt, clearcbttotamt, clearnetnum, clearmsgid, cleardrct, clearamt, batchid, batchdrct, batchnetamt, lastupdate, lastuptime from pay_online_checkclear
+    </sql>
+
+    <select id="selectBatchCheckClearDOList" parameterType="com.dcits.dcwlt.pay.api.model.BatchCheckClearDO" resultMap="BatchCheckClearDOResult">
+        <include refid="selectBatchCheckClearDOVo"/>
+        <where>
+            <if test="msgId != null  and msgId != ''"> and msgid = #{msgId}</if>
+            <if test="senderDateTime != null  and senderDateTime != ''"> and senderdatetime = #{senderDateTime}</if>
+            <if test="instgDrctPty != null  and instgDrctPty != ''"> and instgdrctpty = #{instgDrctPty}</if>
+            <if test="instdDrctPty != null  and instdDrctPty != ''"> and instddrctpty = #{instdDrctPty}</if>
+            <if test="clearDate != null  and clearDate != ''"> and cleardate = #{clearDate}</if>
+            <if test="clearCountNum != null  and clearCountNum != ''"> and clearcountnum = #{clearCountNum}</if>
+            <if test="clearDbtTotAmt != null  and clearDbtTotAmt != ''"> and cleardbttotamt = #{clearDbtTotAmt}</if>
+            <if test="clearCbtTotAmt != null  and clearCbtTotAmt != ''"> and clearcbttotamt = #{clearCbtTotAmt}</if>
+            <if test="clearMsgId != null  and clearMsgId != ''"> and clearmsgid = #{clearMsgId}</if>
+            <if test="clearDrct != null  and clearDrct != ''"> and cleardrct = #{clearDrct}</if>
+            <if test="clearAmt != null  and clearAmt != ''"> and clearamt = #{clearAmt}</if>
+            <if test="batchDrct != null  and batchDrct != ''"> and batchdrct = #{batchDrct}</if>
+            <if test="batchNetAmt != null  and batchNetAmt != ''"> and batchnetamt = #{batchNetAmt}</if>
+            <if test="lastUpDate != null  and lastUpDate != ''"> and lastupdate = #{lastUpDate}</if>
+            <if test="lastUpTime != null  and lastUpTime != ''"> and lastuptime = #{lastUpTime}</if>
+            <if test="batchId != null  and batchId != ''">and batchid = #{batchId}</if>
+        </where>
+    </select>
+    
+    <select id="selectBatchCheckClearDOById" parameterType="String" resultMap="BatchCheckClearDOResult">
+        <include refid="selectBatchCheckClearDOVo"/>
+        where msgid = #{msgid}
+    </select>
+
+</mapper>

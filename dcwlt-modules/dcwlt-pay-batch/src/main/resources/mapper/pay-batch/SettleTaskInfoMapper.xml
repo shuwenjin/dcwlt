@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dcits.dcwlt.pay.batch.mapper.SettleTaskInfoMapper">
+
+    <select id="queryTaskInfoListToExec" resultType="com.dcits.dcwlt.pay.api.model.SettleTaskInfoDO">
+        SELECT TASKCODE, TASKNAME, TASKGROUPCODE, TASKTYPE, TASKINDEX, TASKCLASSNAME, EXECPARAM, TASKSTATE
+        FROM pay_comm_task_info
+        WHERE TASKGROUPCODE = #{taskGroupCode}
+        ORDER BY TASKINDEX
+    </select>
+
+</mapper>

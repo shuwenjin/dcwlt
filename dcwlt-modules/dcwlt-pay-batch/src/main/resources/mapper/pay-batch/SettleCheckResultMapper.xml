@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dcits.dcwlt.pay.batch.mapper.SettleCheckResultMapper">
+    <!--通道对账结果表入库-->
+    <insert id="insert" parameterType="com.dcits.dcwlt.pay.api.model.CheckResultDO">
+        INSERT INTO PAY_BATCH_CHECKRESULT
+        (PAYDATE, PAYSERNO, PAYTIME, COREACCTDATE, MSGTYPE, MSGID, BATCHID, PAYFLAG, INSTGDRCTPTY, DBITPARTY,
+        PAYERWALLETID, PAYERACCOUNT, CRDTPARTY, PAYEENAME, PAYEEACCOUNT, PAYEEWALLETID, CCY, AMOUNT, OGNLMSGTYPE,
+        OGNLMSGID, TRADESTATUS, CORESTATUS, PATHSTATUS, CHECKSTATUS, PROCSTATUS, LASTUPDATE, LASTUPTIME)
+        VALUES(#{payDate}, #{paySerno}, #{payTime}, #{coreAcctDate}, #{msgType}, #{msgId}, #{batchId}, #{payFlag},
+        #{instgDrctPty}, #{dbitParty}, #{payerWalletId}, #{payerAccount}, #{crdtParty}, #{payeeName}, #{payeeAccount},
+        #{payeeWalletId}, #{ccy}, #{amount}, #{ognlMsgType}, #{ognlMsgId}, #{tradeStatus}, #{coreStatus}, #{pathStatus},
+        #{checkStatus}, #{procStatus}, #{lastUpDate},  #{lastUpTime})
+    </insert>
+	
+	<insert id="insertByBatch" parameterType="com.dcits.dcwlt.pay.api.model.CheckResultDO">
+        INSERT INTO PAY_BATCH_CHECKRESULT
+        (PAYDATE, PAYSERNO, PAYTIME, COREACCTDATE, MSGTYPE, MSGID, BATCHID, PAYFLAG, INSTGDRCTPTY, DBITPARTY,
+        PAYERWALLETID, PAYERACCOUNT, CRDTPARTY, PAYEENAME, PAYEEACCOUNT, PAYEEWALLETID, CCY, AMOUNT, OGNLMSGTYPE,
+        OGNLMSGID, TRADESTATUS, CORESTATUS, PATHSTATUS, CHECKSTATUS, PROCSTATUS, LASTUPDATE, LASTUPTIME)
+        VALUES 
+        <foreach collection="list" item="item" index="index" separator=",">
+	       	(#{item.payDate}, #{item.paySerno}, #{item.payTime}, #{item.coreAcctDate}, #{item.msgType}, #{item.msgId}, 
+	       	#{item.batchId}, #{item.payFlag}, #{item.instgDrctPty}, #{item.dbitParty}, #{item.payerWalletId}, #{item.payerAccount}, 
+	       	#{item.crdtParty}, #{item.payeeName}, #{item.payeeAccount}, #{item.payeeWalletId}, #{item.ccy}, #{item.amount},
+	       	#{item.ognlMsgType}, #{item.ognlMsgId}, #{item.tradeStatus}, #{item.coreStatus}, #{item.pathStatus},
+        	#{item.checkStatus}, #{item.procStatus}, #{item.lastUpDate},  #{item.lastUpTime})
+        </foreach> 
+    </insert>
+    
+    <!-- 查询通道对账结果表 -->
+    <select id ="selectCheckResult" resultType="com.dcits.dcwlt.pay.api.model.CheckResultDO">
+        SELECT t.PAYDATE     payDate,
+        t.PAYSERNO    paySerno,
+        t.PAYTIME     payTime,
+        t.COREACCTDATE  coreAcctDate,
+        t.MSGTYPE     msgType,
+        t.MSGID      msgId,
+        t.BATCHID     batchId,
+        t.PAYFLAG     payFlag,
+        t.INSTGDRCTPTY  instgDrctPty,
+        t.DBITPARTY    dbitParty,
+        t.PAYERWALLETID  payerWalletId,
+        t.PAYERACCOUNT  payerAccount,
+        t.CRDTPARTY    crdtParty,
+        t.PAYEENAME    payeeName,
+        t.PAYEEACCOUNT  payeeAccount,
+        t.PAYEEWALLETID  payeeWalletId,
+        t.CCY       ccy,
+        t.AMOUNT     amount,
+        t.OGNLMSGTYPE   ognlMsgType,
+        t.OGNLMSGID    ognlMsgId,
+        t.TRADESTATUS   tradeStatus,
+        t.CORESTATUS   coreStatus,
+        t.PATHSTATUS   pathStatus,
+        t.CHECKSTATUS   checkStatus,
+        t.PROCSTATUS   procStatus,
+        t.LASTUPDATE   lastUpDate,
+        t.LASTUPTIME   lastUpTime
+        FROM PAY_BATCH_CHECKRESULT t
+        where t.PAYDATE = #{payDate}
+          AND t.PAYSERNO = #{paySerno}
+    </select>
+ 
+ 	<!-- 查询需要处理的对账结果表 -->
+    <select id ="selectCheckResultByStatus" resultType="com.dcits.dcwlt.pay.api.model.CheckResultDO">
+        SELECT t.PAYDATE     payDate,
+        t.PAYSERNO    paySerno,
+        t.PAYTIME     payTime,
+        t.COREACCTDATE  coreAcctDate,
+        t.MSGTYPE     msgType,
+        t.MSGID      msgId,
+        t.BATCHID     batchId,
+        t.PAYFLAG     payFlag,
+        t.INSTGDRCTPTY  instgDrctPty,
+        t.DBITPARTY    dbitParty,
+        t.PAYERWALLETID  payerWalletId,
+        t.PAYERACCOUNT  payerAccount,
+        t.CRDTPARTY    crdtParty,
+        t.PAYEENAME    payeeName,
+        t.PAYEEACCOUNT  payeeAccount,
+        t.PAYEEWALLETID  payeeWalletId,
+        t.CCY       ccy,
+        t.AMOUNT     amount,
+        t.OGNLMSGTYPE   ognlMsgType,
+        t.OGNLMSGID    ognlMsgId,
+        t.TRADESTATUS   tradeStatus,
+        t.CORESTATUS   coreStatus,
+        t.PATHSTATUS   pathStatus,
+        t.CHECKSTATUS   checkStatus,
+        t.PROCSTATUS   procStatus,
+        t.LASTUPDATE   lastUpDate,
+        t.LASTUPTIME   lastUpTime
+        FROM PAY_BATCH_CHECKRESULT t
+        where t.PAYDATE = #{payDate}
+          AND t.BATCHID = #{batchId}
+          AND t.CHECKSTATUS in ('MORE', 'LESS', 'SANF', 'FANS', 'EANS', 'EANF', 'PROC')
+    </select>
+    
+    <!-- 查询需要处理的对账结果表 -->
+    <select id ="selectWrongMatchCheckResult" resultType="com.dcits.dcwlt.pay.api.domain.dcep.check.CheckWrongQueryResDTO">
+        SELECT a.* FROM 
+        (SELECT t.PAYDATE     payDate,
+        t.PAYSERNO    paySerno,
+        t.PAYTIME     payTime,
+        t.COREACCTDATE  coreAcctDate,
+        t.MSGTYPE     msgType,
+        t.MSGID      msgId,
+        t.BATCHID     batchId,
+        t.PAYFLAG     payFlag,
+        t.INSTGDRCTPTY  instgDrctPty,
+        t.DBITPARTY    dbitParty,
+        t.PAYERWALLETID  payerWalletId,
+        t.PAYERACCOUNT  payerAccount,
+        t.CRDTPARTY    crdtParty,
+        t.PAYEENAME    payeeName,
+        t.PAYEEACCOUNT  payeeAccount,
+        t.PAYEEWALLETID  payeeWalletId,
+        t.CCY       ccy,
+        t.AMOUNT     amount,
+        t.OGNLMSGTYPE   ognlMsgType,
+        t.OGNLMSGID    ognlMsgId,
+        t.TRADESTATUS   tradeStatus,
+        t.CORESTATUS   coreStatus,
+        t.PATHSTATUS   pathStatus,
+        t.CHECKSTATUS   checkStatus,
+        t.PROCSTATUS   procStatus,
+        t.LASTUPDATE   lastUpDate,
+        t.LASTUPTIME   lastUpTime
+        FROM PAY_BATCH_CHECKRESULT t
+        WHERE t.PAYDATE = #{payDate}
+          AND t.CHECKSTATUS in ('MORE', 'LESS', 'SANF', 'FANS', 'EANS', 'EANF', 'PROC')  
+        <if test="batchId != null and batchId !=''">
+			AND t.BATCHID = #{batchId}
+		</if>
+		<if test="msgType != null and msgType !=''">
+			AND t.MSGTYPE = #{msgType}
+		</if>
+		<if test="checkStatus != null and checkStatus !=''">
+			AND t.CHECKSTATUS = #{checkStatus}
+		</if>
+        <if test="procStatus != null and procStatus !=''">
+			AND t.PROCSTATUS = #{procStatus}
+		</if>
+        <if test="msgId != null and msgId !=''">
+            <!-- 首页  -->
+            AND t.MSGID = #{msgId}
+        </if>
+		<if test="queryPageFlag == 1">
+			<!-- 查询上一页 -->
+			AND t.MSGID &lt; #{queryPageKey}
+		</if>
+		<if test="queryPageFlag == 2">
+			<!-- 查询下一页 -->
+			AND t.MSGID &gt; #{queryPageKey}
+		</if>
+		ORDER BY t.MSGID 
+		<if test="queryPageFlag == 1">
+			<!-- 查询上一页 -->
+			DESC 
+		</if>
+		LIMIT #{count}
+		) a
+		ORDER BY a.msgId
+    </select>
+
+    <update id ="updateCheckResult">
+        UPDATE PAY_BATCH_CHECKRESULT
+        SET
+        <trim prefix="" suffix="" suffixOverrides=",">
+            <if test="lastUpDate != null and lastUpDate != ''">LASTUPDATE = #{lastUpDate},</if>
+            <if test="lastUpTime != null and lastUpTime != ''">LASTUPTIME = #{lastUpTime},</if>
+            <if test="procStatus != null and procStatus != ''">PROCSTATUS = #{procStatus},</if>
+            <if test="checkStatus != null and checkStatus != ''">CHECKSTATUS = #{checkStatus}</if>
+        </trim>
+        WHERE PAYDATE = #{payDate, jdbcType=CHAR} AND PAYSERNO = #{paySerno, jdbcType=CHAR}
+    </update>
+</mapper>

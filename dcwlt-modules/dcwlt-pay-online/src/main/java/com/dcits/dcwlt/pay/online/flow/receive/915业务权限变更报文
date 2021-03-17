@@ -1,0 +1,72 @@
+请求报文：
+<?xml version="1.0" encoding="UTF-8"?><!--兑出是指用户将银行存款兑换为钱包中的DC/EP。-->
+<soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"  xmlns:head="http://www.dcep.com/dcep/header/">
+    <soap:Header>
+        <head:Ver>01</head:Ver> <!--版本号,目前固定填写01-->
+        <head:SndDtTm>2021-01-13T17:55:29</head:SndDtTm><!--系统时间6分钟以内-->
+        <head:MsgTp>dcep.915.001.01</head:MsgTp>  <!--报文编号-->
+        <head:MsgSN>202101130001915202815629446000000001</head:MsgSN><!--业务的通信层标识，同一笔业务可以发起多次通信请求（如超时重试等），MsgId一样，MsgSN不一样,前32位取MsgId，后四位从0001开始递增-->
+        <head:Sender>G4001011000013</head:Sender> <!--发起方运营机构-->
+        <head:Receiver>C1030644021075</head:Receiver> <!--接收方运营机构 农业银行-->
+        <head:SignSN>4</head:SignSN><!--签名证书序列号-->
+    </soap:Header>
+    <soap:Body>
+        <wstxns1:AuthrtyChngNtfctn xmlns:wstxns1="http://www.dcep.com/dcep/91500101/">
+            <GrpHdr>
+                <MsgId>20210113000191520281562944600000</MsgId>  <!--报文标识号、最后一位必须是0、1、2、3-->
+                <CreDtTm>2021-01-13T17:55:29</CreDtTm><!---->
+                <InstgPty>
+                    <InstgDrctPty>G4001011000013</InstgDrctPty><!---->
+                </InstgPty>
+                <InstdPty>
+                    <InstdDrctPty>C1030644021075</InstdDrctPty><!---->
+                </InstdPty>
+                <Rmk>rmk</Rmk><!---->
+            </GrpHdr>
+            <AuthrtyInf>
+                <ChngCtrl>
+                    <ChngTp>CC01</ChngTp>
+                    <FctvTp>EF00</FctvTp>
+                    <FctvDt>2021-01-13T17:55:29</FctvDt>
+                </ChngCtrl>
+
+                <Ptcpt>C1030644021075</Ptcpt>
+                <BizAuthrtyInf>
+                    <MT>dcep.401.001.01</MT> <!-- 报文编号 -->
+                    <TrdCtgyCd>11</TrdCtgyCd><!-- 业务类型编码 业务类型不存在时，该字段为空 -->
+                    <InitAuthrtySgnCd>AS01</InitAuthrtySgnCd><!-- 发起权限标识 AS00：允许 AS01：禁止 -->
+                    <RcvAuthrtySgnCd>AS00</RcvAuthrtySgnCd><!-- 接收权限标识 AS00：允许 AS01：禁止 -->
+                </BizAuthrtyInf>
+            </AuthrtyInf>
+        </wstxns1:AuthrtyChngNtfctn>
+    </soap:Body>
+</soap:Envelope>
+
+
+响应报文：
+<?xml version="1.0" encoding="UTF-8"?>
+<soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/" xmlns:head="http://www.dcep.com/dcep/header/">
+    <head:Header>
+        <head:Sender>C1030644021075</head:Sender>
+        <head:DgtlEnvlp></head:DgtlEnvlp>
+        <head:SignSN>4</head:SignSN>
+        <head:Ver>01</head:Ver>
+        <head:NcrptnSN></head:NcrptnSN>
+        <head:Receiver>G4001011000013</head:Receiver>
+        <head:MsgSN>202101130001915202815629446000000001</head:MsgSN>
+        <head:SndDtTm>2021-03-11T15:13:26</head:SndDtTm>
+        <head:MsgTp>dcep.902.001.01</head:MsgTp>
+    </head:Header>
+    <soap:Body>
+        <wstxns1:ComConf xmlns:wstxns1="http://www.dcep.com/dcep/90200101/">
+            <ConfInf>
+                <OrgnlMsgId>20210113000191520281562944600000</OrgnlMsgId>
+                <OrgnlInstgPty>G4001011000013</OrgnlInstgPty>
+                <PrcSts>PR00</PrcSts>
+                <OrgnlMT>dcep.915.001.01</OrgnlMT>
+                <OrigSndDtTm>2021-01-13T17:55:29</OrigSndDtTm>
+                <Remark></Remark>
+            </ConfInf>
+        </wstxns1:ComConf>
+    </soap:Body>
+</soap:Envelope>

@@ -11,4 +11,6 @@ import com.dcits.dcwlt.common.pay.tradeflow.TradeContext;
  */
 public interface IReconSummaryChkService {
     int saveSummary(TradeContext<?, ?> tradeContext);
+
+
 }

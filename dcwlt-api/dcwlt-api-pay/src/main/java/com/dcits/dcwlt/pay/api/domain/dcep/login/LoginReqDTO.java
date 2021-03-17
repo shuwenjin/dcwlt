@@ -2,6 +2,7 @@ package com.dcits.dcwlt.pay.api.domain.dcep.login;
 
 import com.alibaba.fastjson.annotation.JSONField;
 import com.dcits.dcwlt.pay.api.domain.dcep.DCEPReqBody;
+import com.dcits.dcwlt.pay.api.domain.ecny.ECNYReqBody;
 
 
 /**
@@ -10,7 +11,8 @@ import com.dcits.dcwlt.pay.api.domain.dcep.DCEPReqBody;
  * @Version 1.0
  * Description:登录/退出请求报文
  */
-public class LoginReqDTO extends DCEPReqBody {
+public class LoginReqDTO extends ECNYReqBody {
+    //DCEPReqBody
     /**
      * 登录退出报文体
      */

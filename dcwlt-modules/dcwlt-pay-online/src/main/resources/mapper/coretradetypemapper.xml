@@ -15,7 +15,7 @@
         coreAccAmountType8, coreAccAmountPtr8, coreAccAmountType9, coreAccAmountPtr9,
         coreAccAmountType10, coreAccAmountPtr10, corePrTabsCode, coreFeeCode, coreDrTrxType,
         coreMateAccNo, coreMateName, coreMateUniteCode, coreMateUniteName, coreMateFlag
-        FROM ECNY_COMM_CORETRADETYPEINFO T
+        FROM PAY_COMM_CORETRADETYPEINFO T
         WHERE T.PAYPATH = #{payPath} AND T.ACCTMETH = #{acctMeth} ORDER BY seq ASC
     </select>
 

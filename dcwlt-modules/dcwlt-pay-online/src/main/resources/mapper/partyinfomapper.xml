@@ -63,29 +63,13 @@
         WHERE PARTYID = #{partyID}
     </update>
 
-    <select id="queryParty" resultType="com.dcits.dcwlt.pay.api.model.PartyInfoDO">
-        SELECT P.PARTYID partyID,
-        P.PARTYTYPE partyType,
-        P.PARTYNAME partyName,
-        P.PARTYALIAS partyAlias,
-        P.PARTYSTATUS partyStatus,
-        P.STATUS status,
-        P.CONTACT contact,
-        P.TELEPHONE telephone,
-        P.MAIL mail,
-        P.FAX fax,
-        P.EFFECTDATE effectDate,
-        P.INEFFECTIVEDATE inEffectiveDate,
-        P.CHANGENUMBER changeNumber,
-        P.CHANGECIRCLETIMES changeCircleTimes,
-        P.LASTUPDATE lastUpDate,
-        P.LASTUPTIME lastUpTime
-        FROM  pay_comm_party P
-        <where>
-            <if test="partyID != null and partyID != ''">
-                P.PARTYID = #{partyID}
-            </if>
-        </where>
+    <sql id="selectPartyInfoDOVo">
+        select partyid, partytype, partyname, partyalias, partystatus, status, contact, telephone, mail, fax, effectdate, ineffectivedate, changenumber, changecircletimes, lastupdate, lastuptime from pay_comm_party
+    </sql>
+
+    <select id="queryParty" parameterType="String" resultType="com.dcits.dcwlt.pay.api.model.PartyInfoDO">
+        <include refid="selectPartyInfoDOVo"/>
+        where partyid = #{partyID}
     </select>
 
     <select id="queryEffectiveParty" resultType="com.dcits.dcwlt.pay.api.model.PartyInfoDO">
@@ -141,5 +125,30 @@
         P.LASTUPTIME lastUpTime
         FROM  pay_comm_party P
         WHERE P.INEFFECTIVEDATE &lt; #{inEffectiveDate};
+    </select>
+
+    <select id="querysParty" resultType="com.dcits.dcwlt.pay.api.model.PartyInfoDO">
+        SELECT P.PARTYID partyID,
+        P.PARTYTYPE partyType,
+        P.PARTYNAME partyName,
+        P.PARTYALIAS partyAlias,
+        P.PARTYSTATUS partyStatus,
+        P.STATUS status,
+        P.CONTACT contact,
+        P.TELEPHONE telephone,
+        P.MAIL mail,
+        P.FAX fax,
+        P.EFFECTDATE effectDate,
+        P.INEFFECTIVEDATE inEffectiveDate,
+        P.CHANGENUMBER changeNumber,
+        P.CHANGECIRCLETIMES changeCircleTimes,
+        P.LASTUPDATE lastUpDate,
+        P.LASTUPTIME lastUpTime
+        FROM  pay_comm_party P
+        <where>
+            <if test="partyID != null and partyID != ''">
+                P.PARTYID = #{partyID}
+            </if>
+        </where>
     </select>
 </mapper>

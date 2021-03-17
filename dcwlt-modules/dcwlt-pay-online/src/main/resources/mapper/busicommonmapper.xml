@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dcits.dcwlt.pay.online.mapper.RspCodeMapMapper">
+
+    <!-- 查询错误码映射表 -->
+    <select id="getAllRspCodeMap" resultType="com.dcits.dcwlt.pay.api.model.RspCodeMapDO">
+        SELECT
+            PAYPATH payPath,
+            SRCID srcId,
+            DESTID destId,
+            TXNTYPE txnType,
+            SRCRSPCODE srcRspCode,
+            SRCRSPCODE2 srcRspCode2,
+            SRCRSPCODEDSP srcrspCodeDsp,
+            DESTRSPCODE destRspCode,
+            DESTRSPCODE2 destRspCode2,
+            RSPCODEDSP rspCodeDsp,
+            RSV1 rsv1
+        FROM
+        PAY_COMM_RSPCODEMAP
+
+    </select>
+</mapper>

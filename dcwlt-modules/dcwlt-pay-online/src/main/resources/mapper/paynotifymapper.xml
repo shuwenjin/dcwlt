@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dcits.dcwlt.pay.online.mapper.PayNotifyMapper">
+
+    <!--终态通知请求登记表入库-->
+    <insert id="insert" parameterType="com.dcits.dcwlt.pay.api.model.PayNotifyDO">
+        INSERT INTO pay_pay_notify
+        (   TXENDDATE,
+            TXENDSERNO,
+            TXENDMSGID,
+            TXENDMSGTYPE,
+            TXENDINSTGPTY,
+            TXENDINSTDPTY,
+            REMARK,
+            PROCESSSTATUS,
+            PROCESSCODE,
+            REJECTCODE,
+            REJECTINF,
+            MSGID,
+            MSGTYPE,
+            INSTGPTY,
+            INSTDPTY,
+            AMOUNT,
+            CCY,
+            LASTUPDATE,
+            LASTUPTIME,
+            LASTMICROSECOND
+        )
+        VALUES(
+            #{txEndDate},
+            #{txEndSerno},
+            #{txEndMsgId},
+            #{txEndMsgType},
+            #{txEndInstgpty},
+            #{txEndInstdpty},
+            #{remark},
+            #{processStatus},
+            #{processCode},
+            #{rejectCode},
+            #{rejectInf},
+            #{msgId},
+            #{msgType},
+            #{instgpty},
+            #{instdpty},
+            #{amount},
+            #{ccy},
+            #{lastUpDate},
+            #{lastUpTime},
+            #{lastMicroSecond}
+        )
+    </insert>
+
+    <!--根据报文标识号查询金融交易信息-->
+    <select id="queryByMsgId" resultType="com.dcits.dcwlt.pay.api.model.PayNotifyDO">
+        SELECT
+        TXENDDATE txEndDate,
+        TXENDSERNO txEndSerno,
+        TXENDMSGID txEndMsgId,
+        TXENDMSGTYPE txEndMsgType,
+        TXENDINSTGPTY txEndInstgpty,
+        TXENDINSTDPTY txEndInstdpty,
+        REMARK remark,
+        PROCESSSTATUS processStatus,
+        PROCESSCODE processCode,
+        REJECTCODE rejectCode,
+        REJECTINF rejectInf,
+        MSGID msgId,
+        MSGTYPE msgType,
+        INSTGPTY instgpty,
+        INSTDPTY instdpty,
+        AMOUNT amount,
+        CCY ccy,
+        LASTUPDATE lastUpDate,
+        LASTUPTIME lastUpTime,
+        LASTMICROSECOND lastMicroSecond
+        FROM pay_pay_notify
+        WHERE MSGID = #{msgId, jdbcType=CHAR}
+    </select>
+</mapper>

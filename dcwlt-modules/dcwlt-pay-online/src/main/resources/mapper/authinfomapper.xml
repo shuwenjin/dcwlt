@@ -121,7 +121,7 @@
 
     <!--删除临时业务权限信息-->
     <delete id="deleteAuthInfo">
-        delete from ecny_comm_partyauth_tobeffect
+        delete from pay_comm_partyauth_tobeffect
         <where>
             <if test="partyId != null and partyId!='' ">
                 PARTYID= #{partyId}

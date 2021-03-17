@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/" xmlns:head="http://www.dcep.com/dcep/header/">
+    <soap:Header>
+        <head:Ver>01</head:Ver>
+        <!--版本号,目前固定填写01-->
+        <head:SndDtTm>2021-01-13T20:46:20</head:SndDtTm>
+        <!--系统时间6分钟以内-->
+        <head:MsgTp>dcep.801.001.01</head:MsgTp>
+        <!--报文编号-->
+        <head:MsgSN>202101130001801377273318858000000001</head:MsgSN>
+        <!--业务的通信层标识，同一笔业务可以发起多次通信请求（如超时重试等），MsgId一样，MsgSN不一样,前32位取MsgId，后四位从0001开始递增-->
+        <head:Sender>C1010411000013</head:Sender>
+        <!--发起方运营机构 原报文的收款机构，长款方退钱-->
+        <!--发起方运营机构-->
+        <head:Receiver>C1030644021075</head:Receiver>
+        <!--接收方运营机构 农业银行-->
+        <head:SignSN>4</head:SignSN>
+        <!--签名证书序列号-->
+    </soap:Header>
+    <soap:Body>
+        <wstxns1:DsptReq xmlns:wstxns1="http://www.dcep.com/dcep/80100101/">
+            <GrpHdr>
+                <!--报文标识号-->
+                <MsgId>20210113000180137727331885800000</MsgId>
+                <!--报文发送时间-->
+                <CreDtTm>2021-01-13T20:46:20</CreDtTm>
+                <InstgPty>
+                    <!--发起运营机构-->
+                    <InstgDrctPty>C1010411000013</InstgDrctPty>
+                </InstgPty>
+                <InstdPty>
+                    <!--接收运营机构-->
+                    <InstdDrctPty>C1030644021075</InstdDrctPty>
+                </InstdPty>
+                <!--备注-->
+                <Rmk>贷记调整test</Rmk>
+            </GrpHdr>
+            <OrgnlGrpHdr>
+                <!--原报文标识号-->
+                <OrgnlMsgId>20210112106122714525999867002000</OrgnlMsgId>
+                <!--原发起运营机构-->
+                <OrgnlInstgPty>C1010411000013</OrgnlInstgPty>
+                <!--原报文编号-->
+                <OrgnlMT>dcep.227.001.01</OrgnlMT>
+            </OrgnlGrpHdr>
+            <DsptInf>
+                <!--业务类型编码-->
+                <DsptBizTp>E100</DsptBizTp>
+                <!--业务种类编码-->
+                <DsptCtgyPurpCd>08001</DsptCtgyPurpCd>
+                <!--差错原因码-->
+                <DsptRsnCd>DR01</DsptRsnCd>
+                <!--差错原因说明-->
+                <DsptRsnDesc>内测环境测试</DsptRsnDesc>
+                <!--交易金额-->
+                <DsptAmt Ccy="CNY">1231.45</DsptAmt>
+                <!--交易批次号-->
+                <BatchId>B202101132000</BatchId>
+                <!--原交易信息-->
+                <OrgnlTxRef>
+                    <!--原交易金额-->
+                    <OrgnlTxAmt Ccy="CNY">123.45</OrgnlTxAmt>
+                </OrgnlTxRef>
+            </DsptInf>
+        </wstxns1:DsptReq>
+    </soap:Body>
+</soap:Envelope>
