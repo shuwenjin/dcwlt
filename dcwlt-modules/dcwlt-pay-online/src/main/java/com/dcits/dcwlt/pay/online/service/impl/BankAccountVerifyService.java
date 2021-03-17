@@ -1,6 +1,8 @@
 package com.dcits.dcwlt.pay.online.service.impl;
 
 import com.dcits.dcwlt.common.core.utils.StringUtils;
+import com.dcits.dcwlt.common.pay.channel.bankcore.dto.BankCoreRspMessage;
+import com.dcits.dcwlt.common.pay.channel.bankcore.dto.bankcore358040.BankCore358040ArrayInfoRsp;
 import com.dcits.dcwlt.common.pay.constant.AppConstant;
 import com.dcits.dcwlt.common.pay.constant.Constant;
 import com.dcits.dcwlt.common.pay.enums.AccTpCdEnum;
@@ -130,7 +132,7 @@ public class BankAccountVerifyService {
 //        logger.info("请求零售风控报文：{}", reqDTO);
 //        logger.debug("零售风控返回报文： {}"+resp);
         //错误码、错误信息
-        String errorCode = "";
+        String errorCode = "0000";
         String errorMsg = "";
         try {
             //LSFK返回的错误码
@@ -226,7 +228,17 @@ public class BankAccountVerifyService {
 //            throw new EcnyTransException(AppConstant.TRXSTATUS_FAILED, AppConstant.CRPM_SYS_ID, retCode, bankCoreRspMessage.getHead().getRetInfo());
 //        }
 //        BankCore358040Rsp body = bankCoreRspMessage.getBody();
-        return null;
+        BankCore358040Rsp bankCore358040Rsp = new BankCore358040Rsp();
+        bankCore358040Rsp.setCiSts("0");
+        bankCore358040Rsp.setType("1");
+        bankCore358040Rsp.setAcSts("N");
+        bankCore358040Rsp.setAcBlockSts("N");
+        bankCore358040Rsp.setAcStsw("1");
+        bankCore358040Rsp.setCiStsw("1");
+        bankCore358040Rsp.setAcClass("1");
+        bankCore358040Rsp.setAcAttr("26");
+        bankCore358040Rsp.setCardJointTyp("N");
+        return bankCore358040Rsp;
     }
 
 
