@@ -177,7 +177,7 @@ public class Login933STradeFlow {
         LoginInnerReqDTO reqDTO = reqMsg.getBody();
 
         //判断请求参数和登录类型是否正常
-        if (null == reqDTO || LoginOperationTpCdEnum.hasEnum(reqDTO.getOpterationType())) {
+        if (null == reqDTO || !LoginOperationTpCdEnum.hasEnum(reqDTO.getOpterationType())) {
             logger.warn("登录请求，请求参数有误, 登录退出操作类型有误");
             throw new EcnyTransException(EcnyTransError.ECNY_PARAM_ERROR);
         }

@@ -9,10 +9,10 @@ import java.util.Map;
 /**
  * 消息接收
  */
-@Component
-@RabbitListener(queues = "topic.woman")
+//@Component
+//@RabbitListener(queues = "topic.woman")
 public class TopicTotalReceiver {
-    @RabbitHandler
+    //@RabbitHandler
     public void process(Map testMessage) {
         System.out.println("TopicTotalReceiver消费者收到消息  : " + testMessage.toString());
     }
