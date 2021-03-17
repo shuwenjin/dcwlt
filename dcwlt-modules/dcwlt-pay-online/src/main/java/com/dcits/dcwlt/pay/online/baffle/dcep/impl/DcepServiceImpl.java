@@ -46,4 +46,47 @@ public class DcepServiceImpl implements DcepService {
                 "\t\"head\":{\"retCode\":\"000000\"}\n" +
                 "}");
     }
+
+
+    @Override
+    public JSONObject receive902From933(DCEPReqDTO dcepReqDTO) {
+        return JSONObject.parseObject( "{\n" +
+                "    \"ecnyHead\": {\n" +
+                "        \"Sender\": \"C1010311000014\",\n" +
+                "        \"DgtlEnvlp\": null,\n" +
+                "        \"SignSN\": \"01\",\n" +
+                "        \"Ver\": \"01\",\n" +
+                "        \"NcrptnSN\": null,\n" +
+                "        \"Receiver\": \"C1030644021075\",\n" +
+                "        \"MsgSN\": \"20210113106040120333044574013001\",\n" +
+                "        \"SndDtTm\": \"2021-03-08T14:18:20\",\n" +
+                "        \"MsgTp\": \"dcep.902.001.01\"\n" +
+                "    },\n" +
+                "    \"body\": {\n" +
+                "        \"LoginRspn\": {\n" +
+                "            \"GrpHdr\": {\n" +
+                "                \"msgId\": \"123456789\",\n" +
+                "                \"creDtTm\": \"20180126\",\n" +
+                "                \"instgPty\": {\n" +
+                "                    \"instgDrctPty\": \"12\"\n" +
+                "                },\n" +
+                "                \"instdPty\": {\n" +
+                "                    \"instDrctPty\": \"111\"\n" +
+                "                },\n" +
+                "                \"rmk\": \"ha\"\n" +
+                "            },\n" +
+                "            \"OrgnlGrpInf\": {\n" +
+                "                \"orgnlMsgId\": \"2013513\"\n" +
+                "            },\n" +
+                "            \"LoginRspnInf\": {\n" +
+                "                \"loginOprTp\":  \"\",\n" +
+                "                \"prcSts\": \"PR00\",\n" +
+                "                \"prcCd\": \"123\",\n" +
+                "                \"rjctInf\": \"123\"\n" +
+                "            }\n" +
+                "        }\n" +
+                "    }\n" +
+                "}"
+        );
+    }
 }

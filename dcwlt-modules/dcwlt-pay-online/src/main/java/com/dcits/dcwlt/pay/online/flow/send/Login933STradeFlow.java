@@ -21,6 +21,7 @@ import com.dcits.dcwlt.pay.api.domain.ecny.ECNYRspDTO;
 import com.dcits.dcwlt.pay.api.domain.ecny.ECNYRspHead;
 import com.dcits.dcwlt.pay.api.model.PartyInfoDO;
 import com.dcits.dcwlt.pay.api.model.PayTransDtlNonfDO;
+import com.dcits.dcwlt.pay.online.baffle.dcep.DcepService;
 import com.dcits.dcwlt.pay.online.exception.EcnyTransError;
 import com.dcits.dcwlt.pay.online.exception.EcnyTransException;
 import com.dcits.dcwlt.pay.online.flow.builder.EcnyTradeContext;
@@ -63,9 +64,11 @@ public class Login933STradeFlow {
     @Autowired
     private IPayTransDtlNonfService payTransDtlNonfService;
     @Autowired
-    private IPartyInfoservice partyInfoRepository;
+    private IPartyInfoservice partyInfoservice;
     @Autowired
     IGenerateCodeService generateCodeService;
+    @Autowired
+    private DcepService dcepService;
 
     @Bean(name = LOGIN_TRADE_FLOW)
     public TradeFlow payConvertTradeFlow() {
@@ -142,9 +145,9 @@ public class Login933STradeFlow {
         //设置报文登记簿信息
         payTransDtlNonfDO.setTlrNo(reqDTO.getTlrNo());
         payTransDtlNonfDO.setDrct(AppConstant.DIRECT_SEND);
-        //payTransDtlNonfDO.setPayDate(dcepReqDTO.getHead().getTranDate());
+        payTransDtlNonfDO.setPayDate(DateUtil.getDefaultDate());
         payTransDtlNonfDO.setPaySerNo((String) tradeContext.getTempCtx().get(KEY_PAY_SEQ_NO));
-       // payTransDtlNonfDO.setPayTime(dcepReqDTO.getHead().getTranTime());
+        payTransDtlNonfDO.setPayTime(DateUtil.getDefaultTime());
         payTransDtlNonfDO.setPkgNo(MsgTpEnum.DCEP933.getCode());
         payTransDtlNonfDO.setMsgId(loginReqDTO.getLoginReq().getGrpHdr().getMsgId());
         payTransDtlNonfDO.setSenderDateTime(DateUtil.formatSeconds());
@@ -174,7 +177,7 @@ public class Login933STradeFlow {
         LoginInnerReqDTO reqDTO = reqMsg.getBody();
 
         //判断请求参数和登录类型是否正常
-        if (null == reqDTO || !LoginOperationTpCdEnum.hasEnum(reqDTO.getOpterationType())) {
+        if (null == reqDTO || LoginOperationTpCdEnum.hasEnum(reqDTO.getOpterationType())) {
             logger.warn("登录请求，请求参数有误, 登录退出操作类型有误");
             throw new EcnyTransException(EcnyTransError.ECNY_PARAM_ERROR);
         }
@@ -185,7 +188,7 @@ public class Login933STradeFlow {
             throw new EcnyTransException(EcnyTransError.ECNY_PARAM_ERROR);
         }
 
-        PartyInfoDO partyInfoDO = partyInfoRepository.queryPartyInfoByPartyId(AppConstant.CGB_FINANCIAL_INSTITUTION_CD);
+        PartyInfoDO partyInfoDO = partyInfoservice.queryPartyInfoByPartyId(AppConstant.CGB_FINANCIAL_INSTITUTION_CD);
         if (partyInfoDO == null) {
             logger.error("登录请求，机构不存在,请先调用机构变更接口初始化机构数据");
             throw new EcnyTransException(EcnyTransError.ECNY_NOPARTY_ERROR);
@@ -205,8 +208,9 @@ public class Login933STradeFlow {
         logger.info("登录/退出交易请求发送.");
         DCEPReqDTO dcepReqDTO = (DCEPReqDTO) EcnyTradeContext.getTempContext(tradeContext).get(KEY_DCEP_LOGIN_REQ);
         //通过金融开放平台 --》互联互通
-      //  JSONObject jsonObject = dcepSendService.sendDcep(dcepReqDTO);
-        //EcnyTradeContext.getTempContext(tradeContext).put(KEY_DCEP_LOGIN_RSP, jsonObject);
+       // JSONObject jsonObject = dcepSendService.sendDcep(dcepReqDTO);
+        JSONObject jsonObject = dcepService.receive902From933(dcepReqDTO);
+        EcnyTradeContext.getTempContext(tradeContext).put(KEY_DCEP_LOGIN_RSP, jsonObject);
     }
 
 
@@ -236,7 +240,7 @@ public class Login933STradeFlow {
         if (MsgTpEnum.DCEP900.getCode().equals(dcepHeader.getMsgTp())) {
             //业务检查不通过
             //获取900报文
-            JSONObject body = (JSONObject) jsonObject.get("Body");
+            JSONObject body = (JSONObject) jsonObject.get("body");
             if (null == body) {
                 //响应没有body
                 throw new EcnyTransException(EcnyTransError.ECNY_TRANS_BODY_ERROR);
@@ -251,7 +255,7 @@ public class Login933STradeFlow {
             }
             throw new EcnyTransException(EcnyTransError.ECNY_RESULT_ERROR);
         }
-        JSONObject body = (JSONObject) jsonObject.get("Body");
+        JSONObject body = (JSONObject) jsonObject.get("body");
         if (null == body) {
             //响应没有body
             throw new EcnyTransException(EcnyTransError.ECNY_TRANS_BODY_ERROR);
@@ -265,7 +269,7 @@ public class Login933STradeFlow {
 
 
         //解析body
-        LoginRspDTO loginRspDTO = JSONObject.toJavaObject(jsonObject.getJSONObject("Body"), LoginRspDTO.class);
+        LoginRspDTO loginRspDTO = JSONObject.toJavaObject(jsonObject.getJSONObject("body"), LoginRspDTO.class);
         //业务处理状态
         ProcessStsCdEnum processStatus = loginRspDTO.getLoginRspn().getLoginRspnInf().getPrcSts();
         if (ProcessStsCdEnum.PR00.getCode().equals(processStatus.getCode())) {
@@ -306,7 +310,7 @@ public class Login933STradeFlow {
         partyInfoDO.setLastUpDate(DateUtil.getDefaultDate());
 
         partyInfoDO.setLastUpTime(DateUtil.getDefaultTime());
-        partyInfoRepository.updateParty(partyInfoDO);
+        partyInfoservice.updateParty(partyInfoDO);
     }
 
     /**
