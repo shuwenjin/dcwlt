@@ -1,3 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/" xmlns:head="http://www.dcep.com/dcep/header/">
+    <soap:Header>
+        <head:Ver>01</head:Ver>
+        <head:SndDtTm>2021-01-13T11:30:14</head:SndDtTm>
+        <head:MsgTp>dcep.931.001.01</head:MsgTp>
+        <head:MsgSN>202101130001931149471145726000000001</head:MsgSN>
+        <head:Sender>G4001011000013</head:Sender>
+        <head:Receiver>C1030644021075</head:Receiver>
+        <head:SignSN>4</head:SignSN>
+    </soap:Header>
+    <soap:Body>
+        <wstxns1:TrblNtfctn xmlns:wstxns1="http://www.dcep.com/dcep/93100101/">
+            <GrpHdr>
+                <MsgId>20210113000193114947114572600000</MsgId>
+                <CreDtTm>2021-01-13T11:30:14</CreDtTm>
+                <InstgPty>
+                    <InstgDrctPty>G4001011000013</InstgDrctPty>
+                </InstgPty>
+                <InstdPty>
+                    <InstdDrctPty>C1030644021075</InstdDrctPty>
+                </InstdPty>
+            </GrpHdr>
+            <StsInf>
+                <Tp>ST03</Tp> <!-- 状态变更类型 -->
+                <PtyTp>PT00</PtyTp> <!-- 运营机构类型 -->
+                <PtyId>C1040311005293</PtyId> <!-- 运营机构编码 -->
+            </StsInf>
+        </wstxns1:TrblNtfctn>
+    </soap:Body>
+</soap:Envelope>
+
 {
         "Header": {
             "Sender": "C1030644021075",

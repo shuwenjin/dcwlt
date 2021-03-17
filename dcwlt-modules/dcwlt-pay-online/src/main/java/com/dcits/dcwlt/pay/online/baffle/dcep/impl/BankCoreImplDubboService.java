@@ -8,11 +8,17 @@
  *********************************************/
 
 
-package com.dcits.dcwlt.pay.online.service.impl;
+package com.dcits.dcwlt.pay.online.baffle.dcep.impl;
 
 
+import com.alibaba.csp.sentinel.util.StringUtil;
+import com.dcits.dcwlt.common.pay.channel.bankcore.dto.BankCoreReqHeader;
 import com.dcits.dcwlt.common.pay.channel.bankcore.dto.bankcore351100.BankCore351100InnerReq;
 import com.dcits.dcwlt.common.pay.channel.bankcore.dto.bankcore351100.BankCore351100InnerRsp;
+import com.dcits.dcwlt.pay.online.base.Constant;
+import com.dcits.dcwlt.pay.online.service.impl.CoreTradeTypeRepository;
+import com.dcits.dcwlt.pay.online.service.impl.HostEngCfgRepository;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,7 +36,7 @@ public class BankCoreImplDubboService {
     private static final Logger logger = LoggerFactory.getLogger(BankCoreImplDubboService.class);
 
     @Autowired
-    private BankCoreDubboService bankCoreDubboService;
+    private BankCoreDubboServiceImpl bankCoreDubboService;
 
     @Autowired
     private CoreTradeTypeRepository coreTradeTypeRepository;
@@ -68,60 +74,60 @@ public class BankCoreImplDubboService {
     }
 
     */
-/**
- * 核心记账服务
- *
- * @param bankCoreReqHeader      核心报文头，用于透传渠道信息
- * @param bankCore351100InnerReq 351100接口内部请求实体
- * @return
- *//*
+
+    /**
+     * 核心记账服务
+     *
+     * @param bankCoreReqHeader      核心报文头，用于透传渠道信息
+     * @param bankCore351100InnerReq 351100接口内部请求实体
+     * @return
+     */
 
     public BankCore351100InnerRsp coreServer(BankCoreReqHeader bankCoreReqHeader, BankCore351100InnerReq bankCore351100InnerReq) {
-        // 核心请求日期
+       // 核心请求日期
         String coreReqDate = bankCore351100InnerReq.getCoreReqDate();
         // 获取服务化调用请求流水 --核心请求流水
         String seqNo = bankCore351100InnerReq.getCoreReqSerno();
-        Map<String, Object> map = initBankCore351100ReqMsg(bankCore351100InnerReq);
-        BankCore351100Req bankCore351100Req = null;
-        if (!map.isEmpty()) {
-            if ("0000".equals(map.get(Constant.CONSTANT_ERRORCODE))) {
-                bankCore351100Req = (BankCore351100Req) map.get("entity");
-            } else {
-                return new BankCore351100InnerRsp(Constant.CORESTATUS_FAILED, (String) map.get(Constant.CONSTANT_ERRORCODE),
-                        (String) map.get(Constant.CONSTANT_ERRORMSG));
-            }
-        } else {
-            return new BankCore351100InnerRsp(Constant.CORESTATUS_FAILED, "9999", "调用核心服务赋值失败");
-        }
-
-        // 构造服务化报文头
-        Head head = bankCoreDubboService.bulidServerHead(seqNo, Constant.SRVCCODE_351100,
-                bankCore351100InnerReq.getSrcCnsmrSysId(), bankCore351100InnerReq.getSrcCnsmrSysSeqNo());
-
-        //应用设置重发标识为Y或者Q的时候则上送resdFlag,核心根据Y则做重发，Q则做查询
-        if (StringUtils.equalsAny(bankCore351100InnerReq.getResendFlag(), Head.REQ_RESD_FLAG, "Q")) {
-            head.setResdFlag(bankCore351100InnerReq.getResendFlag());
-        }
-
-        // 获取核心请求报文
-        BankCoreReqMessage msg = bankCoreDubboService.buildBankCoreMessage(head, bankCoreReqHeader, bankCore351100Req, null);
-
-        // 请求核心并返回响应报文实体
-        BankCoreRspMessage<BankCore351100Rsp, IBankCoreBodyArrayInfo> rspMsg = bankCoreDubboService.bankCoreRequest(msg,
-                BankCore351100Rsp.class, BankCore351100ArrayInfoReq.class);
-
-        // 核心网关超时 核心不返回请求日期、流水 需手动先设置
-        Head rspHead = rspMsg.getHead();
-
-        rspHead.setTranDate(coreReqDate);
-        rspHead.setSeqNo(seqNo);
+//        Map<String, Object> map = initBankCore351100ReqMsg(bankCore351100InnerReq);
+//        BankCore351100Req bankCore351100Req = null;
+//        if (!map.isEmpty()) {
+//            if ("0000".equals(map.get(Constant.CONSTANT_ERRORCODE))) {
+//                bankCore351100Req = (BankCore351100Req) map.get("entity");
+//            } else {
+//                return new BankCore351100InnerRsp(Constant.CORESTATUS_FAILED, (String) map.get(Constant.CONSTANT_ERRORCODE),
+//                        (String) map.get(Constant.CONSTANT_ERRORMSG));
+//            }
+//        } else {
+//            return new BankCore351100InnerRsp(Constant.CORESTATUS_FAILED, "9999", "调用核心服务赋值失败");
+//        }
+//
+//        // 构造服务化报文头
+//        Head head = bankCoreDubboService.bulidServerHead(seqNo, Constant.SRVCCODE_351100,
+//                bankCore351100InnerReq.getSrcCnsmrSysId(), bankCore351100InnerReq.getSrcCnsmrSysSeqNo());
+//
+//        //应用设置重发标识为Y或者Q的时候则上送resdFlag,核心根据Y则做重发，Q则做查询
+//        if (StringUtils.equalsAny(bankCore351100InnerReq.getResendFlag(), Head.REQ_RESD_FLAG, "Q")) {
+//            head.setResdFlag(bankCore351100InnerReq.getResendFlag());
+//        }
+//
+//        // 获取核心请求报文
+//        BankCoreReqMessage msg = bankCoreDubboService.buildBankCoreMessage(head, bankCoreReqHeader, bankCore351100Req, null);
+//
+//        // 请求核心并返回响应报文实体
+//        BankCoreRspMessage<BankCore351100Rsp, IBankCoreBodyArrayInfo> rspMsg = bankCoreDubboService.bankCoreRequest(msg,
+//                BankCore351100Rsp.class, BankCore351100ArrayInfoReq.class);
+//
+//        // 核心网关超时 核心不返回请求日期、流水 需手动先设置
+//        Head rspHead = rspMsg.getHead();
+//
+//        rspHead.setTranDate(coreReqDate);
+//        rspHead.setSeqNo(seqNo);
 
         // 处理返回结果
-        return dealRspCoreMsg(rspMsg, bankCore351100InnerReq.getReqType());
+        return dealRspCoreMsg(coreReqDate,seqNo,bankCore351100InnerReq.getReqType());
 
     }
 
-    */
 
     /**
      * 核心记账服务
@@ -132,34 +138,23 @@ public class BankCoreImplDubboService {
 
     public BankCore351100InnerRsp coreServer(BankCore351100InnerReq bankCore351100InnerReq) {
         // 获取核心请求报文头
-        BankCore351100InnerRsp bankCore351100InnerRsp = new BankCore351100InnerRsp();
-        bankCore351100InnerReq.setAmount("1");
-        bankCore351100InnerReq.setAcctBrno("1");
-        bankCore351100InnerReq.setAcctMeth("1");
-        bankCore351100InnerReq.setBookType("1");
-        bankCore351100InnerReq.setBrno("1");
-        bankCore351100InnerReq.setCashExInd("1");
-        bankCore351100InnerReq.setChkNameFlg1("1");
-        bankCore351100InnerReq.setChkNameFlg2("1");
-        bankCore351100InnerReq.setClearDate("1");
-        bankCore351100InnerReq.setCoreReqDate("1");
-        bankCore351100InnerReq.setOrigPaySerno("1");
-        bankCore351100InnerReq.setPayerMediaType("1");
+        BankCoreReqHeader coreHead = buildBankCoreReqHeader(bankCore351100InnerReq);
+
         //请求核心
-        return bankCore351100InnerRsp;
+        return coreServer(coreHead, bankCore351100InnerReq);
     }
-}
-/**
+
+    /**
      * 构建核心请求报文头
      *
      * @param bankCore351100InnerReq
      * @return
-     *//*
+     */
 
     private BankCoreReqHeader buildBankCoreReqHeader(BankCore351100InnerReq bankCore351100InnerReq) {
         // 获取核心请求报文头
         BankCoreReqHeader coreHead = bankCoreDubboService.buildDefaultBankCoreHeader(Constant.BANKCORE_CRCMPRHACCTNG_CODE,
-                StringUtil.getDefaultIfEmpty(bankCore351100InnerReq.getBrno(), Constant.MASTERBANK));
+                StringUtils.defaultIfEmpty(bankCore351100InnerReq.getBrno(), Constant.MASTERBANK));
 
         //设置清算日期
         if (StringUtil.isNotBlank(bankCore351100InnerReq.getClearDate())) {
@@ -176,56 +171,50 @@ public class BankCoreImplDubboService {
             coreHead.setReqChnl(bankCore351100InnerReq.getReqChnl());
         }
         //源发起系统渠道中类，由核心系统预先分配
-        if(StringUtil.isNotBlank(bankCore351100InnerReq.getReqChnl2())){
+        if (StringUtil.isNotBlank(bankCore351100InnerReq.getReqChnl2())) {
             coreHead.setReqChnl2(bankCore351100InnerReq.getReqChnl2());
         }
         return coreHead;
     }
 
 
-    */
-/**
+    /**
      * 扣帐、入账 核心应答后处理
      *
      * @param rspMsg  核心351100响应报文体
      * @param reqType 预入账标识
      * @return
-     *//*
+     */
 
-    private BankCore351100InnerRsp dealRspCoreMsg(BankCoreRspMessage<BankCore351100Rsp, IBankCoreBodyArrayInfo> rspMsg, String reqType) {
+    private BankCore351100InnerRsp dealRspCoreMsg(String coreReqDate,String seqNo,String reqType) {
         //获取核心状态
-        Head rspHead = rspMsg.getHead();
-        BankCoreRspHeader bankCoreHeader = rspMsg.getBankCoreHeader();
-        String coreProcStatus = getCoreStatus(rspHead, bankCoreHeader);
+//        Head rspHead = rspMsg.getHead();
+//        BankCoreRspHeader bankCoreHeader = rspMsg.getBankCoreHeader();
+//        String coreProcStatus = getCoreStatus(rspHead, bankCoreHeader);
 
         //实例化响应报文
         BankCore351100InnerRsp core351100InnerRsp = new BankCore351100InnerRsp();
-        core351100InnerRsp.setCoreStatus(coreProcStatus);
-        core351100InnerRsp.setCoreReqDate(rspHead.getTranDate());
-        core351100InnerRsp.setCoreReqSerno(rspHead.getSeqNo());
+        core351100InnerRsp.setCoreStatus("1");
+        core351100InnerRsp.setCoreReqDate(coreReqDate);
+        core351100InnerRsp.setCoreReqSerno(seqNo);
 
         //核心响应报文头不为NULL时赋值
-        if (null != bankCoreHeader) {
-            core351100InnerRsp.setCoreRspDate(bankCoreHeader.getAcDate());
-            core351100InnerRsp.setCoreRspSerno(bankCoreHeader.getJrnNo());
-            core351100InnerRsp.setHostDate(bankCoreHeader.getHostDate());
-            core351100InnerRsp.setErrorCode(rspHead.getRetCode());
-            core351100InnerRsp.setErrorMsg(rspHead.getRetInfo());
-        } else {
-            core351100InnerRsp.setErrorCode(PlatformError.COMM_ABEND.getErrorCode());
-            core351100InnerRsp.setErrorMsg(PlatformError.COMM_ABEND.getErrorMsg());
-        }
+        core351100InnerRsp.setCoreRspDate("202011");
+        core351100InnerRsp.setCoreRspSerno("1");
+        core351100InnerRsp.setHostDate("2");
+        core351100InnerRsp.setErrorCode("4");
+        core351100InnerRsp.setErrorMsg("5");
         return core351100InnerRsp;
     }
 
-    */
+
 /**
-     * 返回错误赋值
-     *
-     * @param errorCode
-     * @param errorMsg
-     * @return
-     *//*
+ * 返回错误赋值
+ *
+ * @param errorCode
+ * @param errorMsg
+ * @return
+ *//*
 
     private Map<String, Object> returnFail(String errorCode, String errorMsg) {
         Map<String, Object> resultMap = new HashMap<>();
@@ -236,9 +225,9 @@ public class BankCoreImplDubboService {
 
     */
 /**
-     * @param creditEntity
-     * @return
-     *//*
+ * @param creditEntity
+ * @return
+ *//*
 
     private Map<String, Object> initCreditMsg(BankCore351100InnerReq creditEntity) {
 
@@ -289,8 +278,8 @@ public class BankCoreImplDubboService {
             req.setChkNameFlg2(creditEntity.getChkNameFlg2());
 
             req.setAcType2(acctMethCfg2.getCoreAccMode());
-            req.setAc2(StringUtil.getDefaultIfEmpty(creditEntity.getRealPayeeAcct(), creditEntity.getPayeeAcct()));
-            req.setName2(StringUtil.getDefaultIfEmpty(creditEntity.getRealPayeeName(), creditEntity.getPayeeName()));
+            req.setAc2(StringUtils.defaultIfEmpty(creditEntity.getRealPayeeAcct(), creditEntity.getPayeeAcct()));
+            req.setName2(StringUtils.defaultIfEmpty(creditEntity.getRealPayeeName(), creditEntity.getPayeeName()));
             req.setAmt2(creditEntity.getAmount());
             req.setCcy2(creditEntity.getCurrency());
             req.setPrdmoCd2("");
@@ -319,9 +308,9 @@ public class BankCoreImplDubboService {
 
     */
 /**
-     * @param debitEntity
-     * @return
-     *//*
+ * @param debitEntity
+ * @return
+ *//*
 
     private Map<String, Object> initDebitMsg(BankCore351100InnerReq debitEntity) {
         Map<String, Object> resultMap = new HashMap<>();
@@ -340,8 +329,8 @@ public class BankCoreImplDubboService {
 
             req.setAcType1(acctMethCfg1.getCoreAccMode());
             req.setProdCd1(acctMethCfg1.getCorePrdCode());
-            req.setAc1(StringUtil.getDefaultIfEmpty(debitEntity.getRealPayerAcct(), debitEntity.getPayerAcct()));
-            req.setName1(StringUtil.getDefaultIfEmpty(debitEntity.getRealPayerName(), debitEntity.getPayerName()));
+            req.setAc1(StringUtils.defaultIfEmpty(debitEntity.getRealPayerAcct(), debitEntity.getPayerAcct()));
+            req.setName1(StringUtils.defaultIfEmpty(debitEntity.getRealPayerName(), debitEntity.getPayerName()));
             req.setAmt1(debitEntity.getAmount());
             req.setCcy1(debitEntity.getCurrency());
             req.setPrdmoCd1("");
@@ -350,13 +339,13 @@ public class BankCoreImplDubboService {
             req.setDrAmtVal1("");
             req.setRvsNo1(debitEntity.getSuspSerno());
             req.setMmo1(debitEntity.getSummary());
-            req.setDrBusiType2(StringUtil.getDefaultIfEmpty(debitEntity.getCusVouchChkInd(), "N")
-                    + StringUtil.getDefaultIfEmpty(debitEntity.getCusVouchPwdInd(), "N"));
+            req.setDrBusiType2(StringUtils.defaultIfEmpty(debitEntity.getCusVouchChkInd(), "N")
+                    + StringUtils.defaultIfEmpty(debitEntity.getCusVouchPwdInd(), "N"));
             req.setChqType(debitEntity.getCusVouchType());
             req.setChqNo(debitEntity.getCusVouchno());
             req.setChqIssueDt(debitEntity.getCusVouchDate());
             req.setChqPswd(debitEntity.getCusVouchPwd());
-            req.setDrBusiType1(StringUtil.getDefaultIfEmpty(debitEntity.getTransType(), "N"));
+            req.setDrBusiType1(StringUtils.defaultIfEmpty(debitEntity.getTransType(), "N"));
             req.setCashFlg1(debitEntity.getCashExInd());
 
             // 核算机构配置
@@ -408,12 +397,13 @@ public class BankCoreImplDubboService {
 
     */
 /**
-     * 初始化请求报文信息
-     *
-     * @param reqCore351100
-     * @return
-     *//*
+ * 初始化请求报文信息
+ *
+ * @param reqCore351100
+ * @return
+ */
 
+/*
     private Map<String, Object> initBankCore351100ReqMsg(BankCore351100InnerReq reqCore351100) {
         // 获取会计引擎方式
         String mode = hostEngCfgRepository.query(reqCore351100.getServerId(), reqCore351100.getAcctMeth());
@@ -431,6 +421,6 @@ public class BankCoreImplDubboService {
             return returnFail(PlatformError.INPARAMS_INVALID.getErrorCode(), "缺少会计引擎参数配置");
         }
     }
+*/
 
 }
-*/

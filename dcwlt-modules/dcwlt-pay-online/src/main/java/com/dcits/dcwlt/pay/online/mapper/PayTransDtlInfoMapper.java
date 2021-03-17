@@ -17,7 +17,7 @@ public interface PayTransDtlInfoMapper {
 
     List<PayTransDtlInfoDO> queryByOrigSerno(String origPayPathSerno);
 
-    PayTransDtlInfoDO queryByMsgId(String msgId);
+    PayTransDtlInfoDO queryByMsgId(@Param("msgId") String msgId);
 
     int updateDirect(PayTransDtlInfoDO payTransDtlInfoDO);
 

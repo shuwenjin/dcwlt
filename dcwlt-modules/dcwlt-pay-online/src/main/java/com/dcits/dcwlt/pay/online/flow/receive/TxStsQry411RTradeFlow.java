@@ -1,5 +1,6 @@
 package com.dcits.dcwlt.pay.online.flow.receive;
 
+import com.dcits.dcwlt.common.pay.channel.bankcore.dto.BankCore996666.BankCore996666Rsp;
 import com.dcits.dcwlt.common.pay.constant.AppConstant;
 import com.dcits.dcwlt.common.pay.enums.MsgTpEnum;
 import com.dcits.dcwlt.common.pay.enums.ProcessStsCdEnum;
@@ -10,13 +11,18 @@ import com.dcits.dcwlt.pay.api.domain.dcep.DCEPRspDTO;
 import com.dcits.dcwlt.pay.api.domain.dcep.txstsqryreq.*;
 import com.dcits.dcwlt.pay.api.model.PayTransDtlInfoDO;
 import com.dcits.dcwlt.pay.api.model.RspCodeMapDO;
+import com.dcits.dcwlt.pay.api.model.StateMachine;
+import com.dcits.dcwlt.pay.online.baffle.core.IBankCoreService;
 import com.dcits.dcwlt.pay.online.exception.EcnyTransError;
 import com.dcits.dcwlt.pay.online.exception.EcnyTransException;
 import com.dcits.dcwlt.pay.online.flow.builder.EcnyTradeContext;
 import com.dcits.dcwlt.pay.online.flow.builder.EcnyTradeFlowBuilder;
 import com.dcits.dcwlt.pay.online.mapper.PayTransDtlInfoMapper;
+import com.dcits.dcwlt.pay.online.service.ICoreProcessService;
 import com.dcits.dcwlt.pay.online.service.IPayTransDtlInfoService;
-import org.apache.commons.lang3.StringUtils;
+import com.dcits.dcwlt.pay.online.service.impl.BankCoreAccTxnServiceImpl;
+import com.dcits.dcwlt.pay.online.service.impl.CoreEventServiceImpl;
+import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,25 +35,24 @@ import org.springframework.context.annotation.Configuration;
  */
 @Configuration
 public class TxStsQry411RTradeFlow {
-
     private static final Logger logger = LoggerFactory.getLogger(TxStsQry411RTradeFlow.class);
 
     private static final String TXSTSQRY_TRADE_FLOW = "TxStsQry411RTradeFlow";
 
-//    @Autowired
-//    private BankCoreImplDubboService bankCoreImplDubboService;
-//
-//    @Autowired
-//    private BankCoreAccTxnService bankCoreAccTxnService;
+    @Autowired
+    private IBankCoreService bankCoreImplDubboService;
+
+    @Autowired
+    private BankCoreAccTxnServiceImpl bankCoreAccTxnService;
 
     @Autowired
     private PayTransDtlInfoMapper payTransDtlInfoMapper;
 
-//    @Autowired
-//    private ICoreProcessService bankCoreProcessService;
-//
-//    @Autowired
-//    private CoreEventService coreEventService;
+    @Autowired
+    private ICoreProcessService bankCoreProcessService;
+
+    @Autowired
+    private CoreEventServiceImpl coreEventService;
 
     @Autowired
     private IPayTransDtlInfoService payTransDtlInfoService;
@@ -78,8 +83,8 @@ public class TxStsQry411RTradeFlow {
 
         //原查询业务为”兑出“或”汇款兑出“，原收款钱包ID必填
         if((MsgTpEnum.DCEP225.getCode().equals(orgnlMT)
-            || MsgTpEnum.DCEP227.getCode().equals(orgnlMT))
-            && StringUtils.isBlank(orgnlGrpHdr.getOrgnlCdtrWltId())){
+                || MsgTpEnum.DCEP227.getCode().equals(orgnlMT))
+                && StringUtils.isBlank(orgnlGrpHdr.getOrgnlCdtrWltId())){
             logger.error("原收款人钱包ID为空");
             throw new EcnyTransException(AppConstant.TRXSTATUS_FAILED, EcnyTransError.C_WALLET_ID_EMPTY);
         }
@@ -88,7 +93,7 @@ public class TxStsQry411RTradeFlow {
         if(MsgTpEnum.DCEP221.getCode().equals(orgnlMT)
                 && StringUtils.isBlank(orgnlGrpHdr.getOrgnlDbtrWltId())){
             logger.error("原付款人钱包ID为空");
-            throw new EcnyTransException(AppConstant.TRXSTATUS_FAILED, EcnyTransError.D_WALLET_ID_EMPTY);
+            throw new EcnyTransException(AppConstant.TRXSTATUS_FAILED,EcnyTransError.D_WALLET_ID_EMPTY);
         }
 
     }
@@ -130,7 +135,7 @@ public class TxStsQry411RTradeFlow {
         PayTransDtlInfoDO payTransDtlInfoDO = payTransDtlInfoMapper.queryByMsgId(orgnlMsgId);
         if(payTransDtlInfoDO == null){
             logger.error("交易不存在,返回交易处理中");
-            throw new EcnyTransException(AppConstant.TRXSTATUS_FAILED, EcnyTransError.PAY_TRANS_DTL_INFO_NOT_EXIST);
+            throw new EcnyTransException(AppConstant.TRXSTATUS_FAILED,EcnyTransError.PAY_TRANS_DTL_INFO_NOT_EXIST);
         }
         EcnyTradeContext.setTxn(context,payTransDtlInfoDO);
     }
@@ -140,7 +145,7 @@ public class TxStsQry411RTradeFlow {
      * @param context
      */
     private void txnStatusHandle(TradeContext<?,?> context) {
-        PayTransDtlInfoDO payTransDtlInfoDO = (PayTransDtlInfoDO) EcnyTradeContext.getTxn(context);
+        PayTransDtlInfoDO payTransDtlInfoDO = (PayTransDtlInfoDO)EcnyTradeContext.getTxn(context);
         String pathProcStatus = payTransDtlInfoDO.getPathProcStatus();
         String msgType = payTransDtlInfoDO.getMsgType();
 
@@ -151,7 +156,7 @@ public class TxStsQry411RTradeFlow {
 
         //通道状态，0、1为终态，直接响应平台
         if(AppConstant.PAYPATHSTATUS_FAILED.equals(pathProcStatus)
-            || AppConstant.PAYPATHSTATUS_SUCCESS.equals(pathProcStatus)){
+                || AppConstant.PAYPATHSTATUS_SUCCESS.equals(pathProcStatus)){
             logger.info("通道状态已达终态，直接响应平台");
             return;
         }
@@ -161,7 +166,6 @@ public class TxStsQry411RTradeFlow {
         }
 
         //拿到最新的交易登记簿信息
-        //Todo
         payTransDtlInfoDO = payTransDtlInfoMapper.queryByPayInfo(payTransDtlInfoDO.getPayDate(),payTransDtlInfoDO.getPaySerno());
 
         EcnyTradeContext.setTxn(context,payTransDtlInfoDO);
@@ -223,21 +227,20 @@ public class TxStsQry411RTradeFlow {
     private String checkBackCore(PayTransDtlInfoDO payTransDtlInfoDO) {
 
         logger.info("核心状态为异常，回查核心，核心请求日期:{},核心请求流水：{}",payTransDtlInfoDO.getCoreReqDate(), payTransDtlInfoDO.getCoreReqSerno());
-        //Todo
-//        //先主动回查核心，核心回查异常，再登记核心回查事件
-//        BankCore996666Rsp bankCore996666Rsp = bankCoreImplDubboService.queryCoreStatus(payTransDtlInfoDO.getCoreReqDate(), payTransDtlInfoDO.getCoreReqSerno());
-//        //核心回查后处理
-//        bankCoreProcessService.qryCoreStsRetDone(payTransDtlInfoDO,bankCore996666Rsp, (io.seata.saga.statelang.domain.StateMachine) new StateMachine());
-//
-////        //获取最新核心状态
-////        String coreProcStatus = bankCoreAccTxnService.getCoreStatusMap(bankCore996666Rsp.getTxnSts());
-////
-////        if(!AppConstant.CORESTATUS_SUCCESS.equals(coreProcStatus) && !AppConstant.CORESTATUS_FAILED.equals(coreProcStatus)){
-////            logger.info("回查核心异常,登记核心回查事件");
-////            coreEventService.registerCoreQry(payTransDtlInfoDO.getCoreReqDate(), payTransDtlInfoDO.getCoreReqSerno(), payTransDtlInfoDO.getPayDate(), payTransDtlInfoDO.getPaySerno(), TxStsQryCoreQryCallBack.class);
-////        }
-//        return coreProcStatus;
-        return "1";
+
+        //先主动回查核心，核心回查异常，再登记核心回查事件
+        BankCore996666Rsp bankCore996666Rsp = bankCoreImplDubboService.queryCoreStatus(payTransDtlInfoDO.getCoreReqDate(), payTransDtlInfoDO.getCoreReqSerno());
+        //核心回查后处理
+        bankCoreProcessService.qryCoreStsRetDone(payTransDtlInfoDO,bankCore996666Rsp,new StateMachine());
+
+        //获取最新核心状态
+        String coreProcStatus = bankCoreAccTxnService.getCoreStatusMap(bankCore996666Rsp.getTxnSts());
+
+        if(!AppConstant.CORESTATUS_SUCCESS.equals(coreProcStatus) && !AppConstant.CORESTATUS_FAILED.equals(coreProcStatus)){
+            logger.info("回查核心异常,登记核心回查事件");
+//            coreEventService.registerCoreQry(payTransDtlInfoDO.getCoreReqDate(), payTransDtlInfoDO.getCoreReqSerno(), payTransDtlInfoDO.getPayDate(), payTransDtlInfoDO.getPaySerno(), TxStsQryCoreQryCallBack.class);
+        }
+        return coreProcStatus;
     }
 
     /**
@@ -246,7 +249,7 @@ public class TxStsQry411RTradeFlow {
      */
     private void packRspMsg(TradeContext<?,?> context) {
         DCEPRspDTO<TxStsQryRspDTO> dcepRspDTO = EcnyTradeContext.getRspMsg(context);
-        PayTransDtlInfoDO payTransDtlInfoDO = (PayTransDtlInfoDO) EcnyTradeContext.getTxn(context);
+        PayTransDtlInfoDO payTransDtlInfoDO = (PayTransDtlInfoDO)EcnyTradeContext.getTxn(context);
         String pathProcStatus = payTransDtlInfoDO.getPathProcStatus();
         TxStsQryRspDTO rspDTO =  dcepRspDTO.getBody();
         BizQryRef bizQryRef = rspDTO.getTxStsQryRsp().getBizQryRef();
@@ -260,7 +263,7 @@ public class TxStsQry411RTradeFlow {
         bizRpt.setTrnRs(payTransDtlInfoDO.getPayPathRspStatus());
 
         //通道状态不为终态0,1 响应处理中
-        if(!StringUtils.equalsAny(pathProcStatus, AppConstant.PAYPATHSTATUS_SUCCESS, AppConstant.PAYPATHSTATUS_FAILED)){
+        if(!org.apache.commons.lang3.StringUtils.equalsAny(pathProcStatus,AppConstant.PAYPATHSTATUS_SUCCESS,AppConstant.PAYPATHSTATUS_FAILED)){
             bizRpt.setTrnRs(ProcessStsCdEnum.PR02.getCode());
         }
 
@@ -279,7 +282,7 @@ public class TxStsQry411RTradeFlow {
 
         //原交易原因，当原业务状态为“PR01”时必填
         if(!(ProcessStsCdEnum.PR00.getCode().equals(bizRpt.getTrnRs())
-                || ProcessStsCdEnum.PR02.getCode().equals(bizRpt.getTrnRs()))){
+                ||ProcessStsCdEnum.PR02.getCode().equals(bizRpt.getTrnRs()))){
             rsn.setRjctCd(payTransDtlInfoDO.getPayPathRetCode());
             rsn.setRjctInf(payTransDtlInfoDO.getPayPathRetMsg());
         }
@@ -304,9 +307,7 @@ public class TxStsQry411RTradeFlow {
         rspCodeMapDO.setRspCodeDsp(EcnyTransError.OTHER_TECH_ERROR.getErrorMsg());
 
         if (exception instanceof EcnyTransException) {
-            // TODO 错误码映射暂时写死
-            //RspCodeMapDO rspCodeMapDO = EcnyTransException.convertRspCode(e);
-//            rspCodeMapDO = EcnyTransException.convertRspCode(exception);
+            rspCodeMapDO = EcnyTransException.convertRspCode(exception);
             logger.info("映射后错误码错误信息：" + rspCodeMapDO);
         }
 
