@@ -41,6 +41,7 @@ import com.dcits.dcwlt.pay.api.domain.ecny.dspt.DsptChnlReqDTO;
 import com.dcits.dcwlt.pay.api.domain.ecny.dspt.DsptChnlRspDTO;
 import com.dcits.dcwlt.pay.api.model.PayTransDtlInfoDO;
 import com.dcits.dcwlt.pay.api.model.StateMachine;
+import com.dcits.dcwlt.pay.online.baffle.dcep.DcepService;
 import com.dcits.dcwlt.pay.online.exception.EcnyTransError;
 import com.dcits.dcwlt.pay.online.exception.EcnyTransException;
 import com.dcits.dcwlt.pay.online.flow.DcepTransInTradeFlow;
@@ -87,6 +88,9 @@ public class Dispute801STradeFlow {
 
     @Autowired
     private IPartyService partyService;
+
+    @Autowired
+    private DcepService dcepService;
 
     //@Autowired
     //private ITxStsQryNetPartyService txStsQryNetPartyService;
@@ -364,33 +368,10 @@ public class Dispute801STradeFlow {
         try {
             //TODO 互联互通
             //return dcepSendService.sendDcep(dsptReqDTODCEPReqDTO);
-            JSONObject jsonObject = JSONObject.parseObject("{\n" +
-                    "    \"ecnyHead\": {\n" +
-                    "        \"Sender\": \"C1010311000014\",\n" +
-                    "        \"DgtlEnvlp\": null,\n" +
-                    "        \"SignSN\": \"01\",\n" +
-                    "        \"Ver\": \"01\",\n" +
-                    "        \"NcrptnSN\": null,\n" +
-                    "        \"Receiver\": \"C1030644021075\",\n" +
-                    "        \"MsgSN\": \"20210113106040120333044574013001\",\n" +
-                    "        \"SndDtTm\": \"2021-03-08T14:18:20\",\n" +
-                    "        \"MsgTp\": \"dcep.911.001.01\"\n" +
-                    "    },\n" +
-                    "    \"body\": {\n" +
-                    "        \"Fault\": {\n" +
-                    "            \n" +
-                    "                \"faultCode\": \"111\",\n" +
-                    "                \"faultString\": \"1111\",\n" +
-                    "                \"faultActor\": \"111\",\n" +
-                    "                \"detail\": \"222\"\n" +
-                    "        }\n" +
-                    "    },\n" +
-                    "\t\"head\":{\"retCode\":\"000000\"}\n" +
-                    "}");
-            return jsonObject;
+            return dcepService.receive802From801(dsptReqDTODCEPReqDTO);
         } catch (Exception e) {
             logger.error("发送801到互联互通请求失败：{}-{}", e.getMessage(), e);
-            // 发送互联互通交易状态查询 TODO
+            // 发送互联互通交易状态查询
             //txStsQryNetPartyService.registerTrxStsQry(payTransDtlInfoDO);
             throw new EcnyTransException(AppConstant.TRXSTATUS_ABEND, EcnyTransError.PAY_TIME_ERROR);
         }

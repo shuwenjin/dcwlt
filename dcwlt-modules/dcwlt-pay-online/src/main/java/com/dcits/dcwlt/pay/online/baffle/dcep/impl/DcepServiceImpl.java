@@ -2,6 +2,7 @@ package com.dcits.dcwlt.pay.online.baffle.dcep.impl;
 
 import com.alibaba.fastjson.JSONObject;
 import com.dcits.dcwlt.pay.api.domain.dcep.DCEPReqDTO;
+import com.dcits.dcwlt.pay.api.domain.dcep.dspt.DsptReqDTO;
 import com.dcits.dcwlt.pay.api.domain.dcep.freefrmt.FreeFrmtDTO;
 import com.dcits.dcwlt.pay.online.baffle.dcep.DcepService;
 import org.springframework.stereotype.Service;
@@ -88,5 +89,46 @@ public class DcepServiceImpl implements DcepService {
                 "    }\n" +
                 "}"
         );
+    }
+
+    @Override
+    public JSONObject receive802From801(DCEPReqDTO<DsptReqDTO> dsptReqDTODCEPReqDTO) {
+        return JSONObject.parseObject("{\n" +
+                "    \"ecnyHead\": {\n" +
+                "        \"Sender\": \"C1030644021075\",\n" +
+                "        \"SignSN\": \"01\",\n" +
+                "        \"Ver\": \"01\",\n" +
+                "        \"Receiver\": \"C1010311000014\",\n" +
+                "        \"MsgSN\": \"20210113106040120333044574013001\",\n" +
+                "        \"SndDtTm\": \"2021-01-13T20:37:31\",\n" +
+                "        \"MsgTp\": \"dcep.802.001.01\"\n" +
+                "    },\n" +
+                "    \"body\": {\n" +
+                "        \"DsptRsp\": {\n" +
+                "            \"GrpHdr\": {\n" +
+                "                \"CreDtTm\": \"2021-01-13T20:33:33\",\n" +
+                "                \"InstdPty\": {\n" +
+                "                    \"InstdDrctPty\": \"C1010311000014\"\n" +
+                "                },\n" +
+                "                \"InstgPty\": {\n" +
+                "                    \"InstgDrctPty\": \"C1030644021075\"\n" +
+                "                },\n" +
+                "                \"MsgId\": \"20210113106040120333044574013001\"\n" +
+                "            },\n" +
+                "            \"OrgnlGrpHdr\": {\n" +
+                "                \"orgnlMsgId\": \"11\",\n" +
+                "                \"orgnlInstgPty\": \"111\",\n" +
+                "                \"orgnlMT\": \"1111\"\n" +
+                "            },\n" +
+                "            \"RspsnInf\": {\n" +
+                "                \"PrcSts\": \"11\",\n" +
+                "                \"RspsnSts\": \"11\",\n" +
+                "                \"RjctCd\": \"111\",\n" +
+                "                \"RjctInf\": \"111\",\n" +
+                "                \"BatchId\": \"111\"\n" +
+                "            }\n" +
+                "        }\n" +
+                "    }\n" +
+                "}");
     }
 }
