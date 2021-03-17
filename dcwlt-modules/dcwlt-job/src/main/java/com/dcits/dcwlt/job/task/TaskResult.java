@@ -11,7 +11,7 @@ public class TaskResult implements Serializable {
     /** 异常信息 */
     private String message;
     /** 是否成功 */
-    private boolean isSussess;
+    private boolean isSuccess;
 
     /** 调用目标字符串 */
     private String invokeTarget;
@@ -27,12 +27,12 @@ public class TaskResult implements Serializable {
         this.message = message;
     }
 
-    public boolean isSussess() {
-        return isSussess;
+    public boolean isSuccess() {
+        return isSuccess;
     }
 
-    public void setSussess(boolean sussess) {
-        isSussess = sussess;
+    public void setSuccess(boolean success) {
+        isSuccess = success;
     }
 
     public String getInvokeTarget() {
@@ -55,7 +55,7 @@ public class TaskResult implements Serializable {
     public String toString() {
         return "TaskResult{" +
                 "message='" + message + '\'' +
-                ", isSussess=" + isSussess +
+                ", isSuccess=" + isSuccess +
                 ", invokeTarget='" + invokeTarget + '\'' +
                 ", ret=" + ret +
                 '}';

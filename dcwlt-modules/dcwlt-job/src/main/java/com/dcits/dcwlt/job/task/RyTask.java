@@ -2,7 +2,6 @@ package com.dcits.dcwlt.job.task;
 
 import com.alibaba.fastjson.JSONObject;
 import com.dcits.dcwlt.common.core.utils.DateUtils;
-import com.dcits.dcwlt.common.core.utils.StringUtils;
 import org.springframework.stereotype.Component;
 
 /**
@@ -27,17 +26,18 @@ public class RyTask
         // 调用目标字符串
         result.setInvokeTarget("ryTask.ryMultipleParams(" + params + "," + b + "," + l + "L," + d + "D," + i + ")");
         // 初始化执行结果为失败
-        result.setSussess(false);
+        result.setSuccess(false);
 
         System.out.println("执行多参方法：ryTask.ryMultipleParams(" + s + "," + b + "," + l + ",L" + d + "D," + i + ")");
 
         double random = Math.random();
         if (random > 0.6) {
+            result.setMessage("test ryTask.ryMultipleParams Exception");
             throw new Exception(JSONObject.toJSONString(result));
         }
 
         result.setRet(new Double(random));
-        result.setSussess(true);
+        result.setSuccess(true);
         return result;
     }
 
@@ -51,17 +51,18 @@ public class RyTask
         // 调用目标字符串
         result.setInvokeTarget("ryTask.ryParams(" + params + ")");
         // 初始化执行结果为失败
-        result.setSussess(false);
+        result.setSuccess(false);
 
         System.out.println("执行有参方法：" + "ryTask.ryParams(" + str + ")");
 
         double random = Math.random();
         if (random > 0.1) {
+            result.setMessage("test ryTask.ryParams Exception");
             throw new Exception(JSONObject.toJSONString(result));
         }
 
         result.setRet(new Double(random));
-        result.setSussess(true);
+        result.setSuccess(true);
         return result;
     }
 
@@ -70,17 +71,18 @@ public class RyTask
         // 调用目标字符串
         result.setInvokeTarget("ryTask.ryNoParams()");
         // 初始化执行结果为失败
-        result.setSussess(false);
+        result.setSuccess(false);
 
         System.out.println("执行无参方法");
 
         double random = Math.random();
         if (random > 0.9) {
+            result.setMessage("test ryTask.ryNoParams Exception");
             throw new Exception(JSONObject.toJSONString(result));
         }
 
         result.setRet(new Double(random));
-        result.setSussess(true);
+        result.setSuccess(true);
         return result;
     }
 }

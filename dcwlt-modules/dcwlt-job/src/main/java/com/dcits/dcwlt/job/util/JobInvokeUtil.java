@@ -43,6 +43,31 @@ public class JobInvokeUtil
     }
 
     /**
+     * 手动执行方法
+     *
+     * @param invokeTarget 调用目标字符串
+     */
+    public static Object invokeMethod(String invokeTarget) throws Exception
+    {
+        Object ret = null;
+        String beanName = getBeanName(invokeTarget);
+        String methodName = getMethodName(invokeTarget);
+        List<Object[]> methodParams = getMethodParams(invokeTarget);
+
+        if (!isValidClassName(beanName))
+        {
+            Object bean = SpringUtils.getBean(beanName);
+            ret = invokeMethod(bean, methodName, methodParams);
+        }
+        else
+        {
+            Object bean = Class.forName(beanName).newInstance();
+            ret = invokeMethod(bean, methodName, methodParams);
+        }
+        return ret;
+    }
+
+    /**
      * 调用任务方法
      *
      * @param bean 目标对象

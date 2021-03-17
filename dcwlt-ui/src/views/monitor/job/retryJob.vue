@@ -3,7 +3,7 @@
     <el-form :model="queryParams" ref="queryForm" :inline="true" v-show="showSearch" label-width="68px">
       <el-form-item label="任务编号" prop="jobId">
         <el-input
-          v-model="queryParams.jobId"
+          v-model.trim="queryParams.jobId"
           placeholder="请输入任务编号"
           clearable
           size="small"
@@ -13,7 +13,7 @@
       </el-form-item>
       <el-form-item label="父实例Id" prop="fid">
         <el-input
-          v-model="queryParams.fid"
+          v-model.trim="queryParams.fid"
           placeholder="请输入父实例编号"
           clearable
           size="small"
@@ -23,7 +23,7 @@
       </el-form-item>
       <el-form-item label="父任务Id" prop="fjobId">
         <el-input
-          v-model="queryParams.fjobId"
+          v-model.trim="queryParams.fjobId"
           placeholder="请输入父任务编号"
           clearable
           size="small"
@@ -33,7 +33,7 @@
       </el-form-item>
       <el-form-item label="任务名称" prop="jobName">
         <el-input
-          v-model="queryParams.jobName"
+          v-model.trim="queryParams.jobName"
           placeholder="请输入任务名称"
           clearable
           size="small"

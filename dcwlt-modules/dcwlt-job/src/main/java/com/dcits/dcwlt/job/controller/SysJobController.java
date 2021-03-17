@@ -1,11 +1,16 @@
 package com.dcits.dcwlt.job.controller;
 
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 import javax.servlet.http.HttpServletResponse;
 
+import com.alibaba.fastjson.JSONObject;
 import com.dcits.dcwlt.common.core.constant.SysJobConstants;
 import com.dcits.dcwlt.common.core.exception.job.TaskException;
+import com.dcits.dcwlt.common.core.utils.ExceptionUtil;
+import com.dcits.dcwlt.job.task.TaskResult;
+import com.dcits.dcwlt.job.util.JobInvokeUtil;
 import org.quartz.SchedulerException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -182,6 +187,29 @@ public class SysJobController extends BaseController
     {
         jobService.run(job);
         return AjaxResult.success();
+    }
+
+    /**
+     * 手动执行方法
+     */
+    @PreAuthorize(hasPermi = "monitor:job:changeStatus")
+    @Log(title = "手动执行方法", businessType = BusinessType.OTHER)
+    @GetMapping("/manualRun/{invokeTarget}")
+    public TaskResult manualRun(@PathVariable("invokeTarget") String invokeTarget) throws Exception
+    {
+        try {
+            return (TaskResult) JobInvokeUtil.invokeMethod(invokeTarget);
+        } catch (InvocationTargetException e) {
+            TaskResult taskResult = new TaskResult();
+            String str = e.getTargetException().getMessage();
+            if (null != str) {
+                taskResult = JSONObject.toJavaObject(JSONObject.parseObject(str), TaskResult.class);
+                return taskResult;
+            }
+            taskResult.setSuccess(false);
+            taskResult.setMessage(ExceptionUtil.getExceptionMessage(e));
+            return taskResult;
+        }
     }
 
     /**

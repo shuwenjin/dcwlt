@@ -89,3 +89,11 @@ export function runJob(jobId, jobGroup) {
     data: data
   })
 }
+
+// 定时任务立即执行一次
+export function manualRun(invokeTarget) {
+  return request({
+    url: '/schedule/job/manualRun/' + invokeTarget,
+    method: 'get',
+  })
+}

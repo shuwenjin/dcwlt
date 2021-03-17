@@ -3,7 +3,7 @@
     <el-form :model="queryParams" ref="queryForm" :inline="true" v-show="showSearch" label-width="68px">
       <el-form-item label="任务编号" prop="jobId">
         <el-input
-          v-model="queryParams.jobId"
+          v-model.trim="queryParams.jobId"
           placeholder="请输入任务编号"
           clearable
           size="small"
@@ -13,7 +13,7 @@
       </el-form-item>
       <el-form-item label="任务名称" prop="jobName">
         <el-input
-          v-model="queryParams.jobName"
+          v-model.trim="queryParams.jobName"
           placeholder="请输入任务名称"
           clearable
           size="small"
@@ -100,6 +100,16 @@
           v-hasPermi="['monitor:job:query']"
         >日志</el-button>
       </el-col>
+      <el-col :span="1.5">
+        <el-button
+          type="danger"
+          plain
+          icon="el-icon-caret-right"
+          size="mini"
+          @click="handleManualRun"
+          v-hasPermi="['monitor:job:changeStatus']"
+        >手动执行方法</el-button>
+      </el-col>
       <right-toolbar :showSearch.sync="showSearch" @queryTable="getList" :columns="columns"></right-toolbar>
     </el-row>
 
@@ -166,7 +176,7 @@
         <el-row>
           <el-col :span="12">
             <el-form-item label="任务名称" prop="jobName">
-              <el-input v-model="form.jobName" placeholder="请输入任务名称" />
+              <el-input v-model.trim="form.jobName" placeholder="请输入任务名称" />
             </el-form-item>
           </el-col>
           <el-col :span="12">
@@ -194,12 +204,12 @@
                   <i class="el-icon-question"></i>
                 </el-tooltip>
               </span>
-              <el-input v-model="form.invokeTarget" placeholder="请输入调用目标字符串" />
+              <el-input v-model.trim="form.invokeTarget" placeholder="请输入调用目标字符串" />
             </el-form-item>
           </el-col>
           <el-col :span="12">
             <el-form-item label="cron表达式" prop="cronExpression">
-              <el-input v-model="form.cronExpression" placeholder="请输入cron执行表达式" />
+              <el-input v-model.trim="form.cronExpression" placeholder="请输入cron执行表达式" />
             </el-form-item>
           </el-col>
           <el-col :span="12">
@@ -243,12 +253,12 @@
           </el-col>
           <el-col :span="12">
             <el-form-item label="重试最大次数" prop="retryMaxNum">
-              <el-input-number v-model="form.retryMaxNum" controls-position="right" :min="1" />
+              <el-input-number v-model="form.retryMaxNum" controls-position="right" :min="1" :max="100" />
             </el-form-item>
           </el-col>
           <el-col :span="12">
             <el-form-item label="失败重试cron" prop="retryCron">
-              <el-input v-model="form.retryCron" placeholder="请输入失败重试cron" />
+              <el-input v-model.trim="form.retryCron" placeholder="请输入失败重试cron" />
             </el-form-item>
           </el-col>
         </el-row>
@@ -318,11 +328,45 @@
         <el-button @click="openView = false">关 闭</el-button>
       </div>
     </el-dialog>
+
+    <!-- 手动执行方法 -->
+    <el-dialog title="手动执行方法" :visible.sync="manualRunOpen" @close="manualRunCancel" width="700px" append-to-body>
+      <el-form ref="manualRunForm" :model="manualRunForm" :rules="manualRunRules" label-width="120px">
+        <el-row>
+          <el-col :span="24">
+            <el-form-item prop="invokeTarget">
+              <span slot="label">
+                调用方法
+                <el-tooltip placement="top">
+                  <div slot="content">
+                    Bean调用示例：ryTask.ryParams('ry')
+                    <br />Class类调用示例：com.dcits.dcwlt.quartz.task.RyTask.ryParams('ry')
+                    <br />参数说明：支持字符串，布尔类型，长整型，浮点型，整型
+                  </div>
+                  <i class="el-icon-question"></i>
+                </el-tooltip>
+              </span>
+              <el-input v-model.trim="manualRunForm.invokeTarget" placeholder="请输入调用目标字符串" />
+            </el-form-item>
+          </el-col>
+					<el-col :span="24">
+            <el-form-item label="调用方法：" v-if="this.taskResult && (JSON.stringify(this.taskResult) != '{}')">{{ this.taskResult && this.taskResult.invokeTarget }}</el-form-item>
+            <el-form-item label="执行状态：" v-if="this.taskResult && (JSON.stringify(this.taskResult) != '{}')">{{ (this.taskResult && this.taskResult.success) ? '成功' : '失败' }}</el-form-item>
+            <el-form-item label="执行返回值：" v-if="this.taskResult && (JSON.stringify(this.taskResult) != '{}')" >{{ this.taskResult && this.taskResult.ret }}</el-form-item>
+            <el-form-item label="异常信息：" v-if="this.taskResult && this.taskResult.success === false"  >{{ this.taskResult && this.taskResult.message }}</el-form-item>
+          </el-col>
+        </el-row>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button type="primary" @click="manualRunSubmit">执 行</el-button>
+        <el-button @click="manualRunCancel">取 消</el-button>
+      </div>
+    </el-dialog>
   </div>
 </template>
 
 <script>
-import { listJob, getJob, delJob, addJob, updateJob, runJob, changeJobStatus, changeRetryJobStatus } from "@/api/monitor/job";
+import { listJob, getJob, delJob, addJob, updateJob, runJob, changeJobStatus, changeRetryJobStatus, manualRun } from "@/api/monitor/job";
 
 export default {
   name: "Job",
@@ -393,7 +437,19 @@ export default {
         retryMaxNum: [
           { required: true, message: "重试最大次数不能为空", trigger: "blur" }
         ],
-      }
+      },
+      // 是否显示手动执行方法弹出层
+      manualRunOpen: false,
+      // 手动执行方法表单
+      manualRunForm: {},
+      // 手动执行方法表单校验
+      manualRunRules: {
+        invokeTarget: [
+          { required: true, message: "调用目标字符串不能为空", trigger: "blur" }
+        ],
+      },
+      // 手动执行方法返回值
+      taskResult: {},
     };
   },
   created() {
@@ -574,6 +630,26 @@ export default {
       this.download('schedule/job/export', {
         ...this.queryParams
       }, `job_${new Date().getTime()}.xlsx`)
+    },
+    /** 打开手动执行方法弹窗 */
+    handleManualRun() {
+      this.manualRunOpen = true;
+    },
+    /** 关闭手动执行方法弹窗 */
+    manualRunCancel() {
+      this.manualRunOpen = false;
+      this.manualRunForm = {};
+      this.taskResult = {};
+    },
+    /** 手动执行方法 */
+    manualRunSubmit() {
+      this.$refs["manualRunForm"].validate(valid => {
+        if (valid) {
+          manualRun(this.manualRunForm.invokeTarget).then(response => {
+            this.taskResult = response;
+          });
+        }
+      });
     }
   }
 };

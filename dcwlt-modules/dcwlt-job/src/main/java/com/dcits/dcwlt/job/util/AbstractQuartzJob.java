@@ -7,7 +7,6 @@ import java.util.UUID;
 import com.alibaba.fastjson.JSONObject;
 import com.dcits.dcwlt.common.core.constant.ScheduleConstants;
 import com.dcits.dcwlt.common.core.constant.SysJobConstants;
-import com.dcits.dcwlt.common.core.utils.SpringUtils;
 import com.dcits.dcwlt.common.core.utils.bean.BeanUtils;
 import com.dcits.dcwlt.job.domain.SysJob;
 import com.dcits.dcwlt.job.domain.SysJobLog;
@@ -64,7 +63,7 @@ public abstract class AbstractQuartzJob implements Job
                 if (null == taskResult) {
                     throw new JobExecutionException("TaskResult对象为null, 请检查执行方法");
                 } else {
-                    isSuccess = taskResult.isSussess();
+                    isSuccess = taskResult.isSuccess();
                     if (isSuccess) {
                         if (SysJobConstants.RETRYJOB.equals(sysJob.getJobType())) {
                             handleSysRetryJobSuccess(sysJob);
@@ -132,7 +131,9 @@ public abstract class AbstractQuartzJob implements Job
             log.info("任务执行成功  -  jobId: " + sysJob.getJobId() + ", taskResult: " + taskResult.toString());
             sysJobLog.setStatus(SysJobConstants.SUCCESS);
             if (null != taskResult) {
-                sysJobLog.setExcuteRet(taskResult.getRet().toString());
+                if (null != taskResult.getRet()) {
+                    sysJobLog.setExcuteRet(taskResult.getRet().toString());
+                }
             }
         }
 
@@ -171,7 +172,7 @@ public abstract class AbstractQuartzJob implements Job
                 // 初始化重试次数为0
                 sysRetryJob.setRetryNum(0);
                 // 重新生成调用参数
-                // 从Exception的message中反序列化TaskResult对象
+                // 从InvocationTargetException的message中反序列化TaskResult对象
                 if (e instanceof InvocationTargetException) {
                     String str = ((InvocationTargetException) e).getTargetException().getMessage();
                     if (null != str) {

@@ -45,6 +45,11 @@ public class SysJobServiceImpl implements ISysJobService
         {
             ScheduleUtils.createScheduleJob(scheduler, job);
         }
+        List<SysJob> retryJobList = jobMapper.selectRetryJobAll();
+        for (SysJob retryJob : retryJobList)
+        {
+            ScheduleUtils.createScheduleRetryJob(scheduler, retryJob);
+        }
     }
 
     /**
