@@ -46,8 +46,6 @@ public class TxEndNtfcntHandleServiceImpl {
 
     private static final Logger logger = LoggerFactory.getLogger(TxEndNtfcntHandleServiceImpl.class);
 
-    @Autowired
-    private IPayTransDtlInfoService payTransDtlInfoRepository;
 
     @Autowired
     private IPayTransDtlInfoService payTransDtlInfoService;
@@ -125,7 +123,7 @@ public class TxEndNtfcntHandleServiceImpl {
         OrgnlMsgCntt orgnlMsgCntt = txEndNtfcntReqDTO.getOrgnlMsgCntt();
 
         //根据报文标志号查询金融交易簿
-        PayTransDtlInfoDO payTransDtlInfoDO = payTransDtlInfoRepository.query(orgnlMsgId);
+        PayTransDtlInfoDO payTransDtlInfoDO = payTransDtlInfoService.query(orgnlMsgId);
         if(payTransDtlInfoDO != null){
             logger.info("deal221 原兑回交易在金融交易簿有记录：{}",payTransDtlInfoDO);
             updatePayTransDtlInfo(payTransDtlInfoDO,orgnlMsgCntt);
@@ -181,7 +179,7 @@ public class TxEndNtfcntHandleServiceImpl {
 
 
         try {
-            payTransDtlInfoRepository.insert(payTransDtlInfoDO);
+            payTransDtlInfoService.insert(payTransDtlInfoDO);
         } catch (Exception e) {
             logger.error("终态通知-新增金融交易异常： {}-{}", e.getMessage(), e);
             throw new EcnyTransException(EcnyTransError.DATABASE_ERROR);
@@ -228,7 +226,7 @@ public class TxEndNtfcntHandleServiceImpl {
         }
 
         try {
-            payTransDtlInfoRepository.update(newPayTransDTlInfoDO, stateMachine);
+            payTransDtlInfoService.update(newPayTransDTlInfoDO, stateMachine);
         } catch (Exception e) {
             logger.error("终态通知-更新金融交易簿通道状态异常： {}-{}", e.getMessage(), e);
             throw new EcnyTransException(EcnyTransError.DATABASE_ERROR);
@@ -245,7 +243,7 @@ public class TxEndNtfcntHandleServiceImpl {
 
         logger.info("调用兑回推断处理开始,平台日期：{},平台流水：{}",payDate,paySerno);
 
-        PayTransDtlInfoDO payTransDtlInfoDO = payTransDtlInfoRepository.query(payDate,paySerno);
+        PayTransDtlInfoDO payTransDtlInfoDO = payTransDtlInfoService.query(payDate,paySerno);
         String trxStatus = payTransDtlInfoDO.getTrxStatus();
         String coreProcStatus = payTransDtlInfoDO.getCoreProcStatus();
         String pathProcStatus = payTransDtlInfoDO.getPathProcStatus();
@@ -365,7 +363,7 @@ public class TxEndNtfcntHandleServiceImpl {
         if (StringUtils.equalsAny(processStatus, ProcessStsCdEnum.PR01.getCode(), ProcessStsCdEnum.PR04.getCode())) {
 
             String orgnlMsgId = txEndNtfcntReqDTO.getOrgnlGrpHdr().getOrgnlMsgId();
-            PayTransDtlInfoDO payTransDtlInfoDO = payTransDtlInfoRepository.query(orgnlMsgId);
+            PayTransDtlInfoDO payTransDtlInfoDO = payTransDtlInfoService.query(orgnlMsgId);
             // 原交易存在
             if (null != payTransDtlInfoDO) {
                 processOriTxn225(payTransDtlInfoDO, txEndNtfcntReqDTO);
@@ -393,7 +391,7 @@ public class TxEndNtfcntHandleServiceImpl {
             payTransDtlInfoDO.setPayPathRetCode(txEndNtfcntReqDTO.getOrgnlMsgCntt().getPrcCd());
         }
         payTransDtlInfoDO.setPayPathRetMsg(txEndNtfcntReqDTO.getOrgnlMsgCntt().getRjctInf());
-        payTransDtlInfoRepository.update(payTransDtlInfoDO);
+        payTransDtlInfoService.update(payTransDtlInfoDO);
         // 原核心失败，不用处理
         if (AppConstant.CORESTATUS_FAILED.equals(payTransDtlInfoDO.getCoreProcStatus())) {
             logger.error("原兑出交易失败，不处理");
@@ -412,7 +410,7 @@ public class TxEndNtfcntHandleServiceImpl {
         String processStatus = txEndNtfcntReqDTO.getOrgnlMsgCntt().getPrcSts();
         String orgnlMsgId = txEndNtfcntReqDTO.getOrgnlGrpHdr().getOrgnlMsgId();
         // 原交易一定存在
-        PayTransDtlInfoDO payTransDtlInfoDO = payTransDtlInfoRepository.query(orgnlMsgId);
+        PayTransDtlInfoDO payTransDtlInfoDO = payTransDtlInfoService.query(orgnlMsgId);
         if (null == payTransDtlInfoDO) {
             logger.info("汇款兑出终态通知原交易不存在");
             return;
@@ -436,7 +434,7 @@ public class TxEndNtfcntHandleServiceImpl {
             payTransDtlInfoDO.setTrxStatus(AppConstant.TRXSTATUS_ABEND);
             payTransDtlInfoDO.setPathProcStatus(AppConstant.PAYPATHSTATUS_FAILED);
             try {
-                payTransDtlInfoRepository.update(payTransDtlInfoDO);
+                payTransDtlInfoService.update(payTransDtlInfoDO);
             } catch (Exception e) {
                 logger.error("汇款兑出，终态通知失败，更新数据库信息失败：{}-{}", e.getMessage(), e);
                 throw new EcnyTransException(EcnyTransError.DATABASE_ERROR);
@@ -452,7 +450,7 @@ public class TxEndNtfcntHandleServiceImpl {
             StateMachine stateMachine = new StateMachine();
             stateMachine.setPreCoreProcStatus(AppConstant.CORESTATUS_SUCCESS);
             try {
-                payTransDtlInfoRepository.update(payTransDtlInfoDO, stateMachine);
+                payTransDtlInfoService.update(payTransDtlInfoDO, stateMachine);
             } catch (Exception e) {
                 logger.error("汇款兑出，终态通知成功，更新数据库信息失败：{}-{}", e.getMessage(), e);
                 throw new EcnyTransException(EcnyTransError.DATABASE_ERROR);
@@ -486,7 +484,7 @@ public class TxEndNtfcntHandleServiceImpl {
     private void processSend801(TxEndNtfctn txEndNtfctn) {
         String processStatus = txEndNtfctn.getOrgnlMsgCntt().getPrcSts();
         String orgnlMsgId = txEndNtfctn.getOrgnlGrpHdr().getOrgnlMsgId();
-        PayTransDtlInfoDO payTransDtlInfoDOOLD = payTransDtlInfoRepository.query(orgnlMsgId);
+        PayTransDtlInfoDO payTransDtlInfoDOOLD = payTransDtlInfoService.query(orgnlMsgId);
         boolean isSucc = (StringUtils.equalsAny(processStatus, ProcessStsCdEnum.PR00.getCode(), ProcessStsCdEnum.PR03.getCode()));
         boolean isFail = StringUtils.equalsAny(processStatus, ProcessStsCdEnum.PR01.getCode(), ProcessStsCdEnum.PR04.getCode());
         logger.info("终态通知差错贷记调账-往账：推定状态isSucc={},存在原交易801登记簿信息{}",isSucc,null!=payTransDtlInfoDOOLD);
@@ -514,7 +512,7 @@ public class TxEndNtfcntHandleServiceImpl {
                 payTransDtlInfoDOOLD.setPathProcStatus(AppConstant.PAYPATHSTATUS_SUCCESS);
                 updatePayTransDtlInfo(payTransDtlInfoDOOLD,new StateMachine());
                 //获取原原交易更新业务状态为A
-                PayTransDtlInfoDO payTransDtlInfoDOTemp = payTransDtlInfoRepository.query(payTransDtlInfoDOOLD.getOrigPayPathSerno());
+                PayTransDtlInfoDO payTransDtlInfoDOTemp = payTransDtlInfoService.query(payTransDtlInfoDOOLD.getOrigPayPathSerno());
                 if(null != payTransDtlInfoDOTemp){
                     payTransDtlInfoDOTemp.setTrxStatus(AppConstant.TRXSTATUS_PRECREDITSUCCESS);
                     //评审后加状态机控制201  modify 2021-01-29
@@ -538,7 +536,7 @@ public class TxEndNtfcntHandleServiceImpl {
                 payTransDtlInfoDONEW.setTrxStatus(AppConstant.TRXSTATUS_SUCCESS);
                 payTransDtlInfoDONEW.setCoreProcStatus(AppConstant.CORESTATUS_INIT);
                 payTransDtlInfoDONEW.setPathProcStatus(AppConstant.PAYPATHSTATUS_SUCCESS);
-                payTransDtlInfoRepository.insert(payTransDtlInfoDONEW);
+                payTransDtlInfoService.insert(payTransDtlInfoDONEW);
             }
         }
 
@@ -549,7 +547,7 @@ public class TxEndNtfcntHandleServiceImpl {
         String processStatus = txEndNtfctn.getOrgnlMsgCntt().getPrcSts();
         String orgnlMsgId = txEndNtfctn.getOrgnlGrpHdr().getOrgnlMsgId();
         PayTransDtlInfoDO payTransDtlInfoDONEW = new PayTransDtlInfoDO();
-        PayTransDtlInfoDO payTransDtlInfoDO = payTransDtlInfoRepository.query(orgnlMsgId);
+        PayTransDtlInfoDO payTransDtlInfoDO = payTransDtlInfoService.query(orgnlMsgId);
         logger.info("终态通知差错贷记调账-来账：原报文编号{}，推定业务状态{}",orgnlMsgId,processStatus);
         if(null == payTransDtlInfoDO){
             String cntt = txEndNtfctn.getOrgnlMsgCntt().getCntt();
@@ -582,7 +580,7 @@ public class TxEndNtfcntHandleServiceImpl {
             payTransDtlInfoDONEW.setPathProcStatus(AppConstant.PAYPATHSTATUS_SUCCESS);
 
             payTransDtlInfoDONEW.setPayPathRspStatus(processStatus);//更新业务状态——通道回执状态
-            payTransDtlInfoRepository.insert(payTransDtlInfoDONEW);
+            payTransDtlInfoService.insert(payTransDtlInfoDONEW);
             try{
                 //如果收付款人账号信息为空，说明未查到原原交易登记簿信息或者原原交易登记簿信息未记录到收付款人账号，不上核心，只补登记原交易801登记簿信息
                 if(StringUtils.isBlank(payTransDtlInfoDONEW.getPayeeAcct())&&StringUtils.isBlank(payTransDtlInfoDONEW.getPayerAcct())){
@@ -666,7 +664,7 @@ public class TxEndNtfcntHandleServiceImpl {
             payTransDtlInfoDONEW.setCoreProcStatus(AppConstant.CORESTATUS_FAILED);
             payTransDtlInfoDONEW.setPathProcStatus(AppConstant.PAYPATHSTATUS_FAILED);
 
-            payTransDtlInfoRepository.insert(payTransDtlInfoDONEW);
+            payTransDtlInfoService.insert(payTransDtlInfoDONEW);
 
         }else{
             //来账业务业务状态失败：更新通道状态XX0，更新业务状态到通道回执状态，业务处理码到通道返回码
@@ -710,7 +708,7 @@ public class TxEndNtfcntHandleServiceImpl {
 
     private int updatePayTransDtlInfo(PayTransDtlInfoDO payTransDtlInfoDO,StateMachine stateMachine) {
         try {
-            return payTransDtlInfoRepository.update(payTransDtlInfoDO, stateMachine);
+            return payTransDtlInfoService.update(payTransDtlInfoDO, stateMachine);
         } catch (Exception e) {
             logger.error("差错贷记调账，终态通知失败，更新数据库信息失败：{}-{}", e.getMessage(), e);
             throw new EcnyTransException(EcnyTransError.DATABASE_ERROR);
@@ -784,7 +782,7 @@ public class TxEndNtfcntHandleServiceImpl {
             if (AppConstant.CORESTATUS_SUCCESS.equals(bankCore351100InnerRsp.getCoreStatus())
                     || AppConstant.CORESTATUS_FAILED.equals(bankCore351100InnerRsp.getCoreStatus())) {
                 bankCoreAccTxnServiceImpl.updateCoreAccFlow(bankCore351100InnerRsp);
-                payTransDtlInfoRepository.update(payTransDtlInfoDO, stateMachine);
+                payTransDtlInfoService.update(payTransDtlInfoDO, stateMachine);
             }
         } catch (Exception e) {
             logger.error("afterSendCoreDeal：接收核心结果，更新对应状态异常：{}-{}", e.getMessage(), e);
@@ -873,7 +871,7 @@ public class TxEndNtfcntHandleServiceImpl {
 
         try {
             bankCoreAccTxnServiceImpl.insertCoreFlow(bankCore351100InnerReq, coreReqSerno, coreReqDate);
-            int updateNum = payTransDtlInfoRepository.update(payTransDtlInfoDO, stateMachine);
+            int updateNum = payTransDtlInfoService.update(payTransDtlInfoDO, stateMachine);
             if(updateNum != 1){
                 throw new EcnyTransException(EcnyTransError.OTHER_TECH_ERROR);
             }
@@ -947,7 +945,7 @@ public class TxEndNtfcntHandleServiceImpl {
         payTransDtlInfoDONEW.setLastUpDate(DateUtil.getDefaultDate());
         payTransDtlInfoDONEW.setLastUpTime(DateUtil.getDefaultTime());
         // 原兑换登记簿信息
-        PayTransDtlInfoDO payTransDtlInfoDOOLD = payTransDtlInfoRepository.query(orgnlMsgId);
+        PayTransDtlInfoDO payTransDtlInfoDOOLD = payTransDtlInfoService.query(orgnlMsgId);
         if(null != payTransDtlInfoDOOLD) {
             // 原交易与现交易收付款方向调整
             payTransDtlInfoDONEW.setPayerPtyId(payTransDtlInfoDOOLD.getPayeePtyId());
