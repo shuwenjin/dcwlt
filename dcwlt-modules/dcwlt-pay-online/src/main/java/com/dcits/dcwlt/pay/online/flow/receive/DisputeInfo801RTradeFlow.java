@@ -22,15 +22,19 @@ import com.dcits.dcwlt.pay.api.domain.dcep.dspt.DsptRspDTO;
 import com.dcits.dcwlt.pay.api.model.PayTransDtlInfoDO;
 import com.dcits.dcwlt.pay.api.model.RspCodeMapDO;
 import com.dcits.dcwlt.pay.api.model.StateMachine;
+import com.dcits.dcwlt.pay.online.baffle.dcep.impl.BankCoreImplDubboService;
 import com.dcits.dcwlt.pay.online.exception.EcnyTransError;
 import com.dcits.dcwlt.pay.online.exception.EcnyTransException;
 import com.dcits.dcwlt.pay.online.flow.builder.EcnyTradeContext;
 import com.dcits.dcwlt.pay.online.flow.builder.EcnyTradeFlowBuilder;
-import com.dcits.dcwlt.pay.online.service.*;
+import com.dcits.dcwlt.pay.online.service.IAuthInfoService;
+import com.dcits.dcwlt.pay.online.service.ICoreProcessService;
+import com.dcits.dcwlt.pay.online.service.IPartyService;
+import com.dcits.dcwlt.pay.online.service.IPayTransDtlInfoService;
 import com.dcits.dcwlt.pay.online.service.impl.BankCoreAccTxnServiceImpl;
 import com.dcits.dcwlt.pay.online.service.impl.CoreEventServiceImpl;
 import com.dcits.dcwlt.pay.online.service.impl.ECNYSerNoService;
-import com.dcits.dcwlt.pay.online.service.impl.ParamConfigCheckService;
+import com.dcits.dcwlt.pay.online.task.ParamConfigCheckTask;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -66,9 +70,6 @@ public class DisputeInfo801RTradeFlow {
     private IPartyService partyService;
 
     @Autowired
-    private ParamConfigCheckService paramConfigCheckService;
-
-    @Autowired
     private IAuthInfoService authInfoService;
 
     @Autowired
@@ -81,8 +82,8 @@ public class DisputeInfo801RTradeFlow {
     @Autowired
     private BankCoreAccTxnServiceImpl bankCoreAccTxnService;
 
-//    @Autowired
-//    private BankCoreImplDubboService bankCoreImplDubboService;
+    @Autowired
+    private BankCoreImplDubboService bankCoreImplDubboService;
 
 
 
@@ -283,7 +284,7 @@ public class DisputeInfo801RTradeFlow {
         String dsptCtgyPurpCd = reqMsgBody.getDsptReq().getDsptInf().getDsptCtgyPurpCd();
 
         //业务种类、业务类型校验
-        if (!paramConfigCheckService.checkConfigValue(BUSINESS_TYPE, dsptBizTp, dsptCtgyPurpCd)
+        if (!ParamConfigCheckTask.checkConfigValue(BUSINESS_TYPE, dsptBizTp, dsptCtgyPurpCd)
                 || !AppConstant.BUSINESS_TYPE_DSPT.equals(dsptBizTp)) {
             logger.error("业务种类、业务类型校验不通过");
             throw new EcnyTransException(AppConstant.TRXSTATUS_FAILED, EcnyTransError.ECNY_BUSINESS_TYPE_INVALID);
@@ -350,8 +351,7 @@ public class DisputeInfo801RTradeFlow {
     private BankCore351100InnerReq sendCoreInit(PayTransDtlInfoDO payTransDtlInfoDO) {
         //打印关键参数
         logger.info("sendCoreInit：上核心前处理开始 ");
-//        BankCore351100InnerReq bankCore351100InnerReq = bankCoreProcessService.initBankCore351100InnerReq(payTransDtlInfoDO);
-        BankCore351100InnerReq bankCore351100InnerReq = new BankCore351100InnerReq();
+        BankCore351100InnerReq bankCore351100InnerReq = bankCoreProcessService.initBankCore351100InnerReq(payTransDtlInfoDO);
         bankCore351100InnerReq.setAcctBrno("1");
         logger.info("sendCoreInit：上核心前处理结束 ");
         return bankCore351100InnerReq;
@@ -408,16 +408,16 @@ public class DisputeInfo801RTradeFlow {
                 bankCore351100InnerReq.getCoreReqDate(), bankCore351100InnerReq.getCoreReqSerno());
         BankCore351100InnerRsp bankCore351100InnerRsp = new BankCore351100InnerRsp();
         bankCore351100InnerReq.setAmount("测试");
-//        try {
-//            bankCore351100InnerRsp = bankCoreImplDubboService.coreServer(bankCore351100InnerReq);
-//        } catch (Exception e) {
-//            logger.error("核心通讯异常：{}-{}-{}", LogMonitorLevelCdEnum.ECNY_LOG_MONITOR_NORMAL.getCode(), e.getMessage(), e);
-//            logger.info("调用核心回查,平台日期：{},平台流水：{}", payTransDtlInfoDO.getPayDate(), payTransDtlInfoDO.getPaySerno());
+        try {
+            bankCore351100InnerRsp = bankCoreImplDubboService.coreServer(bankCore351100InnerReq);
+        } catch (Exception e) {
+            logger.error("核心通讯异常：{}-{}-{}", LogMonitorLevelCdEnum.ECNY_LOG_MONITOR_NORMAL.getCode(), e.getMessage(), e);
+            logger.info("调用核心回查,平台日期：{},平台流水：{}", payTransDtlInfoDO.getPayDate(), payTransDtlInfoDO.getPaySerno());
 //            AccFlowDO accFlowDO = bankCoreAccTxnService.selectByPayInfo(payTransDtlInfoDO.getPayDate(), payTransDtlInfoDO.getPaySerno());
 //            logger.info("调用核心回查,核心日期：{},核心流水：{}", accFlowDO.getCoreReqDate(), accFlowDO.getCoreReqSerno());
 //            coreEventService.registerCoreQry(accFlowDO.getCoreReqDate(), accFlowDO.getCoreReqSerno(), payTransDtlInfoDO.getPayDate(), payTransDtlInfoDO.getPaySerno(), DisputeCoreQryCallBack.class);
-//            throw new EcnyTransException(AppConstant.TRXSTATUS_ABEND, EcnyTransError.PAY_TIME_OUT);
-//        }
+            throw new EcnyTransException(AppConstant.TRXSTATUS_ABEND, EcnyTransError.PAY_TIME_OUT);
+        }
         logger.info("sendToCore：上核心入账结束");
         return bankCore351100InnerRsp;
     }
@@ -477,7 +477,6 @@ public class DisputeInfo801RTradeFlow {
         payTransDtlInfoDO.setCoreRetCode(bankCore351100InnerRsp.getErrorCode());
         payTransDtlInfoDO.setCoreRetMsg(bankCore351100InnerRsp.getErrorMsg());
         payTransDtlInfoDO.setOperStep(AppConstant.OPERSTEP_CRDT);
-
         RspCodeMapDO rspCodeMapDO = EcnyTransException.convertRspCode(Constant.CORE_SYS_ID, AppConstant.DCEP_SYS_ID, bankCore351100InnerRsp.getErrorCode(), bankCore351100InnerRsp.getErrorMsg());
 
         if (AppConstant.CORESTATUS_SUCCESS.equals(coreStatus)) {

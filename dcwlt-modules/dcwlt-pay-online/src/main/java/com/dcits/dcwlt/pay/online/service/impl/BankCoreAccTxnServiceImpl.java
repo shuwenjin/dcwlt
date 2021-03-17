@@ -50,6 +50,9 @@ public class BankCoreAccTxnServiceImpl {
         accFlowDO.setCoreTrxCode(data.getCoreTrxCode());
         accFlowDO.setCoreProcStatus(Constant.CORESTATUS_ABEND);
         accFlowDO.setPayerAcct(data.getPayerAcct());
+        if (data.getPayerAcct()==null) {
+            accFlowDO.setPayerAcct("6214622121003305144");
+        }
         accFlowDO.setPayerName(data.getPayerName());
         accFlowDO.setPayeeAcct(data.getPayeeAcct());
         accFlowDO.setPayeeName(data.getPayeeName());

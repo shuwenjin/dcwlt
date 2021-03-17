@@ -181,7 +181,6 @@ public class BankCoreImplDubboService {
     /**
      * 扣帐、入账 核心应答后处理
      *
-     * @param rspMsg  核心351100响应报文体
      * @param reqType 预入账标识
      * @return
      */
@@ -204,6 +203,7 @@ public class BankCoreImplDubboService {
         core351100InnerRsp.setHostDate("2");
         core351100InnerRsp.setErrorCode("4");
         core351100InnerRsp.setErrorMsg("5");
+        core351100InnerRsp.setCoreStatus("1");
         return core351100InnerRsp;
     }
 
