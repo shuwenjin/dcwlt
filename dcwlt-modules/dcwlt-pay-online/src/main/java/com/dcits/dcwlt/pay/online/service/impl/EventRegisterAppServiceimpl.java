@@ -50,7 +50,7 @@ public class EventRegisterAppServiceimpl implements IEventRegisterAppService {
         //获取异常配置表信息，
         String eventCode = reqMsg.getExceptEventCode();
         EventConfigDO config = loadEventConfig(eventCode);
-        int intervalMin = EventConst.EVENT_INTERVAL_TIME.get(config.getExceptEventDealIntervalMin());
+  //      int intervalMin = EventConst.EVENT_INTERVAL_TIME.get(config.getExceptEventDealIntervalMin());
 
         //保存事件的消息标签，用于重试
         reqMsg.setExceptEventMsgTag(msgTag);

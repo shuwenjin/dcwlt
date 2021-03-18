@@ -45,7 +45,7 @@ public class TxEndNtfcnt909RTradeFlow {
     private static final String TXENDNTFCNT_TRADE_FLOW = "TxEndNtfcnt909RTradeFlow";
 
     @Autowired
-    private IPayNotifyService payTxEndMsgRepository;
+    private IPayNotifyService payTxEndMsgSerivce;
 
     @Autowired
     private IGenerateCodeService generateCodeService;
@@ -138,7 +138,7 @@ public class TxEndNtfcnt909RTradeFlow {
         }
 
         try {
-            payTxEndMsgRepository.insert(payNotifyDO);
+            payTxEndMsgSerivce.insert(payNotifyDO);
         } catch (Exception e) {
             logger.error("终态通知请求登记表入库失败:{}-{}", e.getMessage(), e);
             throw new EcnyTransException(EcnyTransError.DATABASE_ERROR);

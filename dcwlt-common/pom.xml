@@ -17,6 +17,7 @@
         <module>dcwlt-common-datascope</module>
 		<module>dcwlt-common-datasource</module>
         <module>dcwlt-common-pay</module>
+        <module>dcwlt-common-mq</module>
     </modules>
 
     <artifactId>dcwlt-common</artifactId>
