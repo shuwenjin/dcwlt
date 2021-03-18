@@ -4,6 +4,7 @@ import com.dcits.dcwlt.pay.batch.service.IReportDataService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
@@ -20,7 +21,7 @@ public class ReportDataController {
      * 统计报表数据
      */
     @PostMapping("/statistics")
-    public void statistics(String reportDate)
+    public void statistics(@RequestParam String reportDate)
     {
         iReportDataService.statistics(reportDate);
     }
