@@ -4,7 +4,7 @@ package com.dcits.dcwlt.common.pay.util;
 import com.dcits.dcwlt.common.pay.constant.FileConst;
 import com.dcits.dcwlt.common.pay.enums.SettleTaskErrorEnum;
 import com.dcits.dcwlt.common.pay.exception.SettleTaskException;
-import org.apache.commons.lang.StringEscapeUtils;
+import org.apache.commons.lang3.StringEscapeUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
