@@ -194,13 +194,15 @@ public class SysJobController extends BaseController
             return (TaskResult) JobInvokeUtil.invokeMethod(invokeTarget);
         } catch (InvocationTargetException e) {
             TaskResult taskResult = new TaskResult();
+            taskResult.setInvokeTarget(invokeTarget);
             String str = e.getTargetException().getMessage();
             if (null != str) {
-                taskResult = JSONObject.toJavaObject(JSONObject.parseObject(str), TaskResult.class);
-                return taskResult;
+                try {
+                    return JSONObject.toJavaObject(JSONObject.parseObject(str), TaskResult.class);
+                } catch (Exception josnParseException) { }
             }
             taskResult.setSuccess(false);
-            taskResult.setMessage(ExceptionUtil.getExceptionMessage(e));
+            taskResult.setMessage(str);
             return taskResult;
         }
     }

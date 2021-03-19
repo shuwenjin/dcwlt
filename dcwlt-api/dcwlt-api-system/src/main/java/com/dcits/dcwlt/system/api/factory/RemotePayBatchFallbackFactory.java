@@ -23,7 +23,9 @@ public class RemotePayBatchFallbackFactory implements FallbackFactory<RemotePayB
         return new RemotePayBatchService()
         {
             @Override
-            public void statistics(String reportDate) throws Exception { throw new Exception(throwable.getMessage()); }
+            public void statistics(String reportDate) throws Exception {
+                throw new Exception(throwable.getMessage());
+            }
         };
     }
 }
