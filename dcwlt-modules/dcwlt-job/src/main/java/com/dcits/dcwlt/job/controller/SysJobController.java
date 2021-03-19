@@ -9,18 +9,11 @@ import com.alibaba.fastjson.JSONObject;
 import com.dcits.dcwlt.common.core.constant.SysJobConstants;
 import com.dcits.dcwlt.common.core.exception.job.TaskException;
 import com.dcits.dcwlt.common.core.utils.ExceptionUtil;
-import com.dcits.dcwlt.job.task.TaskResult;
+import com.dcits.dcwlt.common.core.domain.TaskResult;
 import com.dcits.dcwlt.job.util.JobInvokeUtil;
 import org.quartz.SchedulerException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import com.dcits.dcwlt.common.core.utils.SecurityUtils;
 import com.dcits.dcwlt.common.core.utils.poi.ExcelUtil;
 import com.dcits.dcwlt.common.core.web.controller.BaseController;
@@ -194,8 +187,8 @@ public class SysJobController extends BaseController
      */
     @PreAuthorize(hasPermi = "monitor:job:changeStatus")
     @Log(title = "手动执行方法", businessType = BusinessType.OTHER)
-    @GetMapping("/manualRun/{invokeTarget}")
-    public TaskResult manualRun(@PathVariable("invokeTarget") String invokeTarget) throws Exception
+    @GetMapping("/manualRun")
+    public TaskResult manualRun(@RequestParam("invokeTarget") String invokeTarget) throws Exception
     {
         try {
             return (TaskResult) JobInvokeUtil.invokeMethod(invokeTarget);

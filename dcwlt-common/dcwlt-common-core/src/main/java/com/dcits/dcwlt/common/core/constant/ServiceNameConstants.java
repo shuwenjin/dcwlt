@@ -21,4 +21,9 @@ public class ServiceNameConstants
      * 文件服务的serviceid
      */
     public static final String FILE_SERVICE = "dcwlt-file";
+
+    /**
+     * 支付批量服务serviceid
+     */
+    public static final String PAY_BATCH_SERVICE = "dcwlt-pay-batch";
 }

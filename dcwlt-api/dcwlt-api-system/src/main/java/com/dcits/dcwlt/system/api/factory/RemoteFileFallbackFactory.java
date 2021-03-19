@@ -22,7 +22,7 @@ public class RemoteFileFallbackFactory implements FallbackFactory<RemoteFileServ
     @Override
     public RemoteFileService create(Throwable throwable)
     {
-        log.error("文件服务调用失败:{}", throwable.getMessage());
+        log.error("文件服务调用失败: ", throwable.getMessage());
         return new RemoteFileService()
         {
             @Override

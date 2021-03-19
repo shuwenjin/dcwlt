@@ -21,7 +21,7 @@ public class RemoteLogFallbackFactory implements FallbackFactory<RemoteLogServic
     @Override
     public RemoteLogService create(Throwable throwable)
     {
-        log.error("日志服务调用失败:{}", throwable.getMessage());
+        log.error("日志服务调用失败: ", throwable.getMessage());
         return new RemoteLogService()
         {
             @Override

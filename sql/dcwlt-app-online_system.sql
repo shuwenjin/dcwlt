@@ -311,6 +311,7 @@ insert into sys_role_menu values ('2', '113');
 insert into sys_role_menu values ('2', '114');
 insert into sys_role_menu values ('2', '115');
 insert into sys_role_menu values ('2', '116');
+insert into sys_role_menu values ('2', '117');
 insert into sys_role_menu values ('2', '500');
 insert into sys_role_menu values ('2', '501');
 insert into sys_role_menu values ('2', '1000');
@@ -604,10 +605,11 @@ CREATE TABLE `sys_job`  (
     `remark` varchar(500) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT '' COMMENT '备注信息',
     PRIMARY KEY (`job_id`, `job_name`, `job_group`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '定时任务调度表' ROW_FORMAT = Dynamic;
-insert into sys_job values(uuid(), null, null, '0', '系统默认（无参）', 'DEFAULT', 'ryTask.ryNoParams',        '0/30 * * * * ?', '3', '1', '0', '0/2 * * * * ?', '1', null, null, null, 5, 'admin', '2018-03-16 11-33-00', 'admin', '2018-03-16 11-33-00', '');
-insert into sys_job values(uuid(), null, null, '0', '系统默认（有参）', 'DEFAULT', 'ryTask.ryParams(\'yyyy-MM-dd\')',  '0/30 * * * * ?', '3', '1', '0', '0/2 * * * * ?', '1', null, null, null, 5, 'admin', '2018-03-16 11-33-00', 'admin', '2018-03-16 11-33-00', '');
-insert into sys_job values(uuid(), null, null, '0', '系统默认（多参）', 'DEFAULT', 'ryTask.ryMultipleParams(\'yyyy-MM-dd HH:mm:ss\', true, 2000L, 316.50D, 100)', '0/30 * * * * ?', '3', '1', '0', '0/2 * * * * ?', '1', null, null, null, 5, 'admin', '2018-03-16 11-33-00', 'admin', '2018-03-16 11-33-00', '');
-
+INSERT INTO sys_job VALUES ('14a3d5a8-e3fd-46e6-82ce-977005d60f12', NULL, NULL, '0', 'JSONArray参数调用示例', 'DEFAULT', 'ryTask.JSONArrayParams([{name: \"ruoyi\", age: 10}, {name: \"xiaoming\", age: 12}])', '0/30 * * * * ?', '1', '1', '1', '0/2 * * * * ?', '0', NULL, NULL, NULL, 1, 'admin', '2021-03-19 09:56:14', '', '2021-03-19 09:59:59', '');
+INSERT INTO sys_job VALUES ('2666bd30-864c-11eb-a040-9c5c8e383269', NULL, NULL, '0', '系统默认（无参）', 'DEFAULT', 'ryTask.ryNoParams', '0/30 * * * * ?', '3', '1', '1', '0/2 * * * * ?', '0', NULL, NULL, NULL, 5, 'admin', '2018-03-16 11:33:00', 'admin', '2021-03-19 09:59:57', '');
+INSERT INTO sys_job VALUES ('26672c50-864c-11eb-a040-9c5c8e383269', NULL, NULL, '0', '系统默认（有参）', 'DEFAULT', 'ryTask.ryParams(\'yyyy-MM-dd\')', '0/30 * * * * ?', '3', '1', '1', '0/2 * * * * ?', '0', NULL, NULL, NULL, 5, 'admin', '2018-03-16 11:33:00', 'admin', '2021-03-19 09:59:53', '');
+INSERT INTO sys_job VALUES ('2667a12e-864c-11eb-a040-9c5c8e383269', NULL, NULL, '0', '系统默认（多参）', 'DEFAULT', 'ryTask.ryMultipleParams(\'yyyy-MM-dd HH:mm:ss\', true, 2000L, 316.50D, 100)', '0/30 * * * * ?', '3', '1', '1', '0/2 * * * * ?', '0', NULL, NULL, NULL, 5, 'admin', '2018-03-16 11:33:00', 'admin', '2021-03-19 09:59:48', '');
+INSERT INTO sys_job VALUES ('82773183-6c20-49cd-802b-93b37560a1b6', NULL, NULL, '0', 'JSONObject参数调用示例', 'DEFAULT', 'ryTask.JSONObjectParams({name: \"ruoyi\", age: 10})', '0/30 * * * * ?', '1', '1', '1', '0/2 * * * * ?', '0', NULL, NULL, NULL, 1, 'admin', '2021-03-19 09:58:05', '', '2021-03-19 09:59:49', '');
 
 -- ----------------------------
 -- 16、定时任务调度日志表

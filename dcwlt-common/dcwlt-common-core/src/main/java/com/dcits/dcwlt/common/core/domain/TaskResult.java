@@ -1,4 +1,4 @@
-package com.dcits.dcwlt.job.task;
+package com.dcits.dcwlt.common.core.domain;
 
 import java.io.Serializable;
 

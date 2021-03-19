@@ -12,7 +12,7 @@ import com.dcits.dcwlt.job.domain.SysJob;
 import com.dcits.dcwlt.job.domain.SysJobLog;
 import com.dcits.dcwlt.job.service.ISysJobLogService;
 import com.dcits.dcwlt.job.service.ISysJobService;
-import com.dcits.dcwlt.job.task.TaskResult;
+import com.dcits.dcwlt.common.core.domain.TaskResult;
 import org.quartz.Job;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
@@ -56,7 +56,7 @@ public abstract class AbstractQuartzJob implements Job
             {
                 try {
                     taskResult = (TaskResult) doExecute(context, sysJob);
-                    log.info("执行结果" + taskResult.toString());
+                    log.info("执行结果" + JSONObject.toJSONString(taskResult));
                 } catch (ClassCastException castException) {
                     log.error("TaskResult 强转异常", castException);
                 }
@@ -128,7 +128,7 @@ public abstract class AbstractQuartzJob implements Job
 
             handleSysJobException(sysJob, jobLogId, startTime, e);
         } else {
-            log.info("任务执行成功  -  jobId: " + sysJob.getJobId() + ", taskResult: " + taskResult.toString());
+            log.info("任务执行成功  -  jobId: " + sysJob.getJobId() + ", taskResult: " + JSONObject.toJSONString(taskResult));
             sysJobLog.setStatus(SysJobConstants.SUCCESS);
             if (null != taskResult) {
                 if (null != taskResult.getRet()) {

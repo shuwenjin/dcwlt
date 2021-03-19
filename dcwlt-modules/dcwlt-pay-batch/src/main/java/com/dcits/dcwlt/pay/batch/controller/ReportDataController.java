@@ -21,7 +21,7 @@ public class ReportDataController {
      * 统计报表数据
      */
     @PostMapping("/statistics")
-    public void statistics(@RequestParam String reportDate)
+    public void statistics(@RequestParam("reportDate") String reportDate)
     {
         iReportDataService.statistics(reportDate);
     }

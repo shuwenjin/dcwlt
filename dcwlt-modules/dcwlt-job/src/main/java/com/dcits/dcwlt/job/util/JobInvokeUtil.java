@@ -5,6 +5,8 @@ import java.lang.reflect.Method;
 import java.util.LinkedList;
 import java.util.List;
 
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 import com.dcits.dcwlt.common.core.utils.SpringUtils;
 import com.dcits.dcwlt.common.core.utils.StringUtils;
 import com.dcits.dcwlt.job.domain.SysJob;
@@ -142,13 +144,24 @@ public class JobInvokeUtil
         {
             return null;
         }
-        String[] methodParams = methodStr.split(",");
+
         List<Object[]> classs = new LinkedList<>();
+        // 解析 JSONObject 类型
+        if (StringUtils.startsWith(methodStr, "{") && StringUtils.endsWith(methodStr, "}")) {
+            classs.add(new Object[] { JSONObject.parseObject(methodStr), JSONObject.class });
+            return classs;
+        }
+        // 解析 JSONArray 类型
+        if (StringUtils.startsWith(methodStr, "[") && StringUtils.endsWith(methodStr, "]")) {
+            classs.add(new Object[] { JSONArray.parseArray(methodStr), JSONArray.class });
+            return classs;
+        }
+        String[] methodParams = methodStr.split(",");
         for (int i = 0; i < methodParams.length; i++)
         {
             String str = StringUtils.trimToEmpty(methodParams[i]);
-            // String字符串类型，包含'
-            if (StringUtils.contains(str, "'"))
+            // String字符串类型，以'开始，以'结束
+            if (StringUtils.startsWith(str, "'") && StringUtils.endsWith(str, "'"))
             {
                 classs.add(new Object[] { StringUtils.replace(str, "'", ""), String.class });
             }

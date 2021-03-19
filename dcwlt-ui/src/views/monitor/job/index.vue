@@ -330,7 +330,14 @@
     </el-dialog>
 
     <!-- 手动执行方法 -->
-    <el-dialog title="手动执行方法" :visible.sync="manualRunOpen" @close="manualRunCancel" width="700px" append-to-body>
+    <el-dialog 
+      title="手动执行方法" 
+      :visible.sync="manualRunOpen" 
+      @close="manualRunCancel" 
+      width="700px" 
+      append-to-body
+      :close-on-click-modal="false"
+    >
       <el-form ref="manualRunForm" :model="manualRunForm" :rules="manualRunRules" label-width="120px">
         <el-row>
           <el-col :span="24">
