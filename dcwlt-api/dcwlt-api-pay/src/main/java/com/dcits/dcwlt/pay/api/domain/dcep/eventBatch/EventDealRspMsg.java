@@ -1,4 +1,4 @@
-package com.dcits.dcwlt.common.pay.channel.event.msg;
+package com.dcits.dcwlt.pay.api.domain.dcep.eventBatch;
 
 /**
  * 异常事件响应信息

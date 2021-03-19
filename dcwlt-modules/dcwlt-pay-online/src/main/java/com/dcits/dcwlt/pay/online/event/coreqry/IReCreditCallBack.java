@@ -1,10 +1,10 @@
-package com.dcits.dcwlt.pay.online.service;
+package com.dcits.dcwlt.pay.online.event.coreqry;
 
 import com.alibaba.fastjson.JSONObject;
 import com.dcits.dcwlt.common.pay.channel.bankcore.dto.bankcore351100.BankCore351100InnerRsp;
-import com.dcits.dcwlt.common.pay.channel.event.msg.EventDealRspMsg;
+import com.dcits.dcwlt.pay.api.domain.dcep.eventBatch.EventDealRspMsg;
 
-public interface IReCreditCallBackService {
+public interface IReCreditCallBack {
 
     //补入账成功
     EventDealRspMsg reCreditSucc(EventDealRspMsg eventDealRspMsg, BankCore351100InnerRsp bankCore351100InnerRsp, JSONObject eventParam);

@@ -24,6 +24,11 @@ import com.dcits.dcwlt.pay.api.model.PayTransDtlInfoDO;
 import com.dcits.dcwlt.pay.api.model.RspCodeMapDO;
 import com.dcits.dcwlt.pay.api.model.StateMachine;
 import com.dcits.dcwlt.pay.online.config.EcnyTradeConfig;
+import com.dcits.dcwlt.pay.online.event.callback.BankCoreQryCallBack;
+import com.dcits.dcwlt.pay.online.event.callback.ConvertBankRevCallBack;
+import com.dcits.dcwlt.pay.online.event.callback.ReCreditCallBack;
+import com.dcits.dcwlt.pay.online.event.callback.TxEndNTCoreQryCallBack;
+import com.dcits.dcwlt.pay.online.event.service.ReCreditService;
 import com.dcits.dcwlt.pay.online.exception.EcnyTransError;
 import com.dcits.dcwlt.pay.online.exception.EcnyTransException;
 import com.dcits.dcwlt.pay.online.service.ICoreProcessService;
@@ -60,7 +65,7 @@ public class TxEndNtfcntHandleServiceImpl {
     private BankCoreAccTxnServiceImpl bankCoreAccTxnServiceImpl;
 
     @Autowired
-    private ReCreditServiceImpl reCreditServiceImpl;
+    private ReCreditService reCreditServiceImpl;
 
     @Autowired
     private BankCoreImplDubboServiceImpl bankCoreImplDubboServiceImpl;
@@ -321,7 +326,7 @@ public class TxEndNtfcntHandleServiceImpl {
         //核心异常，回查核心
         if(status221 || status220){
             logger.info("调用核心回查事件,平台日期：{},平台流水：{}",payDate,paySerno);
-            coreEventServiceImpl.registerCoreQry(payTransDtlInfoDO.getCoreReqDate(), payTransDtlInfoDO.getCoreReqSerno(),payTransDtlInfoDO.getPayDate(), payTransDtlInfoDO.getPaySerno(), TxEndNTCoreQryCallBackService.class);
+            coreEventServiceImpl.registerCoreQry(payTransDtlInfoDO.getCoreReqDate(), payTransDtlInfoDO.getCoreReqSerno(),payTransDtlInfoDO.getPayDate(), payTransDtlInfoDO.getPaySerno(), TxEndNTCoreQryCallBack.class);
         }
 
         //上核心失败，终态推定失败，拉起告警
@@ -333,7 +338,7 @@ public class TxEndNtfcntHandleServiceImpl {
         //终态推定成功，未上核心或上核心失败，进行补入账
         if(status201 || status291 || status001 || status091){
             logger.info("登记事件进行补入账,平台日期：{},平台流水：{}",payDate,paySerno);
-            coreEventServiceImpl.registerReCredit(payTransDtlInfoDO.getPayDate(), payTransDtlInfoDO.getPaySerno(), ReCreditCallBackServiceImpl.class);
+            coreEventServiceImpl.registerReCredit(payTransDtlInfoDO.getPayDate(), payTransDtlInfoDO.getPaySerno(), ReCreditCallBack.class);
         }
 
         logger.info("调用兑回推断处理结束,平台日期：{},平台流水：{}",payDate,paySerno);
@@ -397,7 +402,7 @@ public class TxEndNtfcntHandleServiceImpl {
             logger.error("原兑出交易失败，不处理");
         } else {
             // 核心成功或者异常,登记异常事件冲正（异常事件冲正会先回查，所以核心异常可以直接登记冲正事件）
-            coreEventServiceImpl.registerBankRev(payTransDtlInfoDO.getPayDate(), payTransDtlInfoDO.getPaySerno(), ConvertBankRevCallBackServiceImpl.class);
+            coreEventServiceImpl.registerBankRev(payTransDtlInfoDO.getPayDate(), payTransDtlInfoDO.getPaySerno(), ConvertBankRevCallBack.class);
         }
     }
 
@@ -440,7 +445,7 @@ public class TxEndNtfcntHandleServiceImpl {
                 throw new EcnyTransException(EcnyTransError.DATABASE_ERROR);
             }
             // 登记冲正事件
-            coreEventServiceImpl.registerBankRev(payTransDtlInfoDO.getPayDate(), payTransDtlInfoDO.getPaySerno(), ConvertBankRevCallBackServiceImpl.class);
+            coreEventServiceImpl.registerBankRev(payTransDtlInfoDO.getPayDate(), payTransDtlInfoDO.getPaySerno(), ConvertBankRevCallBack.class);
         } else {
             // 推定成功
             payTransDtlInfoDO.setTrxStatus(AppConstant.TRXSTATUS_SUCCESS);
@@ -595,7 +600,7 @@ public class TxEndNtfcntHandleServiceImpl {
                 if(StringUtils.equals(e.getErrorCode(),EcnyTransError.OTHER_TECH_ERROR.getErrorCode())){
                     //捕获异常发送核心回调事件
                     AccFlowDO accFlowDO = bankCoreAccTxnServiceImpl.selectByPayInfo(payTransDtlInfoDONEW.getPayDate(), payTransDtlInfoDONEW.getPaySerno());
-                    coreEventServiceImpl.registerCoreQry(accFlowDO.getCoreReqDate(),accFlowDO.getCoreReqSerno(),accFlowDO.getPayDate(),accFlowDO.getPaySerno(), BankCoreQryCallBackServiceImpl.class);
+                    coreEventServiceImpl.registerCoreQry(accFlowDO.getCoreReqDate(),accFlowDO.getCoreReqSerno(),accFlowDO.getPayDate(),accFlowDO.getPaySerno(), BankCoreQryCallBack.class);
                 }
             }
         }else{
@@ -621,7 +626,7 @@ public class TxEndNtfcntHandleServiceImpl {
             //有记录(221)发送核心回查事件  
             if(isStatus221){
                 AccFlowDO accFlowDO = bankCoreAccTxnServiceImpl.selectByPayInfo(payTransDtlInfoDO.getPayDate(), payTransDtlInfoDO.getPaySerno());
-                coreEventServiceImpl.registerCoreQry(accFlowDO.getCoreReqDate(),accFlowDO.getCoreReqSerno(),accFlowDO.getPayDate(),accFlowDO.getPaySerno(), BankCoreQryCallBackServiceImpl.class);
+                coreEventServiceImpl.registerCoreQry(accFlowDO.getCoreReqDate(),accFlowDO.getCoreReqSerno(),accFlowDO.getPayDate(),accFlowDO.getPaySerno(), BankCoreQryCallBack.class);
             }
 
             //有记录（001或291）更新金融登记簿状态为221
@@ -649,7 +654,7 @@ public class TxEndNtfcntHandleServiceImpl {
                     if(StringUtils.equals(e.getErrorCode(),EcnyTransError.OTHER_TECH_ERROR.getErrorCode())){
                         logger.info("注册核心回查事件查询核心状态");
                         AccFlowDO accFlowDO = bankCoreAccTxnServiceImpl.selectByPayInfo(payTransDtlInfoDO.getPayDate(), payTransDtlInfoDO.getPaySerno());
-                        coreEventServiceImpl.registerCoreQry(accFlowDO.getCoreReqDate(),accFlowDO.getCoreReqSerno(),accFlowDO.getPayDate(),accFlowDO.getPaySerno(), BankCoreQryCallBackServiceImpl.class);
+                        coreEventServiceImpl.registerCoreQry(accFlowDO.getCoreReqDate(),accFlowDO.getCoreReqSerno(),accFlowDO.getPayDate(),accFlowDO.getPaySerno(), BankCoreQryCallBack.class);
                     }
                 }
             }
@@ -691,7 +696,7 @@ public class TxEndNtfcntHandleServiceImpl {
             //220（注册核心回调事件）
             if(isStatus220){
                 AccFlowDO accFlowDO = bankCoreAccTxnServiceImpl.selectByPayInfo(payTransDtlInfoDO.getPayDate(), payTransDtlInfoDO.getPaySerno());
-                coreEventServiceImpl.registerCoreQry(accFlowDO.getCoreReqDate(),accFlowDO.getCoreReqSerno(),accFlowDO.getPayDate(),accFlowDO.getPaySerno(), BankCoreQryCallBackServiceImpl.class);
+                coreEventServiceImpl.registerCoreQry(accFlowDO.getCoreReqDate(),accFlowDO.getCoreReqSerno(),accFlowDO.getPayDate(),accFlowDO.getPaySerno(), BankCoreQryCallBack.class);
             }
             //业务状态失败存在记录290，更新为000
             if(isStatus290){
