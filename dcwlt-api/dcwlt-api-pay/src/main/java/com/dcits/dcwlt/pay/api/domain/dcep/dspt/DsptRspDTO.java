@@ -20,7 +20,7 @@ public class DsptRspDTO extends DCEPRspBody {
         DsptRsp dsptRsp = new DsptRsp();
         dsptRsp.setGrpHdr(grpHdr);
         dsptRsp.setOrgnlGrpHdr(orgnlGrpHdr);
-        dsptRsp.setRspsnInf(rspsnInf);
+        dsptRsp.setRspsnInf(rspsnInf  );
         dsptRspDTO.setDsptRsp(dsptRsp);
         return dsptRspDTO;
     }
