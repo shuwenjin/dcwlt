@@ -1,17 +1,19 @@
-package com.dcits.dcwlt.pay.online.service.impl;
+package com.dcits.dcwlt.pay.online.event.service;
 
 import com.alibaba.csp.sentinel.util.StringUtil;
 import com.alibaba.fastjson.JSONObject;
 import com.dcits.dcwlt.common.pay.channel.bankcore.dto.BankCore996666.BankCore996666Rsp;
-import com.dcits.dcwlt.common.pay.channel.event.msg.EventDealRspMsg;
+import com.dcits.dcwlt.pay.api.domain.dcep.eventBatch.EventDealRspMsg;
 import com.dcits.dcwlt.common.pay.constant.Constant;
 import com.dcits.dcwlt.common.pay.constant.EventConst;
 import com.dcits.dcwlt.common.pay.exception.PlatformError;
 import com.dcits.dcwlt.pay.api.domain.dcep.eventBatch.EventDealReqMsg;
 import com.dcits.dcwlt.pay.api.model.PayTransDtlInfoDO;
 import com.dcits.dcwlt.pay.online.service.IEventService;
-import com.dcits.dcwlt.pay.online.service.ICoreQryCallBackService;
+import com.dcits.dcwlt.pay.online.event.coreqry.ICoreQryCallBack;
 import com.dcits.dcwlt.pay.online.service.IPayTransDtlInfoService;
+import com.dcits.dcwlt.pay.online.service.impl.BankCoreAccTxnServiceImpl;
+import com.dcits.dcwlt.pay.online.service.impl.BankCoreImplDubboServiceImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,8 +27,8 @@ import org.springframework.stereotype.Service;
  * Description:
  */
 @Service
-public class CoreQryServiceImpl implements IEventService {
-    private static final Logger logger = LoggerFactory.getLogger(CoreQryServiceImpl.class);
+public class CoreQryService implements IEventService {
+    private static final Logger logger = LoggerFactory.getLogger(CoreQryService.class);
 
     @Autowired
     BankCoreImplDubboServiceImpl bankCoreImplDubboServiceImpl;
@@ -38,6 +40,7 @@ public class CoreQryServiceImpl implements IEventService {
     private IPayTransDtlInfoService payTransDtlInfoRepository;
 
     //@ParamLog
+    @Override
     public EventDealRspMsg runFlow(EventDealReqMsg eventDealReqMsg) {
         //1、获取异常事件配置
         String callBackClassName = JSONObject.parseObject(eventDealReqMsg.getExceptEventContext()).getString("callBackCanonicalName");
@@ -85,7 +88,7 @@ public class CoreQryServiceImpl implements IEventService {
             }
             //存在回调处理，调用应用的冲正回调
             String coreProcStatus = bankCoreAccTxnServiceImpl.getCoreStatusMap(bankCore996666Rsp.getTxnSts());;
-            ICoreQryCallBackService callBack = (ICoreQryCallBackService) Class.forName(callBackClassName).newInstance();
+            ICoreQryCallBack callBack = (ICoreQryCallBack) Class.forName(callBackClassName).newInstance();
             if (Constant.CORESTATUS_SUCCESS.equals(coreProcStatus)) {
                 eventDealRspMsg.setRespCode(Constant.CORESTATUS_SUCCESS);
                 return callBack.coreSucc(eventDealRspMsg, bankCore996666Rsp, eventParam);

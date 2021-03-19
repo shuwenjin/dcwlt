@@ -1,11 +1,11 @@
-package com.dcits.dcwlt.pay.online.service.impl;
+package com.dcits.dcwlt.pay.online.event.service;
 
 import com.alibaba.csp.sentinel.util.StringUtil;
 import com.alibaba.fastjson.JSONObject;
 import com.dcits.dcwlt.common.pay.channel.bankcore.dto.BankCore996666.BankCore996666Rsp;
 import com.dcits.dcwlt.common.pay.channel.bankcore.dto.BankCoreReqHeader;
 import com.dcits.dcwlt.common.pay.channel.bankcore.dto.bankcore998889.BankCore998889Rsp;
-import com.dcits.dcwlt.common.pay.channel.event.msg.EventDealRspMsg;
+import com.dcits.dcwlt.pay.api.domain.dcep.eventBatch.EventDealRspMsg;
 import com.dcits.dcwlt.common.pay.constant.AppConstant;
 import com.dcits.dcwlt.common.pay.constant.EventConst;
 import com.dcits.dcwlt.common.pay.exception.PlatformError;
@@ -20,8 +20,10 @@ import com.dcits.dcwlt.pay.online.base.Constant;
 import com.dcits.dcwlt.pay.online.exception.EcnyTransError;
 import com.dcits.dcwlt.pay.online.exception.EcnyTransException;
 import com.dcits.dcwlt.pay.online.service.IEventService;
-import com.dcits.dcwlt.pay.online.service.IBankRevCallBackService;
+import com.dcits.dcwlt.pay.online.event.coreqry.IBankRevCallBack;
 import com.dcits.dcwlt.pay.online.service.IPayTransDtlInfoService;
+import com.dcits.dcwlt.pay.online.service.impl.BankCoreAccTxnServiceImpl;
+import com.dcits.dcwlt.pay.online.service.impl.BankCoreImplDubboServiceImpl;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -36,9 +38,9 @@ import org.springframework.transaction.annotation.Transactional;
  * Description:
  */
 @Service
-public class BankRevServiceImpl implements IEventService {
+public class BankRevService implements IEventService {
 
-    private static final Logger logger = LoggerFactory.getLogger(BankRevServiceImpl.class);
+    private static final Logger logger = LoggerFactory.getLogger(BankRevService.class);
 
     @Autowired
     private BankCoreImplDubboServiceImpl bankCoreImplDubboServiceImpl;
@@ -48,7 +50,7 @@ public class BankRevServiceImpl implements IEventService {
 
 
     @Autowired
-    private CoreQryServiceImpl coreQryServiceImpl;
+    private CoreQryService coreQryServiceImpl;
 
     @Autowired
     private GenerateCodeServiceImpl generateCodeService;
@@ -59,6 +61,7 @@ public class BankRevServiceImpl implements IEventService {
     @Autowired
     private BankCoreDubboServiceImpl bankCoreDubboServiceImpl;
 
+    @Override
     public EventDealRspMsg runFlow(EventDealReqMsg eventDealReqMsg) {
         // 获取异常事件配置
         String callBackClassName = JSONObject.parseObject(eventDealReqMsg.getExceptEventContext()).getString("callBackCanonicalName");
@@ -276,7 +279,7 @@ public class BankRevServiceImpl implements IEventService {
             }
             //存在回调处理，调用应用的冲正回调
             String coreProcStatus = getCoreStatusMap(bankCore998889Rsp.getCoreStatus());
-            IBankRevCallBackService callBack = (IBankRevCallBackService) Class.forName(callBackClassName).newInstance();
+            IBankRevCallBack callBack = (IBankRevCallBack) Class.forName(callBackClassName).newInstance();
             if (Constant.CORESTATUS_SUCCESS.equals(coreProcStatus)) {
                 eventDealRspMsg.setRespCode(Constant.CORESTATUS_SUCCESS);
                 return callBack.bankRevSucc(eventDealRspMsg, bankCore998889Rsp, eventParam);

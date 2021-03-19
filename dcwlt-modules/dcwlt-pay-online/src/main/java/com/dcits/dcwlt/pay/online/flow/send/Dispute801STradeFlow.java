@@ -50,6 +50,7 @@ import com.dcits.dcwlt.pay.online.flow.builder.EcnyTradeFlowBuilder;
 import com.dcits.dcwlt.pay.online.service.IAuthInfoService;
 import com.dcits.dcwlt.pay.online.service.IPartyService;
 import com.dcits.dcwlt.pay.online.service.IPayTransDtlInfoService;
+import com.dcits.dcwlt.pay.online.service.ITxStsQryNetPartyService;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -92,8 +93,8 @@ public class Dispute801STradeFlow {
     @Autowired
     private DcepService dcepService;
 
-    //@Autowired
-    //private ITxStsQryNetPartyService txStsQryNetPartyService;
+    @Autowired
+    private ITxStsQryNetPartyService txStsQryNetPartyService;
 
     @Bean(name = DSPT_TRADE_FLOW)
     public TradeFlow dsptTradeFlow() {
@@ -372,7 +373,7 @@ public class Dispute801STradeFlow {
         } catch (Exception e) {
             logger.error("发送801到互联互通请求失败：{}-{}", e.getMessage(), e);
             // 发送互联互通交易状态查询
-            //txStsQryNetPartyService.registerTrxStsQry(payTransDtlInfoDO);
+            txStsQryNetPartyService.registerTrxStsQry(payTransDtlInfoDO);
             throw new EcnyTransException(AppConstant.TRXSTATUS_ABEND, EcnyTransError.PAY_TIME_ERROR);
         }
     }

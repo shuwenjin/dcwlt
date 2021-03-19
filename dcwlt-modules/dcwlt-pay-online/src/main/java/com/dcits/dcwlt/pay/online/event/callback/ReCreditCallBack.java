@@ -1,12 +1,13 @@
-package com.dcits.dcwlt.pay.online.service.impl;
+package com.dcits.dcwlt.pay.online.event.callback;
 
 import com.alibaba.fastjson.JSONObject;
 import com.dcits.dcwlt.common.pay.channel.bankcore.dto.bankcore351100.BankCore351100InnerRsp;
-import com.dcits.dcwlt.common.pay.channel.event.msg.EventDealRspMsg;
+import com.dcits.dcwlt.pay.api.domain.dcep.eventBatch.EventDealRspMsg;
 import com.dcits.dcwlt.common.pay.constant.AppConstant;
 import com.dcits.dcwlt.pay.api.model.PayTransDtlInfoDO;
 import com.dcits.dcwlt.pay.online.service.IPayTransDtlInfoService;
-import com.dcits.dcwlt.pay.online.service.IReCreditCallBackService;
+import com.dcits.dcwlt.pay.online.event.coreqry.IReCreditCallBack;
+import com.dcits.dcwlt.pay.online.service.impl.PayTransDtlInfoServiceImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,9 +15,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 /**
  * 调用补入账事件回调
  */
-public class ReCreditCallBackServiceImpl implements IReCreditCallBackService {
+public class ReCreditCallBack implements IReCreditCallBack {
 
-    private static final Logger logger = LoggerFactory.getLogger(ReCreditCallBackServiceImpl.class);
+    private static final Logger logger = LoggerFactory.getLogger(ReCreditCallBack.class);
 
     @Autowired
     private PayTransDtlInfoServiceImpl payTransDtlInfoRepository;

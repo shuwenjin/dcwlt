@@ -1,9 +1,9 @@
-package com.dcits.dcwlt.pay.online.service.impl;
+package com.dcits.dcwlt.pay.online.event.service;
 
 import com.alibaba.fastjson.JSONObject;
 import com.dcits.dcwlt.common.pay.channel.bankcore.dto.bankcore351100.BankCore351100InnerReq;
 import com.dcits.dcwlt.common.pay.channel.bankcore.dto.bankcore351100.BankCore351100InnerRsp;
-import com.dcits.dcwlt.common.pay.channel.event.msg.EventDealRspMsg;
+import com.dcits.dcwlt.pay.api.domain.dcep.eventBatch.EventDealRspMsg;
 import com.dcits.dcwlt.common.pay.constant.AppConstant;
 import com.dcits.dcwlt.common.pay.constant.Constant;
 import com.dcits.dcwlt.common.pay.constant.EventConst;
@@ -17,7 +17,10 @@ import com.dcits.dcwlt.pay.online.exception.EcnyTransException;
 import com.dcits.dcwlt.pay.online.service.ICoreProcessService;
 import com.dcits.dcwlt.pay.online.service.IEventService;
 import com.dcits.dcwlt.pay.online.service.IPayTransDtlInfoService;
-import com.dcits.dcwlt.pay.online.service.IReCreditCallBackService;
+import com.dcits.dcwlt.pay.online.event.coreqry.IReCreditCallBack;
+import com.dcits.dcwlt.pay.online.service.impl.BankCoreAccTxnServiceImpl;
+import com.dcits.dcwlt.pay.online.service.impl.CoreEventServiceImpl;
+import com.dcits.dcwlt.pay.online.event.callback.ReCreditCoreQryCallBack;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -29,9 +32,9 @@ import org.springframework.stereotype.Service;
  * 状态为001,201,291可进行补入账
  */
 @Service
-public class ReCreditServiceImpl implements IEventService {
+public class ReCreditService implements IEventService {
 
-    private static final Logger logger = LoggerFactory.getLogger(ReCreditServiceImpl.class);
+    private static final Logger logger = LoggerFactory.getLogger(ReCreditService.class);
 
     @Autowired
     private IPayTransDtlInfoService payTransDtlInfoRepository;
@@ -49,7 +52,7 @@ public class ReCreditServiceImpl implements IEventService {
     private GenerateCodeServiceImpl generateCodeService;
 
 
-    //@Override
+    @Override
     //@ParamLog
     public EventDealRspMsg runFlow(EventDealReqMsg eventDealReqMsg) {
         //1、初始化返回信息
@@ -244,7 +247,7 @@ public class ReCreditServiceImpl implements IEventService {
                 break;
             default:
                 logger.info("上核心入账异常，回查核心");
-                coreEventServiceImpl.registerCoreQry(bankCore351100InnerRsp.getCoreReqDate(), bankCore351100InnerRsp.getCoreReqSerno(), payTransDtlInfoDO.getPayDate(), payTransDtlInfoDO.getPaySerno(), ReCreditCoreQryCallBackServiceImpl.class);
+                coreEventServiceImpl.registerCoreQry(bankCore351100InnerRsp.getCoreReqDate(), bankCore351100InnerRsp.getCoreReqSerno(), payTransDtlInfoDO.getPayDate(), payTransDtlInfoDO.getPaySerno(), ReCreditCoreQryCallBack.class);
                 break;
         }
 
@@ -270,7 +273,7 @@ public class ReCreditServiceImpl implements IEventService {
             }
             //存在回调,调用对应回调方法
             String coreProcStatus = bankCore351100InnerRsp.getCoreStatus();
-            IReCreditCallBackService callBack = (IReCreditCallBackService) Class.forName(callBackClassName).newInstance();
+            IReCreditCallBack callBack = (IReCreditCallBack) Class.forName(callBackClassName).newInstance();
 
             if (Constant.CORESTATUS_SUCCESS.equals(coreProcStatus)) {
                 logger.info("补登成功");

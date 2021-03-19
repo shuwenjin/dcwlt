@@ -1,14 +1,16 @@
-package com.dcits.dcwlt.pay.online.service.impl;
+package com.dcits.dcwlt.pay.online.event.callback;
 
 import com.alibaba.fastjson.JSONObject;
 import com.dcits.dcwlt.common.pay.channel.bankcore.dto.BankCore996666.BankCore996666Rsp;
-import com.dcits.dcwlt.common.pay.channel.event.msg.EventDealRspMsg;
+import com.dcits.dcwlt.pay.api.domain.dcep.eventBatch.EventDealRspMsg;
 import com.dcits.dcwlt.common.pay.constant.AppConstant;
 import com.dcits.dcwlt.common.pay.enums.ProcessStsCdEnum;
 import com.dcits.dcwlt.pay.api.model.PayNotifyDO;
 import com.dcits.dcwlt.pay.api.model.PayTransDtlInfoDO;
 import com.dcits.dcwlt.pay.api.model.StateMachine;
+import com.dcits.dcwlt.pay.online.event.coreqry.ICoreQryCallBack;
 import com.dcits.dcwlt.pay.online.service.*;
+import com.dcits.dcwlt.pay.online.service.impl.BankCoreAccTxnServiceImpl;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,7 +23,7 @@ import org.springframework.beans.factory.annotation.Autowired;
  * Description:终态通知差错贷记调账核心回查回调
  */
 
-public class BankCoreQryCallBackServiceImpl implements ICoreQryCallBackService {
+public class BankCoreQryCallBack implements ICoreQryCallBack {
 
     @Autowired
     private ICoreProcessService bankCoreProcessService;
@@ -35,7 +37,7 @@ public class BankCoreQryCallBackServiceImpl implements ICoreQryCallBackService {
     @Autowired
     private IPayNotifyService payTxEndMsgRepository;
 
-    private static final Logger logger = LoggerFactory.getLogger(BankCoreQryCallBackServiceImpl.class);
+    private static final Logger logger = LoggerFactory.getLogger(BankCoreQryCallBack.class);
 
    // private static final ICoreProcessService bankCoreProcessService = RtpUtil.getInstance().getBean("bankCoreProcessService");
 

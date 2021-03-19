@@ -12,12 +12,6 @@
     <artifactId>dcwlt-common-mq</artifactId>
     <dependencies>
 
-        <!-- SpringBoot Boot rocketMQ -->
-        <dependency>
-            <groupId>org.apache.rocketmq</groupId>
-            <artifactId>rocketmq-spring-boot-starter</artifactId>
-        </dependency>
-
         <!-- RuoYi Common Core-->
         <dependency>
             <groupId>com.dcits</groupId>
@@ -27,6 +21,23 @@
             <groupId>org.springframework</groupId>
             <artifactId>spring-context</artifactId>
         </dependency>
+
+        <dependency>
+            <groupId>org.apache.rocketmq</groupId>
+            <artifactId>rocketmq-spring-boot-starter</artifactId>
+            <version>2.1.0</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.rocketmq</groupId>
+            <artifactId>rocketmq-client</artifactId>
+            <version>4.5.1</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.rocketmq</groupId>
+            <artifactId>rocketmq-common</artifactId>
+            <version>4.5.1</version>
+        </dependency>
+
 
     </dependencies>
 

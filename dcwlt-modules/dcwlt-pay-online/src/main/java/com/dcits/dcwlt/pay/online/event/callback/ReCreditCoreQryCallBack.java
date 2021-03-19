@@ -1,14 +1,15 @@
-package com.dcits.dcwlt.pay.online.service.impl;
+package com.dcits.dcwlt.pay.online.event.callback;
 
 import com.alibaba.fastjson.JSONObject;
 import com.dcits.dcwlt.common.pay.channel.bankcore.dto.BankCore996666.BankCore996666Rsp;
-import com.dcits.dcwlt.common.pay.channel.event.msg.EventDealRspMsg;
+import com.dcits.dcwlt.pay.api.domain.dcep.eventBatch.EventDealRspMsg;
 import com.dcits.dcwlt.common.pay.constant.AppConstant;
 import com.dcits.dcwlt.pay.api.model.PayTransDtlInfoDO;
 import com.dcits.dcwlt.pay.api.model.StateMachine;
 import com.dcits.dcwlt.pay.online.service.ICoreProcessService;
-import com.dcits.dcwlt.pay.online.service.ICoreQryCallBackService;
+import com.dcits.dcwlt.pay.online.event.coreqry.ICoreQryCallBack;
 import com.dcits.dcwlt.pay.online.service.IPayTransDtlInfoService;
+import com.dcits.dcwlt.pay.online.service.impl.TxEndNtfcntHandleServiceImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,7 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 /**
  * 补入账核心回查
  */
-public class ReCreditCoreQryCallBackServiceImpl implements ICoreQryCallBackService {
+public class ReCreditCoreQryCallBack implements ICoreQryCallBack {
 
     @Autowired
     private IPayTransDtlInfoService payTransDtlInfoRepository;
@@ -27,7 +28,7 @@ public class ReCreditCoreQryCallBackServiceImpl implements ICoreQryCallBackServi
     @Autowired
     private TxEndNtfcntHandleServiceImpl handleService;
 
-    private static final Logger logger = LoggerFactory.getLogger(ReCreditCoreQryCallBackServiceImpl.class);
+    private static final Logger logger = LoggerFactory.getLogger(ReCreditCoreQryCallBack.class);
 
     //private static final IPayTransDtlInfoRepository payTransDtlInfoRepository = RtpUtil.getInstance().getBean("payTransDtlInfoRepository");
 
