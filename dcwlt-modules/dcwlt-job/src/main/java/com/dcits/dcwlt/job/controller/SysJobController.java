@@ -198,8 +198,12 @@ public class SysJobController extends BaseController
             String str = e.getTargetException().getMessage();
             if (null != str) {
                 try {
+                    // 从异常信息中提取任务执行结果taskResult
                     return JSONObject.toJavaObject(JSONObject.parseObject(str), TaskResult.class);
-                } catch (Exception josnParseException) { }
+                } catch (Exception josnParseException) {
+                    // 从异常信息中提取任务执行结果失败, 将调用目标字符串中的日期格式串解析成日期字符串
+                    taskResult.setInvokeTarget(JobInvokeUtil.parseInvokeTarget(invokeTarget));
+                }
             }
             taskResult.setSuccess(false);
             taskResult.setMessage(str);

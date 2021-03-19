@@ -37,7 +37,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			<if test="jobId != null and jobId != ''">
 				AND job_id = #{jobId}
 			</if>
-			<if test="jobId == null and params.jobIds != null and params.jobIds != ''">
+			<if test="jobId == null and fid == null and fjobId == null and params.jobIds != null and params.jobIds != ''">
 				AND job_id in
 				<foreach collection="params.jobIds.split(',')" item="jobId" open="(" separator="," close=")">
 					#{jobId}
@@ -74,16 +74,17 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 				and date_format(fail_time,'%y%m%d %H%i%s') &lt;= date_format(#{params.endFailTime},'%y%m%d %H%i%s')
 			</if>
 		</where>
+		order by create_time desc
 	</select>
 	
 	<select id="selectJobLogAll" resultMap="SysJobLogResult">
 		<include refid="selectJobLogVo"/>
-		where job_type = '0'
+		where job_type = '0' order by create_time desc
 	</select>
 
 	<select id="selectRetryJobLogAll" resultMap="SysJobLogResult">
 		<include refid="selectJobLogVo"/>
-		where job_type = '1'
+		where job_type = '1' order by create_time desc
 	</select>
 	
 	<select id="selectJobLogById" parameterType="String" resultMap="SysJobLogResult">
@@ -107,7 +108,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	</delete>
 
 	<delete id="cleanRetryJobLog">
-		delete from sys_job_log where job_type = '0'
+		delete from sys_job_log where job_type = '1'
 	</delete>
  	
  	<insert id="insertJobLog" parameterType="SysJobLog">

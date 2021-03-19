@@ -142,9 +142,14 @@
         </template>
       </el-table-column>
       <el-table-column label="执行状态" align="center" prop="status" v-if="columns[7].visible" :formatter="statusFormat" width="80"/>
-      <el-table-column label="失败时间" align="center" prop="failTime" v-if="columns[8].visible" width="180">
+      <el-table-column label="失败时间" align="center" prop="failTime" v-if="columns[8].visible" >
         <template slot-scope="scope">
           <span>{{ parseTime(scope.row.failTime) }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column label="创建时间" align="center" prop="createTime" v-if="columns[9].visible" >
+        <template slot-scope="scope">
+          <span>{{ parseTime(scope.row.createTime) }}</span>
         </template>
       </el-table-column>
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
@@ -258,6 +263,7 @@ export default {
         { key: 6, label: `执行时间`, visible: true },
         { key: 7, label: `执行状态`, visible: true },
         { key: 8, label: `失败时间`, visible: true },
+        { key: 9, label: `创建时间`, visible: true },
       ],
     };
   },

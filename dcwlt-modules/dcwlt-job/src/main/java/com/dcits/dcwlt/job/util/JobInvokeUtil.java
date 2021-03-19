@@ -7,6 +7,7 @@ import java.util.List;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.dcits.dcwlt.common.core.utils.DateUtils;
 import com.dcits.dcwlt.common.core.utils.SpringUtils;
 import com.dcits.dcwlt.common.core.utils.StringUtils;
 import com.dcits.dcwlt.job.domain.SysJob;
@@ -165,6 +166,11 @@ public class JobInvokeUtil
             {
                 classs.add(new Object[] { StringUtils.replace(str, "'", ""), String.class });
             }
+            // String字符串类型，自定义日期格式 例如： ${yyyy-MM-dd}
+            else if (StringUtils.startsWith(str, "${") && StringUtils.endsWith(str, "}"))
+            {
+                classs.add(new Object[] { str, String.class });
+            }
             // boolean布尔类型，等于true或者false
             else if (StringUtils.equals(str, "true") || StringUtils.equalsIgnoreCase(str, "false"))
             {
@@ -223,5 +229,63 @@ public class JobInvokeUtil
             index++;
         }
         return classs;
+    }
+
+    /**
+     * 将参数列表中的日期格式串解析成日期字符串
+     * @param invokeTarget
+     * @return
+     */
+    public static String parseMethodParams(String invokeTarget)
+    {
+        String methodStr = StringUtils.substringBetween(invokeTarget, "(", ")");
+        if (StringUtils.isEmpty(methodStr))
+        {
+            return "";
+        }
+
+        // 解析 JSONObject 类型
+        if (StringUtils.startsWith(methodStr, "{") && StringUtils.endsWith(methodStr, "}")) {
+            return methodStr;
+        }
+        // 解析 JSONArray 类型
+        if (StringUtils.startsWith(methodStr, "[") && StringUtils.endsWith(methodStr, "]")) {
+            return methodStr;
+        }
+        String[] methodParams = methodStr.split(",");
+        List<String> methodParamsParsed = new LinkedList<>();
+        for (int i = 0; i < methodParams.length; i++)
+        {
+            String str = StringUtils.trimToEmpty(methodParams[i]);
+            // String字符串类型，以'开始，以'结束
+            if (StringUtils.startsWith(str, "'") && StringUtils.endsWith(str, "'"))
+            {
+                str = StringUtils.replace(str, "'", "");
+                methodParamsParsed.add(StringUtils.toTaskString(DateUtils.parseTaskDate(str)));
+            }
+            // String字符串类型，自定义日期格式 例如： ${yyyy-MM-dd}
+            else if (StringUtils.startsWith(str, "${") && StringUtils.endsWith(str, "}"))
+            {
+                methodParamsParsed.add(StringUtils.toTaskString(DateUtils.parseTaskDate(str)));
+            }
+            // 其他类型
+            else
+            {
+                methodParamsParsed.add(str);
+            }
+        }
+        return StringUtils.join(methodParamsParsed, ',');
+    }
+
+    /**
+     * 将调用目标字符串中的日期格式串解析成日期字符串
+     * @param invokeTarget
+     * @return
+     */
+    public static String parseInvokeTarget(String invokeTarget) {
+        String beanName = getBeanName(invokeTarget);
+        String methodName = getMethodName(invokeTarget);
+        String params = parseMethodParams(invokeTarget);
+        return beanName + "." + methodName + "(" + params + ")";
     }
 }

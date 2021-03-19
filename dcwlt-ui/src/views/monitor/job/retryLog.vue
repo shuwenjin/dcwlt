@@ -170,6 +170,11 @@
           <span>{{ parseTime(scope.row.startTime) }}</span>
         </template>
       </el-table-column>
+      <el-table-column label="创建时间" align="center" prop="createTime" v-if="columns[12].visible" >
+        <template slot-scope="scope">
+          <span>{{ parseTime(scope.row.createTime) }}</span>
+        </template>
+      </el-table-column>
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope">
           <el-button
@@ -280,6 +285,7 @@ export default {
         { key: 9, label: `执行状态`, visible: true },
         { key: 10, label: `返回值`, visible: true },
         { key: 11, label: `执行时间`, visible: true },
+        { key: 12, label: `创建时间`, visible: true },
       ],
     };
   },
@@ -355,7 +361,7 @@ export default {
     },
     /** 清空按钮操作 */
     handleClean() {
-      this.$confirm("是否确认清空所有调度日志数据项?", "警告", {
+      this.$confirm("是否确认清空所有重试调度日志数据项?", "警告", {
           confirmButtonText: "确定",
           cancelButtonText: "取消",
           type: "warning"

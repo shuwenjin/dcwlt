@@ -68,23 +68,24 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			<if test="invokeTarget != null and invokeTarget != ''">
 				AND invoke_target like concat('%', #{invokeTarget}, '%')
 			</if>
-			<if test="fid == null and params.fids != null and params.fids != ''">
+			<if test="jobId == null and fid == null and fjobId == null and params.fids != null and params.fids != ''">
 				AND fid in
 				<foreach collection="params.fids.split(',')" item="fid" open="(" separator="," close=")">
 					#{fid}
 				</foreach>
 			</if>
 		</where>
+		order by create_time desc
 	</select>
 	
 	<select id="selectJobAll" resultMap="SysJobResult">
 		<include refid="selectJobVo"/>
-		where job_type = '0'
+		where job_type = '0' order by create_time desc
 	</select>
 
 	<select id="selectRetryJobAll" resultMap="SysJobResult">
 		<include refid="selectJobVo"/>
-		where job_type = '1'
+		where job_type = '1' order by create_time desc
 	</select>
 	
 	<select id="selectJobById" parameterType="String" resultMap="SysJobResult">

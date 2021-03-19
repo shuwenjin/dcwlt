@@ -176,10 +176,17 @@ public abstract class AbstractQuartzJob implements Job
                 if (e instanceof InvocationTargetException) {
                     String str = ((InvocationTargetException) e).getTargetException().getMessage();
                     if (null != str) {
-                        TaskResult taskResult = JSONObject.toJavaObject(JSONObject.parseObject(str), TaskResult.class);
-                        if (null != taskResult) {
-                            log.debug("TaskResult.getInvokeTarget: " + taskResult.getInvokeTarget());
-                            sysRetryJob.setInvokeTarget(taskResult.getInvokeTarget());
+                        try {
+                            // 从异常信息中提取任务执行结果taskResult
+                            TaskResult taskResult = JSONObject.toJavaObject(JSONObject.parseObject(str), TaskResult.class);
+                            if (null != taskResult) {
+                                log.debug("TaskResult.getInvokeTarget: " + taskResult.getInvokeTarget());
+                                sysRetryJob.setInvokeTarget(taskResult.getInvokeTarget());
+                            }
+                        } catch (Exception josnParseException) {
+                            // 从异常信息中提取任务执行结果失败, 将调用目标字符串中的日期格式串解析成日期字符串
+                            String invokeTarget = sysJob.getInvokeTarget();
+                            sysRetryJob.setInvokeTarget(JobInvokeUtil.parseInvokeTarget(invokeTarget));
                         }
                     }
                 }

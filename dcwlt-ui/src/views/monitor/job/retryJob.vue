@@ -160,6 +160,11 @@
       <el-table-column label="重试成功状态" align="center" v-if="columns[9].visible" :formatter="retryJobStatusFormat"/>
       <el-table-column label="重试次数" align="center" prop="retryNum" v-if="columns[10].visible" />
       <el-table-column label="重试最大次数" align="center" prop="retryMaxNum" v-if="columns[11].visible" />
+      <el-table-column label="创建时间" align="center" prop="createTime" v-if="columns[12].visible" >
+        <template slot-scope="scope">
+          <span>{{ parseTime(scope.row.createTime) }}</span>
+        </template>
+      </el-table-column>
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope">
           <el-button
@@ -299,6 +304,7 @@ export default {
         { key: 9, label: `重试成功状态`, visible: true },
         { key: 10, label: `重试次数`, visible: true },
         { key: 11, label: `重试最大次数`, visible: true },
+        { key: 12, label: `创建时间`, visible: true },
       ],
       // 表单参数
       form: {},

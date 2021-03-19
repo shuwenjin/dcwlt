@@ -142,6 +142,11 @@
         </template>
       </el-table-column>
       <el-table-column label="重试最大次数" align="center" prop="retryMaxNum" v-if="columns[8].visible" />
+      <el-table-column label="创建时间" align="center" prop="createTime" v-if="columns[9].visible" >
+        <template slot-scope="scope">
+          <span>{{ parseTime(scope.row.createTime) }}</span>
+        </template>
+      </el-table-column>
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope">
           <el-button
@@ -424,6 +429,7 @@ export default {
         { key: 6, label: `失败重试cron`, visible: true },
         { key: 7, label: `失败重试状态`, visible: true },
         { key: 8, label: `重试最大次数`, visible: true },
+        { key: 9, label: `创建时间`, visible: true },
       ],
       // 表单参数
       form: {},
