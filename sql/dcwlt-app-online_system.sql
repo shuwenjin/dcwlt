@@ -168,12 +168,13 @@ insert into sys_menu values('107',  '通知公告',       '1',   '9',  'notice',
 insert into sys_menu values('108',  '日志管理',       '1',   '10', 'log',                                 '',                        1, 0, 'M', '0', '0', '',                        'log',           'admin', '2018-03-16 11-33-00', 'admin', '2018-03-16 11-33-00', '日志管理菜单');
 insert into sys_menu values('109',  '在线用户',       '2',   '1',  'online',                              'monitor/online/index',    1, 0, 'C', '0', '0', 'monitor:online:list',     'online',        'admin', '2018-03-16 11-33-00', 'admin', '2018-03-16 11-33-00', '在线用户菜单');
 insert into sys_menu values('110',  '定时任务',       '2',   '2',  'job',                                 'monitor/job/index',       1, 0, 'C', '0', '0', 'monitor:job:list',        'job',           'admin', '2018-03-16 11-33-00', 'admin', '2018-03-16 11-33-00', '定时任务菜单');
-insert into sys_menu values('111',  'Sentinel控制台', '2',   '3',  'http://localhost:8718',                '',                       1, 0, 'C', '0', '0', 'monitor:sentinel:list',   'sentinel',      'admin', '2018-03-16 11-33-00', 'admin', '2018-03-16 11-33-00', '流量控制菜单');
-insert into sys_menu values('112',  'Nacos控制台',    '2',   '4',  'http://localhost:8848/nacos',          '',                       1, 0, 'C', '0', '0', 'monitor:nacos:list',      'nacos',         'admin', '2018-03-16 11-33-00', 'admin', '2018-03-16 11-33-00', '服务治理菜单');
-insert into sys_menu values('113',  'Admin控制台',    '2',   '5',  'http://localhost:9100/login',          '',                       1, 0, 'C', '0', '0', 'monitor:server:list',     'server',        'admin', '2018-03-16 11-33-00', 'admin', '2018-03-16 11-33-00', '服务监控菜单');
-insert into sys_menu values('114',  '表单构建',       '3',   '1',  'build',                                'tool/build/index',       1, 0, 'C', '0', '0', 'tool:build:list',         'build',         'admin', '2018-03-16 11-33-00', 'admin', '2018-03-16 11-33-00', '表单构建菜单');
-insert into sys_menu values('115',  '代码生成',       '3',   '2',  'gen',                                  'tool/gen/index',         1, 0, 'C', '0', '0', 'tool:gen:list',           'code',          'admin', '2018-03-16 11-33-00', 'admin', '2018-03-16 11-33-00', '代码生成菜单');
-insert into sys_menu values('116',  '系统接口',       '3',   '3',  'http://localhost:8000/swagger-ui.html', '',                      1, 0, 'C', '0', '0', 'tool:swagger:list',       'swagger',       'admin', '2018-03-16 11-33-00', 'admin', '2018-03-16 11-33-00', '系统接口菜单');
+insert into sys_menu values('111',  '调度日志',       '2',   '2',  'jobLog',                              'monitor/job/log',         1, 0, 'C', '0', '0', 'monitor:job:list',        'log',           'admin', '2018-03-16 11-33-00', 'admin', '2018-03-16 11-33-00', '调度日志菜单');
+insert into sys_menu values('112',  'Sentinel控制台', '2',   '3',  'http://localhost:8718',                '',                       1, 0, 'C', '0', '0', 'monitor:sentinel:list',   'sentinel',      'admin', '2018-03-16 11-33-00', 'admin', '2018-03-16 11-33-00', '流量控制菜单');
+insert into sys_menu values('113',  'Nacos控制台',    '2',   '4',  'http://localhost:8848/nacos',          '',                       1, 0, 'C', '0', '0', 'monitor:nacos:list',      'nacos',         'admin', '2018-03-16 11-33-00', 'admin', '2018-03-16 11-33-00', '服务治理菜单');
+insert into sys_menu values('114',  'Admin控制台',    '2',   '5',  'http://localhost:9100/login',          '',                       1, 0, 'C', '0', '0', 'monitor:server:list',     'server',        'admin', '2018-03-16 11-33-00', 'admin', '2018-03-16 11-33-00', '服务监控菜单');
+insert into sys_menu values('115',  '表单构建',       '3',   '1',  'build',                                'tool/build/index',       1, 0, 'C', '0', '0', 'tool:build:list',         'build',         'admin', '2018-03-16 11-33-00', 'admin', '2018-03-16 11-33-00', '表单构建菜单');
+insert into sys_menu values('116',  '代码生成',       '3',   '2',  'gen',                                  'tool/gen/index',         1, 0, 'C', '0', '0', 'tool:gen:list',           'code',          'admin', '2018-03-16 11-33-00', 'admin', '2018-03-16 11-33-00', '代码生成菜单');
+insert into sys_menu values('117',  '系统接口',       '3',   '3',  'http://localhost:8000/swagger-ui.html', '',                      1, 0, 'C', '0', '0', 'tool:swagger:list',       'swagger',       'admin', '2018-03-16 11-33-00', 'admin', '2018-03-16 11-33-00', '系统接口菜单');
 insert into sys_menu values('2006', '机构管理',    '2012',   '1',  'party'                              , 'system/party/index'     , 1, 0, 'C', '0', '0', 'system:party:list',       'party',         'admin', '2018-03-01 00-00-00', 'admin', '2021-02-26 17:55:04', '机构菜单');
 
 -- 三级菜单
@@ -310,6 +311,7 @@ insert into sys_role_menu values ('2', '113');
 insert into sys_role_menu values ('2', '114');
 insert into sys_role_menu values ('2', '115');
 insert into sys_role_menu values ('2', '116');
+insert into sys_role_menu values ('2', '117');
 insert into sys_role_menu values ('2', '500');
 insert into sys_role_menu values ('2', '501');
 insert into sys_role_menu values ('2', '1000');
@@ -443,91 +445,97 @@ create table sys_oper_log (
 -- ----------------------------
 -- 11、字典类型表
 -- ----------------------------
-drop table if exists sys_dict_type;
-create table sys_dict_type
-(
-  dict_id          bigint(20)      not null auto_increment    comment '字典主键',
-  dict_name        varchar(100)    default ''                 comment '字典名称',
-  dict_type        varchar(100)    default ''                 comment '字典类型',
-  status           char(1)         default '0'                comment '状态（0正常 1停用）',
-  create_by        varchar(64)     default ''                 comment '创建者',
-  create_time      datetime                                   comment '创建时间',
-  update_by        varchar(64)     default ''                 comment '更新者',
-  update_time      datetime                                   comment '更新时间',
-  remark           varchar(500)    default null               comment '备注',
-  primary key (dict_id),
-  unique (dict_type)
-) engine=innodb auto_increment=100 comment = '字典类型表';
+DROP TABLE IF EXISTS `sys_dict_type`;
+CREATE TABLE `sys_dict_type`  (
+  `dict_id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '字典主键',
+  `dict_name` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT '' COMMENT '字典名称',
+  `dict_type` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT '' COMMENT '字典类型',
+  `status` char(1) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT '0' COMMENT '状态（0正常 1停用）',
+  `create_by` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT '' COMMENT '创建者',
+  `create_time` datetime(0) NULL DEFAULT NULL COMMENT '创建时间',
+  `update_by` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT '' COMMENT '更新者',
+  `update_time` datetime(0) NULL DEFAULT NULL COMMENT '更新时间',
+  `remark` varchar(500) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '备注',
+  PRIMARY KEY (`dict_id`) USING BTREE,
+  UNIQUE INDEX `dict_type`(`dict_type`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 13 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '字典类型表' ROW_FORMAT = Dynamic;
 
-insert into sys_dict_type values(1,  '用户性别', 'sys_user_sex',        '0', 'admin', '2018-03-16 11-33-00', 'admin', '2018-03-16 11-33-00', '用户性别列表');
-insert into sys_dict_type values(2,  '菜单状态', 'sys_show_hide',       '0', 'admin', '2018-03-16 11-33-00', 'admin', '2018-03-16 11-33-00', '菜单状态列表');
-insert into sys_dict_type values(3,  '系统开关', 'sys_normal_disable',  '0', 'admin', '2018-03-16 11-33-00', 'admin', '2018-03-16 11-33-00', '系统开关列表');
-insert into sys_dict_type values(4,  '任务状态', 'sys_job_status',      '0', 'admin', '2018-03-16 11-33-00', 'admin', '2018-03-16 11-33-00', '任务状态列表');
-insert into sys_dict_type values(5,  '任务分组', 'sys_job_group',       '0', 'admin', '2018-03-16 11-33-00', 'admin', '2018-03-16 11-33-00', '任务分组列表');
-insert into sys_dict_type values(6,  '系统是否', 'sys_yes_no',          '0', 'admin', '2018-03-16 11-33-00', 'admin', '2018-03-16 11-33-00', '系统是否列表');
-insert into sys_dict_type values(7,  '通知类型', 'sys_notice_type',     '0', 'admin', '2018-03-16 11-33-00', 'admin', '2018-03-16 11-33-00', '通知类型列表');
-insert into sys_dict_type values(8,  '通知状态', 'sys_notice_status',   '0', 'admin', '2018-03-16 11-33-00', 'admin', '2018-03-16 11-33-00', '通知状态列表');
-insert into sys_dict_type values(9,  '操作类型', 'sys_oper_type',       '0', 'admin', '2018-03-16 11-33-00', 'admin', '2018-03-16 11-33-00', '操作类型列表');
-insert into sys_dict_type values(10, '系统状态', 'sys_common_status',   '0', 'admin', '2018-03-16 11-33-00', 'admin', '2018-03-16 11-33-00', '登录状态列表');
-insert into sys_dict_type values(11, '授权类型', 'sys_grant_type',      '0', 'admin', '2018-03-16 11-33-00', 'admin', '2018-03-16 11-33-00', '授权类型列表');
-
+-- ----------------------------
+-- Records of sys_dict_type
+-- ----------------------------
+INSERT INTO `sys_dict_type` VALUES (1, '用户性别', 'sys_user_sex', '0', 'admin', '2018-03-16 11:33:00', 'admin', '2018-03-16 11:33:00', '用户性别列表');
+INSERT INTO `sys_dict_type` VALUES (2, '菜单状态', 'sys_show_hide', '0', 'admin', '2018-03-16 11:33:00', 'admin', '2018-03-16 11:33:00', '菜单状态列表');
+INSERT INTO `sys_dict_type` VALUES (3, '系统开关', 'sys_normal_disable', '0', 'admin', '2018-03-16 11:33:00', 'admin', '2018-03-16 11:33:00', '系统开关列表');
+INSERT INTO `sys_dict_type` VALUES (4, '任务状态', 'sys_job_status', '0', 'admin', '2018-03-16 11:33:00', 'admin', '2018-03-16 11:33:00', '任务状态列表');
+INSERT INTO `sys_dict_type` VALUES (5, '任务分组', 'sys_job_group', '0', 'admin', '2018-03-16 11:33:00', 'admin', '2018-03-16 11:33:00', '任务分组列表');
+INSERT INTO `sys_dict_type` VALUES (6, '系统是否', 'sys_yes_no', '0', 'admin', '2018-03-16 11:33:00', 'admin', '2018-03-16 11:33:00', '系统是否列表');
+INSERT INTO `sys_dict_type` VALUES (7, '通知类型', 'sys_notice_type', '0', 'admin', '2018-03-16 11:33:00', 'admin', '2018-03-16 11:33:00', '通知类型列表');
+INSERT INTO `sys_dict_type` VALUES (8, '通知状态', 'sys_notice_status', '0', 'admin', '2018-03-16 11:33:00', 'admin', '2018-03-16 11:33:00', '通知状态列表');
+INSERT INTO `sys_dict_type` VALUES (9, '操作类型', 'sys_oper_type', '0', 'admin', '2018-03-16 11:33:00', 'admin', '2018-03-16 11:33:00', '操作类型列表');
+INSERT INTO `sys_dict_type` VALUES (10, '系统状态', 'sys_common_status', '0', 'admin', '2018-03-16 11:33:00', 'admin', '2018-03-16 11:33:00', '登录状态列表');
+INSERT INTO `sys_dict_type` VALUES (11, '授权类型', 'sys_grant_type', '0', 'admin', '2018-03-16 11:33:00', 'admin', '2018-03-16 11:33:00', '授权类型列表');
+INSERT INTO `sys_dict_type` VALUES (12, '执行状态', 'sys_excute_status', '0', 'admin', '2021-03-11 19:47:47', '', NULL, '0成功 1失败');
 
 -- ----------------------------
 -- 12、字典数据表
 -- ----------------------------
-drop table if exists sys_dict_data;
-create table sys_dict_data
-(
-  dict_code        bigint(20)      not null auto_increment    comment '字典编码',
-  dict_sort        int(4)          default 0                  comment '字典排序',
-  dict_label       varchar(100)    default ''                 comment '字典标签',
-  dict_value       varchar(100)    default ''                 comment '字典键值',
-  dict_type        varchar(100)    default ''                 comment '字典类型',
-  css_class        varchar(100)    default null               comment '样式属性（其他样式扩展）',
-  list_class       varchar(100)    default null               comment '表格回显样式',
-  is_default       char(1)         default 'N'                comment '是否默认（Y是 N否）',
-  status           char(1)         default '0'                comment '状态（0正常 1停用）',
-  create_by        varchar(64)     default ''                 comment '创建者',
-  create_time      datetime                                   comment '创建时间',
-  update_by        varchar(64)     default ''                 comment '更新者',
-  update_time      datetime                                   comment '更新时间',
-  remark           varchar(500)    default null               comment '备注',
-  primary key (dict_code)
-) engine=innodb auto_increment=100 comment = '字典数据表';
+DROP TABLE IF EXISTS `sys_dict_data`;
+CREATE TABLE `sys_dict_data`  (
+  `dict_code` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '字典编码',
+  `dict_sort` int(4) NULL DEFAULT 0 COMMENT '字典排序',
+  `dict_label` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT '' COMMENT '字典标签',
+  `dict_value` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT '' COMMENT '字典键值',
+  `dict_type` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT '' COMMENT '字典类型',
+  `css_class` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '样式属性（其他样式扩展）',
+  `list_class` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '表格回显样式',
+  `is_default` char(1) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT 'N' COMMENT '是否默认（Y是 N否）',
+  `status` char(1) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT '0' COMMENT '状态（0正常 1停用）',
+  `create_by` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT '' COMMENT '创建者',
+  `create_time` datetime(0) NULL DEFAULT NULL COMMENT '创建时间',
+  `update_by` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT '' COMMENT '更新者',
+  `update_time` datetime(0) NULL DEFAULT NULL COMMENT '更新时间',
+  `remark` varchar(500) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '备注',
+  PRIMARY KEY (`dict_code`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 36 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '字典数据表' ROW_FORMAT = Dynamic;
 
-insert into sys_dict_data values(1,  1,  '男',       '0',       'sys_user_sex',        '',   '',        'Y', '0', 'admin', '2018-03-16 11-33-00', 'admin', '2018-03-16 11-33-00', '性别男');
-insert into sys_dict_data values(2,  2,  '女',       '1',       'sys_user_sex',        '',   '',        'N', '0', 'admin', '2018-03-16 11-33-00', 'admin', '2018-03-16 11-33-00', '性别女');
-insert into sys_dict_data values(3,  3,  '未知',     '2',       'sys_user_sex',        '',   '',        'N', '0', 'admin', '2018-03-16 11-33-00', 'admin', '2018-03-16 11-33-00', '性别未知');
-insert into sys_dict_data values(4,  1,  '显示',     '0',       'sys_show_hide',       '',   'primary', 'Y', '0', 'admin', '2018-03-16 11-33-00', 'admin', '2018-03-16 11-33-00', '显示菜单');
-insert into sys_dict_data values(5,  2,  '隐藏',     '1',       'sys_show_hide',       '',   'danger',  'N', '0', 'admin', '2018-03-16 11-33-00', 'admin', '2018-03-16 11-33-00', '隐藏菜单');
-insert into sys_dict_data values(6,  1,  '正常',     '0',       'sys_normal_disable',  '',   'primary', 'Y', '0', 'admin', '2018-03-16 11-33-00', 'admin', '2018-03-16 11-33-00', '正常状态');
-insert into sys_dict_data values(7,  2,  '停用',     '1',       'sys_normal_disable',  '',   'danger',  'N', '0', 'admin', '2018-03-16 11-33-00', 'admin', '2018-03-16 11-33-00', '停用状态');
-insert into sys_dict_data values(8,  1,  '正常',     '0',       'sys_job_status',      '',   'primary', 'Y', '0', 'admin', '2018-03-16 11-33-00', 'admin', '2018-03-16 11-33-00', '正常状态');
-insert into sys_dict_data values(9,  2,  '暂停',     '1',       'sys_job_status',      '',   'danger',  'N', '0', 'admin', '2018-03-16 11-33-00', 'admin', '2018-03-16 11-33-00', '停用状态');
-insert into sys_dict_data values(10, 1,  '默认',     'DEFAULT', 'sys_job_group',       '',   '',        'Y', '0', 'admin', '2018-03-16 11-33-00', 'admin', '2018-03-16 11-33-00', '默认分组');
-insert into sys_dict_data values(11, 2,  '系统',     'SYSTEM',  'sys_job_group',       '',   '',        'N', '0', 'admin', '2018-03-16 11-33-00', 'admin', '2018-03-16 11-33-00', '系统分组');
-insert into sys_dict_data values(12, 1,  '是',       'Y',       'sys_yes_no',          '',   'primary', 'Y', '0', 'admin', '2018-03-16 11-33-00', 'admin', '2018-03-16 11-33-00', '系统默认是');
-insert into sys_dict_data values(13, 2,  '否',       'N',       'sys_yes_no',          '',   'danger',  'N', '0', 'admin', '2018-03-16 11-33-00', 'admin', '2018-03-16 11-33-00', '系统默认否');
-insert into sys_dict_data values(14, 1,  '通知',     '1',       'sys_notice_type',     '',   'warning', 'Y', '0', 'admin', '2018-03-16 11-33-00', 'admin', '2018-03-16 11-33-00', '通知');
-insert into sys_dict_data values(15, 2,  '公告',     '2',       'sys_notice_type',     '',   'success', 'N', '0', 'admin', '2018-03-16 11-33-00', 'admin', '2018-03-16 11-33-00', '公告');
-insert into sys_dict_data values(16, 1,  '正常',     '0',       'sys_notice_status',   '',   'primary', 'Y', '0', 'admin', '2018-03-16 11-33-00', 'admin', '2018-03-16 11-33-00', '正常状态');
-insert into sys_dict_data values(17, 2,  '关闭',     '1',       'sys_notice_status',   '',   'danger',  'N', '0', 'admin', '2018-03-16 11-33-00', 'admin', '2018-03-16 11-33-00', '关闭状态');
-insert into sys_dict_data values(18, 1,  '新增',     '1',       'sys_oper_type',       '',   'info',    'N', '0', 'admin', '2018-03-16 11-33-00', 'admin', '2018-03-16 11-33-00', '新增操作');
-insert into sys_dict_data values(19, 2,  '修改',     '2',       'sys_oper_type',       '',   'info',    'N', '0', 'admin', '2018-03-16 11-33-00', 'admin', '2018-03-16 11-33-00', '修改操作');
-insert into sys_dict_data values(20, 3,  '删除',     '3',       'sys_oper_type',       '',   'danger',  'N', '0', 'admin', '2018-03-16 11-33-00', 'admin', '2018-03-16 11-33-00', '删除操作');
-insert into sys_dict_data values(21, 4,  '授权',     '4',       'sys_oper_type',       '',   'primary', 'N', '0', 'admin', '2018-03-16 11-33-00', 'admin', '2018-03-16 11-33-00', '授权操作');
-insert into sys_dict_data values(22, 5,  '导出',     '5',       'sys_oper_type',       '',   'warning', 'N', '0', 'admin', '2018-03-16 11-33-00', 'admin', '2018-03-16 11-33-00', '导出操作');
-insert into sys_dict_data values(23, 6,  '导入',     '6',       'sys_oper_type',       '',   'warning', 'N', '0', 'admin', '2018-03-16 11-33-00', 'admin', '2018-03-16 11-33-00', '导入操作');
-insert into sys_dict_data values(24, 7,  '强退',     '7',       'sys_oper_type',       '',   'danger',  'N', '0', 'admin', '2018-03-16 11-33-00', 'admin', '2018-03-16 11-33-00', '强退操作');
-insert into sys_dict_data values(25, 8,  '生成代码', '8',       'sys_oper_type',       '',   'warning', 'N', '0', 'admin', '2018-03-16 11-33-00', 'admin', '2018-03-16 11-33-00', '生成操作');
-insert into sys_dict_data values(26, 9,  '清空数据', '9',       'sys_oper_type',       '',   'danger',  'N', '0', 'admin', '2018-03-16 11-33-00', 'admin', '2018-03-16 11-33-00', '清空操作');
-insert into sys_dict_data values(27, 1,  '成功',     '0',       'sys_common_status',   '',   'primary', 'N', '0', 'admin', '2018-03-16 11-33-00', 'admin', '2018-03-16 11-33-00', '正常状态');
-insert into sys_dict_data values(28, 2,  '失败',     '1',       'sys_common_status',   '',   'danger',  'N', '0', 'admin', '2018-03-16 11-33-00', 'admin', '2018-03-16 11-33-00', '停用状态');
-insert into sys_dict_data values(29, 1,  '授权码模式',  'authorization_code',  'sys_grant_type',   '',   '',  'N', '0', 'admin', '2018-03-16 11-33-00', 'admin', '2018-03-16 11-33-00', '授权码模式');
-insert into sys_dict_data values(30, 2,  '密码模式',    'password',            'sys_grant_type',   '',   '',  'N', '0', 'admin', '2018-03-16 11-33-00', 'admin', '2018-03-16 11-33-00', '密码模式');
-insert into sys_dict_data values(31, 3,  '客户端模式',  'client_credentials',  'sys_grant_type',   '',   '',  'N', '0', 'admin', '2018-03-16 11-33-00', 'admin', '2018-03-16 11-33-00', '客户端模式');
-insert into sys_dict_data values(32, 4,  '简化模式',    'implicit',            'sys_grant_type',   '',   '',  'N', '0', 'admin', '2018-03-16 11-33-00', 'admin', '2018-03-16 11-33-00', '简化模式');
-insert into sys_dict_data values(33, 5,  '刷新模式',    'refresh_token',       'sys_grant_type',   '',   '',  'N', '0', 'admin', '2018-03-16 11-33-00', 'admin', '2018-03-16 11-33-00', '刷新模式');
+-- ----------------------------
+-- Records of sys_dict_data
+-- ----------------------------
+INSERT INTO `sys_dict_data` VALUES (1, 1, '男', '0', 'sys_user_sex', '', '', 'Y', '0', 'admin', '2018-03-16 11:33:00', 'admin', '2018-03-16 11:33:00', '性别男');
+INSERT INTO `sys_dict_data` VALUES (2, 2, '女', '1', 'sys_user_sex', '', '', 'N', '0', 'admin', '2018-03-16 11:33:00', 'admin', '2018-03-16 11:33:00', '性别女');
+INSERT INTO `sys_dict_data` VALUES (3, 3, '未知', '2', 'sys_user_sex', '', '', 'N', '0', 'admin', '2018-03-16 11:33:00', 'admin', '2018-03-16 11:33:00', '性别未知');
+INSERT INTO `sys_dict_data` VALUES (4, 1, '显示', '0', 'sys_show_hide', '', 'primary', 'Y', '0', 'admin', '2018-03-16 11:33:00', 'admin', '2018-03-16 11:33:00', '显示菜单');
+INSERT INTO `sys_dict_data` VALUES (5, 2, '隐藏', '1', 'sys_show_hide', '', 'danger', 'N', '0', 'admin', '2018-03-16 11:33:00', 'admin', '2018-03-16 11:33:00', '隐藏菜单');
+INSERT INTO `sys_dict_data` VALUES (6, 1, '正常', '0', 'sys_normal_disable', '', 'primary', 'Y', '0', 'admin', '2018-03-16 11:33:00', 'admin', '2018-03-16 11:33:00', '正常状态');
+INSERT INTO `sys_dict_data` VALUES (7, 2, '停用', '1', 'sys_normal_disable', '', 'danger', 'N', '0', 'admin', '2018-03-16 11:33:00', 'admin', '2018-03-16 11:33:00', '停用状态');
+INSERT INTO `sys_dict_data` VALUES (8, 1, '正常', '0', 'sys_job_status', '', 'primary', 'Y', '0', 'admin', '2018-03-16 11:33:00', 'admin', '2018-03-16 11:33:00', '正常状态');
+INSERT INTO `sys_dict_data` VALUES (9, 2, '暂停', '1', 'sys_job_status', '', 'danger', 'N', '0', 'admin', '2018-03-16 11:33:00', 'admin', '2018-03-16 11:33:00', '停用状态');
+INSERT INTO `sys_dict_data` VALUES (10, 1, '默认', 'DEFAULT', 'sys_job_group', '', '', 'Y', '0', 'admin', '2018-03-16 11:33:00', 'admin', '2018-03-16 11:33:00', '默认分组');
+INSERT INTO `sys_dict_data` VALUES (11, 2, '系统', 'SYSTEM', 'sys_job_group', '', '', 'N', '0', 'admin', '2018-03-16 11:33:00', 'admin', '2018-03-16 11:33:00', '系统分组');
+INSERT INTO `sys_dict_data` VALUES (12, 1, '是', 'Y', 'sys_yes_no', '', 'primary', 'Y', '0', 'admin', '2018-03-16 11:33:00', 'admin', '2018-03-16 11:33:00', '系统默认是');
+INSERT INTO `sys_dict_data` VALUES (13, 2, '否', 'N', 'sys_yes_no', '', 'danger', 'N', '0', 'admin', '2018-03-16 11:33:00', 'admin', '2018-03-16 11:33:00', '系统默认否');
+INSERT INTO `sys_dict_data` VALUES (14, 1, '通知', '1', 'sys_notice_type', '', 'warning', 'Y', '0', 'admin', '2018-03-16 11:33:00', 'admin', '2018-03-16 11:33:00', '通知');
+INSERT INTO `sys_dict_data` VALUES (15, 2, '公告', '2', 'sys_notice_type', '', 'success', 'N', '0', 'admin', '2018-03-16 11:33:00', 'admin', '2018-03-16 11:33:00', '公告');
+INSERT INTO `sys_dict_data` VALUES (16, 1, '正常', '0', 'sys_notice_status', '', 'primary', 'Y', '0', 'admin', '2018-03-16 11:33:00', 'admin', '2018-03-16 11:33:00', '正常状态');
+INSERT INTO `sys_dict_data` VALUES (17, 2, '关闭', '1', 'sys_notice_status', '', 'danger', 'N', '0', 'admin', '2018-03-16 11:33:00', 'admin', '2018-03-16 11:33:00', '关闭状态');
+INSERT INTO `sys_dict_data` VALUES (18, 1, '新增', '1', 'sys_oper_type', '', 'info', 'N', '0', 'admin', '2018-03-16 11:33:00', 'admin', '2018-03-16 11:33:00', '新增操作');
+INSERT INTO `sys_dict_data` VALUES (19, 2, '修改', '2', 'sys_oper_type', '', 'info', 'N', '0', 'admin', '2018-03-16 11:33:00', 'admin', '2018-03-16 11:33:00', '修改操作');
+INSERT INTO `sys_dict_data` VALUES (20, 3, '删除', '3', 'sys_oper_type', '', 'danger', 'N', '0', 'admin', '2018-03-16 11:33:00', 'admin', '2018-03-16 11:33:00', '删除操作');
+INSERT INTO `sys_dict_data` VALUES (21, 4, '授权', '4', 'sys_oper_type', '', 'primary', 'N', '0', 'admin', '2018-03-16 11:33:00', 'admin', '2018-03-16 11:33:00', '授权操作');
+INSERT INTO `sys_dict_data` VALUES (22, 5, '导出', '5', 'sys_oper_type', '', 'warning', 'N', '0', 'admin', '2018-03-16 11:33:00', 'admin', '2018-03-16 11:33:00', '导出操作');
+INSERT INTO `sys_dict_data` VALUES (23, 6, '导入', '6', 'sys_oper_type', '', 'warning', 'N', '0', 'admin', '2018-03-16 11:33:00', 'admin', '2018-03-16 11:33:00', '导入操作');
+INSERT INTO `sys_dict_data` VALUES (24, 7, '强退', '7', 'sys_oper_type', '', 'danger', 'N', '0', 'admin', '2018-03-16 11:33:00', 'admin', '2018-03-16 11:33:00', '强退操作');
+INSERT INTO `sys_dict_data` VALUES (25, 8, '生成代码', '8', 'sys_oper_type', '', 'warning', 'N', '0', 'admin', '2018-03-16 11:33:00', 'admin', '2018-03-16 11:33:00', '生成操作');
+INSERT INTO `sys_dict_data` VALUES (26, 9, '清空数据', '9', 'sys_oper_type', '', 'danger', 'N', '0', 'admin', '2018-03-16 11:33:00', 'admin', '2018-03-16 11:33:00', '清空操作');
+INSERT INTO `sys_dict_data` VALUES (27, 1, '成功', '0', 'sys_common_status', '', 'primary', 'N', '0', 'admin', '2018-03-16 11:33:00', 'admin', '2018-03-16 11:33:00', '正常状态');
+INSERT INTO `sys_dict_data` VALUES (28, 2, '失败', '1', 'sys_common_status', '', 'danger', 'N', '0', 'admin', '2018-03-16 11:33:00', 'admin', '2018-03-16 11:33:00', '停用状态');
+INSERT INTO `sys_dict_data` VALUES (29, 1, '授权码模式', 'authorization_code', 'sys_grant_type', '', '', 'N', '0', 'admin', '2018-03-16 11:33:00', 'admin', '2018-03-16 11:33:00', '授权码模式');
+INSERT INTO `sys_dict_data` VALUES (30, 2, '密码模式', 'password', 'sys_grant_type', '', '', 'N', '0', 'admin', '2018-03-16 11:33:00', 'admin', '2018-03-16 11:33:00', '密码模式');
+INSERT INTO `sys_dict_data` VALUES (31, 3, '客户端模式', 'client_credentials', 'sys_grant_type', '', '', 'N', '0', 'admin', '2018-03-16 11:33:00', 'admin', '2018-03-16 11:33:00', '客户端模式');
+INSERT INTO `sys_dict_data` VALUES (32, 4, '简化模式', 'implicit', 'sys_grant_type', '', '', 'N', '0', 'admin', '2018-03-16 11:33:00', 'admin', '2018-03-16 11:33:00', '简化模式');
+INSERT INTO `sys_dict_data` VALUES (33, 5, '刷新模式', 'refresh_token', 'sys_grant_type', '', '', 'N', '0', 'admin', '2018-03-16 11:33:00', 'admin', '2018-03-16 11:33:00', '刷新模式');
+INSERT INTO `sys_dict_data` VALUES (34, 0, '成功', '0', 'sys_excute_status', NULL, NULL, 'N', '0', 'admin', '2021-03-11 19:48:24', '', NULL, NULL);
+INSERT INTO `sys_dict_data` VALUES (35, 0, '失败', '1', 'sys_excute_status', NULL, NULL, 'N', '0', 'admin', '2021-03-11 19:48:41', '', NULL, NULL);
 
 
 -- ----------------------------
@@ -571,45 +579,66 @@ create table sys_logininfor (
 -- ----------------------------
 -- 15、定时任务调度表
 -- ----------------------------
-drop table if exists sys_job;
-create table sys_job (
-  job_id              bigint(20)    not null auto_increment    comment '任务ID',
-  job_name            varchar(64)   default ''                 comment '任务名称',
-  job_group           varchar(64)   default 'DEFAULT'          comment '任务组名',
-  invoke_target       varchar(500)  not null                   comment '调用目标字符串',
-  cron_expression     varchar(255)  default ''                 comment 'cron执行表达式',
-  misfire_policy      varchar(20)   default '3'                comment '计划执行错误策略（1立即执行 2执行一次 3放弃执行）',
-  concurrent          char(1)       default '1'                comment '是否并发执行（0允许 1禁止）',
-  status              char(1)       default '0'                comment '状态（0正常 1暂停）',
-  create_by           varchar(64)   default ''                 comment '创建者',
-  create_time         datetime                                 comment '创建时间',
-  update_by           varchar(64)   default ''                 comment '更新者',
-  update_time         datetime                                 comment '更新时间',
-  remark              varchar(500)  default ''                 comment '备注信息',
-  primary key (job_id, job_name, job_group)
-) engine=innodb auto_increment=100 comment = '定时任务调度表';
+DROP TABLE IF EXISTS `sys_job`;
+CREATE TABLE `sys_job`  (
+    `job_id` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '任务ID',
+    `fid` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '父实例ID',
+    `fjob_id` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '父任务ID',
+    `job_type` char(1) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT '0' COMMENT '任务类型（0父任务 1子任务）',
+    `job_name` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '' COMMENT '任务名称',
+    `job_group` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT 'DEFAULT' COMMENT '任务组名',
+    `invoke_target` varchar(500) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '调用目标字符串',
+    `cron_expression` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT '' COMMENT 'cron执行表达式',
+    `misfire_policy` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT '3' COMMENT '计划执行错误策略（1立即执行 2执行一次 3放弃执行）',
+    `concurrent` char(1) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT '1' COMMENT '是否并发执行（0允许 1禁止）',
+    `status` char(1) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT '0' COMMENT '状态（0正常 1暂停）',
+    `retry_cron` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT '' COMMENT '失败重试cron',
+    `retry_status` char(1) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT '0' COMMENT '失败重试状态（0正常 1暂停）',
+    `fail_time` datetime(0) NULL DEFAULT NULL COMMENT '父任务失败时间',
+    `retry_job_status` char(1) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '重试是否成功（0成功 1失败）',
+    `retry_num` int(4) NULL DEFAULT NULL COMMENT '当前重试次数',
+    `retry_max_num` int(4) NULL DEFAULT 0 COMMENT '重试最大次数',
+    `create_by` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT '' COMMENT '创建者',
+    `create_time` datetime(0) NULL DEFAULT NULL COMMENT '创建时间',
+    `update_by` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT '' COMMENT '更新者',
+    `update_time` datetime(0) NULL DEFAULT NULL COMMENT '更新时间',
+    `remark` varchar(500) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT '' COMMENT '备注信息',
+    PRIMARY KEY (`job_id`, `job_name`, `job_group`) USING BTREE
+) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '定时任务调度表' ROW_FORMAT = Dynamic;
 
-insert into sys_job values(1, '系统默认（无参）', 'DEFAULT', 'ryTask.ryNoParams',        '0/10 * * * * ?', '3', '1', '1', 'admin', '2018-03-16 11-33-00', 'admin', '2018-03-16 11-33-00', '');
-insert into sys_job values(2, '系统默认（有参）', 'DEFAULT', 'ryTask.ryParams(\'ry\')',  '0/15 * * * * ?', '3', '1', '1', 'admin', '2018-03-16 11-33-00', 'admin', '2018-03-16 11-33-00', '');
-insert into sys_job values(3, '系统默认（多参）', 'DEFAULT', 'ryTask.ryMultipleParams(\'ry\', true, 2000L, 316.50D, 100)',  '0/20 * * * * ?', '3', '1', '1', 'admin', '2018-03-16 11-33-00', 'admin', '2018-03-16 11-33-00', '');
-
+-- ----------------------------
+-- Records of sys_job
+-- ----------------------------
+INSERT INTO `sys_job` VALUES ('2667a12e-864c-11eb-a040-9c5c8e383269', NULL, NULL, '0', '系统默认（多参）', 'DEFAULT', 'ryTask.ryMultipleParams(\'yyyy-MM-dd HH:mm:ss\', true, 2000L, 316.50D, 100)', '0/30 * * * * ?', '3', '1', '1', '0/2 * * * * ?', '0', NULL, NULL, NULL, 5, 'admin', '2018-03-16 11:33:00', 'admin', '2021-03-19 09:59:48', '');
+INSERT INTO `sys_job` VALUES ('26672c50-864c-11eb-a040-9c5c8e383269', NULL, NULL, '0', '系统默认（有参）', 'DEFAULT', 'ryTask.ryParams(\'yyyy-MM-dd\')', '0/30 * * * * ?', '3', '1', '1', '0/2 * * * * ?', '0', NULL, NULL, NULL, 5, 'admin', '2018-03-16 11:34:00', 'admin', '2021-03-19 09:59:53', '');
+INSERT INTO `sys_job` VALUES ('2666bd30-864c-11eb-a040-9c5c8e383269', NULL, NULL, '0', '系统默认（无参）', 'DEFAULT', 'ryTask.ryNoParams', '0/30 * * * * ?', '3', '1', '1', '0/2 * * * * ?', '0', NULL, NULL, NULL, 5, 'admin', '2018-03-16 11:35:00', 'admin', '2021-03-19 09:59:57', '');
+INSERT INTO `sys_job` VALUES ('14a3d5a8-e3fd-46e6-82ce-977005d60f12', NULL, NULL, '0', 'JSONArray参数调用示例', 'DEFAULT', 'ryTask.JSONArrayParams([{name: \"ruoyi\", age: 10}, {name: \"xiaoming\", age: 12}])', '0/30 * * * * ?', '3', '1', '1', '0/2 * * * * ?', '0', NULL, NULL, NULL, 5, 'admin', '2021-03-19 09:56:14', 'admin', '2021-03-19 16:04:58', '');
+INSERT INTO `sys_job` VALUES ('82773183-6c20-49cd-802b-93b37560a1b6', NULL, NULL, '0', 'JSONObject参数调用示例', 'DEFAULT', 'ryTask.JSONObjectParams({name: \"ruoyi\", age: 10})', '0/30 * * * * ?', '3', '1', '1', '0/2 * * * * ?', '0', NULL, NULL, NULL, 5, 'admin', '2021-03-19 09:58:05', 'admin', '2021-03-19 16:04:43', '');
+INSERT INTO `sys_job` VALUES ('49ef9c73-b619-471d-80e4-826a26904da6', NULL, NULL, '0', '支付批量服务报表', 'DEFAULT', 'dcwltPayBatchTask.statistics(\'yyyy-MM-dd\')', '0 0 1 * * ?', '3', '1', '1', '0 0/10 * * * ?', '0', NULL, NULL, NULL, 5, 'admin', '2021-03-19 16:04:08', 'admin', '2021-03-19 20:12:46', '');
 
 -- ----------------------------
 -- 16、定时任务调度日志表
 -- ----------------------------
-drop table if exists sys_job_log;
-create table sys_job_log (
-  job_log_id          bigint(20)     not null auto_increment    comment '任务日志ID',
-  job_name            varchar(64)    not null                   comment '任务名称',
-  job_group           varchar(64)    not null                   comment '任务组名',
-  invoke_target       varchar(500)   not null                   comment '调用目标字符串',
-  job_message         varchar(500)                              comment '日志信息',
-  status              char(1)        default '0'                comment '执行状态（0正常 1失败）',
-  exception_info      varchar(2000)  default ''                 comment '异常信息',
-  create_time         datetime                                  comment '创建时间',
-  primary key (job_log_id)
-) engine=innodb comment = '定时任务调度日志表';
-
+DROP TABLE IF EXISTS `sys_job_log`;
+CREATE TABLE `sys_job_log`  (
+    `job_log_id` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '任务日志ID',
+    `job_id` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '任务ID',
+    `fid` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '父实例ID',
+    `fjob_id` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '父任务ID',
+    `fail_time` datetime(0) NULL DEFAULT NULL COMMENT '父任务失败时间',
+    `job_type` char(1) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT '0' COMMENT '任务类型（0父任务 1子任务）',
+    `job_name` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '任务名称',
+    `job_group` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '任务组名',
+    `invoke_target` varchar(500) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '调用目标字符串',
+    `job_message` varchar(500) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '日志信息',
+    `status` char(1) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT '0' COMMENT '执行状态（0成功 1失败）',
+    `exception_info` varchar(2000) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT '' COMMENT '异常信息',
+    `start_time` datetime(0) NULL DEFAULT NULL COMMENT '开始时间',
+    `stop_time` datetime(0) NULL DEFAULT NULL COMMENT '停止时间',
+    `create_time` datetime(0) NULL DEFAULT NULL COMMENT '创建时间',
+    `excute_ret` text CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL COMMENT '执行返回值',
+    PRIMARY KEY (`job_log_id`) USING BTREE
+) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '定时任务调度日志表' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- 17、通知公告表

@@ -11,7 +11,7 @@ import com.dcits.dcwlt.job.domain.SysJobLog;
 public interface SysJobLogMapper
 {
     /**
-     * 获取quartz调度器日志的计划任务
+     * 调度任务日志查询
      * 
      * @param jobLog 调度日志信息
      * @return 调度任务日志集合
@@ -24,6 +24,13 @@ public interface SysJobLogMapper
      * @return 调度任务日志列表
      */
     public List<SysJobLog> selectJobLogAll();
+
+    /**
+     * 查询所有失败重试调度任务日志
+     *
+     * @return 调度任务日志列表
+     */
+    public List<SysJobLog> selectRetryJobLogAll();
 
     /**
      * 通过调度任务日志ID查询调度信息
@@ -55,10 +62,15 @@ public interface SysJobLogMapper
      * @param jobId 调度日志ID
      * @return 结果
      */
-    public int deleteJobLogById(Long jobId);
+    public int deleteJobLogById(String jobId);
 
     /**
-     * 清空任务日志
+     * 清空主任务日志
      */
     public void cleanJobLog();
+
+    /**
+     * 清空失败重试任务日志
+     */
+    public void cleanRetryJobLog();
 }

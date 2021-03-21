@@ -94,15 +94,27 @@ export const constantRoutes = [
     ]
   },
   {
-    path: '/job',
+    path: '/monitor',
     component: Layout,
     hidden: true,
     children: [
       {
-        path: 'log',
+        path: 'jobLog',
         component: (resolve) => require(['@/views/monitor/job/log'], resolve),
         name: 'JobLog',
         meta: { title: '调度日志' }
+      },
+      {
+        path: 'retryLog',
+        component: (resolve) => require(['@/views/monitor/job/retryLog'], resolve),
+        name: 'RetryLog',
+        meta: { title: '重试调度日志' }
+      },
+      {
+        path: 'retryJob',
+        component: (resolve) => require(['@/views/monitor/job/retryJob'], resolve),
+        name: 'RetryJob',
+        meta: { title: '重试定时任务' }
       }
     ]
   },

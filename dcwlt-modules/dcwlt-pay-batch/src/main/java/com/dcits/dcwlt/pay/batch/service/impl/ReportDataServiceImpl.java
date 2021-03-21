@@ -137,7 +137,6 @@ public class ReportDataServiceImpl implements IReportDataService {
 
         financeReportDO.setReportDate(reportDate);
         financeReportDOMapper.insertFinanceReportDO(financeReportDO);
-
     }
 
     // 非金融报表统计
@@ -183,5 +182,4 @@ public class ReportDataServiceImpl implements IReportDataService {
         nonfinanceReportDO.setReportDate(reportDate);
         nonfinanceReportDOMapper.insertNonfinanceReportDO(nonfinanceReportDO);
     }
-
 }

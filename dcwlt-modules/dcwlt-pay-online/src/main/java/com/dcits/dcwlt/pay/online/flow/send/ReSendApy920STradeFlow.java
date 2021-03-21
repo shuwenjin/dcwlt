@@ -18,6 +18,7 @@ import com.dcits.dcwlt.pay.api.domain.ecny.ECNYReqDTO;
 import com.dcits.dcwlt.pay.api.domain.ecny.ECNYRspDTO;
 import com.dcits.dcwlt.pay.api.domain.ecny.ECNYRspHead;
 import com.dcits.dcwlt.pay.api.model.PayTransDtlNonfDO;
+import com.dcits.dcwlt.pay.online.baffle.dcep.DcepService;
 import com.dcits.dcwlt.pay.online.exception.EcnyTransError;
 import com.dcits.dcwlt.pay.online.exception.EcnyTransException;
 import com.dcits.dcwlt.pay.online.flow.builder.EcnyTradeContext;
@@ -70,8 +71,8 @@ public class ReSendApy920STradeFlow {
 //    @Autowired
 //    private ECNYSerNoService ecnySerNoService;
 
-//    @Autowired
-//    private DcepSendService dcepSendService;
+    @Autowired
+    private DcepService dcepSendService;
 
 //    @Autowired
 //    private IPayTransDtlNonfRepository payTransDtlNonfRepository;
@@ -263,7 +264,7 @@ public class ReSendApy920STradeFlow {
         try {
             logger.info("请求报文:{}", dcepReqDTO);
 //            rspObj = dcepSendService.sendDcep(dcepReqDTO);
-            rspObj = new JSONObject();
+            rspObj = dcepSendService.receive920(dcepReqDTO);
         } catch (Exception e) {
             logger.error("发送重发申请到互联互通请求失败：{}-{}", e.getMessage(), e);
             throw new EcnyTransException(AppConstant.TRXSTATUS_FAILED, EcnyTransError.OTHER_TECH_ERROR);
@@ -280,7 +281,7 @@ public class ReSendApy920STradeFlow {
         JSONObject jsonObject = (JSONObject) EcnyTradeContext.getTempContext(tradeContext).get(DCEP_RSP_DTO);
         String prcSts = "";
         try {
-            prcSts = jsonObject.getJSONObject("body").getJSONObject("CmonConf").getJSONObject("CmonConfInf").getString("PrcSts");
+            prcSts = jsonObject.getJSONObject("body").getJSONObject("ComConf").getJSONObject("ConfInf").getString("PrcSts");
         } catch (Exception e) {
             logger.error("获取互联互通响应失败：{}，{}", EcnyTransError.GET_RSP_INFO_ERROR.getErrorCode(), EcnyTransError.GET_RSP_INFO_ERROR.getErrorMsg());
             throw new EcnyTransException(EcnyTransError.GET_RSP_INFO_ERROR);

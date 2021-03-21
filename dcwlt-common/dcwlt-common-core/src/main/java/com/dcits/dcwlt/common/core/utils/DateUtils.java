@@ -104,6 +104,47 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils
     }
 
     /**
+     * 日期路径 按照parsePatterns数组里格式进行格式化日期
+     */
+    public static final String dateTime(String pattern)
+    {
+        if (isVaildPattern(pattern)) {
+            Date now = new Date();
+            return DateFormatUtils.format(now, pattern);
+        } else {
+            return null;
+        }
+    }
+
+    /**
+     * 日期 按照pattern格式进行格式化日期
+     */
+    public static final String date(String pattern)
+    {
+        try {
+            Date now = new Date();
+            return DateFormatUtils.format(now, pattern);
+        } catch (Exception e){
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    /**
+     * 日期格式串正确性校验
+     * @param pattern
+     * @return
+     */
+    public static boolean isVaildPattern(String pattern) {
+        for (String str : parsePatterns) {
+            if (str.equals(pattern)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
      * 日期型字符串转化为日期 格式
      */
     public static Date parseDate(Object str)
@@ -151,5 +192,18 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils
         // 计算差多少秒//输出结果
         // long sec = diff % nd % nh % nm / ns;
         return day + "天" + hour + "小时" + min + "分钟";
+    }
+
+    public static String parseTaskDate(String s) {
+        String params = s;
+        // 常用日志格式
+        if(DateUtils.isVaildPattern(params)) {
+            params = DateUtils.dateTime(params);
+        } else if (StringUtils.startsWith(s, "${") && StringUtils.endsWith(s, "}")) {
+            // 使用${}表示自定义日期格式，例如：${yyyyMMdd}
+            params = StringUtils.substringBetween(s,"${", "}");
+            params = DateUtils.date(params);
+        }
+        return params;
     }
 }

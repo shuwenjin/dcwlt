@@ -3,6 +3,8 @@ package com.dcits.dcwlt.job.controller;
 import java.io.IOException;
 import java.util.List;
 import javax.servlet.http.HttpServletResponse;
+
+import com.dcits.dcwlt.common.core.constant.SysJobConstants;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -40,6 +42,20 @@ public class SysJobLogController extends BaseController
     public TableDataInfo list(SysJobLog sysJobLog)
     {
         startPage();
+        sysJobLog.setJobType(SysJobConstants.MAINJOB);
+        List<SysJobLog> list = jobLogService.selectJobLogList(sysJobLog);
+        return getDataTable(list);
+    }
+
+    /**
+     * 查询定时任务调度日志列表
+     */
+    @PreAuthorize(hasPermi = "monitor:job:list")
+    @GetMapping("/retryList")
+    public TableDataInfo retryList(SysJobLog sysJobLog)
+    {
+        startPage();
+        sysJobLog.setJobType(SysJobConstants.RETRYJOB);
         List<SysJobLog> list = jobLogService.selectJobLogList(sysJobLog);
         return getDataTable(list);
     }
@@ -52,6 +68,21 @@ public class SysJobLogController extends BaseController
     @PostMapping("/export")
     public void export(HttpServletResponse response, SysJobLog sysJobLog) throws IOException
     {
+        sysJobLog.setJobType(SysJobConstants.MAINJOB);
+        List<SysJobLog> list = jobLogService.selectJobLogList(sysJobLog);
+        ExcelUtil<SysJobLog> util = new ExcelUtil<SysJobLog>(SysJobLog.class);
+        util.exportExcel(response, list, "调度日志");
+    }
+
+    /**
+     * 导出失败重试定时任务调度日志列表
+     */
+    @PreAuthorize(hasPermi = "monitor:job:export")
+    @Log(title = "任务调度日志", businessType = BusinessType.EXPORT)
+    @PostMapping("/retryExport")
+    public void retryExport(HttpServletResponse response, SysJobLog sysJobLog) throws IOException
+    {
+        sysJobLog.setJobType(SysJobConstants.RETRYJOB);
         List<SysJobLog> list = jobLogService.selectJobLogList(sysJobLog);
         ExcelUtil<SysJobLog> util = new ExcelUtil<SysJobLog>(SysJobLog.class);
         util.exportExcel(response, list, "调度日志");
@@ -82,11 +113,23 @@ public class SysJobLogController extends BaseController
      * 清空定时任务调度日志
      */
     @PreAuthorize(hasPermi = "monitor:job:remove")
-    @Log(title = "调度日志", businessType = BusinessType.CLEAN)
+    @Log(title = "主任务调度日志", businessType = BusinessType.CLEAN)
     @DeleteMapping("/clean")
     public AjaxResult clean()
     {
         jobLogService.cleanJobLog();
+        return AjaxResult.success();
+    }
+
+    /**
+     * 清空失败重试定时任务调度日志
+     */
+    @PreAuthorize(hasPermi = "monitor:job:remove")
+    @Log(title = "失败重试任务调度日志", businessType = BusinessType.CLEAN)
+    @DeleteMapping("/cleanRetry")
+    public AjaxResult cleanRetry()
+    {
+        jobLogService.cleanRetryJobLog();
         return AjaxResult.success();
     }
 }

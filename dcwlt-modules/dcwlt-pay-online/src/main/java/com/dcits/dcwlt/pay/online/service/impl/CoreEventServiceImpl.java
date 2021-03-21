@@ -4,9 +4,9 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.serializer.SerializerFeature;
 import com.dcits.dcwlt.pay.api.domain.dcep.eventBatch.EventDealReqMsg;
 import com.dcits.dcwlt.pay.online.service.IEventRegisterAppService;
-import com.dcits.dcwlt.pay.online.service.IBankRevCallBackService;
-import com.dcits.dcwlt.pay.online.service.ICoreQryCallBackService;
-import com.dcits.dcwlt.pay.online.service.IReCreditCallBackService;
+import com.dcits.dcwlt.pay.online.event.coreqry.IBankRevCallBack;
+import com.dcits.dcwlt.pay.online.event.coreqry.ICoreQryCallBack;
+import com.dcits.dcwlt.pay.online.event.coreqry.IReCreditCallBack;
 import org.mybatis.logging.Logger;
 import org.mybatis.logging.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,7 +40,7 @@ public class CoreEventServiceImpl {
      * @param callBackClass
      * @param <T>
      */
-    public <T extends ICoreQryCallBackService> void registerCoreQry(String coreReqDate, String coreReqSerno, String payDate, String paySerno, Class<T> callBackClass) {
+    public <T extends ICoreQryCallBack> void registerCoreQry(String coreReqDate, String coreReqSerno, String payDate, String paySerno, Class<T> callBackClass) {
         Map<String, String> param = new HashMap<>();
         if (null != callBackClass) {
             param.put("callBackCanonicalName", callBackClass.getCanonicalName());
@@ -70,7 +70,7 @@ public class CoreEventServiceImpl {
      * @param callBackClass
      * @param <T>
      */
-    public <T extends IBankRevCallBackService> void registerBankRev(String payDate, String paySerno, Class<T> callBackClass) {
+    public <T extends IBankRevCallBack> void registerBankRev(String payDate, String paySerno, Class<T> callBackClass) {
         Map<String, String> param = new HashMap<>();
         if (null != callBackClass) {
             param.put("callBackCanonicalName", callBackClass.getCanonicalName());
@@ -99,7 +99,7 @@ public class CoreEventServiceImpl {
      * @param callBackClass
      * @param <T>
      */
-    public <T extends IReCreditCallBackService> void registerReCredit(String payDate, String paySerno, Class<T> callBackClass) {
+    public <T extends IReCreditCallBack> void registerReCredit(String payDate, String paySerno, Class<T> callBackClass) {
         Map<String, String> param = new HashMap<>();
         if (null != callBackClass) {
             param.put("callBackCanonicalName", callBackClass.getCanonicalName());
@@ -117,7 +117,7 @@ public class CoreEventServiceImpl {
         eventDealReqMsg.setExceptEventSeqNo(payDate+splitStr+paySerno);
         eventDealReqMsg.setExceptEventContext(paramStr);
 
-        eventRegisterAppService.registerEvent(eventDealReqMsg,EVENT);
+    //    eventRegisterAppService.registerEvent(eventDealReqMsg,EVENT);
 
     }
 

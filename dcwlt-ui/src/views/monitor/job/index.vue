@@ -1,17 +1,28 @@
 <template>
   <div class="app-container">
     <el-form :model="queryParams" ref="queryForm" :inline="true" v-show="showSearch" label-width="68px">
+      <el-form-item label="任务编号" prop="jobId">
+        <el-input
+          v-model.trim="queryParams.jobId"
+          placeholder="请输入任务编号"
+          clearable
+          size="small"
+          style="width: 240px"
+          @keyup.enter.native="handleQuery"
+        />
+      </el-form-item>
       <el-form-item label="任务名称" prop="jobName">
         <el-input
-          v-model="queryParams.jobName"
+          v-model.trim="queryParams.jobName"
           placeholder="请输入任务名称"
           clearable
           size="small"
+          style="width: 240px"
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
       <el-form-item label="任务组名" prop="jobGroup">
-        <el-select v-model="queryParams.jobGroup" placeholder="请选择任务组名" clearable size="small">
+        <el-select style="width: 240px" v-model="queryParams.jobGroup" placeholder="请选择任务组名" clearable size="small">
           <el-option
             v-for="dict in jobGroupOptions"
             :key="dict.dictValue"
@@ -21,7 +32,7 @@
         </el-select>
       </el-form-item>
       <el-form-item label="任务状态" prop="status">
-        <el-select v-model="queryParams.status" placeholder="请选择任务状态" clearable size="small">
+        <el-select style="width: 240px" v-model="queryParams.status" placeholder="请选择任务状态" clearable size="small">
           <el-option
             v-for="dict in statusOptions"
             :key="dict.dictValue"
@@ -89,17 +100,27 @@
           v-hasPermi="['monitor:job:query']"
         >日志</el-button>
       </el-col>
-      <right-toolbar :showSearch.sync="showSearch" @queryTable="getList"></right-toolbar>
+      <el-col :span="1.5">
+        <el-button
+          type="danger"
+          plain
+          icon="el-icon-caret-right"
+          size="mini"
+          @click="handleManualRun"
+          v-hasPermi="['monitor:job:changeStatus']"
+        >手动执行方法</el-button>
+      </el-col>
+      <right-toolbar :showSearch.sync="showSearch" @queryTable="getList" :columns="columns"></right-toolbar>
     </el-row>
 
     <el-table v-loading="loading" :data="jobList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
-      <el-table-column label="任务编号" align="center" prop="jobId" />
-      <el-table-column label="任务名称" align="center" prop="jobName" :show-overflow-tooltip="true" />
-      <el-table-column label="任务组名" align="center" prop="jobGroup" :formatter="jobGroupFormat" />
-      <el-table-column label="调用目标字符串" align="center" prop="invokeTarget" :show-overflow-tooltip="true" />
-      <el-table-column label="cron执行表达式" align="center" prop="cronExpression" :show-overflow-tooltip="true" />
-      <el-table-column label="状态" align="center">
+      <el-table-column label="任务编号" align="center" prop="jobId" v-if="columns[0].visible" />
+      <el-table-column label="任务名称" align="center" prop="jobName" v-if="columns[1].visible" :show-overflow-tooltip="true" />
+      <el-table-column label="任务组名" align="center" prop="jobGroup" v-if="columns[2].visible" :formatter="jobGroupFormat" />
+      <el-table-column label="调用目标字符串" align="center" prop="invokeTarget" v-if="columns[3].visible" :show-overflow-tooltip="true" />
+      <el-table-column label="cron执行表达式" align="center" prop="cronExpression" v-if="columns[4].visible" :show-overflow-tooltip="true" />
+      <el-table-column label="状态" v-if="columns[5].visible" align="center">
         <template slot-scope="scope">
           <el-switch
             v-model="scope.row.status"
@@ -107,6 +128,23 @@
             inactive-value="1"
             @change="handleStatusChange(scope.row)"
           ></el-switch>
+        </template>
+      </el-table-column>
+      <el-table-column label="失败重试cron" align="center" prop="retryCron" v-if="columns[6].visible" />
+      <el-table-column label="失败重试状态" align="center" v-if="columns[7].visible">
+        <template slot-scope="scope">
+          <el-switch
+            v-model="scope.row.retryStatus"
+            active-value="0"
+            inactive-value="1"
+            @change="handleRetryStatusChange(scope.row)"
+          ></el-switch>
+        </template>
+      </el-table-column>
+      <el-table-column label="重试最大次数" align="center" prop="retryMaxNum" v-if="columns[8].visible" />
+      <el-table-column label="创建时间" align="center" prop="createTime" v-if="columns[9].visible" >
+        <template slot-scope="scope">
+          <span>{{ parseTime(scope.row.createTime) }}</span>
         </template>
       </el-table-column>
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
@@ -143,7 +181,7 @@
         <el-row>
           <el-col :span="12">
             <el-form-item label="任务名称" prop="jobName">
-              <el-input v-model="form.jobName" placeholder="请输入任务名称" />
+              <el-input v-model.trim="form.jobName" placeholder="请输入任务名称" />
             </el-form-item>
           </el-col>
           <el-col :span="12">
@@ -171,12 +209,12 @@
                   <i class="el-icon-question"></i>
                 </el-tooltip>
               </span>
-              <el-input v-model="form.invokeTarget" placeholder="请输入调用目标字符串" />
+              <el-input v-model.trim="form.invokeTarget" placeholder="请输入调用目标字符串" />
             </el-form-item>
           </el-col>
           <el-col :span="12">
             <el-form-item label="cron表达式" prop="cronExpression">
-              <el-input v-model="form.cronExpression" placeholder="请输入cron执行表达式" />
+              <el-input v-model.trim="form.cronExpression" placeholder="请输入cron执行表达式" />
             </el-form-item>
           </el-col>
           <el-col :span="12">
@@ -196,7 +234,7 @@
               </el-radio-group>
             </el-form-item>
           </el-col>
-          <el-col :span="24">
+          <el-col :span="12">
             <el-form-item label="状态">
               <el-radio-group v-model="form.status">
                 <el-radio
@@ -206,10 +244,28 @@
                 >{{dict.dictLabel}}</el-radio>
               </el-radio-group>
             </el-form-item>
+            <el-form-item label="失败重试cron" prop="retryCron">
+              <el-input v-model.trim="form.retryCron" placeholder="请输入失败重试cron" />
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="失败重试状态">
+              <el-radio-group v-model="form.retryStatus">
+                <el-radio
+                  v-for="dict in retryStatusOptions"
+                  :key="dict.dictValue"
+                  :label="dict.dictValue"
+                >{{dict.dictLabel}}</el-radio>
+              </el-radio-group>
+            </el-form-item>
+            <el-form-item label="重试最大次数" prop="retryMaxNum">
+              <el-input-number v-model="form.retryMaxNum" controls-position="right" :min="1" :max="100" />
+            </el-form-item>
           </el-col>
         </el-row>
       </el-form>
       <div slot="footer" class="dialog-footer">
+        <el-link :style="{marginRight: '150px'}" type="primary" href="https://cron.qqe2.com" target="_blank">在线生成cron表达式</el-link>
         <el-button type="primary" @click="submitForm">确 定</el-button>
         <el-button @click="cancel">取 消</el-button>
       </div>
@@ -219,28 +275,26 @@
     <el-dialog title="任务详细" :visible.sync="openView" width="700px" append-to-body>
       <el-form ref="form" :model="form" label-width="120px" size="mini">
         <el-row>
-          <el-col :span="12">
+          <el-col :span="24">
             <el-form-item label="任务编号：">{{ form.jobId }}</el-form-item>
+          </el-col>
+          <el-col :span="12">
             <el-form-item label="任务名称：">{{ form.jobName }}</el-form-item>
           </el-col>
           <el-col :span="12">
             <el-form-item label="任务分组：">{{ jobGroupFormat(form) }}</el-form-item>
-            <el-form-item label="创建时间：">{{ form.createTime }}</el-form-item>
-          </el-col>
-          <el-col :span="12">
-            <el-form-item label="cron表达式：">{{ form.cronExpression }}</el-form-item>
-          </el-col>
-          <el-col :span="12">
-            <el-form-item label="下次执行时间：">{{ parseTime(form.nextValidTime) }}</el-form-item>
           </el-col>
           <el-col :span="24">
             <el-form-item label="调用目标方法：">{{ form.invokeTarget }}</el-form-item>
           </el-col>
           <el-col :span="12">
-            <el-form-item label="任务状态：">
-              <div v-if="form.status == 0">正常</div>
-              <div v-else-if="form.status == 1">失败</div>
-            </el-form-item>
+            <el-form-item label="创建时间：">{{ form.createTime }}</el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="下次执行时间：">{{ parseTime(form.nextValidTime) }}</el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="cron表达式：">{{ form.cronExpression }}</el-form-item>
           </el-col>
           <el-col :span="12">
             <el-form-item label="是否并发：">
@@ -248,7 +302,7 @@
               <div v-else-if="form.concurrent == 1">禁止</div>
             </el-form-item>
           </el-col>
-          <el-col :span="12">
+          <el-col :span="24">
             <el-form-item label="执行策略：">
               <div v-if="form.misfirePolicy == 0">默认策略</div>
               <div v-else-if="form.misfirePolicy == 1">立即执行</div>
@@ -256,17 +310,73 @@
               <div v-else-if="form.misfirePolicy == 3">放弃执行</div>
             </el-form-item>
           </el-col>
+          <el-col :span="12">
+            <el-form-item label="任务状态：">
+              <div v-if="form.status == 0">正常</div>
+              <div v-else-if="form.status == 1">暂停</div>
+            </el-form-item>
+            <el-form-item label="失败重试cron：">{{ form.retryCron }}</el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="失败重试状态：">
+              <div v-if="form.retryStatus == 0">正常</div>
+              <div v-else-if="form.retryStatus == 1">暂停</div>
+            </el-form-item>
+            <el-form-item label="重试最大次数：">{{ form.retryMaxNum }}</el-form-item>
+          </el-col>
         </el-row>
       </el-form>
       <div slot="footer" class="dialog-footer">
+        <el-link :style="{marginRight: '200px'}" type="primary" href="https://cron.qqe2.com" target="_blank">在线生成cron表达式</el-link>
         <el-button @click="openView = false">关 闭</el-button>
+      </div>
+    </el-dialog>
+
+    <!-- 手动执行方法 -->
+    <el-dialog 
+      title="手动执行方法" 
+      :visible.sync="manualRunOpen" 
+      @close="manualRunCancel" 
+      width="700px" 
+      append-to-body
+      :close-on-click-modal="false"
+    >
+      <el-form ref="manualRunForm" :model="manualRunForm" :rules="manualRunRules" label-width="120px">
+        <el-row>
+          <el-col :span="24">
+            <el-form-item prop="invokeTarget">
+              <span slot="label">
+                调用方法
+                <el-tooltip placement="top">
+                  <div slot="content">
+                    Bean调用示例：ryTask.ryParams('ry')
+                    <br />Class类调用示例：com.dcits.dcwlt.quartz.task.RyTask.ryParams('ry')
+                    <br />参数说明：支持字符串，布尔类型，长整型，浮点型，整型
+                  </div>
+                  <i class="el-icon-question"></i>
+                </el-tooltip>
+              </span>
+              <el-input v-model.trim="manualRunForm.invokeTarget" placeholder="请输入调用目标字符串" />
+            </el-form-item>
+          </el-col>
+					<el-col :span="24">
+            <el-form-item label="调用方法：" v-if="this.taskResult && (JSON.stringify(this.taskResult) != '{}')">{{ this.taskResult && this.taskResult.invokeTarget }}</el-form-item>
+            <el-form-item label="执行状态：" v-if="this.taskResult && (JSON.stringify(this.taskResult) != '{}')">{{ (this.taskResult && this.taskResult.success) ? '成功' : '失败' }}</el-form-item>
+            <el-form-item label="执行返回值：" v-if="this.taskResult && (JSON.stringify(this.taskResult) != '{}')" >{{ this.taskResult && this.taskResult.ret }}</el-form-item>
+            <el-form-item label="异常信息：" v-if="this.taskResult && this.taskResult.success === false"  >{{ this.taskResult && this.taskResult.message }}</el-form-item>
+          </el-col>
+        </el-row>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button type="primary" @click="manualRunSubmit" :loading="excuteLoading">执 行</el-button>
+        <el-button @click="manualRunCancel">取 消</el-button>
       </div>
     </el-dialog>
   </div>
 </template>
 
 <script>
-import { listJob, getJob, delJob, addJob, updateJob, runJob, changeJobStatus } from "@/api/monitor/job";
+import { listJob, getJob, delJob, addJob, updateJob, runJob, changeJobStatus, changeRetryJobStatus, manualRun } from "@/api/monitor/job";
 
 export default {
   name: "Job",
@@ -274,6 +384,8 @@ export default {
     return {
       // 遮罩层
       loading: true,
+      // 执行按钮遮罩层
+      excuteLoading: false,
       // 选中数组
       ids: [],
       // 非单个禁用
@@ -296,14 +408,29 @@ export default {
       jobGroupOptions: [],
       // 状态字典
       statusOptions: [],
+      // 失败重试状态字典
+      retryStatusOptions: [],
       // 查询参数
       queryParams: {
         pageNum: 1,
         pageSize: 10,
         jobName: undefined,
         jobGroup: undefined,
-        status: undefined
+        status: undefined,
       },
+      // 列信息
+      columns: [
+        { key: 0, label: `任务编号`, visible: true },
+        { key: 1, label: `任务名称`, visible: true },
+        { key: 2, label: `任务组名`, visible: true },
+        { key: 3, label: `调用目标字符串`, visible: true },
+        { key: 4, label: `cron执行表达式`, visible: true },
+        { key: 5, label: `状态`, visible: true },
+        { key: 6, label: `失败重试cron`, visible: true },
+        { key: 7, label: `失败重试状态`, visible: true },
+        { key: 8, label: `重试最大次数`, visible: true },
+        { key: 9, label: `创建时间`, visible: true },
+      ],
       // 表单参数
       form: {},
       // 表单校验
@@ -316,8 +443,26 @@ export default {
         ],
         cronExpression: [
           { required: true, message: "cron执行表达式不能为空", trigger: "blur" }
-        ]
-      }
+        ],
+        retryCron: [
+          { required: true, message: "失败重试cron不能为空", trigger: "blur" }
+        ],
+        retryMaxNum: [
+          { required: true, message: "重试最大次数不能为空", trigger: "blur" }
+        ],
+      },
+      // 是否显示手动执行方法弹出层
+      manualRunOpen: false,
+      // 手动执行方法表单
+      manualRunForm: {},
+      // 手动执行方法表单校验
+      manualRunRules: {
+        invokeTarget: [
+          { required: true, message: "调用目标字符串不能为空", trigger: "blur" }
+        ],
+      },
+      // 手动执行方法返回值
+      taskResult: {},
     };
   },
   created() {
@@ -327,6 +472,7 @@ export default {
     });
     this.getDicts("sys_job_status").then(response => {
       this.statusOptions = response.data;
+      this.retryStatusOptions = response.data;
     });
   },
   methods: {
@@ -347,6 +493,10 @@ export default {
     statusFormat(row, column) {
       return this.selectDictLabel(this.statusOptions, row.status);
     },
+    // 失败重试状态字典翻译
+    retryStatusFormat(row, column) {
+      return this.selectDictLabel(this.retryStatusOptions, row.retryStatus);
+    },
     // 取消按钮
     cancel() {
       this.open = false;
@@ -362,7 +512,10 @@ export default {
         cronExpression: undefined,
         misfirePolicy: 1,
         concurrent: 1,
-        status: "0"
+        status: "0",
+        retryCron: undefined,
+        retryStatus: "0",
+        retryMaxNum: 1,
       };
       this.resetForm("form");
     },
@@ -397,6 +550,21 @@ export default {
           row.status = row.status === "0" ? "1" : "0";
         });
     },
+    // 失败重试状态修改
+    handleRetryStatusChange(row) {
+      let text = row.retryStatus === "0" ? "启用" : "停用";
+      this.$confirm('确认要"' + text + '""' + row.jobName + '"失败重试功能吗?', "警告", {
+          confirmButtonText: "确定",
+          cancelButtonText: "取消",
+          type: "warning"
+        }).then(function() {
+          return changeRetryJobStatus(row.jobId, row.retryStatus);
+        }).then(() => {
+          this.msgSuccess(text + "成功");
+        }).catch(function() {
+          row.retryStatus = row.retryStatus === "0" ? "1" : "0";
+        });
+    },
     /* 立即执行一次 */
     handleRun(row) {
       this.$confirm('确认要立即执行一次"' + row.jobName + '"任务吗?', "警告", {
@@ -418,7 +586,7 @@ export default {
     },
     /** 任务日志列表查询 */
     handleJobLog() {
-      this.$router.push("/job/log");
+      this.$router.push({name: 'JobLog', params: {jobIds: this.ids}});
     },
     /** 新增按钮操作 */
     handleAdd() {
@@ -437,7 +605,7 @@ export default {
       });
     },
     /** 提交按钮 */
-    submitForm: function() {
+    submitForm() {
       this.$refs["form"].validate(valid => {
         if (valid) {
           if (this.form.jobId != undefined) {
@@ -475,6 +643,33 @@ export default {
       this.download('schedule/job/export', {
         ...this.queryParams
       }, `job_${new Date().getTime()}.xlsx`)
+    },
+    /** 打开手动执行方法弹窗 */
+    handleManualRun() {
+      this.manualRunOpen = true;
+      this.excuteLoading = false;
+    },
+    /** 关闭手动执行方法弹窗 */
+    manualRunCancel() {
+      this.manualRunOpen = false;
+      this.manualRunForm = {};
+      this.taskResult = {};
+      this.excuteLoading = false;
+    },
+    /** 手动执行方法 */
+    manualRunSubmit() {
+      this.excuteLoading = true;
+      this.$refs["manualRunForm"].validate(valid => {
+        if (valid) {
+          manualRun(this.manualRunForm.invokeTarget).then(response => {
+            this.taskResult = response;
+            this.excuteLoading = false;
+          }, error => {
+            console.error(error);
+            this.excuteLoading = false;
+          });
+        }
+      });
     }
   }
 };

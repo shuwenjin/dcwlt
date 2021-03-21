@@ -520,4 +520,14 @@ public class StringUtils extends org.apache.commons.lang3.StringUtils
     {
         return (T) obj;
     }
+
+
+    /**
+     * 定时任务中的字符串必须用单引号包裹，例如 'sss'
+     * @param s
+     * @return
+     */
+    public static String toTaskString(String s) {
+        return "'" + s +  "'";
+    }
 }

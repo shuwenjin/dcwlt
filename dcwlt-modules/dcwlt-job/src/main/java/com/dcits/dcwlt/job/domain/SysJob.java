@@ -6,27 +6,38 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
 import com.dcits.dcwlt.common.core.constant.ScheduleConstants;
-import org.apache.commons.lang3.builder.ToStringBuilder;
-import org.apache.commons.lang3.builder.ToStringStyle;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.dcits.dcwlt.common.core.annotation.Excel;
-import com.dcits.dcwlt.common.core.annotation.Excel.ColumnType;
 import com.dcits.dcwlt.common.core.utils.StringUtils;
 import com.dcits.dcwlt.common.core.web.domain.BaseEntity;
 import com.dcits.dcwlt.job.util.CronUtils;
+import org.springframework.data.annotation.Id;
 
 /**
  * 定时任务调度表 sys_job
  * 
- * @author ruoyi
+ * @author dcwlt
  */
 public class SysJob extends BaseEntity implements Serializable
 {
     private static final long serialVersionUID = 1L;
 
     /** 任务ID */
-    @Excel(name = "任务序号", cellType = ColumnType.NUMERIC)
-    private Long jobId;
+    @Id
+    @Excel(name = "任务编号")
+    private String jobId;
+
+    /** 父实例ID */
+    @Excel(name = "父实例编号")
+    private String fid;
+
+    /** 父任务ID*/
+    @Excel(name = "父任务编号")
+    private String fjobId;
+
+    /** 任务类型（0父任务 1子任务） */
+    @Excel(name = "任务类型", readConverterExp = "0=父任务,1=子任务")
+    private String jobType;
 
     /** 任务名称 */
     @Excel(name = "任务名称")
@@ -56,12 +67,37 @@ public class SysJob extends BaseEntity implements Serializable
     @Excel(name = "任务状态", readConverterExp = "0=正常,1=暂停")
     private String status;
 
-    public Long getJobId()
+    /** 失败重试cron */
+    @Excel(name = "失败重试cron")
+    private String retryCron;
+
+    /** 失败重试状态（0正常 1暂停） */
+    @Excel(name = "失败重试状态", readConverterExp = "0=正常,1=暂停")
+    private String retryStatus;
+
+    /** 主任务失败时间 */
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @Excel(name = "主任务失败时间", width = 30, dateFormat = "yyyy-MM-dd HH:mm:ss")
+    private Date failTime;
+
+    /** 重试最大次数 */
+    @Excel(name = "重试最大次数")
+    private Integer retryMaxNum;
+
+    /** 重试是否成功（0成功 1失败） */
+    @Excel(name = "重试是否成功", readConverterExp = "0=成功,1=失败")
+    private String retryJobStatus;
+
+    /** 当前重试次数 */
+    @Excel(name = "当前重试次数")
+    private Integer retryNum;
+
+    public String getJobId()
     {
         return jobId;
     }
 
-    public void setJobId(Long jobId)
+    public void setJobId(String jobId)
     {
         this.jobId = jobId;
     }
@@ -122,6 +158,16 @@ public class SysJob extends BaseEntity implements Serializable
         return null;
     }
 
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    public Date getNextRetryValidTime()
+    {
+        if (StringUtils.isNotEmpty(retryCron))
+        {
+            return CronUtils.getNextExecution(retryCron);
+        }
+        return null;
+    }
+
     public String getMisfirePolicy()
     {
         return misfirePolicy;
@@ -152,22 +198,103 @@ public class SysJob extends BaseEntity implements Serializable
         this.status = status;
     }
 
+    public void setRetryCron(String retryCron)
+    {
+        this.retryCron = retryCron;
+    }
+
+    public String getRetryCron()
+    {
+        return retryCron;
+    }
+
+    public void setRetryStatus(String retryStatus)
+    {
+        this.retryStatus = retryStatus;
+    }
+
+    public String getRetryStatus()
+    {
+        return retryStatus;
+    }
+
+    public Date getFailTime() {
+        return failTime;
+    }
+
+    public void setFailTime(Date failTime) {
+        this.failTime = failTime;
+    }
+
+    public void setRetryMaxNum(Integer retryMaxNum)
+    {
+        this.retryMaxNum = retryMaxNum;
+    }
+
+    public Integer getRetryMaxNum()
+    {
+        return retryMaxNum;
+    }
+
+    public String getFid() {
+        return fid;
+    }
+
+    public void setFid(String fid) {
+        this.fid = fid;
+    }
+
+    public String getFjobId() {
+        return fjobId;
+    }
+
+    public void setFjobId(String fjobId) {
+        this.fjobId = fjobId;
+    }
+
+    public String getJobType() {
+        return jobType;
+    }
+
+    public void setJobType(String jobType) {
+        this.jobType = jobType;
+    }
+
+    public String getRetryJobStatus() {
+        return retryJobStatus;
+    }
+
+    public void setRetryJobStatus(String retryJobStatus) {
+        this.retryJobStatus = retryJobStatus;
+    }
+
+    public Integer getRetryNum() {
+        return retryNum;
+    }
+
+    public void setRetryNum(Integer retryNum) {
+        this.retryNum = retryNum;
+    }
+
     @Override
     public String toString() {
-        return new ToStringBuilder(this,ToStringStyle.MULTI_LINE_STYLE)
-            .append("jobId", getJobId())
-            .append("jobName", getJobName())
-            .append("jobGroup", getJobGroup())
-            .append("cronExpression", getCronExpression())
-            .append("nextValidTime", getNextValidTime())
-            .append("misfirePolicy", getMisfirePolicy())
-            .append("concurrent", getConcurrent())
-            .append("status", getStatus())
-            .append("createBy", getCreateBy())
-            .append("createTime", getCreateTime())
-            .append("updateBy", getUpdateBy())
-            .append("updateTime", getUpdateTime())
-            .append("remark", getRemark())
-            .toString();
+        return "SysJob{" +
+                "jobId=" + jobId +
+                ", fid=" + fid +
+                ", fjobId=" + fjobId +
+                ", jobType='" + jobType + '\'' +
+                ", jobName='" + jobName + '\'' +
+                ", jobGroup='" + jobGroup + '\'' +
+                ", invokeTarget='" + invokeTarget + '\'' +
+                ", cronExpression='" + cronExpression + '\'' +
+                ", misfirePolicy='" + misfirePolicy + '\'' +
+                ", concurrent='" + concurrent + '\'' +
+                ", status='" + status + '\'' +
+                ", retryCron='" + retryCron + '\'' +
+                ", retryStatus='" + retryStatus + '\'' +
+                ", retryMaxNum=" + retryMaxNum +
+                ", retryJobStatus='" + retryJobStatus + '\'' +
+                ", retryNum=" + retryNum +
+                '}';
     }
 }

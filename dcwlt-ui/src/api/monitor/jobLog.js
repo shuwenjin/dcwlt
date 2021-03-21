@@ -1,7 +1,14 @@
 import request from '@/utils/request'
 
 // 查询调度日志列表
-export function listJobLog(query) {
+export function listJobLog(query, isRetryJob) {
+  if (isRetryJob) {
+    return request({
+      url: '/schedule/job/log/retryList',
+      method: 'get',
+      params: query
+    })
+  }
   return request({
     url: '/schedule/job/log/list',
     method: 'get',
@@ -18,7 +25,13 @@ export function delJobLog(jobLogId) {
 }
 
 // 清空调度日志
-export function cleanJobLog() {
+export function cleanJobLog(isRetryJobLog) {
+  if (isRetryJobLog) {
+    return request({
+      url: '/schedule/job/log/cleanRetry',
+      method: 'delete'
+    })
+  }
   return request({
     url: '/schedule/job/log/clean',
     method: 'delete'

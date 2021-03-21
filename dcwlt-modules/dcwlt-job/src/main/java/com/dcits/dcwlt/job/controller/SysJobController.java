@@ -1,20 +1,19 @@
 package com.dcits.dcwlt.job.controller;
 
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 import javax.servlet.http.HttpServletResponse;
 
+import com.alibaba.fastjson.JSONObject;
+import com.dcits.dcwlt.common.core.constant.SysJobConstants;
 import com.dcits.dcwlt.common.core.exception.job.TaskException;
+import com.dcits.dcwlt.common.core.utils.ExceptionUtil;
+import com.dcits.dcwlt.common.core.domain.TaskResult;
+import com.dcits.dcwlt.job.util.JobInvokeUtil;
 import org.quartz.SchedulerException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import com.dcits.dcwlt.common.core.utils.SecurityUtils;
 import com.dcits.dcwlt.common.core.utils.poi.ExcelUtil;
 import com.dcits.dcwlt.common.core.web.controller.BaseController;
@@ -47,6 +46,20 @@ public class SysJobController extends BaseController
     public TableDataInfo list(SysJob sysJob)
     {
         startPage();
+        sysJob.setJobType(SysJobConstants.MAINJOB);
+        List<SysJob> list = jobService.selectJobList(sysJob);
+        return getDataTable(list);
+    }
+
+    /**
+     * 查询重试定时任务列表
+     */
+    @PreAuthorize(hasPermi = "monitor:job:list")
+    @GetMapping("/retryList")
+    public TableDataInfo retryList(SysJob sysJob)
+    {
+        startPage();
+        sysJob.setJobType(SysJobConstants.RETRYJOB);
         List<SysJob> list = jobService.selectJobList(sysJob);
         return getDataTable(list);
     }
@@ -59,6 +72,21 @@ public class SysJobController extends BaseController
     @PostMapping("/export")
     public void export(HttpServletResponse response, SysJob sysJob) throws IOException
     {
+        sysJob.setJobType(SysJobConstants.MAINJOB);
+        List<SysJob> list = jobService.selectJobList(sysJob);
+        ExcelUtil<SysJob> util = new ExcelUtil<SysJob>(SysJob.class);
+        util.exportExcel(response, list, "定时任务");
+    }
+
+    /**
+     * 导出失败重试定时任务列表
+     */
+    @PreAuthorize(hasPermi = "monitor:job:export")
+    @Log(title = "定时任务", businessType = BusinessType.EXPORT)
+    @PostMapping("/retryExport")
+    public void retryExport(HttpServletResponse response, SysJob sysJob) throws IOException
+    {
+        sysJob.setJobType(SysJobConstants.RETRYJOB);
         List<SysJob> list = jobService.selectJobList(sysJob);
         ExcelUtil<SysJob> util = new ExcelUtil<SysJob>(SysJob.class);
         util.exportExcel(response, list, "定时任务");
@@ -69,7 +97,7 @@ public class SysJobController extends BaseController
      */
     @PreAuthorize(hasPermi = "monitor:job:query")
     @GetMapping(value = "/{jobId}")
-    public AjaxResult getInfo(@PathVariable("jobId") Long jobId)
+    public AjaxResult getInfo(@PathVariable("jobId") String jobId)
     {
         return AjaxResult.success(jobService.selectJobById(jobId));
     }
@@ -86,7 +114,13 @@ public class SysJobController extends BaseController
         {
             return AjaxResult.error("cron表达式不正确");
         }
+        if (!CronUtils.isValid(sysJob.getRetryCron()))
+        {
+            return AjaxResult.error("失败重试cron表达式不正确");
+        }
         sysJob.setCreateBy(SecurityUtils.getUsername());
+        // 设置任务类型为主任务
+        sysJob.setJobType(SysJobConstants.MAINJOB);
         return toAjax(jobService.insertJob(sysJob));
     }
 
@@ -101,6 +135,10 @@ public class SysJobController extends BaseController
         if (!CronUtils.isValid(sysJob.getCronExpression()))
         {
             return AjaxResult.error("cron表达式不正确");
+        }
+        if (!CronUtils.isValid(sysJob.getRetryCron()))
+        {
+            return AjaxResult.error("失败重试cron表达式不正确");
         }
         sysJob.setUpdateBy(SecurityUtils.getUsername());
         return toAjax(jobService.updateJob(sysJob));
@@ -120,6 +158,19 @@ public class SysJobController extends BaseController
     }
 
     /**
+     * 定时任务状态修改
+     */
+    @PreAuthorize(hasPermi = "monitor:job:changeStatus")
+    @Log(title = "定时任务", businessType = BusinessType.UPDATE)
+    @PutMapping("/changeRetryStatus")
+    public AjaxResult changeRetryStatus(@RequestBody SysJob job) throws SchedulerException, TaskException
+    {
+        SysJob newJob = jobService.selectJobById(job.getJobId());
+        newJob.setRetryStatus(job.getRetryStatus());
+        return toAjax(jobService.changeRetryStatus(newJob));
+    }
+
+    /**
      * 定时任务立即执行一次
      */
     @PreAuthorize(hasPermi = "monitor:job:changeStatus")
@@ -132,12 +183,41 @@ public class SysJobController extends BaseController
     }
 
     /**
+     * 手动执行方法
+     */
+    @PreAuthorize(hasPermi = "monitor:job:changeStatus")
+    @Log(title = "手动执行方法", businessType = BusinessType.OTHER)
+    @GetMapping("/manualRun")
+    public TaskResult manualRun(@RequestParam("invokeTarget") String invokeTarget) throws Exception
+    {
+        try {
+            return (TaskResult) JobInvokeUtil.invokeMethod(invokeTarget);
+        } catch (InvocationTargetException e) {
+            TaskResult taskResult = new TaskResult();
+            taskResult.setInvokeTarget(invokeTarget);
+            String str = e.getTargetException().getMessage();
+            if (null != str) {
+                try {
+                    // 从异常信息中提取任务执行结果taskResult
+                    return JSONObject.toJavaObject(JSONObject.parseObject(str), TaskResult.class);
+                } catch (Exception josnParseException) {
+                    // 从异常信息中提取任务执行结果失败, 将调用目标字符串中的日期格式串解析成日期字符串
+                    taskResult.setInvokeTarget(JobInvokeUtil.parseInvokeTarget(invokeTarget));
+                }
+            }
+            taskResult.setSuccess(false);
+            taskResult.setMessage(str);
+            return taskResult;
+        }
+    }
+
+    /**
      * 删除定时任务
      */
     @PreAuthorize(hasPermi = "monitor:job:remove")
     @Log(title = "定时任务", businessType = BusinessType.DELETE)
     @DeleteMapping("/{jobIds}")
-    public AjaxResult remove(@PathVariable Long[] jobIds) throws SchedulerException, TaskException
+    public AjaxResult remove(@PathVariable String[] jobIds) throws SchedulerException, TaskException
     {
         jobService.deleteJobByIds(jobIds);
         return AjaxResult.success();

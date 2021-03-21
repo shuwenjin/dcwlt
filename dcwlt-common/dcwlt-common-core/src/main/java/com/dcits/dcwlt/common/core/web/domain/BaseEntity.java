@@ -4,6 +4,8 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+
+import com.dcits.dcwlt.common.core.annotation.Excel;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 /**
@@ -15,7 +17,8 @@ public class BaseEntity implements Serializable
 {
     private static final long serialVersionUID = 1L;
 
-    /** 搜索值 */
+    /** 搜索值 不支持导出*/
+    @Excel(isExport = false)
     private String searchValue;
 
     /** 创建者 */
@@ -35,7 +38,8 @@ public class BaseEntity implements Serializable
     /** 备注 */
     private String remark;
 
-    /** 请求参数 */
+    /** 请求参数  不支持导出*/
+    @Excel(isExport = false)
     private Map<String, Object> params;
 
     public String getSearchValue()

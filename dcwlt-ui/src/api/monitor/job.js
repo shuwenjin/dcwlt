@@ -1,7 +1,14 @@
 import request from '@/utils/request'
 
 // 查询定时任务调度列表
-export function listJob(query) {
+export function listJob(query, isRetryJob) {
+  if (isRetryJob) {
+    return request({
+      url: '/schedule/job/retryList',
+      method: 'get',
+      params: query
+    })
+  }
   return request({
     url: '/schedule/job/list',
     method: 'get',
@@ -56,6 +63,19 @@ export function changeJobStatus(jobId, status) {
   })
 }
 
+// 任务失败重试状态修改
+export function changeRetryJobStatus(jobId, retryStatus) {
+  const data = {
+    jobId,
+    retryStatus
+  }
+  return request({
+    url: '/schedule/job/changeRetryStatus',
+    method: 'put',
+    data: data
+  })
+}
+
 
 // 定时任务立即执行一次
 export function runJob(jobId, jobGroup) {
@@ -67,5 +87,14 @@ export function runJob(jobId, jobGroup) {
     url: '/schedule/job/run',
     method: 'put',
     data: data
+  })
+}
+
+// 定时任务立即执行一次
+export function manualRun(invokeTarget) {
+  return request({
+    url: '/schedule/job/manualRun',
+    method: 'get',
+    params: { invokeTarget }
   })
 }
