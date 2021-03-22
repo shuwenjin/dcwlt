@@ -439,7 +439,7 @@ public class BankAttAcctManage433RTradeFlow {
      *
      * @param tradeContext 交易上下文
      */
-    private BankCore358040Rsp BankCore358040Verify(TradeContext<?, ?> tradeContext) {
+    private BankCore358040Rsp  BankCore358040Verify(TradeContext<?, ?> tradeContext) {
         BankAttAcctReq reqBody = getReqBody(tradeContext);
         return bankAccountVerifyService.verifyAccount(TrxTpCdEnum.SIGN.getCode(), buildBankCore358040Req(reqBody));
     }

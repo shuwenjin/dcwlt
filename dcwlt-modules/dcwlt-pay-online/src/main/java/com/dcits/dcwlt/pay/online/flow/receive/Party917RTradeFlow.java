@@ -18,6 +18,7 @@ import com.dcits.dcwlt.pay.api.domain.dcep.fault.FaultDTO;
 import com.dcits.dcwlt.pay.api.domain.dcep.party.Party;
 import com.dcits.dcwlt.pay.api.domain.dcep.party.chng.FinCdChngNtfctn;
 import com.dcits.dcwlt.pay.api.domain.dcep.party.chng.FinCdChngNtfctnDTO;
+import com.dcits.dcwlt.pay.api.model.RspCodeMapDO;
 import com.dcits.dcwlt.pay.online.service.PartyChangeProcess;
 import com.dcits.dcwlt.pay.online.exception.EcnyTransError;
 import com.dcits.dcwlt.pay.online.exception.EcnyTransException;
@@ -192,13 +193,13 @@ public class Party917RTradeFlow {
         faultDTO.setFault(fault);
 
         // 错误码映射
-//        RspCodeMapDO rspCodeMapDO = EcnyTransException.convertRspCode(e);
+        RspCodeMapDO rspCodeMapDO = EcnyTransException.convertRspCode(e);
 
         //设置911报文体数据
         //业务故障信息, 911失败时，响应机构编码
         fault.setFaultActor(AppConstant.CGB_FINANCIAL_INSTITUTION_CD);        //业务故障信息
-//        fault.setFaultCode(rspCodeMapDO.getDestRspCode());                    //业务故障代码
-//        fault.setFaultString(rspCodeMapDO.getRspCodeDsp());                   //业务故障说明
+        fault.setFaultCode(rspCodeMapDO.getDestRspCode());                    //业务故障代码
+        fault.setFaultString(rspCodeMapDO.getRspCodeDsp());                   //业务故障说明
 
 
         //响应实体

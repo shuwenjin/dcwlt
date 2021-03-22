@@ -21,7 +21,8 @@ public class ApiConstant {
     //差错贷记调账服务化接口
     public static final String DSPT_SERVICE_NAME = "dcepPymtWrngAcctDeal";
 
-
+    //差错贷记调账服务化接口
+    public static final String PAYCONVERT_SERVICE_NAME = "pymtRmtOtptRqstIntt";
 
 
 

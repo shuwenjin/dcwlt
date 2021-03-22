@@ -1,5 +1,6 @@
-package com.dcits.dcwlt.pay.online.flow.receive;
+package com.dcits.dcwlt.pay.online.flow.send;
 
+import com.alibaba.csp.sentinel.util.StringUtil;
 import com.alibaba.fastjson.JSONObject;
 import com.dcits.dcwlt.common.pay.channel.bankcore.dto.bankcore351100.BankCore351100InnerReq;
 import com.dcits.dcwlt.common.pay.channel.bankcore.dto.bankcore351100.BankCore351100InnerRsp;
@@ -11,6 +12,7 @@ import com.dcits.dcwlt.common.pay.sequence.service.impl.GenerateCodeServiceImpl;
 import com.dcits.dcwlt.common.pay.tradeflow.TradeContext;
 import com.dcits.dcwlt.common.pay.tradeflow.TradeFlow;
 import com.dcits.dcwlt.common.pay.type.OutOrgTypeEnum;
+import com.dcits.dcwlt.common.pay.util.BigDecimalUtil;
 import com.dcits.dcwlt.common.pay.util.DateUtil;
 import com.dcits.dcwlt.pay.api.domain.dcep.DCEPReqDTO;
 import com.dcits.dcwlt.pay.api.domain.dcep.DCEPRspDTO;
@@ -18,6 +20,7 @@ import com.dcits.dcwlt.pay.api.domain.dcep.bankattachedmanagement.BankAttRspsnIn
 import com.dcits.dcwlt.pay.api.domain.dcep.cmonconf.CmonConfDTO;
 import com.dcits.dcwlt.pay.api.domain.dcep.cmonconf.CmonConfInf;
 import com.dcits.dcwlt.pay.api.domain.dcep.common.GrpHdr;
+import com.dcits.dcwlt.pay.api.domain.dcep.common.RspsnInf;
 import com.dcits.dcwlt.pay.api.domain.dcep.fault.Fault;
 import com.dcits.dcwlt.pay.api.domain.dcep.fault.FaultDTO;
 import com.dcits.dcwlt.pay.api.domain.dcep.payconvert.*;
@@ -26,19 +29,20 @@ import com.dcits.dcwlt.pay.api.domain.ecny.ECNYReqHead;
 import com.dcits.dcwlt.pay.api.domain.ecny.ECNYRspDTO;
 import com.dcits.dcwlt.pay.api.domain.ecny.ECNYRspHead;
 import com.dcits.dcwlt.pay.api.domain.ecny.payconvert.PayConvertChnlReqDTO;
-import com.dcits.dcwlt.pay.api.domain.ecny.payconvert.PayConvertStsQryRspDTO;
+import com.dcits.dcwlt.pay.api.domain.ecny.payconvert.PayConvertChnlRspDTO;
 import com.dcits.dcwlt.pay.api.model.PayTransDtlInfoDO;
 import com.dcits.dcwlt.pay.api.model.StateMachine;
+import com.dcits.dcwlt.pay.online.baffle.dcep.impl.BankCoreImplDubboService;
 import com.dcits.dcwlt.pay.online.base.Constant;
 import com.dcits.dcwlt.pay.online.event.service.BankRevService;
 import com.dcits.dcwlt.pay.online.exception.EcnyTransError;
 import com.dcits.dcwlt.pay.online.exception.EcnyTransException;
 import com.dcits.dcwlt.pay.online.flow.builder.EcnyTradeContext;
 import com.dcits.dcwlt.pay.online.flow.builder.EcnyTradeFlowBuilder;
+import com.dcits.dcwlt.pay.online.mapper.PayTransDtlInfoMapper;
 import com.dcits.dcwlt.pay.online.mapper.SignInfoMapper;
-import com.dcits.dcwlt.pay.online.service.IAuthInfoService;
 import com.dcits.dcwlt.pay.online.service.ICoreProcessService;
-import com.dcits.dcwlt.pay.online.service.IPayTransDtlInfoService;
+import com.dcits.dcwlt.pay.online.service.ITxStsQryNetPartyService;
 import com.dcits.dcwlt.pay.online.service.impl.*;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -46,9 +50,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-
+import java.math.BigDecimal;
 import java.util.Map;
-
 
 /**
  * 兑出交易处理配置
@@ -68,16 +71,19 @@ public class PayConvert227STradeFlow {
     private static final String LIMIT_CONFIG_KEY = "ecny.payCounvert.limit.amount";
 
     @Autowired
-    private SignInfoMapper signInfoRepository;
+    private SignInfoMapper signInfoMapper;
 
     @Autowired
-    private IPayTransDtlInfoService payTransDtlInfoRepository;
+    private PayTransDtlInfoMapper payTransDtlInfoMapper;
+
+    @Autowired
+    private PayTransDtlInfoServiceImpl payTransDtlInfoService;
 
     @Autowired
     private BankCoreAccTxnServiceImpl bankCoreAccTxnService;
 
-//    @Autowired
-//    private BankCoreImplDubboService bankCoreImplDubboService;
+    @Autowired
+    private BankCoreImplDubboService bankCoreImplDubboService;
 
     @Autowired
     private BankAccountVerifyService bankAccountVerifyService;
@@ -91,8 +97,9 @@ public class PayConvert227STradeFlow {
     @Autowired
     private GenerateCodeServiceImpl generateCodeService;
 
-//    @Autowired
-//    private ITxStsQryNetPartyService txStsQryNetPartyService;
+    @Autowired
+    private ITxStsQryNetPartyService txStsQryNetPartyService;
+
 
     @Autowired
     private BankRevService bankRevService;
@@ -101,7 +108,7 @@ public class PayConvert227STradeFlow {
     private PartyService partyService;
 
     @Autowired
-    private IAuthInfoService authInfoService;
+    private AuthInfoServiceimpl authInfoService;
 
     @Autowired
     private ICoreProcessService bankCoreProcessService;
@@ -131,7 +138,7 @@ public class PayConvert227STradeFlow {
         PayConvertChnlReqDTO reqBody = reqMsg.getBody();
         PayTransDtlInfoDO payTransDtlInfoDO = new PayTransDtlInfoDO();
 
-        payTransDtlInfoDO.setPayDate(DateUtil.getDefaultDate());
+        payTransDtlInfoDO.setPayDate(DateUtil.getCurDay());
         String paySerno = generateCodeService.generatePlatformFlowNo();
         payTransDtlInfoDO.setPaySerno(paySerno);
         payTransDtlInfoDO.setPayTime(DateUtil.getDefaultTime());
@@ -147,9 +154,15 @@ public class PayConvert227STradeFlow {
         payTransDtlInfoDO.setBatchId(generateCodeService.getBachNo());
         payTransDtlInfoDO.setBusiChnl(ecnyHead.getBusiChnl());
         payTransDtlInfoDO.setBusiChnl2(ecnyHead.getBusiChnl2());
+        //Todo
 //        payTransDtlInfoDO.setBusiSysDate(reqMsg.getHead().getTranDate());
 //        payTransDtlInfoDO.setBusiSysTime(reqMsg.getHead().getTranTime());
 //        payTransDtlInfoDO.setBusiSysSerno(reqMsg.getHead().getSeqNo());
+//
+        payTransDtlInfoDO.setBusiSysDate(DateUtil.getCurDay());
+        payTransDtlInfoDO.setBusiSysTime(DateUtil.getDefaultTime());
+        payTransDtlInfoDO.setBusiSysSerno(generateCodeService.getBachNo());
+
         payTransDtlInfoDO.setMsgType(MsgTpEnum.DCEP227.getCode());
         payTransDtlInfoDO.setBusiType(reqBody.getBusiType());
         payTransDtlInfoDO.setBusiKind(reqBody.getBusiKind());
@@ -175,11 +188,11 @@ public class PayConvert227STradeFlow {
         payTransDtlInfoDO.setOrigChnlDtl(ecnyHead.getOrigChnlDtl());
         payTransDtlInfoDO.setSummary(SummaryCdEnum.XSG.getCode());
         payTransDtlInfoDO.setLastUpJrnno(paySerno);
-        payTransDtlInfoDO.setLastUpDate(DateUtil.getDefaultDate());
+        payTransDtlInfoDO.setLastUpDate(DateUtil.getCurDay());
         payTransDtlInfoDO.setLastUpTime(DateUtil.getDefaultTime());
         payTransDtlInfoDO.setRemark(reqBody.getRemark());
         try {
-            payTransDtlInfoRepository.insert(payTransDtlInfoDO);
+            payTransDtlInfoMapper.insert(payTransDtlInfoDO);
         } catch (Exception e) {
             logger.info("金融流水表入库失败:{}-{}", e.getMessage(), e);
             throw new EcnyTransException(AppConstant.TRXSTATUS_FAILED, EcnyTransError.DATABASE_ERROR);
@@ -204,7 +217,7 @@ public class PayConvert227STradeFlow {
         String instgPtyId = reqMsg.getBody().getPayerBank();
         String busiType = reqMsg.getBody().getBusiType();
 
-        //判断发起机构是否广发银行
+        //判断发起机构是否广发银
         if (!AppConstant.CGB_FINANCIAL_INSTITUTION_CD.equals(instgPtyId)) {
             logger.info("发起机构传输有误,{}", instgPtyId);
             throw new EcnyTransException(AppConstant.TRXSTATUS_FAILED, EcnyTransError.PARTY_INSTG_ERROR);
@@ -232,12 +245,14 @@ public class PayConvert227STradeFlow {
         }
 
         // 限额校验
-//        BigDecimal trxAmt = BigDecimalUtil.parse(reqMsg.getBody().getAmount());
+        BigDecimal trxAmt = BigDecimalUtil.parse(reqMsg.getBody().getAmount());
+        String amountLimit = BigDecimalUtil.parse(reqMsg.getBody().getAmount()).toString();
+        //Todo
 //        String amountLimit = RtpUtil.getInstance().getProperty(LIMIT_CONFIG_KEY, AMOUNT_LIMIT);
-//        if (trxAmt.compareTo(BigDecimalUtil.parse(amountLimit)) > 0) {
-//            logger.error("交易金额超过上限");
-//            throw new EcnyTransException(AppConstant.TRXSTATUS_FAILED, EcnyTransError.AMOUNT_LIMIT_OUT);
-//        }
+        if (trxAmt.compareTo(BigDecimalUtil.parse(amountLimit)) > 0) {
+            logger.error("交易金额超过上限");
+            throw new EcnyTransException(AppConstant.TRXSTATUS_FAILED, EcnyTransError.AMOUNT_LIMIT_OUT);
+        }
 
 
         // 账户校验
@@ -360,13 +375,13 @@ public class PayConvert227STradeFlow {
      */
     public BankCore351100InnerRsp sendToCore(PayTransDtlInfoDO payTransDtlInfoDO, BankCore351100InnerReq bankCore351100InnerReq) {
         logger.info("发送核心系统进行账务处理,核心请求日期:{},流水:{}", bankCore351100InnerReq.getCoreReqDate(), bankCore351100InnerReq.getCoreReqSerno());
-        BankCore351100InnerRsp bankCore351100InnerRsp = null;
+        BankCore351100InnerRsp bankCore351100InnerRsp;
         try {
-//            bankCore351100InnerRsp = bankCoreImplDubboService.coreServer(bankCore351100InnerReq);
+            bankCore351100InnerRsp = bankCoreImplDubboService.coreServer(bankCore351100InnerReq);
         } catch (Exception e) {
             logger.error("核心通讯异常：{}-{}-{}", LogMonitorLevelCdEnum.ECNY_LOG_MONITOR_NORMAL.getCode(), e.getMessage(), e);
             // 登记冲正异常事件
-//            bankRev(payTransDtlInfoDO);
+            bankRev(payTransDtlInfoDO);
             throw new EcnyTransException(AppConstant.TRXSTATUS_ABEND, EcnyTransError.GATEWAY_REQUEST_ERROR);
         }
         return bankCore351100InnerRsp;
@@ -391,7 +406,7 @@ public class PayConvert227STradeFlow {
             bankCoreProcessService.sendCoreDone(payTransDtlInfoDO,bankCore351100InnerRsp,stateMachine);
         } catch (Exception e) {
             // 登记冲正异常事件
-//            bankRev(payTransDtlInfoDO);
+            bankRev(payTransDtlInfoDO);
             logger.error("核心后处理异常：{}-{}", e.getMessage(), e);
             throw new EcnyTransException(AppConstant.TRXSTATUS_ABEND, EcnyTransError.DATABASE_ERROR);
         }
@@ -438,7 +453,7 @@ public class PayConvert227STradeFlow {
             payTransDtlInfoDO.setTrxStatus(AppConstant.TRXSTATUS_ABEND);
             payTransDtlInfoDO.setPathProcStatus(AppConstant.PAYPATHSTATUS_INIT);
             // 登记冲正异常事件
-//            bankRev(payTransDtlInfoDO);
+            bankRev(payTransDtlInfoDO);
         }
     }
 
@@ -491,7 +506,7 @@ public class PayConvert227STradeFlow {
         } catch (Exception e) {
             logger.error("发送互联互通平台异常：{}-{}-{}", LogMonitorLevelCdEnum.ECNY_LOG_MONITOR_NORMAL.getCode(), e.getMessage(), e);
             // 登记异常事件，发送互联互通交易状态查询
-//            txStsQryNetPartyService.registerTrxStsQry(payTransDtlInfoDO);
+            txStsQryNetPartyService.registerTrxStsQry(payTransDtlInfoDO);
             throw new EcnyTransException(AppConstant.TRXSTATUS_ABEND, EcnyTransError.SEND_DCEP_ERROR);
         }
     }
@@ -518,7 +533,7 @@ public class PayConvert227STradeFlow {
             String processStatus = dcepRspDTO.getBody().getConvertRsp().getRspsnInf().getPrcSts();
             BankAttRspsnInf rspsnInf = dcepRspDTO.getBody().getConvertRsp().getRspsnInf();
             payTransDtlInfoDO.setPayPathRetSerno(dcepRspDTO.getBody().getConvertRsp().getGrpHdr().getMsgId());
-            payTransDtlInfoDO.setPayPathRetDate(DateUtil.getDefaultDate());
+            payTransDtlInfoDO.setPayPathRetDate(DateUtil.getCurDay());
             payTransDtlInfoDO.setPayPathRspStatus(rspsnInf.getRspsnSts());
             payTransDtlInfoDO.setPayPathRetCode(rspsnInf.getRjctCd());
             payTransDtlInfoDO.setPayPathRetMsg(rspsnInf.getRjctInf());
@@ -543,7 +558,7 @@ public class PayConvert227STradeFlow {
                 payTransDtlInfoDO.setTrxStatus(AppConstant.TRXSTATUS_ABEND);
                 payTransDtlInfoDO.setPathProcStatus(AppConstant.PAYPATHSTATUS_ABEND);
                 // 登记异常事件，发送互联互通交易状态查询
-//                txStsQryNetPartyService.registerTrxStsQry(payTransDtlInfoDO);
+                txStsQryNetPartyService.registerTrxStsQry(payTransDtlInfoDO);
             }
 
         } else if (MsgTpEnum.DCEP900.getCode().equals(msgType)) {
@@ -555,7 +570,7 @@ public class PayConvert227STradeFlow {
             payTransDtlInfoDO.setTrxRetMsg(cmonConfInf.getPrcCd());
             payTransDtlInfoDO.setTrxRetCode(cmonConfInf.getRjctInf());
             payTransDtlInfoDO.setPayPathRetSerno(dcepRspDTO.getBody().getCmonConf().getGrpHdr().getMsgId());
-            payTransDtlInfoDO.setPayPathRetDate(DateUtil.getDefaultDate());
+            payTransDtlInfoDO.setPayPathRetDate(DateUtil.getCurDay());
             payTransDtlInfoDO.setPayPathRspStatus(cmonConfInf.getPrcSts());
             payTransDtlInfoDO.setPayPathRetCode(cmonConfInf.getPrcCd());
             payTransDtlInfoDO.setPayPathRetMsg(cmonConfInf.getRjctInf());
@@ -569,14 +584,14 @@ public class PayConvert227STradeFlow {
             payTransDtlInfoDO.setTrxRetMsg(fault.getFaultString());
             payTransDtlInfoDO.setTrxRetCode(fault.getFaultCode());
             payTransDtlInfoDO.setPayPathRetSerno(dcepRspDTO.getDcepHead().getMsgSn());
-            payTransDtlInfoDO.setPayPathRetDate(DateUtil.getDefaultDate());
+            payTransDtlInfoDO.setPayPathRetDate(DateUtil.getCurDay());
             payTransDtlInfoDO.setPayPathRetCode(fault.getFaultCode());
             payTransDtlInfoDO.setPayPathRetMsg(fault.getFaultString());
             // 登记异常事件，发送互联互通交易状态查询
-//            txStsQryNetPartyService.registerTrxStsQry(payTransDtlInfoDO);
+            txStsQryNetPartyService.registerTrxStsQry(payTransDtlInfoDO);
         } else {
             // 其他的金融开放平台的异常（一般不会出现），登记异常事件，发送互联互通交易状态查询
-//            txStsQryNetPartyService.registerTrxStsQry(payTransDtlInfoDO);
+            txStsQryNetPartyService.registerTrxStsQry(payTransDtlInfoDO);
         }
         // 获取当前状态对象
         StateMachine stateMachine = new StateMachine();
@@ -585,7 +600,7 @@ public class PayConvert227STradeFlow {
         stateMachine.setPrePathProcStatus(AppConstant.PAYPATHSTATUS_RECIPE);
         try {
             // 更新金融交易表
-            int retCount = payTransDtlInfoRepository.update(payTransDtlInfoDO, stateMachine);
+            int retCount = payTransDtlInfoService.update(payTransDtlInfoDO, stateMachine);
             if (retCount != 1) {
                 // 更新失败，若此时交易是失败的，也要即时冲正，回复手机银行异常（一般不会）
                 if (isFailed) {
@@ -624,12 +639,13 @@ public class PayConvert227STradeFlow {
         // 响应头
         ECNYRspHead head = new ECNYRspHead(trxStatus);
         // 响应体
-        PayConvertStsQryRspDTO rspDTO = new PayConvertStsQryRspDTO();
+        PayConvertChnlRspDTO rspDTO = new PayConvertChnlRspDTO();
         rspDTO.setCoreAcctDate(payTransDtlInfoDO.getCoreAcctDate());
         rspDTO.setCoreSerno(payTransDtlInfoDO.getCoreSerno());
         rspDTO.setPayPathSerno(payTransDtlInfoDO.getPayPathSerno());
-
-        ECNYRspDTO ecnyRspDTO = ECNYRspDTO.newInstance(ecnyReqDTO, head, null, payTransDtlInfoDO.getTrxRetCode(), payTransDtlInfoDO.getTrxRetMsg());
+        //Todo
+//        ECNYRspDTO ecnyRspDTO = ECNYRspDTO.newInstance(ecnyReqDTO, head, rspDTO, payTransDtlInfoDO.getTrxRetCode(), payTransDtlInfoDO.getTrxRetMsg());
+        ECNYRspDTO ecnyRspDTO = new ECNYRspDTO();
         EcnyTradeContext.setRspMsg(tradeContext, ecnyRspDTO);
     }
 
@@ -656,13 +672,13 @@ public class PayConvert227STradeFlow {
         if (null != payTransDtlInfoDO) {
             // 更新流水表
             payTransDtlInfoDO.setTrxStatus(status);
-            if (StringUtils.isEmpty(payTransDtlInfoDO.getTrxRetCode())) {
+            if (StringUtil.isEmpty(payTransDtlInfoDO.getTrxRetCode())) {
                 payTransDtlInfoDO.setTrxRetCode(code);
             }
-            if (StringUtils.isEmpty(payTransDtlInfoDO.getTrxRetMsg())) {
+            if (StringUtil.isEmpty(payTransDtlInfoDO.getTrxRetMsg())) {
                 payTransDtlInfoDO.setTrxRetMsg(msg);
             }
-            payTransDtlInfoRepository.update(payTransDtlInfoDO);
+            payTransDtlInfoMapper.update((Map<String, String>) payTransDtlInfoDO);
             // 响应报文
             ECNYRspHead ecnyRspHead = new ECNYRspHead(payTransDtlInfoDO.getTrxStatus());
             ECNYRspDTO ecnyRspDTO = ECNYRspDTO.newInstance(ecnyReqDTO, ecnyRspHead, null, payTransDtlInfoDO.getTrxRetCode(), payTransDtlInfoDO.getTrxRetMsg());
@@ -680,8 +696,9 @@ public class PayConvert227STradeFlow {
      *
      * @param payTransDtlInfoDO
      */
-//    public void bankRev(PayTransDtlInfoDO payTransDtlInfoDO) {
+    public void bankRev(PayTransDtlInfoDO payTransDtlInfoDO) {
+        //Todo
 //        coreEventService.registerBankRev(payTransDtlInfoDO.getPayDate(), payTransDtlInfoDO.getPaySerno(), ConvertBankRevCallBack.class);
-//    }
+    }
 
 }
