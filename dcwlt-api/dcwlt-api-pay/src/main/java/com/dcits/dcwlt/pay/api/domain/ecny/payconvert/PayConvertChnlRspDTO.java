@@ -1,8 +1,9 @@
 package com.dcits.dcwlt.pay.api.domain.ecny.payconvert;
 
 import com.dcits.dcwlt.pay.api.domain.ecny.ECNYReqBody;
+import com.dcits.dcwlt.pay.api.domain.ecny.ECNYRspBody;
 
-public class PayConvertChnlRspDTO extends ECNYReqBody {
+public class PayConvertChnlRspDTO extends ECNYRspBody {
 
     private String coreAcctDate;// 核心记账日期
     private String coreSerno;// 核心记账流水
