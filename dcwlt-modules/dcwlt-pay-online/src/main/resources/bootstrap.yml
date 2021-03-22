@@ -31,11 +31,3 @@ rocketmq:
     group: producer-group-1 #生产者
   consumer:
     group: consumer-group-1 #消费者
-
-# 数字钱包原始代码配置
-ency:
-  batch:
-    task:
-      execute:
-        threads: 10
-
