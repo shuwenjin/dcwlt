@@ -3,6 +3,7 @@ package com.dcits.dcwlt.job.service;
 import java.util.List;
 import java.util.UUID;
 
+import com.dcits.dcwlt.common.pay.sequence.service.IGenerateCodeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.dcits.dcwlt.job.domain.SysJobLog;
@@ -18,6 +19,9 @@ public class SysJobLogServiceImpl implements ISysJobLogService
 {
     @Autowired
     private SysJobLogMapper jobLogMapper;
+
+    @Autowired
+    private IGenerateCodeService generateCodeService;
 
     /**
      * 调度任务日志查询
@@ -52,7 +56,8 @@ public class SysJobLogServiceImpl implements ISysJobLogService
     public void addJobLog(SysJobLog jobLog)
     {
         if (null == jobLog.getJobLogId() || "".equals(jobLog.getJobLogId())) {
-            jobLog.setJobLogId(UUID.randomUUID().toString());
+            //jobLog.setJobLogId(UUID.randomUUID().toString());
+            jobLog.setJobLogId(generateCodeService.generateCoreReqSerno());
         }
         jobLogMapper.insertJobLog(jobLog);
     }

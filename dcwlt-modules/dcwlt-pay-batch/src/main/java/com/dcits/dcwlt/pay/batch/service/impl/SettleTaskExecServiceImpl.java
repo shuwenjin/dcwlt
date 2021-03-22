@@ -97,7 +97,7 @@ public class SettleTaskExecServiceImpl implements ISettleTaskExecService {
 		if (taskGroupExec.getExecState().equals(TaskExecStatusEnum.SUCC.getCode())) {
 			throw new SettleTaskException(SettleTaskErrorEnum.BC0001.getCode(), SettleTaskErrorEnum.BC0001.getDesc());
 		}
-		
+
 		//查询任务列表
 		List<SettleTaskExecDO> taskExecList = settleTaskExecMapper.queryTaskExecListByCode(taskGroupExec.getSettleDate(),
 				taskGroupExec.getTaskGroupCode(), taskGroupExec.getBatchId());

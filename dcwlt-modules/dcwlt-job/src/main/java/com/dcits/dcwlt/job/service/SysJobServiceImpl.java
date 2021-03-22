@@ -7,6 +7,7 @@ import javax.annotation.PostConstruct;
 import com.dcits.dcwlt.common.core.constant.ScheduleConstants;
 import com.dcits.dcwlt.common.core.constant.SysJobConstants;
 import com.dcits.dcwlt.common.core.exception.job.TaskException;
+import com.dcits.dcwlt.common.pay.sequence.service.IGenerateCodeService;
 import org.quartz.JobDataMap;
 import org.quartz.JobKey;
 import org.quartz.Scheduler;
@@ -32,6 +33,9 @@ public class SysJobServiceImpl implements ISysJobService
 
     @Autowired
     private SysJobMapper jobMapper;
+
+    @Autowired
+    private IGenerateCodeService generateCodeService;
 
     /**
      * 项目启动时，初始化定时器 主要是防止手动修改数据库导致未同步到定时任务处理（注：不能手动修改数据库ID和任务组名，否则会导致脏数据）
@@ -284,7 +288,8 @@ public class SysJobServiceImpl implements ISysJobService
     {
         // 生成Id
         if (null == job.getJobId() || "".equals(job.getJobId())) {
-            job.setJobId(UUID.randomUUID().toString());
+            //job.setJobId(UUID.randomUUID().toString());
+            job.setJobId(generateCodeService.generateCoreReqSerno());
         }
 
         if (SysJobConstants.MAINJOB.equals(job.getJobType())) {

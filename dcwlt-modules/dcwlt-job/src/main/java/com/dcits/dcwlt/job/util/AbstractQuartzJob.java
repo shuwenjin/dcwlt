@@ -8,6 +8,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.dcits.dcwlt.common.core.constant.ScheduleConstants;
 import com.dcits.dcwlt.common.core.constant.SysJobConstants;
 import com.dcits.dcwlt.common.core.utils.bean.BeanUtils;
+import com.dcits.dcwlt.common.pay.sequence.service.IGenerateCodeService;
 import com.dcits.dcwlt.job.domain.SysJob;
 import com.dcits.dcwlt.job.domain.SysJobLog;
 import com.dcits.dcwlt.job.service.ISysJobLogService;
@@ -36,6 +37,9 @@ public abstract class AbstractQuartzJob implements Job
 
     @Autowired
     ISysJobLogService jobLogService;
+
+    @Autowired
+    private IGenerateCodeService generateCodeService;
 
     /**
      * 线程本地变量
@@ -103,7 +107,8 @@ public abstract class AbstractQuartzJob implements Job
 
         final SysJobLog sysJobLog = new SysJobLog();
         BeanUtils.copyBeanProp(sysJobLog, sysJob);
-        String jobLogId = UUID.randomUUID().toString();
+        //String jobLogId = UUID.randomUUID().toString();
+        String jobLogId = generateCodeService.generateCoreReqSerno();
         sysJobLog.setJobLogId(jobLogId);
         sysJobLog.setStartTime(startTime);
         sysJobLog.setStopTime(new Date());
@@ -157,7 +162,8 @@ public abstract class AbstractQuartzJob implements Job
                 SysJob sysRetryJob = new SysJob();
                 BeanUtils.copyBeanProp(sysRetryJob, sysJob);
                 // 生成新的jobId
-                String retryJobId = UUID.randomUUID().toString();
+                //String retryJobId = UUID.randomUUID().toString();
+                String retryJobId = generateCodeService.generateCoreReqSerno();
                 sysRetryJob.setJobId(retryJobId);
                 // 设置父任务Id
                 sysRetryJob.setFjobId(sysJob.getJobId());
