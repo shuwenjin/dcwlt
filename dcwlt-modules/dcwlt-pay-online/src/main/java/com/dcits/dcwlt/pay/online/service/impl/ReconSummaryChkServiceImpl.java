@@ -66,6 +66,7 @@ public class ReconSummaryChkServiceImpl implements IReconSummaryChkService {
                 saveReconSummaryChkDTO = reconSummaryChkRepository.replaceReconSummaryChkDO(reconSummaryChkDO);
                 logger.info("对总信息入库成功，汇总信息：{}", saveReconSummaryChkDTO);
             } catch (Exception e) {
+                e.printStackTrace();
                 logger.error("汇总信息入库失败,报文标识号为：{}", reconSummaryChkDO.getMsgId());
                 throw new EcnyTransException(e.getMessage(), EcnyTransError.DATABASE_ERROR.getErrorCode(),EcnyTransError.DATABASE_ERROR.getErrorMsg());
             }
@@ -178,14 +179,18 @@ public class ReconSummaryChkServiceImpl implements IReconSummaryChkService {
         DCEPReqDTO<ReconSummaryChkDTO> reqMsg = EcnyTradeContext.getReqMsg(tradeContext);
         ReconSummaryChkDTO summaryChkDTO = reqMsg.getBody();
         ReconSummaryChk reconSummaryChk = summaryChkDTO.getReconSummaryChk();
-        List<SummaryBody> summaryBodyList = reconSummaryChk.getSummaryChkInf().getSummaryBody();
+        SummaryBody summaryBody = reconSummaryChk.getSummaryChkInf().getSummaryBody();
         List<SummaryInfoDO> arrayList = new ArrayList<>();
-        if (null != summaryBodyList && !summaryBodyList.isEmpty()) {
-            for (SummaryBody summaryBody : summaryBodyList) {
+        if (null != summaryBody && !summaryBody.getSummaryGrp().isEmpty()) {
+            for (SummaryGrp summaryGrp : summaryBody.getSummaryGrp()) {
                 //业务信息
-                List<ChkPayList> chkPayList = summaryBody.getChkPayList();
-                if (null != chkPayList && !chkPayList.isEmpty()) {
-                    for (ChkPayList chkPay : chkPayList) {
+                ChkPayList chkPayList = summaryGrp.getChkPayList();
+                List<ChkPayInf> chkPayInf = null;
+                if (null != chkPayList) {
+                    chkPayInf = chkPayList.getChkPayInf();
+                }
+                if (null != chkPayInf && !chkPayInf.isEmpty()) {
+                    for (ChkPayInf chkPay : chkPayInf) {
                         SummaryInfoDO summaryInfoDO = new SummaryInfoDO();
                         //报文标识
                         summaryInfoDO.setMsgId(reconSummaryChk.getGrpHdr().getMsgId());
@@ -199,19 +204,19 @@ public class ReconSummaryChkServiceImpl implements IReconSummaryChkService {
                         summaryInfoDO.setLastUpTime(DateUtil.getDefaultTime());
                         /***************SummaryBody<SummaryGrp>分片信息*************/
                         //分片编号
-                        summaryInfoDO.setSplitNum(summaryBody.getNb());
+                        summaryInfoDO.setSplitNum(summaryGrp.getNb());
                         //分片总笔数
-                        summaryInfoDO.setSplitCountNum(summaryBody.getCntNb());
+                        summaryInfoDO.setSplitCountNum(summaryGrp.getCntNb());
                         //分片总金额
-                        summaryInfoDO.setSplitCountAmt(AmountUtil.yuanToFen(summaryBody.getCntAmt().getValue()));
+                        summaryInfoDO.setSplitCountAmt(AmountUtil.yuanToFen(summaryGrp.getCntAmt().getValue()));
                         //分片记录付款笔数总数
-                        summaryInfoDO.setSplitDbitCountNum(summaryBody.getDbtCntNb());
+                        summaryInfoDO.setSplitDbitCountNum(summaryGrp.getDbtCntNb());
                         //分片记录付款金额总数
-                        summaryInfoDO.setSplitDbitCountAmt(AmountUtil.yuanToFen(summaryBody.getDbtCntAmt().getValue()));
+                        summaryInfoDO.setSplitDbitCountAmt(AmountUtil.yuanToFen(summaryGrp.getDbtCntAmt().getValue()));
                         //汇总记录收款笔数总
-                        summaryInfoDO.setSplitCrdtCountNum(summaryBody.getCdtCntNb());
+                        summaryInfoDO.setSplitCrdtCountNum(summaryGrp.getCdtCntNb());
                         //汇总记录收款金额总数
-                        summaryInfoDO.setSplitCrdtCountAmt(AmountUtil.yuanToFen(summaryBody.getCdtCntAmt().getValue()));
+                        summaryInfoDO.setSplitCrdtCountAmt(AmountUtil.yuanToFen(summaryGrp.getCdtCntAmt().getValue()));
 
                         /******************ChkPayList<ChkPayInf>业务清单信息************/
                         //报文编号
@@ -252,13 +257,23 @@ public class ReconSummaryChkServiceImpl implements IReconSummaryChkService {
         //对账汇总消息头
         SummaryHdr summaryHdr = summaryChkInf.getSummaryHdr();
         DtlFileInf dtlFileInf = summaryChkInf.getDtlFileInf();
-        List<FileInf> fileInfList = dtlFileInf.getFileInfList();
+        List<FileInf> fileInfs = null;
+        if (null != dtlFileInf) {
+            FileInfList fileInfList = dtlFileInf.getFileInfList();
+            if (null != fileInfList) {
+                fileInfs = fileInfList.getFileInf();
+            }
+        }
         ArrayList<DtlFileInfDO> arrayList = new ArrayList<>();
-        if (null != fileInfList && !fileInfList.isEmpty()) {
-            for (FileInf fileInf : fileInfList) {
-                List<String> fileNameList = fileInf.getFileNameList();
-                if (null != fileInf && !fileNameList.isEmpty()) {
-                    for (String fileNameList1 : fileNameList) {
+        if (null != fileInfs && !fileInfs.isEmpty()) {
+            for (FileInf fileInf : fileInfs) {
+                FileNameList fileNameList = fileInf.getFileNameList();
+                List<FileName> fileName = null;
+                if (null != fileNameList) {
+                    fileName = fileNameList.getFileName();
+                }
+                if (null != fileName && !fileName.isEmpty()) {
+                    for (FileName fileNameList1 : fileName) {
                         DtlFileInfDO dtlFileInfDO = new DtlFileInfDO();
                         //报文标识
                         dtlFileInfDO.setMsgId(reconSummaryChk.getGrpHdr().getMsgId());
@@ -271,7 +286,7 @@ public class ReconSummaryChkServiceImpl implements IReconSummaryChkService {
                         //文件路径
                         dtlFileInfDO.setSrcFilePath(fileInf.getFilePath());
                         //文件名称
-                        dtlFileInfDO.setFileName(fileNameList1);
+                        dtlFileInfDO.setFileName(fileNameList1.getFileName());
                         arrayList.add(dtlFileInfDO);
                     }
                 }

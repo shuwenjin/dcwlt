@@ -4,7 +4,6 @@ import com.alibaba.fastjson.annotation.JSONField;
 import org.hibernate.validator.constraints.Length;
 
 import javax.validation.constraints.NotNull;
-import java.util.List;
 
 public class FileInf {
     /*
@@ -16,9 +15,7 @@ public class FileInf {
     /*
      * 文件名称列表
      * */
-   /* @NotNull(message = "文件名称不能为空")
-    @Length(max = 64)*/
-    private List<String> fileNameList;
+    private FileNameList fileNameList;
 
     @JSONField(name = "FilePath")
     public String getFilePath() {
@@ -30,11 +27,11 @@ public class FileInf {
     }
 
     @JSONField(name = "FileNameList")
-    public List<String> getFileNameList() {
+    public FileNameList getFileNameList() {
         return fileNameList;
     }
 
-    public void setFileNameList(List<String> fileNameList) {
+    public void setFileNameList(FileNameList fileNameList) {
         this.fileNameList = fileNameList;
     }
 

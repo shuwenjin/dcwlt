@@ -21,7 +21,7 @@ public class SummaryChkInf {
     private SummaryHdr summaryHdr;
     //汇总消息体
     @Valid
-    private List<SummaryBody> summaryBody;
+    private SummaryBody summaryBody;
     //对账明细文件信息
     @Valid
     private DtlFileInf dtlFileInf;
@@ -39,11 +39,11 @@ public class SummaryChkInf {
     }
 
     @JSONField(name = "SummaryBody")
-    public List<SummaryBody> getSummaryBody() {
+    public SummaryBody getSummaryBody() {
         return summaryBody;
     }
 
-    public void setSummaryBody(List<SummaryBody> summaryBody) {
+    public void setSummaryBody(SummaryBody summaryBody) {
         this.summaryBody = summaryBody;
     }
 

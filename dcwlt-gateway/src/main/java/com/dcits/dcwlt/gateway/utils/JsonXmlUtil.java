@@ -19,12 +19,7 @@ import java.io.StringReader;
 import java.io.StringWriter;
 import java.net.URL;
 import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 /**
  * JSON对象与XML相互转换工具类
@@ -51,7 +46,7 @@ public class JsonXmlUtil {
     private static final String SOAP_BODY_ATT_V = "http://www.dcep.com/";
     private static final String MSGTP = "head:MsgTp";
 
-    private static final Set<String> LISTELEMENTS = new HashSet<String>(Arrays.asList(new String[]{"FileInfList", "AuthrtyInf", "ChngInf", "BizAuthrtyInf", "BatchList", "ClrList", "FileNameList", "ChkPayList", "SummaryBody"}));
+    private static final Set<String> LISTELEMENTS = new HashSet<String>(Arrays.asList(new String[]{"FileInf", "AuthrtyInf", "ChngInf", "BizAuthrtyInf", "BatchList", "ClrList", "FileName", "ChkPayInf", "SummaryGrp"}));
 
     private JsonXmlUtil() {
         throw new IllegalStateException("Utility class");
@@ -68,7 +63,9 @@ public class JsonXmlUtil {
         SAXReader reader = new SAXReader();
         Document document = reader.read(new StringReader(xml));
         Element root = document.getRootElement();
-        JSONObject json = dcepElementToJson(root);
+        JSONObject parent = new JSONObject();
+        JSONObject json = dcepElementToJson(root, parent);
+        System.out.println(json.toJSONString());
         return json;
     }
 
@@ -78,45 +75,78 @@ public class JsonXmlUtil {
      * @param element Element对象
      * @return JSON对象
      */
-    public static JSONObject dcepElementToJson(Element element) {
-        JSONObject json = new JSONObject();
+    public static JSONObject dcepElementToJson(Element element, JSONObject parent) {
+        // 判断当前节点是否有child
+        if (element.elements().isEmpty()) {
+            if (element.attributes().isEmpty()) {
+                parent.put(element.getName(), element.getText());
+            } else {
+                parent.put(element.getName(), CcyToJSON(element));
+            }
+            return parent;
+        }
+        // key 计数器， key的数量大于1则为数组
+        Map<String, Integer> keyCount = new HashMap<>();
         for (Object child : element.elements()) {
             Element e = (Element) child;
-            if (LISTELEMENTS.contains(e.getName())) {
+            String key = e.getName();
+            if (null == keyCount.get(key)) {
+                keyCount.put(key, 1);
+            } else {
+                keyCount.put(key, keyCount.get(key) + 1);
+            }
+        }
+        // key的数组值map
+        Map<String, JSONArray> jsonArrayMap = new HashMap<>();
+        for (Object child : element.elements()) {
+            Element e = (Element) child;
+            if (keyCount.get(e.getName()) > 1 || LISTELEMENTS.contains(e.getName())) {
                 //数组
-                json.put(e.getName(), dcepElementLitToJsonArray(e));
+                if (null == jsonArrayMap.get(e.getName())) {
+                    JSONArray jsonArray = new JSONArray();
+                    JSONObject json = new JSONObject();
+                    json = dcepElementToJson(e, json);
+                    jsonArray.add(json);
+                    jsonArrayMap.put(e.getName(), jsonArray);
+                } else {
+                    JSONObject json = new JSONObject();
+                    json = dcepElementToJson(e, json);
+                    JSONArray jsonArray = jsonArrayMap.get(e.getName());
+                    jsonArray.add(json);
+                    jsonArrayMap.put(e.getName(), jsonArray);
+                }
             } else {
                 if (e.elements().isEmpty()) {
                     if (e.attributes().isEmpty()) {
-                        json.put(e.getName(), e.getText());
+                        parent.put(e.getName(), e.getText());
                     } else {
-                        JSONObject jsonCcy = new JSONObject();
-                        jsonCcy.put(KEY_CCY, e.attributeValue(KEY_CCY));
-                        jsonCcy.put(KEY_VALUE, e.getText());
-                        json.put(e.getName(), jsonCcy);
+                        parent.put(e.getName(), CcyToJSON(e));
                     }
                 } else {
-                    json.put(e.getName(), dcepElementToJson(e));
+                    JSONObject subJson = new JSONObject();
+                    subJson = dcepElementToJson(e, subJson);
+                    parent.put(e.getName(), dcepElementToJson(e, subJson));
                 }
             }
         }
+        // 遍历key的数组值map
+        for (Map.Entry<String, JSONArray> entry : jsonArrayMap.entrySet()) {
+            parent.put(entry.getKey(), entry.getValue());
+        }
 
-        return json;
+        return parent;
     }
 
-    public static JSONArray dcepElementLitToJsonArray(Element element) {
-        JSONArray jsonArray = new JSONArray();
-        for (Object child : element.elements()) {
-            Element e = (Element) child;
-            JSONObject json = new JSONObject();
-            if(e.elements().isEmpty()){
-                json.put(e.getName(), e.getText());
-            }else {
-                json.put(e.getName(), dcepElementToJson(e));
-            }
-            jsonArray.add(json);
-        }
-        return jsonArray;
+    /**
+     * CcyToJSON 处理属性中的 Ccy
+     * @param element
+     * @return
+     */
+    public static JSONObject CcyToJSON(Element element) {
+        JSONObject jsonCcy = new JSONObject();
+        jsonCcy.put(KEY_CCY, element.attributeValue(KEY_CCY));
+        jsonCcy.put(KEY_VALUE, element.getText());
+        return jsonCcy;
     }
 
     /**
@@ -423,10 +453,7 @@ public class JsonXmlUtil {
                 if (e.attributes().isEmpty()) {
                     json.put(e.getName(), e.getText());
                 } else {
-                    JSONObject jsonCcy = new JSONObject();
-                    jsonCcy.put(KEY_CCY, e.attributeValue(KEY_CCY));
-                    jsonCcy.put(KEY_VALUE, e.getText());
-                    json.put(e.getName(), jsonCcy);
+                    json.put(e.getName(), CcyToJSON(e));
                 }
             } else {
                 json.put(e.getName(), elementToJson(e));
