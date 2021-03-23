@@ -1,0 +1,193 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/" xmlns:head="http://www.dcep.com/dcep/header/">
+    <soap:Header>
+        <head:Ver>01</head:Ver>
+        <head:SndDtTm>2021-01-13T16:12:27</head:SndDtTm>
+        <head:MsgTp>dcep.711.001.01</head:MsgTp>
+        <head:MsgSN>202101130001711819829805147000000001</head:MsgSN>
+        <head:Sender>G4001011000013</head:Sender>
+        <head:Receiver>C1030644021075</head:Receiver>
+        <head:SignSN>4</head:SignSN>
+    </soap:Header>
+    <soap:Body>
+        <wstxns1:ReconSummaryChk xmlns:wstxns1="http://www.dcep.com/dcep/71100101/">
+            <GrpHdr>
+                <MsgId>20210113000171181982980514700000</MsgId>
+                <CreDtTm>2021-01-13T16:12:27</CreDtTm>
+                <InstgPty>
+                    <InstgDrctPty>G4001011000013</InstgDrctPty>
+                </InstgPty>
+                <InstdPty>
+                    <InstdDrctPty>C1030644021075</InstdDrctPty>
+                </InstdPty>
+                <Rmk>机构对账汇总核对报文</Rmk>
+            </GrpHdr>
+            <SummaryChkInf>
+                <SummaryHdr>
+                    <BatchId>B202101131600</BatchId>
+                    <CntNb>15</CntNb>
+                    <CntAmt Ccy="CNY">10161.34</CntAmt>
+                    <DbtCntNb>4</DbtCntNb>
+                    <DbtCntAmt Ccy="CNY">103.96</DbtCntAmt>
+                    <CdtCntNb>11</CdtCntNb>
+                    <CdtCntAmt Ccy="CNY">10057.38</CdtCntAmt>
+                </SummaryHdr>
+                <SummaryBody>
+                    <SummaryGrp>
+                        <Nb>00</Nb>
+                        <CntNb>2</CntNb>
+                        <CntAmt Ccy="CNY">10001.00</CntAmt>
+                        <DbtCntNb>0</DbtCntNb>
+                        <DbtCntAmt Ccy="CNY">0.00</DbtCntAmt>
+                        <CdtCntNb>2</CdtCntNb>
+                        <CdtCntAmt Ccy="CNY">10001.00</CdtCntAmt>
+                        <ChkPayList>
+                            <ChkPayInf>
+                                <MsgTp>dcep.227.001.01</MsgTp>
+                                <BizSts>PR00</BizSts>
+                                <CntNb>1</CntNb>
+                                <CntAmt Ccy="CNY">1.00</CntAmt>
+                                <DbtCntNb>0</DbtCntNb>
+                                <DbtCntAmt Ccy="CNY">0.00</DbtCntAmt>
+                                <CdtCntNb>1</CdtCntNb>
+                                <CdtCntAmt Ccy="CNY">1.00</CdtCntAmt>
+                            </ChkPayInf>
+                            <ChkPayInf>
+                                <MsgTp>dcep.227.001.01</MsgTp>
+                                <BizSts>PR01</BizSts>
+                                <CntNb>1</CntNb>
+                                <CntAmt Ccy="CNY">10000.00</CntAmt>
+                                <DbtCntNb>0</DbtCntNb>
+                                <DbtCntAmt Ccy="CNY">0.00</DbtCntAmt>
+                                <CdtCntNb>1</CdtCntNb>
+                                <CdtCntAmt Ccy="CNY">10000.00</CdtCntAmt>
+                            </ChkPayInf>
+                        </ChkPayList>
+                    </SummaryGrp>
+                    <SummaryGrp>
+                        <Nb>68</Nb>
+                        <CntNb>2</CntNb>
+                        <CntAmt Ccy="CNY">0.07</CntAmt>
+                        <DbtCntNb>0</DbtCntNb>
+                        <DbtCntAmt Ccy="CNY">0.00</DbtCntAmt>
+                        <CdtCntNb>2</CdtCntNb>
+                        <CdtCntAmt Ccy="CNY">0.07</CdtCntAmt>
+                        <ChkPayList>
+                            <ChkPayInf>
+                                <MsgTp>dcep.221.001.01</MsgTp>
+                                <BizSts>PR01</BizSts>
+                                <CntNb>1</CntNb>
+                                <CntAmt Ccy="CNY">0.01</CntAmt>
+                                <DbtCntNb>0</DbtCntNb>
+                                <DbtCntAmt Ccy="CNY">0.00</DbtCntAmt>
+                                <CdtCntNb>1</CdtCntNb>
+                                <CdtCntAmt Ccy="CNY">0.01</CdtCntAmt>
+                            </ChkPayInf>
+                            <ChkPayInf>
+                                <MsgTp>dcep.227.001.01</MsgTp>
+                                <BizSts>PR03</BizSts>
+                                <CntNb>1</CntNb>
+                                <CntAmt Ccy="CNY">0.06</CntAmt>
+                                <DbtCntNb>0</DbtCntNb>
+                                <DbtCntAmt Ccy="CNY">0.00</DbtCntAmt>
+                                <CdtCntNb>1</CdtCntNb>
+                                <CdtCntAmt Ccy="CNY">0.06</CdtCntAmt>
+                            </ChkPayInf>
+                        </ChkPayList>
+                    </SummaryGrp>
+                    <SummaryGrp>
+                        <Nb>76</Nb>
+                        <CntNb>2</CntNb>
+                        <CntAmt Ccy="CNY">0.20</CntAmt>
+                        <DbtCntNb>0</DbtCntNb>
+                        <DbtCntAmt Ccy="CNY">0.00</DbtCntAmt>
+                        <CdtCntNb>2</CdtCntNb>
+                        <CdtCntAmt Ccy="CNY">0.20</CdtCntAmt>
+                        <ChkPayList>
+                            <ChkPayInf>
+                                <MsgTp>dcep.227.001.01</MsgTp>
+                                <BizSts>PR00</BizSts>
+                                <CntNb>1</CntNb>
+                                <CntAmt Ccy="CNY">0.10</CntAmt>
+                                <DbtCntNb>0</DbtCntNb>
+                                <DbtCntAmt Ccy="CNY">0.00</DbtCntAmt>
+                                <CdtCntNb>1</CdtCntNb>
+                                <CdtCntAmt Ccy="CNY">0.10</CdtCntAmt>
+                            </ChkPayInf>
+                            <ChkPayInf>
+                                <MsgTp>dcep.227.001.01</MsgTp>
+                                <BizSts>PR03</BizSts>
+                                <CntNb>1</CntNb>
+                                <CntAmt Ccy="CNY">0.10</CntAmt>
+                                <DbtCntNb>0</DbtCntNb>
+                                <DbtCntAmt Ccy="CNY">0.00</DbtCntAmt>
+                                <CdtCntNb>1</CdtCntNb>
+                                <CdtCntAmt Ccy="CNY">0.10</CdtCntAmt>
+                            </ChkPayInf>
+                        </ChkPayList>
+                    </SummaryGrp>
+                </SummaryBody>
+                <DtlFileInf>
+                    <FileInfNb>9</FileInfNb>
+                    <FileInfList>
+                        <FileInf>
+                            <FilePath>127.0.0.1:22/dcrecon/20200525/C1010511003703/trade/00/</FilePath>
+                            <FileNameList>
+                                <FileName>B202005251400_00_01.zip.sec</FileName>
+                            </FileNameList>
+                        </FileInf>
+                        <FileInf>
+                            <FilePath>127.0.0.1:22/dcrecon/20200525/C1010511003703/trade/01/</FilePath>
+                            <FileNameList>
+                                <FileName>B202005251400_01_01.zip.sec</FileName>
+                            </FileNameList>
+                        </FileInf>
+                        <FileInf>
+                            <FilePath>127.0.0.1:22/dcrecon/20200525/C1010511003703/trade/02/</FilePath>
+                            <FileNameList>
+                                <FileName>B202005251400_02_01.zip.sec</FileName>
+                            </FileNameList>
+                        </FileInf>
+                        <FileInf>
+                            <FilePath>127.0.0.1:22/dcrecon/20200525/C1010511003703/trade/03/</FilePath>
+                            <FileNameList>
+                                <FileName>B202005251400_03_01.zip.sec</FileName>
+                            </FileNameList>
+                        </FileInf>
+                        <FileInf>
+                            <FilePath>127.0.0.1:22/dcrecon/20200525/C1010511003703/trade/33/</FilePath>
+                            <FileNameList>
+                                <FileName>B202005251400_33_01.zip.sec</FileName>
+                            </FileNameList>
+                        </FileInf>
+                        <FileInf>
+                            <FilePath>127.0.0.1:22/dcrecon/20200525/C1010511003703/trade/46/</FilePath>
+                            <FileNameList>
+                                <FileName>B202005251400_46_01.zip.sec</FileName>
+                            </FileNameList>
+                        </FileInf>
+                        <FileInf>
+                            <FilePath>127.0.0.1:22/dcrecon/20200525/C1010511003703/trade/68/</FilePath>
+                            <FileNameList>
+                                <FileName>B202005251400_68_01.zip.sec</FileName>
+                            </FileNameList>
+                        </FileInf>
+                        <FileInf>
+                            <FilePath>127.0.0.1:22/dcrecon/20200525/C1010511003703/trade/73/</FilePath>
+                            <FileNameList>
+                                <FileName>B202005251400_73_01.zip.sec</FileName>
+                            </FileNameList>
+                        </FileInf>
+                        <FileInf>
+                            <FilePath>127.0.0.1:22/dcrecon/20200525/C1010511003703/trade/76/</FilePath>
+                            <FileNameList>
+                                <FileName>B202005251400_76_01.zip.sec</FileName>
+                            </FileNameList>
+                        </FileInf>
+                    </FileInfList>
+                </DtlFileInf>
+                <ReconIndex>0x7b75633e709800a1e4ddc97a1fb54d56a65593b432ea79eeab57cec41dc229ba</ReconIndex>
+            </SummaryChkInf>
+        </wstxns1:ReconSummaryChk>
+    </soap:Body>
+</soap:Envelope>

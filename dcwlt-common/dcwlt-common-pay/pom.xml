@@ -104,6 +104,10 @@
             <groupId>dom4j</groupId>
             <artifactId>dom4j</artifactId>
         </dependency>
+        <dependency>
+            <groupId>com.dcits</groupId>
+            <artifactId>dcwlt-common-core</artifactId>
+        </dependency>
     </dependencies>
 
 </project>

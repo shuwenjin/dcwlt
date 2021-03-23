@@ -9,6 +9,9 @@ import com.dcits.dcwlt.pay.api.domain.dcep.eventBatch.EventConfigDO;
 import com.dcits.dcwlt.pay.api.domain.dcep.eventBatch.EventDealReqMsg;
 import com.dcits.dcwlt.pay.api.domain.dcep.eventBatch.EventDealRspMsg;
 import com.dcits.dcwlt.pay.api.domain.dcep.eventBatch.EventInfoDO;
+import com.dcits.dcwlt.pay.api.fun.FunInvokerFactory;
+import com.dcits.dcwlt.pay.api.fun.FunInvoker;
+import com.dcits.dcwlt.pay.api.fun.FunExecutor;
 import com.dcits.dcwlt.pay.online.event.IEventDealAppService;
 import com.dcits.dcwlt.pay.online.mapper.EventMapper;
 import com.dcits.dcwlt.pay.online.service.IEventRegisterAppService;
@@ -22,6 +25,8 @@ import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 /**
  * @author zhanguohai
@@ -182,18 +187,33 @@ public class EventDealAppService implements IEventDealAppService {
         rspMsg.setExceptEventCode(eventInfo.getExceptEventCode());
         rspMsg.setExceptEventSeqNo(eventInfo.getExceptEventSeqNo());
 
-        // 获取执行路径
-        String exceptEventTrxCode = config.getExceptEventTrxCode();
+        //请求FUN交易初始化
+        FunInvoker invoker = FunInvokerFactory.getFunInvoker(config.getExceptEventTrxCode());//根据 FUN Path 获取 FUN 执行器
 
-        if (StringUtils.equals("pathQry/runPathQry", exceptEventTrxCode)) {
-            // 执行通道状态回查事件
-            EventDealRspMsg eventDealRspMsg = pathQryService.runFlow(eventInfo);
-            return eventDealRspMsg;
+        //本线程调用
+        if (EventConst.EVENT_DEAL_MODE_LOCAL.equals(config.getExceptDealMode())) {
+            Object respParam = FunExecutor.execute(invoker, eventInfo);// 执行 FUN，获取返回结果
+            return (EventDealRspMsg) respParam;
+            //异步线程调用
+        } else if (EventConst.EVENT_DEAL_MODE_ASYNC.equals(config.getExceptDealMode())) {
+            ExecutorService executorService = Executors.newSingleThreadExecutor();
+            executorService.submit(() -> {
+                try {
+                    FunExecutor.execute(invoker, eventInfo);
+                } catch (Exception e) {
+                    //异步调用不处理异常
+                }
+            });
+            executorService.shutdown();
+            rspMsg.setRetryFlag(EventConst.EVENT_DEAL_RETRY_N);
+            rspMsg.setRespCode(PlatformError.SUCCESS.getErrorCode());
+            rspMsg.setRespMsg(PlatformError.SUCCESS.getErrorMsg());
+            return rspMsg;
+            //其他暂不开放
+        } else {
+            logger.info("异常事件暂不支持该处理模式");
+            rspMsg.setRetryFlag(EventConst.EVENT_DEAL_RETRY_N);
+            throw new EventDealException(EventDealError.SYS_ERR);
         }
-
-        rspMsg.setRetryFlag(EventConst.EVENT_DEAL_RETRY_N);
-        rspMsg.setRespCode(PlatformError.SUCCESS.getErrorCode());
-        rspMsg.setRespMsg(PlatformError.SUCCESS.getErrorMsg());
-        return rspMsg;
     }
 }
