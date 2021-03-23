@@ -13,13 +13,13 @@ import com.dcits.dcwlt.pay.online.service.impl.AuthInfoServiceimpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 /**
- * @author wuguofeng01
- * @Time 2021/01/02 15:29
- * @Version 1.0
  * Description:核心回查
  */
+@Component
 public class DisputeCoreQryCallBack implements ICoreQryCallBack {
     private static final Logger logger = LoggerFactory.getLogger(DisputeCoreQryCallBack.class);
 

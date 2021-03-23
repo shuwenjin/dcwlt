@@ -85,7 +85,7 @@ public class AccFlowServiceImpl {
         Map<String, String> param = new HashMap<>();
         param.put("payDate", payDate);
         param.put("paySerno", paySerno);
-        return accflowMapper.selectCoreReqSerno(QUERY_BY_PAY_ACCFLOW_SQL, param);
+        return accflowMapper.selectCoreReqSerno(param);
     }
 
     public int updateCoreStatus(AccFlowDO updAccFlowDO) {
@@ -94,7 +94,7 @@ public class AccFlowServiceImpl {
         updAccFlowDO.setLastUpTime(DateUtil.getDefaultTime());
         updAccFlowDO.setLastMicroSecond(String.valueOf(System.currentTimeMillis()));
 
-        return accflowMapper.updateCoreStatus(UPDATE_STATUS_ACCFLOW_SQL, updAccFlowDO);
+        return accflowMapper.updateCoreStatus(updAccFlowDO);
     }
 }
 

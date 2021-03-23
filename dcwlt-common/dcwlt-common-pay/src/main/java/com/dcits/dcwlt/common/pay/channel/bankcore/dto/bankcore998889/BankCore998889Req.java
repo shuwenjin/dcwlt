@@ -10,14 +10,13 @@
 package com.dcits.dcwlt.common.pay.channel.bankcore.dto.bankcore998889;
 
 import com.alibaba.fastjson.annotation.JSONField;
-import com.dcits.dcwlt.common.pay.channel.bankcore.dto.IBankCoreBody;
 
 /**
  * 
  * @author luojie03
  *
  */
-public class BankCore998889Req implements IBankCoreBody {
+public class BankCore998889Req {
 
 	@JSONField(name = "REQ_SYS_ID")
 	private String reqSysId; 			// 外围系统标识

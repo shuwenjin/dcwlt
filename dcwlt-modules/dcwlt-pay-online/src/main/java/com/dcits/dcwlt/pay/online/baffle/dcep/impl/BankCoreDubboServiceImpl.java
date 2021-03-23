@@ -2,6 +2,8 @@ package com.dcits.dcwlt.pay.online.baffle.dcep.impl;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.dcits.dcwlt.common.pay.channel.bankcore.IBankCoreBody;
+import com.dcits.dcwlt.common.pay.channel.bankcore.IBankCoreBodyArrayInfo;
 import com.dcits.dcwlt.common.pay.channel.bankcore.dto.*;
 import com.dcits.dcwlt.common.pay.channel.bankcore.dto.bankcore358040.BankCore358040ArrayInfoRsp;
 import com.dcits.dcwlt.common.pay.channel.bankcore.dto.bankcore358040.BankCore358040Req;
@@ -72,7 +74,7 @@ public class BankCoreDubboServiceImpl {
      * @param arrayBody    核心请求报文循环数组
      * @return
      */
-    public <T extends IBankCoreBody, A extends IBankCoreBodyArrayInfo> BankCoreReqMessage<T, A> buildBankCoreMessage(BankCoreReqHeader codeHeadInfo, BankCore998889Req body, List<A> arrayBody) {
+    public <T, A> BankCoreReqMessage<T, A> buildBankCoreMessage(BankCoreReqHeader codeHeadInfo, BankCore998889Req body, List<A> arrayBody) {
 
         return (BankCoreReqMessage<T, A>) BankCoreReqMessage.newInstance(codeHeadInfo, body, arrayBody);
     }
@@ -143,7 +145,7 @@ public class BankCoreDubboServiceImpl {
      * @throws DocumentException
      * @Description:构造返回实体类对象
      */
-    private <T extends IBankCoreBody, A extends IBankCoreBodyArrayInfo> BankCoreRspMessage<T, A> jsonToBankCoreMessage(
+    private <T, A> BankCoreRspMessage<T, A> jsonToBankCoreMessage(
             JSONObject retObj, Class<T> clazz, Class<A> arrayClazz) {
         // 获取服务网关头，报文体 json-->String
         JSONObject headObj = retObj.getJSONObject(Constant.HEAD_TAG);
@@ -181,7 +183,7 @@ public class BankCoreDubboServiceImpl {
      * @param arrayClazz
      * @return
      */
-    public <A extends IBankCoreBodyArrayInfo> List<A> jsonArrayToJavaObject(JSONArray array, Class<A> arrayClazz) {
+    public <A> List<A> jsonArrayToJavaObject(JSONArray array, Class<A> arrayClazz) {
         List<A> list = new ArrayList<>();
         for (int i = 0; i < array.size(); i++) {
             list.add(JSONObject.parseObject(array.getString(i), arrayClazz));

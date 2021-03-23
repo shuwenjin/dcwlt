@@ -9,6 +9,7 @@ import com.dcits.dcwlt.common.pay.constant.EventConst;
 import com.dcits.dcwlt.common.pay.exception.PlatformError;
 import com.dcits.dcwlt.pay.api.domain.dcep.eventBatch.EventDealReqMsg;
 import com.dcits.dcwlt.pay.api.model.PayTransDtlInfoDO;
+import com.dcits.dcwlt.pay.online.event.callback.DisputeCoreQryCallBack;
 import com.dcits.dcwlt.pay.online.service.IEventService;
 import com.dcits.dcwlt.pay.online.event.coreqry.ICoreQryCallBack;
 import com.dcits.dcwlt.pay.online.service.IPayTransDtlInfoService;
@@ -37,7 +38,7 @@ public class CoreQryService implements IEventService {
     private BankCoreAccTxnServiceImpl bankCoreAccTxnServiceImpl;
 
     @Autowired
-    private IPayTransDtlInfoService payTransDtlInfoRepository;
+    private IPayTransDtlInfoService payTransDtlInfoService;
 
     //@ParamLog
     @Override
@@ -54,7 +55,7 @@ public class CoreQryService implements IEventService {
         EventDealRspMsg eventDealRspMsg = initEventRspMsg(eventDealReqMsg);
 
         //3、判断原交易核心是否异常
-        PayTransDtlInfoDO payTransDtlInfoDO = payTransDtlInfoRepository.query(payDate,paySerno);
+        PayTransDtlInfoDO payTransDtlInfoDO = payTransDtlInfoService.query(payDate,paySerno);
         if(!Constant.CORESTATUS_ABEND.equals(payTransDtlInfoDO.getCoreProcStatus())){
             eventDealRspMsg.setRetryFlag(EventConst.EVENT_DEAL_RETRY_N);
             eventDealRspMsg.setRespCode(PlatformError.SYSTEM_ERROR.getErrorCode());
@@ -72,6 +73,9 @@ public class CoreQryService implements IEventService {
         return packEventRspMsg(eventDealRspMsg, bankCore996666Rsp);
     }
 
+    @Autowired
+    private DisputeCoreQryCallBack disputeCoreQryCallBack;
+
     /**
      * 回查回调事件
      * @param eventDealRspMsg
@@ -87,7 +91,7 @@ public class CoreQryService implements IEventService {
                 return eventDealRspMsg;
             }
             //存在回调处理，调用应用的冲正回调
-            String coreProcStatus = bankCoreAccTxnServiceImpl.getCoreStatusMap(bankCore996666Rsp.getTxnSts());;
+            String coreProcStatus = bankCoreAccTxnServiceImpl.getCoreStatusMap(bankCore996666Rsp.getTxnSts());
             ICoreQryCallBack callBack = (ICoreQryCallBack) Class.forName(callBackClassName).newInstance();
             if (Constant.CORESTATUS_SUCCESS.equals(coreProcStatus)) {
                 eventDealRspMsg.setRespCode(Constant.CORESTATUS_SUCCESS);

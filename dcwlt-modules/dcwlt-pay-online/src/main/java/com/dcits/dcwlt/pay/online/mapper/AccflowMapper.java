@@ -14,9 +14,9 @@ public interface AccflowMapper {
 
     AccFlowDO query(Map<String, String> param);
 
-	AccFlowDO selectCoreReqSerno(String queryByPayAccflowSql, Map<String, String> param);
+	AccFlowDO selectCoreReqSerno( Map<String, String> param);
 
-	int updateCoreStatus(String updateStatusAccflowSql, AccFlowDO updAccFlowDO);
+	int updateCoreStatus(AccFlowDO updAccFlowDO);
 }
 
 

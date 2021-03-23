@@ -14,7 +14,7 @@ import com.alibaba.fastjson.annotation.JSONField;
  *          </p>
  * @param <T>
  */
-public class BankCoreRspMessage<T extends IBankCoreBody, A extends IBankCoreBodyArrayInfo> {
+public class BankCoreRspMessage<T, A> {
 //	private Head head; // 服务化报文头
 	private BankCoreRspHeader bankCoreHeader; // 核心响应报文头
 	private T body; // 通用报文体
@@ -27,7 +27,7 @@ public class BankCoreRspMessage<T extends IBankCoreBody, A extends IBankCoreBody
 	 * @param body
 	 *            报文体
 	 */
-	public static <T extends IBankCoreBody, A extends IBankCoreBodyArrayInfo> BankCoreRspMessage<T, A> newInstance(
+	public static <T, A> BankCoreRspMessage<T, A> newInstance(
 			 BankCoreRspHeader bankCoreHeader, T body, List<A> coreBodyArrayInfo) {
 		BankCoreRspMessage<T, A> msg = new BankCoreRspMessage<>();
 		msg.setBody(body);
@@ -43,7 +43,7 @@ public class BankCoreRspMessage<T extends IBankCoreBody, A extends IBankCoreBody
 	 *            报文体
 	 * @return
 	 */
-	public static <T extends IBankCoreBody, A extends IBankCoreBodyArrayInfo> BankCoreRspMessage<T, A> newInstance(
+	public static <T, A> BankCoreRspMessage<T, A> newInstance(
 			 T body, BankCoreRspHeader bankCoreHeader) {
 		BankCoreRspMessage<T, A> msg = new BankCoreRspMessage<>();
 		msg.setBody(body);

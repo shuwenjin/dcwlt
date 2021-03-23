@@ -11,7 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
-@RocketMQMessageListener(topic = "queue_test_topic",
+@RocketMQMessageListener(topic = "topic-dcwlt",
         selectorExpression = "*",
         consumerGroup = "consumer-group-1")
 public class EventConsumer implements RocketMQListener<String> {

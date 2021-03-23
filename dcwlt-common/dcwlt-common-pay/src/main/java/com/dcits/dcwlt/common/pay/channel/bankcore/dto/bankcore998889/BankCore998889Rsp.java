@@ -10,9 +10,7 @@
 package com.dcits.dcwlt.common.pay.channel.bankcore.dto.bankcore998889;
 
 
-import com.dcits.dcwlt.common.pay.channel.bankcore.dto.IBankCoreBody;
-
-public class BankCore998889Rsp implements IBankCoreBody {
+public class BankCore998889Rsp {
 
 	private String errorCode       ;   // 核心返回码       M
 	

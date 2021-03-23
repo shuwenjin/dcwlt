@@ -77,7 +77,7 @@ public class TxStsQryNetPartyServiceImpl implements ITxStsQryNetPartyService {
                     "\t\t\"SndDtTm\": \"2021-01-13T20:37:31\",\n" +
                     "\t\t\"MsgTp\": \"dcep.412.001.01\"\n" +
                     "\t},\n" +
-                    "\t\"Body\": {\n" +
+                    "\t\"body\": {\n" +
                     "\t\t\"TxStsQryRsp\": {\n" +
                     "\t\t\t\"GrpHdr\": {\n" +
                     "\t\t\t\t\"CreDtTm\": \"2021-01-13T20:33:33\",\n" +
@@ -203,6 +203,7 @@ public class TxStsQryNetPartyServiceImpl implements ITxStsQryNetPartyService {
      * @return
      */
     private TxStsQrySRspDTO setTxStsQryRspSDTO(JSONObject rspObj) {
+        logger.info("应答报文：{}",rspObj.toJSONString());
         TxStsQrySRspDTO txStsQryRspSDTO = new TxStsQrySRspDTO();
 
         DCEPRspDTO<TxStsQryRspDTO> dcepRspDTO = DCEPRspDTO.jsonToDCEPRspDTO(rspObj, TxStsQryRspDTO.class);

@@ -60,7 +60,7 @@ public class EventRegisterAppServiceimpl implements IEventRegisterAppService {
         reqMsg.setExceptEventMsgTag(msgTag);
 
         //发送消息中心
-        eventProducer.sendMsg("queue_test_topic",JSON.toJSON(reqMsg).toString());
+        eventProducer.sendMsg("topic-dcwlt",JSON.toJSON(reqMsg).toString());
     }
 
 

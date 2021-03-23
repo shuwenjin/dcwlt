@@ -19,10 +19,12 @@ import com.dcits.dcwlt.pay.api.domain.dcep.common.RspsnInf;
 import com.dcits.dcwlt.pay.api.domain.dcep.dspt.DsptInf;
 import com.dcits.dcwlt.pay.api.domain.dcep.dspt.DsptReqDTO;
 import com.dcits.dcwlt.pay.api.domain.dcep.dspt.DsptRspDTO;
+import com.dcits.dcwlt.pay.api.model.AccFlowDO;
 import com.dcits.dcwlt.pay.api.model.PayTransDtlInfoDO;
 import com.dcits.dcwlt.pay.api.model.RspCodeMapDO;
 import com.dcits.dcwlt.pay.api.model.StateMachine;
 import com.dcits.dcwlt.pay.online.baffle.dcep.impl.BankCoreImplDubboService;
+import com.dcits.dcwlt.pay.online.event.callback.DisputeCoreQryCallBack;
 import com.dcits.dcwlt.pay.online.exception.EcnyTransError;
 import com.dcits.dcwlt.pay.online.exception.EcnyTransException;
 import com.dcits.dcwlt.pay.online.flow.builder.EcnyTradeContext;
@@ -64,7 +66,7 @@ public class DisputeInfo801RTradeFlow {
     private GenerateCodeServiceImpl generateCodeService;
 
     @Autowired
-    private IPayTransDtlInfoService payTransDtlInfoRepository;
+    private IPayTransDtlInfoService payTransDtlInfoService;
 
     @Autowired
     private IPartyService partyService;
@@ -200,7 +202,7 @@ public class DisputeInfo801RTradeFlow {
         payTransDtlInfoDO.setLastUpTime(DateUtil.getDefaultTime());
 
         try {
-            payTransDtlInfoRepository.insert(payTransDtlInfoDO);
+            payTransDtlInfoService.insert(payTransDtlInfoDO);
         } catch (Exception e) {
             logger.error("金融流水表入库失败:{}-{}", e.getMessage(), e);
             throw new EcnyTransException(AppConstant.TRXSTATUS_FAILED, EcnyTransError.UPDATE_INFO_ERROR);
@@ -223,7 +225,7 @@ public class DisputeInfo801RTradeFlow {
 
         String orgnlMsgId = reqMsg.getBody().getDsptReq().getOrgnlGrpHdr().getOrgnlMsgId();
         // 获取原金融登记簿信息
-        PayTransDtlInfoDO payTransDtlInfo_orig = payTransDtlInfoRepository.query(orgnlMsgId);
+        PayTransDtlInfoDO payTransDtlInfo_orig = payTransDtlInfoService.query(orgnlMsgId);
 
         if (null == payTransDtlInfo_orig) {
             logger.error("原交易不存在");
@@ -257,7 +259,7 @@ public class DisputeInfo801RTradeFlow {
         payTransDtlInfo_dspt.setLastUpTime(DateUtil.getDefaultTime());
 
         try {
-            payTransDtlInfoRepository.update(payTransDtlInfo_dspt);
+            payTransDtlInfoService.update(payTransDtlInfo_dspt);
         } catch (Exception e) {
             logger.error("金融流水表更新失败:{}-{}", e.getMessage(), e);
             throw new EcnyTransException(AppConstant.TRXSTATUS_FAILED, EcnyTransError.DATABASE_ERROR);
@@ -387,7 +389,7 @@ public class DisputeInfo801RTradeFlow {
             // 更新账户流水表
             bankCoreAccTxnService.insertCoreFlow(bankCore351100InnerReq, coreReqSerno, coreReqDate);
             // 更新金融交易表
-            int retCount = payTransDtlInfoRepository.update(payTransDtlInfoDO, stateMachine);
+            int retCount = payTransDtlInfoService.update(payTransDtlInfoDO, stateMachine);
             if (retCount != 1) {
                 logger.info("更新金融信息表失败");
                 throw new EcnyTransException(AppConstant.TRXSTATUS_FAILED, EcnyTransError.DATABASE_ERROR);
@@ -409,17 +411,19 @@ public class DisputeInfo801RTradeFlow {
         BankCore351100InnerRsp bankCore351100InnerRsp = new BankCore351100InnerRsp();
         bankCore351100InnerReq.setAmount("测试");
         try {
-            bankCore351100InnerRsp = bankCoreImplDubboService.coreServer(bankCore351100InnerReq);
+            throw new EcnyTransException(AppConstant.TRXSTATUS_FAILED, EcnyTransError.DATABASE_ERROR);
+            //bankCore351100InnerRsp = bankCoreImplDubboService.coreServer(bankCore351100InnerReq);
         } catch (Exception e) {
             logger.error("核心通讯异常：{}-{}-{}", LogMonitorLevelCdEnum.ECNY_LOG_MONITOR_NORMAL.getCode(), e.getMessage(), e);
             logger.info("调用核心回查,平台日期：{},平台流水：{}", payTransDtlInfoDO.getPayDate(), payTransDtlInfoDO.getPaySerno());
-//            AccFlowDO accFlowDO = bankCoreAccTxnService.selectByPayInfo(payTransDtlInfoDO.getPayDate(), payTransDtlInfoDO.getPaySerno());
-//            logger.info("调用核心回查,核心日期：{},核心流水：{}", accFlowDO.getCoreReqDate(), accFlowDO.getCoreReqSerno());
-//            coreEventService.registerCoreQry(accFlowDO.getCoreReqDate(), accFlowDO.getCoreReqSerno(), payTransDtlInfoDO.getPayDate(), payTransDtlInfoDO.getPaySerno(), DisputeCoreQryCallBack.class);
+            AccFlowDO accFlowDO = bankCoreAccTxnService.selectByPayInfo(payTransDtlInfoDO.getPayDate(), payTransDtlInfoDO.getPaySerno());
+            logger.info("调用核心回查,核心日期：{},核心流水：{}", accFlowDO.getCoreReqDate(), accFlowDO.getCoreReqSerno());
+            coreEventService.registerCoreQry(accFlowDO.getCoreReqDate(), accFlowDO.getCoreReqSerno(), payTransDtlInfoDO.getPayDate(), payTransDtlInfoDO.getPaySerno(), DisputeCoreQryCallBack.class);
             throw new EcnyTransException(AppConstant.TRXSTATUS_ABEND, EcnyTransError.PAY_TIME_OUT);
         }
-        logger.info("sendToCore：上核心入账结束");
-        return bankCore351100InnerRsp;
+        //logger.info("sendToCore：上核心入账结束");
+        //return bankCore351100InnerRsp;
+
     }
 
     /**
@@ -446,7 +450,7 @@ public class DisputeInfo801RTradeFlow {
                 throw new EcnyTransException(AppConstant.TRXSTATUS_ABEND, EcnyTransError.DATABASE_ERROR);
             }
             // 更新金融交易表
-            retCount = payTransDtlInfoRepository.update(payTransDtlInfoDO, stateMachine);
+            retCount = payTransDtlInfoService.update(payTransDtlInfoDO, stateMachine);
             if (retCount != 1) {
                 logger.info("更新金融信息表失败");
                 throw new EcnyTransException(AppConstant.TRXSTATUS_ABEND, EcnyTransError.DATABASE_ERROR);
@@ -599,7 +603,7 @@ public class DisputeInfo801RTradeFlow {
         }
         payTransDtlInfoDO.setPayPathRetDate(DateUtil.getDefaultDate());
         payTransDtlInfoDO.setPayPathRspStatus(rspsnInf.getRspsnSts());
-        payTransDtlInfoRepository.update(payTransDtlInfoDO);
+        payTransDtlInfoService.update(payTransDtlInfoDO);
 
         rspsnInf.setRjctCd(rspCodeMapDO.getDestRspCode());
         rspsnInf.setRjctInf(rspCodeMapDO.getRspCodeDsp());

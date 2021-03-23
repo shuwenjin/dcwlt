@@ -10,6 +10,8 @@
 package com.dcits.dcwlt.pay.online.service.impl;
 
 import com.alibaba.csp.sentinel.util.StringUtil;
+import com.dcits.dcwlt.common.pay.channel.bankcore.IBankCoreBody;
+import com.dcits.dcwlt.common.pay.channel.bankcore.IBankCoreBodyArrayInfo;
 import com.dcits.dcwlt.common.pay.channel.bankcore.dto.*;
 import com.dcits.dcwlt.common.pay.channel.bankcore.dto.BankCore996666.BankCore996666Rsp;
 import com.dcits.dcwlt.common.pay.channel.bankcore.dto.bankcore351100.*;
@@ -137,7 +139,7 @@ public class BankCoreImplDubboServiceImpl {
      * @return
      */
     public BankCore996666Rsp queryCoreStatus(String reqSysDate, String reqSysJrn) {
-        return queryCoreStatus("", "");
+        return queryCoreStatus("", "",reqSysDate, reqSysJrn);
     }
 
     /**
@@ -169,8 +171,15 @@ public class BankCoreImplDubboServiceImpl {
         // 构造服务化请求报文
         BankCoreReqMessage msg = bankCoreDubboServiceImpl.buildBankCoreMessage(coreHead, req, null);
 
-        // 请求核心服务
-        BankCoreRspMessage rsp = bankCoreDubboServiceImpl.bankCoreRequests(msg, BankCore998889Req.class, null);
+        // 请求核心服务 todo 暂时返回假数据
+        //BankCoreRspMessage rsp = bankCoreDubboServiceImpl.bankCoreRequests(msg, BankCore998889Req.class, null);
+        BankCoreRspMessage rsp = new BankCoreRspMessage();
+        BankCore996666Rsp bankCore996666Rsp = new BankCore996666Rsp();
+        bankCore996666Rsp.setCoreRetCode("11");
+        bankCore996666Rsp.setCoreRetMsg("22");
+        bankCore996666Rsp.setHostAcdate("111");
+        bankCore996666Rsp.setTxnSts("1");
+        rsp.setBody(bankCore996666Rsp);
 
         // 后续补充检查
         return (BankCore996666Rsp) rsp.getBody();

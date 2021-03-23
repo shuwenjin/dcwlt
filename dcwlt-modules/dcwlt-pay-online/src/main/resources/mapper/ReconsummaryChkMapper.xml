@@ -23,7 +23,7 @@
 	        SET T.EXCEPTEVENTDEALCOUNT = ifnull(T.EXCEPTEVENTDEALCOUNT,0) + 1
 	      WHERE T.EXCEPTEVENTCODE = #{exceptEventCode}
 	        AND T.EXCEPTEVENTSEQNO = #{exceptEventSeqNo}
-	        AND ifnull(T.EXCEPTEVENTDEALCOUNT,0) + 1 &lt;= #{maxDealNum}
+ 	        AND ifnull(T.EXCEPTEVENTDEALCOUNT,0) + 1 &lt;= #{maxDealNum}
     </update>
     
     <!-- 查询异常事件配置-->

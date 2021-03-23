@@ -15,14 +15,12 @@ import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 /**
- * @author liuyong
- * @Time 2021/01/08 08:52
- * @Version 1.0
  * Description:终态通知差错贷记调账核心回查回调
  */
-
+@Component
 public class BankCoreQryCallBack implements ICoreQryCallBack {
 
     @Autowired
