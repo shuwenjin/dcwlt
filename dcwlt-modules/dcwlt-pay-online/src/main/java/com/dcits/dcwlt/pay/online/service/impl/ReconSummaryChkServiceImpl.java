@@ -117,7 +117,7 @@ public class ReconSummaryChkServiceImpl implements IReconSummaryChkService {
         ReconSummaryChkDO summaryChkDO = new ReconSummaryChkDO();
         ReconSummaryChk reconSummaryChk = summaryChkDTO.getReconSummaryChk();
         //业务组件
-        GrpHdr grpHdr = reconSummaryChk.getGrpHdr();
+        GrpHdr grpHdr = GrpHdr.getInstance(reconSummaryChk.getGrpHdr());
         //对账汇总核对信息
         SummaryChkInf summaryChkInf = reconSummaryChk.getSummaryChkInf();
         //对账汇总消息头
@@ -271,7 +271,7 @@ public class ReconSummaryChkServiceImpl implements IReconSummaryChkService {
         if (null != fileInfList && !fileInfList.isEmpty()) {
             for (FileInf fileInf : fileInfList) {
                 List<String> fileNameList = null;
-                if (null != fileNameList) {
+                if (null != fileInf) {
                     fileNameList = fileInf.getFileNameList();
                 }
                 if (null != fileNameList && !fileNameList.isEmpty()) {

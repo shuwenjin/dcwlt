@@ -97,7 +97,7 @@ public class ReconSummaryChk711TradeFlow {
         try {
             EventDealReqMsg msg = new EventDealReqMsg();
             msg.setExceptEventCode("EVENTNCHECKSUMMARY");
-         //   msg.setExceptEventSeqNo(SequenceUtil.getSeq());
+            msg.setExceptEventSeqNo(generateCodeService.generateCoreReqSerno());
             //获取批次日期
             EventBatchTotalParam eventBatchTotalParam = new EventBatchTotalParam();
             eventBatchTotalParam.setBatchDate(batchDate);
@@ -108,7 +108,7 @@ public class ReconSummaryChk711TradeFlow {
 
             EventDealReqMsg msgDetial = new EventDealReqMsg();
             msgDetial.setExceptEventCode("EVENTNCHECKDETIAL");
-        //    msgDetial.setExceptEventSeqNo(SequenceUtil.getSeq());
+            msgDetial.setExceptEventSeqNo(generateCodeService.generateCoreReqSerno());
             EventBatchDetailParam eventBatchDetailParam = new EventBatchDetailParam();
             eventBatchDetailParam.setBatchDate(batchDate);
             eventBatchDetailParam.setBatchId(summaryHdr.getBatchId());

@@ -3,7 +3,7 @@ import com.dcits.dcwlt.pay.api.model.ReconSummaryChkDO;
 import com.dcits.dcwlt.pay.online.mapper.ReconsummaryChkMapper;
 import com.dcits.dcwlt.pay.online.service.IReconSummaryChService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Repository;
+import org.springframework.stereotype.Service;
 
 /**
  * @author weimeiyuan
@@ -11,15 +11,15 @@ import org.springframework.stereotype.Repository;
  * @Version 1.0
  * Description:
  */
-@Repository
+@Service
 public class ReconSummaryChkimpl implements IReconSummaryChService {
-    private static final String REPLACE_SQL = "reconsummarychkmapper.replaceReconSummaryChkDO";
+    //private static final String REPLACE_SQL = "reconsummarychkmapper.replaceReconSummaryChkDO";
 
     @Autowired
     private ReconsummaryChkMapper reconsummaryChkMapper;
 
     @Override
     public int replaceReconSummaryChkDO(ReconSummaryChkDO reconSummaryChkDO) throws Exception {
-        return reconsummaryChkMapper.insertReconSummaryChkDO(REPLACE_SQL, reconSummaryChkDO);
+        return reconsummaryChkMapper.insertReconSummaryChkDO(reconSummaryChkDO);
     }
 }

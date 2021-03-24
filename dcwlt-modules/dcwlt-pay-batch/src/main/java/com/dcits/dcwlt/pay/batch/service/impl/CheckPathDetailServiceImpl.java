@@ -17,9 +17,9 @@ import java.util.List;
  */
 @Service
 public class CheckPathDetailServiceImpl implements ICheckPathDetailService {
-    private static final String INSERT_SQL = "settleCheckPathDetailMapper.insert";
-    private static final String SELECT_SQL = "settleCheckPathDetailMapper.selectPathDetail";
-    private static final String REPLACE_SQL = "settleCheckPathDetailMapper.replace";
+    //private static final String INSERT_SQL = "settleCheckPathDetailMapper.insert";
+    //private static final String SELECT_SQL = "settleCheckPathDetailMapper.selectPathDetail";
+    //private static final String REPLACE_SQL = "settleCheckPathDetailMapper.replace";
 
     @Autowired
     private SettleCheckPathDetailMapper settleCheckPathDetailMapper;

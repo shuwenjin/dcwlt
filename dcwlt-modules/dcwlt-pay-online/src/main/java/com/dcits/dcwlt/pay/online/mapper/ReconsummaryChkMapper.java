@@ -7,9 +7,7 @@ import com.dcits.dcwlt.pay.api.model.DtlFileInfDO;
 import com.dcits.dcwlt.pay.api.model.MonitorDO;
 import com.dcits.dcwlt.pay.api.model.ReconSummaryChkDO;
 import com.dcits.dcwlt.pay.api.model.SummaryInfoDO;
-import org.apache.ibatis.annotations.Mapper;
 
-@Mapper
 public interface ReconsummaryChkMapper {
 
     EventConfigDO queryEventConfig(String eventCode);
@@ -31,10 +29,10 @@ public interface ReconsummaryChkMapper {
 
     int replaceDtlFileInfDO(DtlFileInfDO dtlFileInfDO) throws Exception;
 
-    int update(String replaceSql, SummaryInfoDO summaryInfoDO);
+    int update(SummaryInfoDO summaryInfoDO);
 
-    int insertReconSummaryChkDO(String replaceSql, ReconSummaryChkDO reconSummaryChkDO);
+    int insertReconSummaryChkDO(ReconSummaryChkDO reconSummaryChkDO);
 
-    int insertDtlFileInfDO(String replaceSql, DtlFileInfDO dtlFileInfDO);
+    int insertDtlFileInfDO(DtlFileInfDO dtlFileInfDO);
 }
 

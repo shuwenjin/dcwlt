@@ -10,6 +10,8 @@ import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
+import com.dcits.dcwlt.common.core.utils.DateUtils;
+
 /**
  * 业务头组件
  *
@@ -75,7 +77,7 @@ public class GrpHdr {
     public static GrpHdr getInstance(GrpHdr origGrpHdr) {
         GrpHdr grpHdr = new GrpHdr();
         grpHdr.setMsgId(origGrpHdr.getMsgId());
-        grpHdr.setCreDtTm(DateUtil.formatISODateTimeToDate(grpHdr.getCreDtTm()));
+        grpHdr.setCreDtTm(DateUtil.formatISODateTimeToDate(origGrpHdr.getCreDtTm()));
         grpHdr.setInstdPty(new InstdPty(origGrpHdr.getInstgPty().getInstgDrctPty()));
         grpHdr.setInstgPty(new InstgPty(origGrpHdr.getInstdPty().getInstdDrctPty()));
         grpHdr.setRmk(origGrpHdr.getRmk());

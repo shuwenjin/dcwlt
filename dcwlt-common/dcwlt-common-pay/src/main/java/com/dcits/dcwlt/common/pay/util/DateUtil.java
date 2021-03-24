@@ -208,9 +208,18 @@ public class DateUtil {
 		return curTime.substring(curTime.length() - 8);
 	}
 
-	// TODO
-	public static String formatISODateTimeToDate(String fctvDt) {
-		return "";
+	/**
+	 * 时间：2021-01-14T09:24:01转 20210114092401
+	 * @param strISODate
+	 * @return
+	 */
+	public static String formatISODateTimeToDate(String strISODate) {
+		try {
+			return DEFAULT_SECONDS_FORMATTER.format(STANDARD_DATETIME_FORMATTER.parse(strISODate));
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return null;
 	}
 
 

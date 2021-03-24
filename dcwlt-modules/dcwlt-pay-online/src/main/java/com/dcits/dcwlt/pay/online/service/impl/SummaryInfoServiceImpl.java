@@ -15,7 +15,7 @@ import org.springframework.stereotype.Repository;
  */
 @Repository
 public class SummaryInfoServiceImpl implements ISummaryInfoService {
-    private static final String REPLACE_SQL = "summaryinfomapper.replaceSummaryInfoDO";
+    //private static final String REPLACE_SQL = "summaryinfomapper.replaceSummaryInfoDO";
 
     @Autowired
     private ReconsummaryChkMapper reconsummaryChkMapper;
@@ -28,6 +28,6 @@ public class SummaryInfoServiceImpl implements ISummaryInfoService {
      */
     @Override
     public int replaceSummaryInfoDO(SummaryInfoDO summaryInfoDO) throws Exception {
-        return reconsummaryChkMapper.update(REPLACE_SQL, summaryInfoDO);
+        return reconsummaryChkMapper.update(summaryInfoDO);
     }
 }
