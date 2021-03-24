@@ -179,18 +179,24 @@ public class ReconSummaryChkServiceImpl implements IReconSummaryChkService {
         DCEPReqDTO<ReconSummaryChkDTO> reqMsg = EcnyTradeContext.getReqMsg(tradeContext);
         ReconSummaryChkDTO summaryChkDTO = reqMsg.getBody();
         ReconSummaryChk reconSummaryChk = summaryChkDTO.getReconSummaryChk();
-        SummaryBody summaryBody = reconSummaryChk.getSummaryChkInf().getSummaryBody();
+        List<SummaryGrp> summaryBody = null;
+        if (null != reconSummaryChk) {
+            SummaryChkInf summaryChkInf = reconSummaryChk.getSummaryChkInf();
+            if (null != summaryChkInf) {
+                summaryBody = summaryChkInf.getSummaryBody();
+            }
+        }
         List<SummaryInfoDO> arrayList = new ArrayList<>();
-        if (null != summaryBody && !summaryBody.getSummaryGrp().isEmpty()) {
-            for (SummaryGrp summaryGrp : summaryBody.getSummaryGrp()) {
+        if (null != summaryBody && !summaryBody.isEmpty()) {
+            for (SummaryGrp summaryGrp : summaryBody) {
                 //业务信息
-                ChkPayList chkPayList = summaryGrp.getChkPayList();
-                List<ChkPayInf> chkPayInf = null;
-                if (null != chkPayList) {
-                    chkPayInf = chkPayList.getChkPayInf();
+                List<ChkPayInf> chkPayList = null;
+                if (null != summaryGrp) {
+                    chkPayList = summaryGrp.getChkPayList();
                 }
-                if (null != chkPayInf && !chkPayInf.isEmpty()) {
-                    for (ChkPayInf chkPay : chkPayInf) {
+
+                if (null != chkPayList && !chkPayList.isEmpty()) {
+                    for (ChkPayInf chkPay : chkPayList) {
                         SummaryInfoDO summaryInfoDO = new SummaryInfoDO();
                         //报文标识
                         summaryInfoDO.setMsgId(reconSummaryChk.getGrpHdr().getMsgId());
@@ -257,23 +263,19 @@ public class ReconSummaryChkServiceImpl implements IReconSummaryChkService {
         //对账汇总消息头
         SummaryHdr summaryHdr = summaryChkInf.getSummaryHdr();
         DtlFileInf dtlFileInf = summaryChkInf.getDtlFileInf();
-        List<FileInf> fileInfs = null;
+        List<FileInf> fileInfList = null;
         if (null != dtlFileInf) {
-            FileInfList fileInfList = dtlFileInf.getFileInfList();
-            if (null != fileInfList) {
-                fileInfs = fileInfList.getFileInf();
-            }
+            fileInfList = dtlFileInf.getFileInfList();
         }
         ArrayList<DtlFileInfDO> arrayList = new ArrayList<>();
-        if (null != fileInfs && !fileInfs.isEmpty()) {
-            for (FileInf fileInf : fileInfs) {
-                FileNameList fileNameList = fileInf.getFileNameList();
-                List<FileName> fileName = null;
+        if (null != fileInfList && !fileInfList.isEmpty()) {
+            for (FileInf fileInf : fileInfList) {
+                List<String> fileNameList = null;
                 if (null != fileNameList) {
-                    fileName = fileNameList.getFileName();
+                    fileNameList = fileInf.getFileNameList();
                 }
-                if (null != fileName && !fileName.isEmpty()) {
-                    for (FileName fileNameList1 : fileName) {
+                if (null != fileNameList && !fileNameList.isEmpty()) {
+                    for (String fileName : fileNameList) {
                         DtlFileInfDO dtlFileInfDO = new DtlFileInfDO();
                         //报文标识
                         dtlFileInfDO.setMsgId(reconSummaryChk.getGrpHdr().getMsgId());
@@ -286,7 +288,7 @@ public class ReconSummaryChkServiceImpl implements IReconSummaryChkService {
                         //文件路径
                         dtlFileInfDO.setSrcFilePath(fileInf.getFilePath());
                         //文件名称
-                        dtlFileInfDO.setFileName(fileNameList1.getFileName());
+                        dtlFileInfDO.setFileName(fileName);
                         arrayList.add(dtlFileInfDO);
                     }
                 }
