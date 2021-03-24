@@ -2,6 +2,7 @@ package com.dcits.dcwlt.pay.online.event.service;
 
 import com.alibaba.csp.sentinel.util.StringUtil;
 import com.alibaba.fastjson.JSONObject;
+import com.dcits.dcwlt.common.core.utils.SpringUtils;
 import com.dcits.dcwlt.common.pay.channel.bankcore.dto.BankCore996666.BankCore996666Rsp;
 import com.dcits.dcwlt.pay.api.domain.dcep.eventBatch.EventDealRspMsg;
 import com.dcits.dcwlt.common.pay.constant.Constant;
@@ -19,6 +20,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.lang.reflect.Method;
 
 
 /**
@@ -92,19 +95,27 @@ public class CoreQryService implements IEventService {
             }
             //存在回调处理，调用应用的冲正回调
             String coreProcStatus = bankCoreAccTxnServiceImpl.getCoreStatusMap(bankCore996666Rsp.getTxnSts());
-            ICoreQryCallBack callBack = (ICoreQryCallBack) Class.forName(callBackClassName).newInstance();
+            Object bean = SpringUtils.getBean(callBackClassName.substring(callBackClassName.lastIndexOf(".")+1));
             if (Constant.CORESTATUS_SUCCESS.equals(coreProcStatus)) {
                 eventDealRspMsg.setRespCode(Constant.CORESTATUS_SUCCESS);
-                return callBack.coreSucc(eventDealRspMsg, bankCore996666Rsp, eventParam);
+                Method coreSucc = bean.getClass().getDeclaredMethod("coreSucc", EventDealRspMsg.class, BankCore996666Rsp.class, JSONObject.class);
+                return (EventDealRspMsg)coreSucc.invoke(bean,eventDealRspMsg, bankCore996666Rsp, eventParam);
+                //return callBack.coreSucc(eventDealRspMsg, bankCore996666Rsp, eventParam);
             } else if ("TC1003".equals(bankCore996666Rsp.getCoreRetCode())) {
                 eventDealRspMsg.setRespCode(Constant.CORESTATUS_REVERSED);
-                return callBack.coreReversed(eventDealRspMsg, bankCore996666Rsp, eventParam);
+                Method coreSucc = bean.getClass().getDeclaredMethod("coreReversed", EventDealRspMsg.class, BankCore996666Rsp.class, JSONObject.class);
+                return (EventDealRspMsg)coreSucc.invoke(bean,eventDealRspMsg, bankCore996666Rsp, eventParam);
+                //return callBack.coreReversed(eventDealRspMsg, bankCore996666Rsp, eventParam);
             } else if (Constant.CORESTATUS_ABEND.equals(coreProcStatus)) {
                 eventDealRspMsg.setRespCode(Constant.CORESTATUS_ABEND);
-                return callBack.coreAbend(eventDealRspMsg, bankCore996666Rsp, eventParam);
+                Method coreSucc = bean.getClass().getDeclaredMethod("coreAbend", EventDealRspMsg.class, BankCore996666Rsp.class, JSONObject.class);
+                return (EventDealRspMsg)coreSucc.invoke(bean,eventDealRspMsg, bankCore996666Rsp, eventParam);
+                //return callBack.coreAbend(eventDealRspMsg, bankCore996666Rsp, eventParam);
             } else if (Constant.CORESTATUS_FAILED.equals(coreProcStatus)) {
                 eventDealRspMsg.setRespCode(Constant.CORESTATUS_FAILED);
-                return callBack.coreFail(eventDealRspMsg, bankCore996666Rsp, eventParam);
+                Method coreSucc = bean.getClass().getDeclaredMethod("coreFail", EventDealRspMsg.class, BankCore996666Rsp.class, JSONObject.class);
+                return (EventDealRspMsg)coreSucc.invoke(bean,eventDealRspMsg, bankCore996666Rsp, eventParam);
+                //return callBack.coreFail(eventDealRspMsg, bankCore996666Rsp, eventParam);
             } else {
                 eventDealRspMsg.setRespCode(PlatformError.OTHER_BUSI_ERROR.getErrorCode());
             }

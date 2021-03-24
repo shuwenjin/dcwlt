@@ -367,7 +367,7 @@ public class Dispute801STradeFlow {
 
     private JSONObject sendToDcep(DCEPReqDTO<DsptReqDTO> dsptReqDTODCEPReqDTO, PayTransDtlInfoDO payTransDtlInfoDO) {
         try {
-            //TODO 互联互通
+            //TODO 模拟互联互通接收
             //return dcepSendService.sendDcep(dsptReqDTODCEPReqDTO);
             return dcepService.receive802From801(dsptReqDTODCEPReqDTO);
         } catch (Exception e) {
@@ -462,8 +462,7 @@ public class Dispute801STradeFlow {
             payTransDtlInfoDO.setPayPathRetDate(DateUtil.getDefaultDate());
             payTransDtlInfoDO.setPayPathRetCode(fault.getFaultCode());
             payTransDtlInfoDO.setPayPathRetMsg(fault.getFaultString());
-            // todo
-            //txStsQryNetPartyService.registerTrxStsQry(payTransDtlInfoDO);
+            txStsQryNetPartyService.registerTrxStsQry(payTransDtlInfoDO);
         }
         EcnyTradeContext.getTempContext(tradeContext).put("PAY_TRANS_DTL", payTransDtlInfoDO);
 

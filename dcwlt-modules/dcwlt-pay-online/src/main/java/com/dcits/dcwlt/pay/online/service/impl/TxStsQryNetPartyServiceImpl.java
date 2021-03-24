@@ -64,7 +64,7 @@ public class TxStsQryNetPartyServiceImpl implements ITxStsQryNetPartyService {
             //拼装请求报文
             DCEPReqDTO<TxStsQryReqDTO> dcepReqDTO = buildDcepReqDTO(msgId);
 
-            //发送请求到互联互通平台 todo 测试暂时返回801查寻交易状态
+            //发送请求到互联互通平台 todo 发送互联互通，测试暂时返回801查寻交易状态
             //JSONObject rspObj = dcepSendService.sendDcep(dcepReqDTO);
             JSONObject rspObj =
             JSONObject.parseObject("{\n" +

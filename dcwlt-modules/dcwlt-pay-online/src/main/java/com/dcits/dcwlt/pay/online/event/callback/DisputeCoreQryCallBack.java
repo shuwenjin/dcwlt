@@ -19,7 +19,7 @@ import org.springframework.stereotype.Service;
 /**
  * Description:核心回查
  */
-@Component
+@Component("DisputeCoreQryCallBack")
 public class DisputeCoreQryCallBack implements ICoreQryCallBack {
     private static final Logger logger = LoggerFactory.getLogger(DisputeCoreQryCallBack.class);
 

@@ -106,7 +106,7 @@ public class EventDealAppService implements IEventDealAppService {
         event.setExceptEventSeqNo(eventMsg.getExceptEventSeqNo());
         event.setExceptEventDealCount("1");
         event.setExceptEventSysStatus(EventConst.EVENT_DEAL_PROC);
-        // todo ip
+        // todo 后期获取获取动态ip
         event.setExceptEventDealPath("127.0.0.1");
         event.setExceptEventContext(eventMsg.getExceptEventContext());
         return event;
@@ -169,9 +169,6 @@ public class EventDealAppService implements IEventDealAppService {
         }
         return rspMsg;
     }
-
-    @Autowired
-    private PathQryService pathQryService;
 
 
     /**

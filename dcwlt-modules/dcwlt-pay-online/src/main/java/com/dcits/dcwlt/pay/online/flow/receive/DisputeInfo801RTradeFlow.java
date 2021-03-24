@@ -411,8 +411,8 @@ public class DisputeInfo801RTradeFlow {
         BankCore351100InnerRsp bankCore351100InnerRsp = new BankCore351100InnerRsp();
         bankCore351100InnerReq.setAmount("测试");
         try {
-            throw new EcnyTransException(AppConstant.TRXSTATUS_FAILED, EcnyTransError.DATABASE_ERROR);
-            //bankCore351100InnerRsp = bankCoreImplDubboService.coreServer(bankCore351100InnerReq);
+            // TODO 核心入账接口
+            bankCore351100InnerRsp = bankCoreImplDubboService.coreServer(bankCore351100InnerReq);
         } catch (Exception e) {
             logger.error("核心通讯异常：{}-{}-{}", LogMonitorLevelCdEnum.ECNY_LOG_MONITOR_NORMAL.getCode(), e.getMessage(), e);
             logger.info("调用核心回查,平台日期：{},平台流水：{}", payTransDtlInfoDO.getPayDate(), payTransDtlInfoDO.getPaySerno());
@@ -421,8 +421,8 @@ public class DisputeInfo801RTradeFlow {
             coreEventService.registerCoreQry(accFlowDO.getCoreReqDate(), accFlowDO.getCoreReqSerno(), payTransDtlInfoDO.getPayDate(), payTransDtlInfoDO.getPaySerno(), DisputeCoreQryCallBack.class);
             throw new EcnyTransException(AppConstant.TRXSTATUS_ABEND, EcnyTransError.PAY_TIME_OUT);
         }
-        //logger.info("sendToCore：上核心入账结束");
-        //return bankCore351100InnerRsp;
+        logger.info("sendToCore：上核心入账结束");
+        return bankCore351100InnerRsp;
 
     }
 
