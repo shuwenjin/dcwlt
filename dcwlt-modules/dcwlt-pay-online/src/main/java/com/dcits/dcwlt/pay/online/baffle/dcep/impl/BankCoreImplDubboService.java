@@ -88,6 +88,7 @@ public class BankCoreImplDubboService {
         String coreReqDate = bankCore351100InnerReq.getCoreReqDate();
         // 获取服务化调用请求流水 --核心请求流水
         String seqNo = bankCore351100InnerReq.getCoreReqSerno();
+        // todo 核心请求暂时注掉
 //        Map<String, Object> map = initBankCore351100ReqMsg(bankCore351100InnerReq);
 //        BankCore351100Req bankCore351100Req = null;
 //        if (!map.isEmpty()) {
@@ -191,7 +192,7 @@ public class BankCoreImplDubboService {
 //        BankCoreRspHeader bankCoreHeader = rspMsg.getBankCoreHeader();
 //        String coreProcStatus = getCoreStatus(rspHead, bankCoreHeader);
 
-        //实例化响应报文
+        //实例化响应报文 todo 核心应答暂时写死
         BankCore351100InnerRsp core351100InnerRsp = new BankCore351100InnerRsp();
         core351100InnerRsp.setCoreStatus("1");
         core351100InnerRsp.setCoreReqDate(coreReqDate);

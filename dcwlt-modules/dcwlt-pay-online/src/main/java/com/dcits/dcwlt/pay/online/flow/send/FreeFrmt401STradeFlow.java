@@ -48,7 +48,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 /**
- * @author wanyangwei
  * @desc 自由格式发送配置类
  */
 @Configuration
@@ -201,7 +200,7 @@ public class    FreeFrmt401STradeFlow {
      * */
     public void sendReqMsg(TradeContext<?, ?> context) {
         DCEPReqDTO<FreeFrmtDTO> dcepReqDTO = (DCEPReqDTO<FreeFrmtDTO>) EcnyTradeContext.getTempContext(context).get("dcepReqDTO");
-        //发送请求报文,接收响应 TODO
+        //发送请求报文,接收响应 TODO 互联互通返回假数据
         //JSONObject rspObj = dcepSendService.sendDcep(dcepReqDTO);
         JSONObject rspObj = dcepService.receive902From401(dcepReqDTO);
         EcnyTradeContext.getTempContext(context).put("rspObj", rspObj);

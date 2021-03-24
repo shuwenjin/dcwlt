@@ -122,10 +122,10 @@ public class DcepServiceImpl implements DcepService {
                 "                \"orgnlMT\": \"1111\"\n" +
                 "            },\n" +
                 "            \"RspsnInf\": {\n" +
-                "                \"PrcSts\": \"11\",\n" +
-                "                \"RspsnSts\": \"11\",\n" +
-                "                \"RjctCd\": \"111\",\n" +
-                "                \"RjctInf\": \"111\",\n" +
+                "                \"PrcSts\": \"PR00\",\n" +
+                "                \"RspsnSts\": \"PR00\",\n" +
+                "                \"RjctCd\": \"PR00\",\n" +
+                "                \"RjctInf\": \"成功\",\n" +
                 "                \"BatchId\": \"111\"\n" +
                 "            }\n" +
                 "        }\n" +

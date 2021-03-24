@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
+    <soap:Header>
+        <Sender>C1030644021075</Sender>
+        <SignSN>null</SignSN>
+        <Ver>01</Ver>
+        <Receiver>C1010311000014</Receiver>
+        <MsgSN>20210113106040120333044574013000</MsgSN>
+        <SndDtTm>2021-01-13T20:37:31</SndDtTm>
+        <MsgTp>dcep.401.001.01</MsgTp>
+    </soap:Header>
+    <soap:Body>
+        <wstxns1:FreeFrmt xmlns:wstxns1="http://www.dcep.com/dcep/40100101/">
+            <GrpHdr>
+                <CreDtTm>2021-01-13T20:33:33</CreDtTm>
+                <InstdPty>
+                    <InstdDrctPty>C1010311000014</InstdDrctPty>
+                </InstdPty>
+                <InstgPty>
+                    <InstgDrctPty>C1030644021075</InstgDrctPty>
+                </InstgPty>
+                <MsgId>20210113106040120333044574013000</MsgId>
+            </GrpHdr>
+            <FreeFrmtInf>
+                <MsgCnt>接收机*:C1010311000014</MsgCnt>
+            </FreeFrmtInf>
+        </wstxns1:FreeFrmt>
+    </soap:Body>
+</soap:Envelope>
