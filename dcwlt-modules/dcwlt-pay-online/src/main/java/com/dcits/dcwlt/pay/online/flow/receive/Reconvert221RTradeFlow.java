@@ -42,8 +42,6 @@ import org.springframework.context.annotation.Configuration;
 
 /**
  * 兑回交易处理配置
- *
- * @author chenyanchun
  */
 @Configuration
 public class Reconvert221RTradeFlow {
@@ -80,52 +78,6 @@ public class Reconvert221RTradeFlow {
                 .response(this::packRspMsg)        //响应保存封装
                 .errHandler(this::reconverErrHandler)
                 .build();
-    }
-
-    /**
-     * 基础校验
-     *
-     * @param context
-     */
-    private void checkMsg(TradeContext<?, ?> context) {
-        DCEPReqDTO<ReconvertReqDTO> reqMsg = EcnyTradeContext.getReqMsg(context);
-        ReconvertReq reconvertReq = reqMsg.getBody().getReconvertReq();
-        String trxBizTp = reconvertReq.getTrxInf().getTrxBizTp();
-        String instdPtyId = reconvertReq.getGrpHdr().getInstdPty().getInstdDrctPty();
-        String instgPtyId = reconvertReq.getGrpHdr().getInstgPty().getInstgDrctPty();
-
-        //付款人钱包类型为“对公钱包”时，交易资金来源必填
-        if (WalletTpCdEnum.WT09.getCode().equals(reconvertReq.getDbtrInf().getDbtrWltTp())
-                && StringUtils.isEmpty(reconvertReq.getTrxInf().getTrxFndSrc())) {
-            logger.error("付款人钱包类型为“对公钱包”时，交易资金来源必填");
-            throw new EcnyTransException(AppConstant.TRXSTATUS_FAILED, EcnyTransError.TRANSACTION_FUNDS_SOURCE_EMPTY);
-        }
-
-        //业务种类、业务类型校验
-        if (!ParamConfigCheckTask.checkConfigValue(BUSINESS_TYPE,
-                trxBizTp, reconvertReq.getTrxInf().getTrxCtgyPurpCd())
-                || !AppConstant.BUSINESS_TYPE_RECONVERT.equals(trxBizTp)) {
-            logger.error("业务种类、业务类型校验不通过");
-            throw new EcnyTransException(AppConstant.TRXSTATUS_FAILED, EcnyTransError.BUSINESS_TYPE_INVALID);
-        }
-
-        //判断接收机构是否广发银行 及校验机构状态
-        if (!AppConstant.CGB_FINANCIAL_INSTITUTION_CD.equals(instdPtyId)) {
-            logger.error("接收机构传输有误,{}", instdPtyId);
-            throw new EcnyTransException(AppConstant.TRXSTATUS_FAILED, EcnyTransError.PARTY_INSTD_ERROR);
-        }
-        boolean partyFlag = partyService.isAvailable(instdPtyId);
-        if (!partyFlag) {
-            logger.error("接收机构状态异常,{}", instdPtyId);
-            throw new EcnyTransException(AppConstant.TRXSTATUS_FAILED, EcnyTransError.PARTY_STATUS_ERROR);
-        }
-
-        // 发起机构权限校验 根据：发起机构号+报文编号+业务类型+发送标识
-        Boolean sendAuth = authInfoService.validateAuthInfo(instgPtyId, MsgTpEnum.DCEP221.getCode(), "", AuthInfoDrctEnum.sendAuth);
-        if (!sendAuth) {
-            logger.error("发送机构权限不足,{}", instgPtyId);
-            throw new EcnyTransException(AppConstant.TRXSTATUS_FAILED, EcnyTransError.PARTY_POWER_ERROR);
-        }
     }
 
     /**
@@ -188,6 +140,54 @@ public class Reconvert221RTradeFlow {
                 payTransDtlInfoDO.getPayDate(), payTransDtlInfoDO.getPaySerno());
     }
 
+
+    /**
+     * 基础校验
+     *
+     * @param context
+     */
+    private void checkMsg(TradeContext<?, ?> context) {
+        DCEPReqDTO<ReconvertReqDTO> reqMsg = EcnyTradeContext.getReqMsg(context);
+        ReconvertReq reconvertReq = reqMsg.getBody().getReconvertReq();
+        String trxBizTp = reconvertReq.getTrxInf().getTrxBizTp();
+        String instdPtyId = reconvertReq.getGrpHdr().getInstdPty().getInstdDrctPty();
+        String instgPtyId = reconvertReq.getGrpHdr().getInstgPty().getInstgDrctPty();
+
+        //付款人钱包类型为“对公钱包”时，交易资金来源必填
+        if (WalletTpCdEnum.WT09.getCode().equals(reconvertReq.getDbtrInf().getDbtrWltTp())
+                && StringUtils.isEmpty(reconvertReq.getTrxInf().getTrxFndSrc())) {
+            logger.error("付款人钱包类型为“对公钱包”时，交易资金来源必填");
+            throw new EcnyTransException(AppConstant.TRXSTATUS_FAILED, EcnyTransError.TRANSACTION_FUNDS_SOURCE_EMPTY);
+        }
+
+        //业务种类、业务类型校验
+        if (!ParamConfigCheckTask.checkConfigValue(BUSINESS_TYPE,
+                trxBizTp, reconvertReq.getTrxInf().getTrxCtgyPurpCd())
+                || !AppConstant.BUSINESS_TYPE_RECONVERT.equals(trxBizTp)) {
+            logger.error("业务种类、业务类型校验不通过");
+            throw new EcnyTransException(AppConstant.TRXSTATUS_FAILED, EcnyTransError.BUSINESS_TYPE_INVALID);
+        }
+
+        //判断接收机构是否广发银行 及校验机构状态
+        if (!AppConstant.CGB_FINANCIAL_INSTITUTION_CD.equals(instdPtyId)) {
+            logger.error("接收机构传输有误,{}", instdPtyId);
+            throw new EcnyTransException(AppConstant.TRXSTATUS_FAILED, EcnyTransError.PARTY_INSTD_ERROR);
+        }
+        boolean partyFlag = partyService.isAvailable(instdPtyId);
+        if (!partyFlag) {
+            logger.error("接收机构状态异常,{}", instdPtyId);
+            throw new EcnyTransException(AppConstant.TRXSTATUS_FAILED, EcnyTransError.PARTY_STATUS_ERROR);
+        }
+
+        // 发起机构权限校验 根据：发起机构号+报文编号+业务类型+发送标识
+        Boolean sendAuth = authInfoService.validateAuthInfo(instgPtyId, MsgTpEnum.DCEP221.getCode(), "", AuthInfoDrctEnum.sendAuth);
+        if (!sendAuth) {
+            logger.error("发送机构权限不足,{}", instgPtyId);
+            throw new EcnyTransException(AppConstant.TRXSTATUS_FAILED, EcnyTransError.PARTY_POWER_ERROR);
+        }
+    }
+
+
     /**
      * 入账处理
      *
@@ -246,7 +246,7 @@ public class Reconvert221RTradeFlow {
      */
     public void sendCorePre(PayTransDtlInfoDO payTransDtlInfoDO, BankCore351100InnerReq bankCore351100InnerReq) {
 
-        logger.info("心前处理，入账务流水表，更新登记簿为状态为处理中开始");
+        logger.info("核心前处理，入账务流水表，更新登记簿为状态为处理中开始");
 
         String coreReqDate = generateCodeService.getCoreReqDate(payTransDtlInfoDO.getBatchId());
         String coreReqSerno = generateCodeService.generateCoreReqSerno();
