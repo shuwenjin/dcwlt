@@ -13,8 +13,8 @@ import com.dcits.dcwlt.pay.api.model.AuthInfoDO;
 import com.dcits.dcwlt.pay.api.model.AuthInfoToBeEffectiveDO;
 import com.dcits.dcwlt.pay.api.model.PartyInfoDO;
 import com.dcits.dcwlt.pay.api.model.PartyToBeEffectiveDO;
-import com.dcits.dcwlt.pay.online.exception.EcnyTransError;
-import com.dcits.dcwlt.pay.online.exception.EcnyTransException;
+import com.dcits.dcwlt.pay.api.mq.event.exception.EcnyTransError;
+import com.dcits.dcwlt.pay.api.mq.event.exception.EcnyTransException;
 import com.dcits.dcwlt.pay.online.mapper.PartyInfoMapper;
 import com.dcits.dcwlt.pay.online.service.*;
 

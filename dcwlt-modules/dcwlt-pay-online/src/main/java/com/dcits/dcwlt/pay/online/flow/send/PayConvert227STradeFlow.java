@@ -20,7 +20,6 @@ import com.dcits.dcwlt.pay.api.domain.dcep.bankattachedmanagement.BankAttRspsnIn
 import com.dcits.dcwlt.pay.api.domain.dcep.cmonconf.CmonConfDTO;
 import com.dcits.dcwlt.pay.api.domain.dcep.cmonconf.CmonConfInf;
 import com.dcits.dcwlt.pay.api.domain.dcep.common.GrpHdr;
-import com.dcits.dcwlt.pay.api.domain.dcep.common.RspsnInf;
 import com.dcits.dcwlt.pay.api.domain.dcep.fault.Fault;
 import com.dcits.dcwlt.pay.api.domain.dcep.fault.FaultDTO;
 import com.dcits.dcwlt.pay.api.domain.dcep.payconvert.*;
@@ -35,8 +34,8 @@ import com.dcits.dcwlt.pay.api.model.StateMachine;
 import com.dcits.dcwlt.pay.online.baffle.dcep.impl.BankCoreImplDubboService;
 import com.dcits.dcwlt.pay.online.base.Constant;
 import com.dcits.dcwlt.pay.online.event.service.BankRevService;
-import com.dcits.dcwlt.pay.online.exception.EcnyTransError;
-import com.dcits.dcwlt.pay.online.exception.EcnyTransException;
+import com.dcits.dcwlt.pay.api.mq.event.exception.EcnyTransError;
+import com.dcits.dcwlt.pay.api.mq.event.exception.EcnyTransException;
 import com.dcits.dcwlt.pay.online.flow.builder.EcnyTradeContext;
 import com.dcits.dcwlt.pay.online.flow.builder.EcnyTradeFlowBuilder;
 import com.dcits.dcwlt.pay.online.mapper.PayTransDtlInfoMapper;

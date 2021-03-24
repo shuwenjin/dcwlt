@@ -1,8 +1,8 @@
-package com.dcits.dcwlt.pay.online.mq;
+package com.dcits.dcwlt.pay.api.mq;
 
 import com.alibaba.fastjson.JSONObject;
+import com.dcits.dcwlt.pay.api.mq.event.IEventDealAppService;
 import com.dcits.dcwlt.pay.api.domain.dcep.eventBatch.EventDealReqMsg;
-import com.dcits.dcwlt.pay.online.event.IEventDealAppService;
 import org.apache.rocketmq.spring.annotation.RocketMQMessageListener;
 import org.apache.rocketmq.spring.core.RocketMQListener;
 import org.slf4j.Logger;

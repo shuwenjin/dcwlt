@@ -13,7 +13,7 @@ import com.dcits.dcwlt.pay.api.domain.dcep.party.chng.FinCdChngNtfctnDTO;
 import com.dcits.dcwlt.pay.api.domain.dcep.party.trblntfctn.TrblNtfctnDTO;
 import com.dcits.dcwlt.pay.api.model.RspCodeMapDO;
 import com.dcits.dcwlt.pay.online.base.Constant;
-import com.dcits.dcwlt.pay.online.exception.EcnyTransException;
+import com.dcits.dcwlt.pay.api.mq.event.exception.EcnyTransException;
 import com.dcits.dcwlt.pay.online.flow.builder.EcnyTradeContext;
 import com.dcits.dcwlt.pay.online.flow.builder.EcnyTradeFlowBuilder;
 import com.dcits.dcwlt.pay.online.service.INotificationProcess;

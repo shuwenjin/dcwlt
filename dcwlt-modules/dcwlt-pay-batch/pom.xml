@@ -17,7 +17,6 @@
     </description>
 
     <dependencies>
-
         <!-- SpringCloud Ailibaba Nacos -->
         <dependency>
             <groupId>com.alibaba.cloud</groupId>
@@ -78,11 +77,12 @@
             <groupId>com.dcits</groupId>
             <artifactId>dcwlt-common-swagger</artifactId>
         </dependency>
+
+        <!-- dcits pay api -->
         <dependency>
             <groupId>com.dcits</groupId>
             <artifactId>dcwlt-api-pay</artifactId>
         </dependency>
-
         <dependency>
             <groupId>com.jcraft</groupId>
             <artifactId>jsch</artifactId>

@@ -24,7 +24,7 @@ spring:
         shared-configs:
           - application-${spring.profiles.active}.${spring.cloud.nacos.config.file-extension}
 
-  # 配置rocketmq
+# 配置rocketmq
 rocketmq:
   name-server: 127.0.0.1:9876
   producer:

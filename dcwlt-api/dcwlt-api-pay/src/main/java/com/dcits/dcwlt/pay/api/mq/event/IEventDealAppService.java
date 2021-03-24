@@ -1,4 +1,4 @@
-package com.dcits.dcwlt.pay.online.event;
+package com.dcits.dcwlt.pay.api.mq.event;
 
 
 import com.dcits.dcwlt.pay.api.domain.dcep.eventBatch.EventDealReqMsg;

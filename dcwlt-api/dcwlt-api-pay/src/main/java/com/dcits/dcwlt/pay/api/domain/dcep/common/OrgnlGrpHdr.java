@@ -83,11 +83,13 @@ public class OrgnlGrpHdr {
 		this.orgnlMT = orgnlMT;
 	}
 
+
 	@Override
 	public String toString() {
-		return "OrgnlGrpHdr [orgnlMsgId=" + orgnlMsgId + ", orgnlInstgPty=" + orgnlInstgPty + ", orgnlMT=" + orgnlMT
-				+ "]";
+		return "OrgnlGrpHdr{" +
+				"orgnlMsgId='" + orgnlMsgId + '\'' +
+				", orgnlInstgPty='" + orgnlInstgPty + '\'' +
+				", orgnlMT='" + orgnlMT + '\'' +
+				'}';
 	}
-
-	
 }

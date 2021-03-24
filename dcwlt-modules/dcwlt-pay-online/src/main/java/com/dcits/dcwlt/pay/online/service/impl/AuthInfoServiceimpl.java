@@ -13,8 +13,8 @@ import com.dcits.dcwlt.pay.api.domain.dcep.authinfo.BizAuthrtyInf;
 import com.dcits.dcwlt.pay.api.domain.dcep.chngctrl.ChngCtrl;
 import com.dcits.dcwlt.pay.api.model.AuthInfoDO;
 import com.dcits.dcwlt.pay.api.model.AuthInfoToBeEffectiveDO;
-import com.dcits.dcwlt.pay.online.exception.EcnyTransError;
-import com.dcits.dcwlt.pay.online.exception.EcnyTransException;
+import com.dcits.dcwlt.pay.api.mq.event.exception.EcnyTransError;
+import com.dcits.dcwlt.pay.api.mq.event.exception.EcnyTransException;
 import com.dcits.dcwlt.pay.online.mapper.AuthInfoMapper;
 import com.dcits.dcwlt.pay.online.service.IAuthInfoService;
 import org.apache.commons.lang3.StringUtils;
@@ -24,7 +24,6 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import javax.annotation.Resource;
 import java.util.List;
 
 /**

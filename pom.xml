@@ -39,7 +39,7 @@
         <dom4j.version>1.6.1</dom4j.version>
         <bcprov.version>1.56</bcprov.version>
         <validation.version>2.0.1.Final</validation.version>
-        <rocketmq.version>2.2.0</rocketmq.version>
+        <rocketmq.version>2.1.0</rocketmq.version>
         <lombok.version>1.18.0</lombok.version>
         <spring-boot-maven-plugin.version>2.4.3</spring-boot-maven-plugin.version>
     </properties>

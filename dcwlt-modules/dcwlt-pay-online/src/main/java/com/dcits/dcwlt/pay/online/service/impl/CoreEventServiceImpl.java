@@ -3,7 +3,7 @@ package com.dcits.dcwlt.pay.online.service.impl;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.serializer.SerializerFeature;
 import com.dcits.dcwlt.pay.api.domain.dcep.eventBatch.EventDealReqMsg;
-import com.dcits.dcwlt.pay.online.service.IEventRegisterAppService;
+import com.dcits.dcwlt.pay.api.mq.event.IEventRegisterAppService;
 import com.dcits.dcwlt.pay.online.event.coreqry.IBankRevCallBack;
 import com.dcits.dcwlt.pay.online.event.coreqry.ICoreQryCallBack;
 import com.dcits.dcwlt.pay.online.event.coreqry.IReCreditCallBack;

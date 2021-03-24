@@ -9,6 +9,9 @@ import com.dcits.dcwlt.pay.api.domain.dcep.eventBatch.EventDealReqMsg;
 public class FunExecutor {
 
     public static Object execute(FunInvoker invoker, EventDealReqMsg eventInfo) {
+        if (null == invoker) {
+            return null;
+        }
         try {
             Object[] classs = new Object[1];
             classs[0] = (Object) eventInfo;

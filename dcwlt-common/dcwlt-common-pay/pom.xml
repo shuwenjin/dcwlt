@@ -109,5 +109,4 @@
             <artifactId>dcwlt-common-core</artifactId>
         </dependency>
     </dependencies>
-
 </project>

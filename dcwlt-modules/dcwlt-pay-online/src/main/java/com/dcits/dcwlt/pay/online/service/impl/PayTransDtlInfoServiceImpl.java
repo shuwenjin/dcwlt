@@ -16,8 +16,8 @@ import com.dcits.dcwlt.pay.api.domain.dcep.reconvert.TrxInfReconvert;
 import com.dcits.dcwlt.pay.api.model.PayTransDtlInfoDO;
 import com.dcits.dcwlt.pay.api.model.StateMachine;
 import com.dcits.dcwlt.pay.online.base.Constant;
-import com.dcits.dcwlt.pay.online.exception.EcnyTransError;
-import com.dcits.dcwlt.pay.online.exception.EcnyTransException;
+import com.dcits.dcwlt.pay.api.mq.event.exception.EcnyTransError;
+import com.dcits.dcwlt.pay.api.mq.event.exception.EcnyTransException;
 import com.dcits.dcwlt.pay.online.mapper.PayTransDtlInfoMapper;
 import com.dcits.dcwlt.pay.online.service.IPayTransDtlInfoService;
 import org.apache.commons.beanutils.BeanUtils;
@@ -25,6 +25,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
 
 import java.lang.reflect.InvocationTargetException;
@@ -32,6 +33,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+@Primary
 @Service("payTransDtlInfoServiceImpl")
 public class PayTransDtlInfoServiceImpl implements IPayTransDtlInfoService {
 

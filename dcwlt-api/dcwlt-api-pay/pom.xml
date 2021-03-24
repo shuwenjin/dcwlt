@@ -24,7 +24,10 @@
             <groupId>com.dcits</groupId>
             <artifactId>dcwlt-common-pay</artifactId>
         </dependency>
-
+        <dependency>
+            <groupId>com.dcits</groupId>
+            <artifactId>dcwlt-common-mq</artifactId>
+        </dependency>
     </dependencies>
 
 </project>

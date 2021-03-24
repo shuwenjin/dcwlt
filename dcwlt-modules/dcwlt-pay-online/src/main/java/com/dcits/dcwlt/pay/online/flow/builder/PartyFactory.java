@@ -8,8 +8,8 @@ import com.dcits.dcwlt.pay.api.domain.dcep.chngctrl.ChngCtrl;
 import com.dcits.dcwlt.pay.api.domain.dcep.common.NbInf;
 import com.dcits.dcwlt.pay.api.domain.dcep.party.Party;
 import com.dcits.dcwlt.pay.api.model.PartyToBeEffectiveDO;
-import com.dcits.dcwlt.pay.online.exception.EcnyTransError;
-import com.dcits.dcwlt.pay.online.exception.EcnyTransException;
+import com.dcits.dcwlt.pay.api.mq.event.exception.EcnyTransError;
+import com.dcits.dcwlt.pay.api.mq.event.exception.EcnyTransException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

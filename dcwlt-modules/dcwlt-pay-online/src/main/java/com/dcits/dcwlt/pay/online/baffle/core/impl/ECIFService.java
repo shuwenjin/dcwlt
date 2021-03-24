@@ -1,31 +1,11 @@
 package com.dcits.dcwlt.pay.online.baffle.core.impl;
 
-import com.alibaba.csp.sentinel.util.StringUtil;
 import com.dcits.dcwlt.common.pay.channel.bankcore.dto.bankcore358040.BankCore358040Rsp;
-import com.dcits.dcwlt.common.pay.constant.AppConstant;
-import com.dcits.dcwlt.pay.online.exception.EcnyTransError;
-import com.dcits.dcwlt.pay.online.exception.EcnyTransException;
-import com.dcits.dcwlt.pay.online.flow.receive.BankAttAcctManage433RTradeFlow;
 import com.dcits.dcwlt.pay.online.service.impl.ECNYSerNoService;
-import org.apache.http.protocol.HTTP;
-import org.dom4j.Attribute;
-import org.dom4j.Element;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import org.dom4j.Document;
-import org.dom4j.DocumentHelper;
-
-import javax.xml.soap.SOAPMessage;
 
 /**
  * ECIF 接口

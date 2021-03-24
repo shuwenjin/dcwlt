@@ -1,16 +1,14 @@
 package com.dcits.dcwlt.pay.online.service.impl;
 
 import com.dcits.dcwlt.common.core.utils.StringUtils;
-import com.dcits.dcwlt.common.pay.channel.bankcore.dto.BankCoreRspMessage;
-import com.dcits.dcwlt.common.pay.channel.bankcore.dto.bankcore358040.BankCore358040ArrayInfoRsp;
 import com.dcits.dcwlt.common.pay.constant.AppConstant;
 import com.dcits.dcwlt.common.pay.constant.Constant;
 import com.dcits.dcwlt.common.pay.enums.AccTpCdEnum;
 import com.dcits.dcwlt.common.pay.sequence.service.impl.GenerateCodeServiceImpl;
 import com.dcits.dcwlt.common.pay.channel.bankcore.dto.bankcore358040.BankCore358040Req;
 import com.dcits.dcwlt.common.pay.channel.bankcore.dto.bankcore358040.BankCore358040Rsp;
-import com.dcits.dcwlt.pay.online.exception.EcnyTransError;
-import com.dcits.dcwlt.pay.online.exception.EcnyTransException;
+import com.dcits.dcwlt.pay.api.mq.event.exception.EcnyTransError;
+import com.dcits.dcwlt.pay.api.mq.event.exception.EcnyTransException;
 import com.dcits.dcwlt.common.pay.channel.bankcore.dto.LSFK43ReqMsg;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

@@ -1,4 +1,4 @@
-package com.dcits.dcwlt.pay.online.mapper;
+package com.dcits.dcwlt.pay.api.mapper;
 
 import com.dcits.dcwlt.pay.api.model.RspCodeMapDO;
 import org.apache.ibatis.annotations.Mapper;
