@@ -6,6 +6,11 @@ import java.util.Map;
 
 public class EventConst {
 
+    /**
+     * 消息标签
+     */
+    public static final String EVENT = "EVENT";             //dcwlt-pay-online消息
+    public static final String BATCH = "BATCH";             //dcwlt-pay-batch消息
 
     /**
      * 异常事件处理扭转状态

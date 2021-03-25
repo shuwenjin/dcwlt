@@ -1,6 +1,7 @@
 package com.dcits.dcwlt.pay.online.flow.receive;
 
 import com.alibaba.fastjson.JSONObject;
+import com.dcits.dcwlt.common.pay.constant.EventConst;
 import com.dcits.dcwlt.common.pay.enums.MsgTpEnum;
 import com.dcits.dcwlt.common.pay.sequence.service.impl.GenerateCodeServiceImpl;
 import com.dcits.dcwlt.common.pay.tradeflow.TradeContext;
@@ -104,7 +105,7 @@ public class ReconSummaryChk711TradeFlow {
             eventBatchTotalParam.setBatchDate(batchDate);
             eventBatchTotalParam.setBatchId(summaryHdr.getBatchId());
             msg.setExceptEventContext(JSONObject.toJSONString(eventBatchTotalParam));
-            eventRegisterAppServiceimpl.registerEvent(msg, "BATCH");
+            eventRegisterAppServiceimpl.registerEvent(msg, EventConst.BATCH);
             logger.info("机构对账汇总信息消息入库成功！！事件业务流水:{}", msg.getExceptEventSeqNo());
 
             EventDealReqMsg msgDetial = new EventDealReqMsg();
@@ -115,7 +116,7 @@ public class ReconSummaryChk711TradeFlow {
             eventBatchDetailParam.setBatchId(summaryHdr.getBatchId());
             eventBatchDetailParam.setDigitalEnvelope(reqMsg.getDcepHead().getDgtlEnvlp());
             msgDetial.setExceptEventContext(JSONObject.toJSONString(eventBatchDetailParam));
-            eventRegisterAppServiceimpl.registerEvent(msgDetial, "BATCH");
+            eventRegisterAppServiceimpl.registerEvent(msgDetial, EventConst.BATCH);
             logger.info("明细对账消息发送成功！！！事件业务流水:{}", msgDetial.getExceptEventSeqNo());
         }catch (EcnyTransException e){
             logger.error("消息发送失败{}",e);
