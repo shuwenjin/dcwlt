@@ -1,5 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/" xmlns:head="http://www.dcep.com/dcep/header/">
+    <!--前置条件，先调用接口
+    /pay-batch/schedulerController?settleDate=20210113&batchId=B202101131600&serviceName=ImportDataService
+    参数取值说明：
+    1. batchId为当前报文中的 BatchId
+    2. settleDate = batchId.substring(1, 9)
+    3. serviceName=ImportDataService
+    接口执行成功后再发该报文
+    -->
     <soap:Header>
         <head:Ver>01</head:Ver>
         <head:SndDtTm>2021-01-13T16:12:27</head:SndDtTm>

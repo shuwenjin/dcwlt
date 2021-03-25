@@ -19,7 +19,7 @@ import org.springframework.stereotype.Service;
 public class ImportTradeDataFileTask implements ISettleTask {
     private static final Logger logger = LoggerFactory.getLogger(ImportTradeDataFileTask.class);
     //sql导出文件路径
-    @Value("{ecny.sql.load.path}")
+    @Value("${ecny.sql.load.path}")
     private String fileRootPath;
     @Autowired
     private ICheckCollectService checkCollectService;

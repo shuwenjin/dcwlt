@@ -27,25 +27,6 @@ import java.util.List;
      */
      int insertByBatch(List<CheckCollectDO> list);
 
-    /**
-     * 文件导入
-     *
-     * @param
-     * @return
-     */
-//     int loadFileByBatch(String fileName) {
-//        String sql = "load data infile '" + fileName + "' into table ecny_batch_checkcollect\r\n" +
-//                "        (PAYDATE, PAYSERNO, PAYTIME, COREACCTDATE, MSGTYPE, MSGID, BATCHID, PAYFLAG, INSTGDRCTPTY, DBITPARTY,\r\n" +
-//                "        PAYERWALLETID,\r\n" +
-//                "        PAYERACCOUNT, CRDTPARTY, PAYEENAME, PAYEEACCOUNT, PAYEEWALLETID, CCY, AMOUNT, OGNLMSGTYPE, OGNLMSGID,\r\n" +
-//                "        TRADESTATUS, CORESTATUS, PATHSTATUS, LASTUPDATE, LASTUPTIME)";
-//        IDataService dataService = RtpUtil.getInstance().getBean(IDataService.class);
-//        return dataService.executeSql(IDataService.DEFAULT_DSNAME, sql, null);
-//    }
-
-     int loadFileByBatch(@Param("fileName")String fileName);
-
-
      List<CheckCollectDO> selectCheckCollect(@Param("batchId")String batchId);
 
      List<CheckPathDO> selectCollectSumByMsgType(@Param("batchId")String batchId);

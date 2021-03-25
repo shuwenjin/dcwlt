@@ -1,6 +1,10 @@
 # Tomcat
 server:
   port: 9401
+# open mybatis log
+#mybatis:
+  #configuration:
+    #log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
 
 # Spring
 spring: 
@@ -61,7 +65,10 @@ sftp:
 ecny:
   online:
     server:
-      url: ''
+      url: 127.0.0.1
+  sql:
+    load:
+      path: /home/mysql/mysql/data
 # 配置rocketmq
 rocketmq:
   name-server: 127.0.0.1:9876

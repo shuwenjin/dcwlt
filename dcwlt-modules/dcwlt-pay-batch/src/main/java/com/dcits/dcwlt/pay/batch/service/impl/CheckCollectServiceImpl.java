@@ -8,6 +8,7 @@ import com.dcits.dcwlt.pay.batch.mapper.SettleCheckColectMapper;
 import com.dcits.dcwlt.pay.batch.service.ICheckCollectService;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
@@ -22,6 +23,9 @@ public class CheckCollectServiceImpl implements ICheckCollectService {
 
     @Autowired
     private SettleCheckColectMapper settleCheckColectMapper;
+
+    @Autowired
+    JdbcTemplate jdbcTemplate;
 
     private static final String INSERT_SQL = "settleCheckColectMapper.insert";
     private static final String SELECT_SQL = "settleCheckColectMapper.selectCheckCollect";
@@ -50,8 +54,13 @@ public class CheckCollectServiceImpl implements ICheckCollectService {
      * @return
      */
     @Override
-    public int loadFileByBatch(String fileName) {
-        return settleCheckColectMapper.loadFileByBatch(fileName);
+    public void loadFileByBatch(String fileName) {
+        String sql = "load data infile '" + fileName + "' into table pay_batch_checkcollect\r\n" +
+                "        (PAYDATE, PAYSERNO, PAYTIME, COREACCTDATE, MSGTYPE, MSGID, BATCHID, PAYFLAG, INSTGDRCTPTY, DBITPARTY,\r\n" +
+                "        PAYERWALLETID,\r\n" +
+                "        PAYERACCOUNT, CRDTPARTY, PAYEENAME, PAYEEACCOUNT, PAYEEWALLETID, CCY, AMOUNT, OGNLMSGTYPE, OGNLMSGID,\r\n" +
+                "        TRADESTATUS, CORESTATUS, PATHSTATUS, LASTUPDATE, LASTUPTIME)";
+        jdbcTemplate.execute(sql);
     }
 
     @Override

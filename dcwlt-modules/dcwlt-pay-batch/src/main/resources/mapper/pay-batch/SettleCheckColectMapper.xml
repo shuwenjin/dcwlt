@@ -347,12 +347,4 @@
             #{item}
         </foreach>
     </select>
-
-    <insert id="loadFileByBatch">
-        load data infile #{fileName} into table pay_batch_checkcollect
-               (PAYDATE, PAYSERNO, PAYTIME, COREACCTDATE, MSGTYPE, MSGID, BATCHID, PAYFLAG, INSTGDRCTPTY, DBITPARTY,
-                PAYERWALLETID,PAYERACCOUNT, CRDTPARTY, PAYEENAME, PAYEEACCOUNT, PAYEEWALLETID,
-                CCY, AMOUNT, OGNLMSGTYPE, OGNLMSGID,TRADESTATUS, CORESTATUS, PATHSTATUS, LASTUPDATE, LASTUPTIME)
-    </insert>
-
 </mapper>

@@ -32,7 +32,7 @@ public interface ICheckCollectService {
      * @param fileName
      * @return
      */
-    public int loadFileByBatch(String fileName);
+    public void loadFileByBatch(String fileName);
 
     /**
      * 将数据从联机库导入文件
