@@ -39,10 +39,14 @@ ency:
     wrong:
       max:
         count: 100
+  #联机系统机构url
+  online:
+    server:
+      url: 127.0.0.1
   #文件加载路径
   sql:
     load:
-      path:
+      path: ./
 # 协议
 sftp:
   client:
@@ -62,13 +66,6 @@ sftp:
     sessionConnectTimeout: 15000
   # channel连接超时时间
     channelConnectedTimeout: 15000
-ecny:
-  online:
-    server:
-      url: 127.0.0.1
-  sql:
-    load:
-      path: /home/mysql/mysql/data
 # 配置rocketmq
 rocketmq:
   name-server: 127.0.0.1:9876
