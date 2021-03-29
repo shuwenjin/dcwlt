@@ -23,7 +23,7 @@ import com.dcits.dcwlt.pay.online.service.IEventService;
 import com.dcits.dcwlt.pay.online.event.coreqry.IBankRevCallBack;
 import com.dcits.dcwlt.pay.online.service.IPayTransDtlInfoService;
 import com.dcits.dcwlt.pay.online.service.impl.BankCoreAccTxnServiceImpl;
-import com.dcits.dcwlt.pay.online.service.impl.BankCoreImplDubboServiceImpl;
+import com.dcits.dcwlt.pay.online.baffle.core.impl.BankCoreImplDubboServiceImpl;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

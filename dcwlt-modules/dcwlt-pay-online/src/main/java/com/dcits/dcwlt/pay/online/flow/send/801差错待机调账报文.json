@@ -1,16 +1,21 @@
 {
-        "ecnyHead": {
-            "busiChnl": "1111",
-            "busiChnl2": "2222",
-            "zoneno": "01",
-            "brno": "01234",
-            "tellerno": "111",
-            "origChnl": "11",
-            "origChnl2": "222",
-            "origChnlDtl": "22"
-        },
-        "body": {
-            "payDate": "20210305",
-            "paySerno":"15033930001"
-        }
+  "head": {
+    "tranDate": "20210317",
+    "tranTime": "103524",
+    "seqNo": "20210113000122532910308590900000"
+  },
+  "ecnyHead": {
+    "busiChnl": "1111",
+    "busiChnl2": "2222",
+    "zoneno": "01",
+    "brno": "01234",
+    "tellerno": "111",
+    "origChnl": "11",
+    "origChnl2": "222",
+    "origChnlDtl": "22"
+  },
+  "body": {
+    "payDate": "20210317",
+    "paySerno": "10352440002"
+  }
 }

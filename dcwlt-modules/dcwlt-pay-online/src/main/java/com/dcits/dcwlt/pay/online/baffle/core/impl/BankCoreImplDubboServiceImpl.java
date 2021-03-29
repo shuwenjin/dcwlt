@@ -7,7 +7,7 @@
  *     rtp - initial implementation
  *********************************************/
 
-package com.dcits.dcwlt.pay.online.service.impl;
+package com.dcits.dcwlt.pay.online.baffle.core.impl;
 
 import com.alibaba.csp.sentinel.util.StringUtil;
 import com.dcits.dcwlt.common.pay.channel.bankcore.IBankCoreBody;
@@ -28,6 +28,8 @@ import com.dcits.dcwlt.common.pay.util.DateUtil;
 import com.dcits.dcwlt.common.pay.util.IOCheckUtil;
 import com.dcits.dcwlt.pay.api.model.CoreTradeTypeDO;
 import com.dcits.dcwlt.pay.online.baffle.dcep.impl.BankCoreDubboServiceImpl;
+import com.dcits.dcwlt.pay.online.service.impl.CoreTradeTypeRepository;
+import com.dcits.dcwlt.pay.online.service.impl.HostEngCfgRepository;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -39,9 +41,9 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * 核心接口服务层
+ * 核心接口服务层 todo 后续可自己实现接口
  *
- * @author zhanguohai
+ *
  */
 @Service
 public class BankCoreImplDubboServiceImpl {
@@ -154,7 +156,7 @@ public class BankCoreImplDubboServiceImpl {
     public BankCore996666Rsp queryCoreStatus(String srcCnsmrSysId, String srcCnsmrSysSeqNo, String reqSysDate, String reqSysJrn) {
 
         // 获取服务化调用请求流水``
-        String seqNo = generateCodeService.generateCoreReqSerno();
+        //String seqNo = generateCodeService.generateCoreReqSerno();
 
         //构造服务化报文头
        // Head head = bankCoreDubboService.bulidServerHead(seqNo, Constant.SRVCCODE_996666, srcCnsmrSysId, srcCnsmrSysSeqNo);
@@ -169,15 +171,15 @@ public class BankCoreImplDubboServiceImpl {
         req.setReqSysJrn(reqSysJrn);
 
         // 构造服务化请求报文
-        BankCoreReqMessage msg = bankCoreDubboServiceImpl.buildBankCoreMessage(coreHead, req, null);
+        //BankCoreReqMessage msg = bankCoreDubboServiceImpl.buildBankCoreMessage(coreHead, req, null);
 
-        // 请求核心服务 todo 暂时返回假数据
+        // 请求核心服务
         //BankCoreRspMessage rsp = bankCoreDubboServiceImpl.bankCoreRequests(msg, BankCore998889Req.class, null);
         BankCoreRspMessage rsp = new BankCoreRspMessage();
         BankCore996666Rsp bankCore996666Rsp = new BankCore996666Rsp();
-        bankCore996666Rsp.setCoreRetCode("11");
-        bankCore996666Rsp.setCoreRetMsg("22");
-        bankCore996666Rsp.setHostAcdate("111");
+        bankCore996666Rsp.setCoreRetCode("000000");
+        bankCore996666Rsp.setCoreRetMsg("核心处理成功");
+        bankCore996666Rsp.setHostAcdate("20120602");
         bankCore996666Rsp.setTxnSts("1");
         rsp.setBody(bankCore996666Rsp);
 

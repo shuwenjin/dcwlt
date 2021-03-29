@@ -372,6 +372,7 @@ public class Convert225RTradeFlow {
         logger.info("发送核心系统进行账务处理,核心请求日期:{},流水:{}", bankCore351100InnerReq.getCoreReqDate(), bankCore351100InnerReq.getCoreReqSerno());
         BankCore351100InnerRsp bankCore351100InnerRsp;
         try {
+            // todo 请求核心的代码
             bankCore351100InnerRsp = bankCoreImplDubboService.coreServer(bankCore351100InnerReq);
         } catch (Exception e) {
             logger.error("核心通讯异常：{}-{}-{}", LogMonitorLevelCdEnum.ECNY_LOG_MONITOR_NORMAL.getCode(), e.getMessage(), e);

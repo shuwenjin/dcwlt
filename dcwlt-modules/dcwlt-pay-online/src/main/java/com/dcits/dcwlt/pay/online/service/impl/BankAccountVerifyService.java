@@ -123,6 +123,7 @@ public class BankAccountVerifyService {
     public Map<String, String> invokeLSFK43(String custidNo, String custType, String custName, String payDate, String payTime, String paySerno) {
         logger.info("\n------------反洗钱接口调用--------------");
 
+        // todo
         Map<String, String> resultMap = new HashMap<>();
 //        LSFK43ReqDTO reqDTO = buildLSFKReqDTO(custidNo, custType, custName, payDate, payTime, paySerno);
 //        String resp = RpcHttpJsonUtil.executeExt(ApiConstant.LSFK43_SERVER_NAME, JsonUtil.toJSONString(reqDTO));
@@ -214,6 +215,7 @@ public class BankAccountVerifyService {
      * @return BankCore358040Rsp
      */
     public BankCore358040Rsp queryAccount(String msgType, BankCore358040Req req) {
+        // todo 调用核心接口
 //        logger.info("开始校验账户信息");
 //        //构建服务化报文头
 //        Head head = HeadUtil.newHead(Constant.SRVCCODE_358040, Constant.CORE_SYS_ID, generateCodeService.generateCoreReqSerno());

@@ -24,6 +24,7 @@ import com.dcits.dcwlt.pay.api.domain.dcep.txstsqryreq.TxStsQryReq;
 import com.dcits.dcwlt.pay.api.domain.dcep.txstsqryreq.TxStsQryReqDTO;
 import com.dcits.dcwlt.pay.api.domain.dcep.txstsqryreq.TxStsQryRspDTO;
 import com.dcits.dcwlt.pay.api.model.PayTransDtlInfoDO;
+import com.dcits.dcwlt.pay.online.baffle.dcep.DcepService;
 import com.dcits.dcwlt.pay.online.event.callback.ReCreditCoreQryCallBack;
 import com.dcits.dcwlt.pay.api.mq.event.exception.EcnyTransError;
 import com.dcits.dcwlt.pay.api.mq.event.IEventRegisterAppService;
@@ -55,6 +56,9 @@ public class TxStsQryNetPartyServiceImpl implements ITxStsQryNetPartyService {
     @Autowired
     private IEventRegisterAppService eventRegisterAppService;
 
+    @Autowired
+    private DcepService dcepService;
+
     @Override
     public TxStsQrySRspDTO txStsQryNetParty(String msgId) {
         TxStsQrySRspDTO txStsQrySRspDTO;
@@ -66,58 +70,7 @@ public class TxStsQryNetPartyServiceImpl implements ITxStsQryNetPartyService {
 
             //发送请求到互联互通平台 todo 发送互联互通，测试暂时返回801查寻交易状态
             //JSONObject rspObj = dcepSendService.sendDcep(dcepReqDTO);
-            JSONObject rspObj =
-            JSONObject.parseObject("{\n" +
-                    "\t\"ecnyHead\": {\n" +
-                    "\t\t\"Sender\": \"C1030644021075\",\n" +
-                    "\t\t\"SignSN\": \"01\",\n" +
-                    "\t\t\"Ver\": \"01\",\n" +
-                    "\t\t\"Receiver\": \"C1010311000014\",\n" +
-                    "\t\t\"MsgSN\": \"20210113106040120333044574013001\",\n" +
-                    "\t\t\"SndDtTm\": \"2021-01-13T20:37:31\",\n" +
-                    "\t\t\"MsgTp\": \"dcep.412.001.01\"\n" +
-                    "\t},\n" +
-                    "\t\"body\": {\n" +
-                    "\t\t\"TxStsQryRsp\": {\n" +
-                    "\t\t\t\"GrpHdr\": {\n" +
-                    "\t\t\t\t\"CreDtTm\": \"2021-01-13T20:33:33\",\n" +
-                    "\t\t\t\t\"InstdPty\": {\n" +
-                    "\t\t\t\t\t\"InstdDrctPty\": \"C1010311000014\"\n" +
-                    "\t\t\t\t},\n" +
-                    "\t\t\t\t\"InstgPty\": {\n" +
-                    "\t\t\t\t\t\"InstgDrctPty\": \"C1030644021075\"\n" +
-                    "\t\t\t\t},\n" +
-                    "\t\t\t\t\"MsgId\": \"20210113106040120333044574013001\"\n" +
-                    "\t\t\t},\n" +
-                    "\t\t\t\"BizQryRef\": {\n" +
-                    "\t\t\t\t\"QryRef\": \"11\",\n" +
-                    "\t\t\t\t\"QryNm\": \"111\",\n" +
-                    "\t\t\t\t\"QryRs\": \"PR00\"\n" +
-                    "\t\t\t},\n" +
-                    "\t\t\t\"BizRpt\": {\n" +
-                    "\t\t\t\t\"TrnRs\": \"PR00\",\n" +
-                    "\t\t\t\t\"Rsn\": {\n" +
-                    "\t\t\t\t\t\"PrcCd\": \"11\",\n" +
-                    "\t\t\t\t\t\"RjctCd\": \"11\",\n" +
-                    "\t\t\t\t\t\"RjctInf\": \"111\"\n" +
-                    "\t\t\t\t},\n" +
-                    "\t\t\t\t\"OrgnlTxInf\": {\n" +
-                    "\t\t\t\t\t\"OrgnlMsgId\": \"11\",\n" +
-                    "\t\t\t\t\t\"OrgnlInstgPty\": \"22\",\n" +
-                    "\t\t\t\t\t\"OrgnlMT\": \"dcep.801.001.01\",\n" +
-                    "\t\t\t\t\t\"OrgnlBizTp\": \"11\"\n" +
-                    "\t\t\t\t}\n" +
-                    "\t\t\t},\n" +
-                    "\t\t\t\"OprlErr\": {\n" +
-                    "\t\t\t\t\"RjctInf\": \"11\",\n" +
-                    "\t\t\t\t\"Err\": {\n" +
-                    "\t\t\t\t\t\"PrcCd\": \"11\",\n" +
-                    "\t\t\t\t\t\"RjctCd\": \"222\"\n" +
-                    "\t\t\t\t}\n" +
-                    "\t\t\t}\n" +
-                    "\t\t}\n" +
-                    "\t}\n" +
-                    "}");
+            JSONObject rspObj = dcepService.receive412(dcepReqDTO);
 
             //拼装响应报文
             txStsQrySRspDTO = packRspMsg(rspObj);

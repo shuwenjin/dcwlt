@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/" xmlns:head="http://www.dcep.com/dcep/header/">
+    <soap:Header>
+        <head:Ver>01</head:Ver>
+        <head:SndDtTm>2021-01-13T11:45:54</head:SndDtTm>
+        <head:MsgTp>dcep.917.001.01</head:MsgTp>
+        <head:MsgSN>202101130001917941057896199000000001</head:MsgSN>
+        <head:Sender>G4001011000013</head:Sender>
+        <head:Receiver>C1030644021075</head:Receiver>
+        <head:SignSN>4</head:SignSN>
+    </soap:Header>
+    <soap:Body>
+        <wstxns1:FinCdChngNtfctn xmlns:wstxns1="http://www.dcep.com/dcep/91700101/">
+            <GrpHdr>
+                <MsgId>20210113000191794105789619900000</MsgId>
+                <CreDtTm>2021-01-13T11:45:54</CreDtTm>
+                <InstgPty>
+                    <InstgDrctPty>G4001011000013</InstgDrctPty>
+                </InstgPty>
+                <InstdPty>
+                    <InstdDrctPty>C1030644021075</InstdDrctPty>
+                </InstdPty>
+            </GrpHdr>
+            <Prttn>
+                <TtlNb>1</TtlNb>
+                <StartNb>1</StartNb>
+                <EndNb>1</EndNb>
+            </Prttn>
+            <NbInf>
+                <ChngNb>00000500</ChngNb>
+            </NbInf>
+            <ChngInf>
+                <ChngCtrl>
+                    <ChngTp>CC00</ChngTp>
+                    <FctvTp>EF00</FctvTp>
+                    <FctvDt>2021-01-13T11:45:54</FctvDt>
+                </ChngCtrl>
+                <PtyTp>PT00</PtyTp> <!-- 运营机构类型 -->
+                <PtyId>C1040311005293</PtyId> <!-- 运营机构编码 -->
+                <PtyNm>中国邮政储蓄银行</PtyNm><!-- 运营机构名称 -->
+                <PtyAli>008000</PtyAli><!-- 运营机构标识 -->
+                <PtySts>ST02</PtySts><!-- 运营机构状态 -->
+                <Contact>Z</Contact><!-- 联系人 -->
+                <Tel>111</Tel><!-- 电话 -->
+                <Mail>1@qq.com</Mail><!-- 邮箱 -->
+                <Fax>1</Fax><!-- 传真 -->
+            </ChngInf>
+        </wstxns1:FinCdChngNtfctn>
+    </soap:Body>
+</soap:Envelope>
