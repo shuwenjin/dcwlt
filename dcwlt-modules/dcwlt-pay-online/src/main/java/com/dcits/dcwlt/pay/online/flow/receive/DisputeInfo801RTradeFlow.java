@@ -409,7 +409,6 @@ public class DisputeInfo801RTradeFlow {
         logger.info("上核心入账开始，核心日期：{}，核心请求流水：{}",
                 bankCore351100InnerReq.getCoreReqDate(), bankCore351100InnerReq.getCoreReqSerno());
         BankCore351100InnerRsp bankCore351100InnerRsp = new BankCore351100InnerRsp();
-        bankCore351100InnerReq.setAmount("测试");
         try {
             // TODO 核心入账接口
             bankCore351100InnerRsp = bankCoreImplDubboService.coreServer(bankCore351100InnerReq);

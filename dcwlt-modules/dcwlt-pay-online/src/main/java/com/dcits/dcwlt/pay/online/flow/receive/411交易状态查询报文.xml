@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/" xmlns:head="http://www.dcep.com/dcep/header/">
+    <soap:Header>
+        <head:Ver>01</head:Ver>
+        <head:SndDtTm>2021-01-14T11:30:52</head:SndDtTm>
+        <head:MsgTp>dcep.411.001.01</head:MsgTp>
+        <!--报文编号-->
+        <head:MsgSN>202101140001411671734133743000000001</head:MsgSN>
+        <!--通讯级标识号-->
+        <head:Sender>G4001011000013</head:Sender>
+        <!-- 发起方运营机构-->
+        <head:Receiver>C1030644021075</head:Receiver>
+        <!-- 接收方运营机构-->
+        <head:SignSN>4</head:SignSN>
+
+    </soap:Header>
+    <soap:Body>
+        <wstxns1:TxStsQryReq xmlns:wstxns1="http://www.dcep.com/dcep/41100101/">
+            <GrpHdr>
+                <MsgId>20210114000141167173413374306789</MsgId>
+                <CreDtTm>2021-01-14T11:30:52</CreDtTm>
+                <InstgPty>
+                    <InstgDrctPty>G4001011000013</InstgDrctPty>
+                </InstgPty>
+                <InstdPty>
+                    <InstdDrctPty>C1030644021075</InstdDrctPty>
+                </InstdPty>
+
+            </GrpHdr>
+            <OrgnlGrpHdr>
+                <OrgnlMsgId>20210114000122199849129770676545</OrgnlMsgId><!--20200208003120187243780829397000-->
+                <OrgnlInstgPty>G4001011000013</OrgnlInstgPty>
+                <OrgnlMT>dcep.221.001.01</OrgnlMT>
+                <OrgnlBizTp>C201</OrgnlBizTp>
+                <OrgnlBizKind>03011</OrgnlBizKind>
+                <OrgnlDbtrWltId>101112345678916</OrgnlDbtrWltId>
+                <OrgnlCdtrWltId></OrgnlCdtrWltId>
+            </OrgnlGrpHdr>
+        </wstxns1:TxStsQryReq>
+    </soap:Body>
+</soap:Envelope>

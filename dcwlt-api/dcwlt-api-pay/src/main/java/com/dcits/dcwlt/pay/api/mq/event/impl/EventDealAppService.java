@@ -22,6 +22,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ExecutorService;
@@ -105,8 +108,11 @@ public class EventDealAppService implements IEventDealAppService {
         event.setExceptEventSeqNo(eventMsg.getExceptEventSeqNo());
         event.setExceptEventDealCount("1");
         event.setExceptEventSysStatus(EventConst.EVENT_DEAL_PROC);
-        // todo 后期获取获取动态ip
-        event.setExceptEventDealPath("127.0.0.1");
+        try {
+            event.setExceptEventDealPath(InetAddress.getLocalHost().getHostAddress());
+        } catch (UnknownHostException e) {
+            logger.error("获取本机ip失败");
+        }
         event.setExceptEventContext(eventMsg.getExceptEventContext());
         return event;
     }

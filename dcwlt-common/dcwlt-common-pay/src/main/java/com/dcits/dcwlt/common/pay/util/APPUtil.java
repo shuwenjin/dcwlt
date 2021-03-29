@@ -19,7 +19,7 @@ public class APPUtil {
      */
     public static String getAppId() {
         //
-        return "";
+        return "DCWLT";
     }
 
     /**

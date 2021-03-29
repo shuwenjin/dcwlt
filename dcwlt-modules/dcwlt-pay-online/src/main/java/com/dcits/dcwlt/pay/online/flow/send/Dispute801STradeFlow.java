@@ -147,6 +147,10 @@ public class Dispute801STradeFlow {
         payTransDtlInfoDO.setBusiChnl(ecnyHead.getBusiChnl());
         payTransDtlInfoDO.setBusiChnl2(ecnyHead.getBusiChnl2());
 
+        payTransDtlInfoDO.setBusiSysDate(reqMsg.getHead().getTranDate());
+        payTransDtlInfoDO.setBusiSysTime(reqMsg.getHead().getTranTime());
+        payTransDtlInfoDO.setBusiSysSerno(reqMsg.getHead().getSeqNo());
+
         payTransDtlInfoDO.setLastUpJrnno(generateFlowNo);
         payTransDtlInfoDO.setLastUpDate(DateUtil.getDefaultDate());
         payTransDtlInfoDO.setLastUpTime(DateUtil.getDefaultTime());

@@ -26,8 +26,6 @@ import org.springframework.stereotype.Service;
 
 /**
  * 核心接口服务层
- *
- * @author zhanguohai
  */
 
 @Service

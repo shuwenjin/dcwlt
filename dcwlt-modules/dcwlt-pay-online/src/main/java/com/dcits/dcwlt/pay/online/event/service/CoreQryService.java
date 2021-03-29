@@ -12,10 +12,9 @@ import com.dcits.dcwlt.pay.api.domain.dcep.eventBatch.EventDealReqMsg;
 import com.dcits.dcwlt.pay.api.model.PayTransDtlInfoDO;
 import com.dcits.dcwlt.pay.online.event.callback.DisputeCoreQryCallBack;
 import com.dcits.dcwlt.pay.online.service.IEventService;
-import com.dcits.dcwlt.pay.online.event.coreqry.ICoreQryCallBack;
 import com.dcits.dcwlt.pay.online.service.IPayTransDtlInfoService;
 import com.dcits.dcwlt.pay.online.service.impl.BankCoreAccTxnServiceImpl;
-import com.dcits.dcwlt.pay.online.service.impl.BankCoreImplDubboServiceImpl;
+import com.dcits.dcwlt.pay.online.baffle.core.impl.BankCoreImplDubboServiceImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -76,9 +75,6 @@ public class CoreQryService implements IEventService {
         return packEventRspMsg(eventDealRspMsg, bankCore996666Rsp);
     }
 
-    @Autowired
-    private DisputeCoreQryCallBack disputeCoreQryCallBack;
-
     /**
      * 回查回调事件
      * @param eventDealRspMsg
@@ -100,22 +96,18 @@ public class CoreQryService implements IEventService {
                 eventDealRspMsg.setRespCode(Constant.CORESTATUS_SUCCESS);
                 Method coreSucc = bean.getClass().getDeclaredMethod("coreSucc", EventDealRspMsg.class, BankCore996666Rsp.class, JSONObject.class);
                 return (EventDealRspMsg)coreSucc.invoke(bean,eventDealRspMsg, bankCore996666Rsp, eventParam);
-                //return callBack.coreSucc(eventDealRspMsg, bankCore996666Rsp, eventParam);
             } else if ("TC1003".equals(bankCore996666Rsp.getCoreRetCode())) {
                 eventDealRspMsg.setRespCode(Constant.CORESTATUS_REVERSED);
                 Method coreSucc = bean.getClass().getDeclaredMethod("coreReversed", EventDealRspMsg.class, BankCore996666Rsp.class, JSONObject.class);
                 return (EventDealRspMsg)coreSucc.invoke(bean,eventDealRspMsg, bankCore996666Rsp, eventParam);
-                //return callBack.coreReversed(eventDealRspMsg, bankCore996666Rsp, eventParam);
             } else if (Constant.CORESTATUS_ABEND.equals(coreProcStatus)) {
                 eventDealRspMsg.setRespCode(Constant.CORESTATUS_ABEND);
                 Method coreSucc = bean.getClass().getDeclaredMethod("coreAbend", EventDealRspMsg.class, BankCore996666Rsp.class, JSONObject.class);
                 return (EventDealRspMsg)coreSucc.invoke(bean,eventDealRspMsg, bankCore996666Rsp, eventParam);
-                //return callBack.coreAbend(eventDealRspMsg, bankCore996666Rsp, eventParam);
             } else if (Constant.CORESTATUS_FAILED.equals(coreProcStatus)) {
                 eventDealRspMsg.setRespCode(Constant.CORESTATUS_FAILED);
                 Method coreSucc = bean.getClass().getDeclaredMethod("coreFail", EventDealRspMsg.class, BankCore996666Rsp.class, JSONObject.class);
                 return (EventDealRspMsg)coreSucc.invoke(bean,eventDealRspMsg, bankCore996666Rsp, eventParam);
-                //return callBack.coreFail(eventDealRspMsg, bankCore996666Rsp, eventParam);
             } else {
                 eventDealRspMsg.setRespCode(PlatformError.OTHER_BUSI_ERROR.getErrorCode());
             }
@@ -159,40 +151,6 @@ public class CoreQryService implements IEventService {
         }
         return eventDealRspMsg;
     }
-
-    /**
-     * @param eventDealReqMsg
-     * @param bankCore996666Rsp
-     */
-//    @Transactional(rollbackFor = Exception.class)
-//    public void dealQryCoreStsRet(EventDealReqMsg eventDealReqMsg, AccFlowDO accFlowDO, BankCore996666Rsp bankCore996666Rsp) {
-//        JSONObject eventJson = JSONObject.parseObject(eventDealReqMsg.getExceptEventContext());
-//        String coreReqDate = accFlowDO.getCoreReqDate();
-//        String coreReqSerno = accFlowDO.getCoreReqSerno();
-//        String trxSqlId = eventJson.getString("trxSqlId");
-//        bankCoreAccTxnService.updateQryTradeRet(coreReqDate, coreReqSerno, bankCore996666Rsp);
-//        //SQL_ID不为空，则关联更新登记簿
-//        if (StringUtil.isBlank(trxSqlId)) {
-//            return;
-//        }
-//        //设置更新字段
-//        Map<String, String> updMap = new HashMap<>();
-//        String coreProcStatus = bankCoreAccTxnService.getCoreStatusMap(bankCore996666Rsp.getTxnSts());
-//        updMap.put("coreRetCode", bankCore996666Rsp.getCoreRetCode());
-//        updMap.put("coreRetMsg", bankCore996666Rsp.getCoreRetMsg());
-//        updMap.put("coreAcctDate", bankCore996666Rsp.getHostAcdate());
-//        updMap.put("coreSerno", bankCore996666Rsp.getHostJrnno());
-//        updMap.put("coreProcStatus", coreProcStatus);
-//        updMap.put("lastUpDate", DateUtil.getDefaultDate());
-//        updMap.put("lastUpTime", DateUtil.getDefaultTime());
-//        updMap.put("trxStatus",coreProcStatus);
-//
-//        //设置更新条件
-//        updMap.put("payDate", accFlowDO.getPayDate());
-//        updMap.put("paySerno", accFlowDO.getPaySerno());
-//
-//        DBUtil.update(trxSqlId, updMap);
-//    }
 
     /**
      * 初始化异常事件响应信息
