@@ -1,4 +1,3 @@
-请求报文：
 <?xml version="1.0" encoding="UTF-8"?><!--兑出是指用户将银行存款兑换为钱包中的DC/EP。-->
 <soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"  xmlns:head="http://www.dcep.com/dcep/header/">
     <soap:Header>
@@ -34,39 +33,10 @@
                 <BizAuthrtyInf>
                     <MT>dcep.401.001.01</MT> <!-- 报文编号 -->
                     <TrdCtgyCd>11</TrdCtgyCd><!-- 业务类型编码 业务类型不存在时，该字段为空 -->
-                    <InitAuthrtySgnCd>AS01</InitAuthrtySgnCd><!-- 发起权限标识 AS00：允许 AS01：禁止 -->
+                    <InitAuthrtySgnCd>AS00</InitAuthrtySgnCd><!-- 发起权限标识 AS00：允许 AS01：禁止 -->
                     <RcvAuthrtySgnCd>AS00</RcvAuthrtySgnCd><!-- 接收权限标识 AS00：允许 AS01：禁止 -->
                 </BizAuthrtyInf>
             </AuthrtyInf>
         </wstxns1:AuthrtyChngNtfctn>
-    </soap:Body>
-</soap:Envelope>
-
-
-响应报文：
-<?xml version="1.0" encoding="UTF-8"?>
-<soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/" xmlns:head="http://www.dcep.com/dcep/header/">
-    <head:Header>
-        <head:Sender>C1030644021075</head:Sender>
-        <head:DgtlEnvlp></head:DgtlEnvlp>
-        <head:SignSN>4</head:SignSN>
-        <head:Ver>01</head:Ver>
-        <head:NcrptnSN></head:NcrptnSN>
-        <head:Receiver>G4001011000013</head:Receiver>
-        <head:MsgSN>202101130001915202815629446000000001</head:MsgSN>
-        <head:SndDtTm>2021-03-11T15:13:26</head:SndDtTm>
-        <head:MsgTp>dcep.902.001.01</head:MsgTp>
-    </head:Header>
-    <soap:Body>
-        <wstxns1:ComConf xmlns:wstxns1="http://www.dcep.com/dcep/90200101/">
-            <ConfInf>
-                <OrgnlMsgId>20210113000191520281562944600000</OrgnlMsgId>
-                <OrgnlInstgPty>G4001011000013</OrgnlInstgPty>
-                <PrcSts>PR00</PrcSts>
-                <OrgnlMT>dcep.915.001.01</OrgnlMT>
-                <OrigSndDtTm>2021-01-13T17:55:29</OrigSndDtTm>
-                <Remark></Remark>
-            </ConfInf>
-        </wstxns1:ComConf>
     </soap:Body>
 </soap:Envelope>

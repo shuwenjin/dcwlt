@@ -67,6 +67,7 @@ public class TransInService {
      * @return
      */
     public DCEPReqDTO<?> jsonToDCEPReqDTO(JSONObject reqMsg) {
+        logger.info("请求json报文：{}",reqMsg.toJSONString());
         DCEPHeader dcepHeader = JSONObject.toJavaObject(reqMsg.getJSONObject(AppConstant.DCEP_HEAD), DCEPHeader.class);    //互联互通报文头json对象-->DCEPHeader实体
         Class<?> clazz = getClassName(dcepHeader.getMsgTp());
         DCEPReqBody body = (DCEPReqBody) JSONObject.toJavaObject(reqMsg.getJSONObject(AppConstant.DCEP_BODY), clazz);          //互联互通报文体json对象-->DCEPReqBody实体
