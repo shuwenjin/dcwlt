@@ -16,7 +16,7 @@ public class FileInf {
     /*
      * 文件名称列表
      * */
-    private List<String> fileNameList;
+    private FileNameList fileNameList;
 
     @JSONField(name = "FilePath")
     public String getFilePath() {
@@ -28,11 +28,11 @@ public class FileInf {
     }
 
     @JSONField(name = "FileNameList")
-    public List<String> getFileNameList() {
+    public FileNameList getFileNameList() {
         return fileNameList;
     }
 
-    public void setFileNameList(List<String> fileNameList) {
+    public void setFileNameList(FileNameList fileNameList) {
         this.fileNameList = fileNameList;
     }
 

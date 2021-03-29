@@ -55,7 +55,7 @@ public class SummaryGrp {
      * 业务对账清单列表
      * */
     @Valid
-    private List<ChkPayInf> chkPayList;
+    private ChkPayList chkPayList;
 
     @JSONField(name = "Nb")
     public String getNb() {
@@ -121,11 +121,11 @@ public class SummaryGrp {
     }
 
     @JSONField(name = "ChkPayList")
-    public List<ChkPayInf> getChkPayList() {
+    public ChkPayList getChkPayList() {
         return chkPayList;
     }
 
-    public void setChkPayList(List<ChkPayInf> chkPayList) {
+    public void setChkPayList(ChkPayList chkPayList) {
         this.chkPayList = chkPayList;
     }
 

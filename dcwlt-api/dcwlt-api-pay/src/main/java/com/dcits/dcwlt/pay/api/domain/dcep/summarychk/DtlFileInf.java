@@ -22,7 +22,7 @@ public class DtlFileInf {
      * 对账明细文件列表
      * */
     @Valid
-    private List<FileInf> fileInfList;
+    private FileInfList fileInfList;
 
     @JSONField(name = "FileInfNb")
     public String getFileInfNb() {
@@ -34,11 +34,11 @@ public class DtlFileInf {
     }
 
     @JSONField(name = "FileInfList")
-    public List<FileInf> getFileInfList() {
+    public FileInfList getFileInfList() {
         return fileInfList;
     }
 
-    public void setFileInfList(List<FileInf> fileInfList) {
+    public void setFileInfList(FileInfList fileInfList) {
         this.fileInfList = fileInfList;
     }
 
