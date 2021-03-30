@@ -77,6 +77,7 @@ public class JsonXmlUtil {
      * @return JSON对象
      */
     public static JSONObject dcepElementToJson(Element parentElement, JSONObject parent) {
+        // 数组类型Map
         Map<String, JSONArray> arrayMap = new HashMap<>();
         for (Object child : parentElement.elements()) {
             Element e = (Element) child;
@@ -85,38 +86,14 @@ public class JsonXmlUtil {
                 // 数组子节点没有child
                 if (e.elements().isEmpty()) {
                     if (e.attributes().isEmpty()) {
-                        if (null == arrayMap.get(e.getName())) {
-                            JSONArray jsonArray = new JSONArray();
-                            jsonArray.add(e.getText());
-                            arrayMap.put(e.getName(), jsonArray);
-                        } else {
-                            JSONArray jsonArray = arrayMap.get(e.getName());
-                            jsonArray.add(e.getText());
-                            arrayMap.put(e.getName(), jsonArray);
-                        }
+                        arrayMapAddItem(arrayMap, e, e.getText());
                     } else {
                         JSONObject json = new JSONObject();
                         json.put(e.getName(), ElementWithAttrToJSON(e));
-                        if (null == arrayMap.get(e.getName())) {
-                            JSONArray jsonArray = new JSONArray();
-                            jsonArray.add(json);
-                            arrayMap.put(e.getName(), jsonArray);
-                        } else {
-                            JSONArray jsonArray = arrayMap.get(e.getName());
-                            jsonArray.add(json);
-                            arrayMap.put(e.getName(), jsonArray);
-                        }
+                        arrayMapAddItem(arrayMap, e, json);
                     }
                 } else {
-                    if (null == arrayMap.get(e.getName())) {
-                        JSONArray jsonArray = new JSONArray();
-                        jsonArray.add(dcepElementToJson(e, new JSONObject()));
-                        arrayMap.put(e.getName(), jsonArray);
-                    } else {
-                        JSONArray jsonArray = arrayMap.get(e.getName());
-                        jsonArray.add(dcepElementToJson(e, new JSONObject()));
-                        arrayMap.put(e.getName(), jsonArray);
-                    }
+                    arrayMapAddItem(arrayMap, e, dcepElementToJson(e, new JSONObject()));
                 }
             } else {
                 // 当前节点无child
@@ -138,6 +115,24 @@ public class JsonXmlUtil {
         }
 
         return parent;
+    }
+
+    /**
+     * 数组类型Map添加元素
+     * @param arrayMap
+     * @param e
+     * @param item
+     */
+    public static void arrayMapAddItem(Map<String, JSONArray> arrayMap, Element e, Object item) {
+        if (null == arrayMap.get(e.getName())) {
+            JSONArray jsonArray = new JSONArray();
+            jsonArray.add(item);
+            arrayMap.put(e.getName(), jsonArray);
+        } else {
+            JSONArray jsonArray = arrayMap.get(e.getName());
+            jsonArray.add(item);
+            arrayMap.put(e.getName(), jsonArray);
+        }
     }
 
     /**
