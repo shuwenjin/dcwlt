@@ -20,6 +20,7 @@ import com.dcits.dcwlt.pay.api.domain.dcep.bankattachedmanagement.BankAttRspsnIn
 import com.dcits.dcwlt.pay.api.domain.dcep.cmonconf.CmonConfDTO;
 import com.dcits.dcwlt.pay.api.domain.dcep.cmonconf.CmonConfInf;
 import com.dcits.dcwlt.pay.api.domain.dcep.common.GrpHdr;
+import com.dcits.dcwlt.pay.api.domain.dcep.common.RspsnInf;
 import com.dcits.dcwlt.pay.api.domain.dcep.fault.Fault;
 import com.dcits.dcwlt.pay.api.domain.dcep.fault.FaultDTO;
 import com.dcits.dcwlt.pay.api.domain.dcep.payconvert.*;
@@ -31,8 +32,10 @@ import com.dcits.dcwlt.pay.api.domain.ecny.payconvert.PayConvertChnlReqDTO;
 import com.dcits.dcwlt.pay.api.domain.ecny.payconvert.PayConvertChnlRspDTO;
 import com.dcits.dcwlt.pay.api.model.PayTransDtlInfoDO;
 import com.dcits.dcwlt.pay.api.model.StateMachine;
+import com.dcits.dcwlt.pay.online.baffle.dcep.DcepService;
 import com.dcits.dcwlt.pay.online.baffle.dcep.impl.BankCoreImplDubboService;
 import com.dcits.dcwlt.pay.online.base.Constant;
+import com.dcits.dcwlt.pay.online.event.callback.ConvertBankRevCallBack;
 import com.dcits.dcwlt.pay.online.event.service.BankRevService;
 import com.dcits.dcwlt.pay.api.mq.event.exception.EcnyTransError;
 import com.dcits.dcwlt.pay.api.mq.event.exception.EcnyTransException;
@@ -112,6 +115,9 @@ public class PayConvert227STradeFlow {
     @Autowired
     private ICoreProcessService bankCoreProcessService;
 
+    @Autowired
+    private DcepService dcepService;
+
     @Bean(name = PAY_CONVERT_TRADE_FLOW)
     public TradeFlow payConvertTradeFlow() {
         return EcnyTradeFlowBuilder.get()
@@ -137,7 +143,7 @@ public class PayConvert227STradeFlow {
         PayConvertChnlReqDTO reqBody = reqMsg.getBody();
         PayTransDtlInfoDO payTransDtlInfoDO = new PayTransDtlInfoDO();
 
-        payTransDtlInfoDO.setPayDate(DateUtil.getCurDay());
+        payTransDtlInfoDO.setPayDate(DateUtil.getDefaultDate());
         String paySerno = generateCodeService.generatePlatformFlowNo();
         payTransDtlInfoDO.setPaySerno(paySerno);
         payTransDtlInfoDO.setPayTime(DateUtil.getDefaultTime());
@@ -153,11 +159,10 @@ public class PayConvert227STradeFlow {
         payTransDtlInfoDO.setBatchId(generateCodeService.getBachNo());
         payTransDtlInfoDO.setBusiChnl(ecnyHead.getBusiChnl());
         payTransDtlInfoDO.setBusiChnl2(ecnyHead.getBusiChnl2());
-        //Todo
-//        payTransDtlInfoDO.setBusiSysDate(reqMsg.getHead().getTranDate());
-//        payTransDtlInfoDO.setBusiSysTime(reqMsg.getHead().getTranTime());
-//        payTransDtlInfoDO.setBusiSysSerno(reqMsg.getHead().getSeqNo());
-//
+        payTransDtlInfoDO.setBusiSysDate(reqMsg.getHead().getTranDate());
+        payTransDtlInfoDO.setBusiSysTime(reqMsg.getHead().getTranTime());
+        payTransDtlInfoDO.setBusiSysSerno(reqMsg.getHead().getSeqNo());
+
         payTransDtlInfoDO.setBusiSysDate(DateUtil.getCurDay());
         payTransDtlInfoDO.setBusiSysTime(DateUtil.getDefaultTime());
         payTransDtlInfoDO.setBusiSysSerno(generateCodeService.getBachNo());
@@ -187,7 +192,7 @@ public class PayConvert227STradeFlow {
         payTransDtlInfoDO.setOrigChnlDtl(ecnyHead.getOrigChnlDtl());
         payTransDtlInfoDO.setSummary(SummaryCdEnum.XSG.getCode());
         payTransDtlInfoDO.setLastUpJrnno(paySerno);
-        payTransDtlInfoDO.setLastUpDate(DateUtil.getCurDay());
+        payTransDtlInfoDO.setLastUpDate(DateUtil.getDefaultDate());
         payTransDtlInfoDO.setLastUpTime(DateUtil.getDefaultTime());
         payTransDtlInfoDO.setRemark(reqBody.getRemark());
         try {
@@ -500,8 +505,9 @@ public class PayConvert227STradeFlow {
      */
     public JSONObject sendDcep(DCEPReqDTO<PayConvertReqDTO> dcepReqDTO, PayTransDtlInfoDO payTransDtlInfoDO) {
         try {
-            JSONObject rspObj = dcepSendService.sendDcep(dcepReqDTO);
-            return rspObj;
+            //JSONObject rspObj = dcepSendService.sendDcep(dcepReqDTO);
+            JSONObject jsonObject = dcepService.receive228(dcepReqDTO);
+            return jsonObject;
         } catch (Exception e) {
             logger.error("发送互联互通平台异常：{}-{}-{}", LogMonitorLevelCdEnum.ECNY_LOG_MONITOR_NORMAL.getCode(), e.getMessage(), e);
             // 登记异常事件，发送互联互通交易状态查询
@@ -530,9 +536,9 @@ public class PayConvert227STradeFlow {
         if (MsgTpEnum.DCEP228.getCode().equals(msgType)) {
             DCEPRspDTO<PayConvertRspDTO> dcepRspDTO = DCEPRspDTO.jsonToDCEPRspDTO(rspObj, PayConvertRspDTO.class);
             String processStatus = dcepRspDTO.getBody().getConvertRsp().getRspsnInf().getPrcSts();
-            BankAttRspsnInf rspsnInf = dcepRspDTO.getBody().getConvertRsp().getRspsnInf();
+            RspsnInf rspsnInf = dcepRspDTO.getBody().getConvertRsp().getRspsnInf();
             payTransDtlInfoDO.setPayPathRetSerno(dcepRspDTO.getBody().getConvertRsp().getGrpHdr().getMsgId());
-            payTransDtlInfoDO.setPayPathRetDate(DateUtil.getCurDay());
+            payTransDtlInfoDO.setPayPathRetDate(DateUtil.getDefaultDate());
             payTransDtlInfoDO.setPayPathRspStatus(rspsnInf.getRspsnSts());
             payTransDtlInfoDO.setPayPathRetCode(rspsnInf.getRjctCd());
             payTransDtlInfoDO.setPayPathRetMsg(rspsnInf.getRjctInf());
@@ -642,9 +648,7 @@ public class PayConvert227STradeFlow {
         rspDTO.setCoreAcctDate(payTransDtlInfoDO.getCoreAcctDate());
         rspDTO.setCoreSerno(payTransDtlInfoDO.getCoreSerno());
         rspDTO.setPayPathSerno(payTransDtlInfoDO.getPayPathSerno());
-        //Todo
-//        ECNYRspDTO ecnyRspDTO = ECNYRspDTO.newInstance(ecnyReqDTO, head, rspDTO, payTransDtlInfoDO.getTrxRetCode(), payTransDtlInfoDO.getTrxRetMsg());
-        ECNYRspDTO ecnyRspDTO = new ECNYRspDTO();
+        ECNYRspDTO ecnyRspDTO = ECNYRspDTO.newInstance(ecnyReqDTO, head, rspDTO, payTransDtlInfoDO.getTrxRetCode(), payTransDtlInfoDO.getTrxRetMsg());
         EcnyTradeContext.setRspMsg(tradeContext, ecnyRspDTO);
     }
 
@@ -696,8 +700,7 @@ public class PayConvert227STradeFlow {
      * @param payTransDtlInfoDO
      */
     public void bankRev(PayTransDtlInfoDO payTransDtlInfoDO) {
-        //Todo
-//        coreEventService.registerBankRev(payTransDtlInfoDO.getPayDate(), payTransDtlInfoDO.getPaySerno(), ConvertBankRevCallBack.class);
+        coreEventService.registerBankRev(payTransDtlInfoDO.getPayDate(), payTransDtlInfoDO.getPaySerno(), ConvertBankRevCallBack.class);
     }
 
 }

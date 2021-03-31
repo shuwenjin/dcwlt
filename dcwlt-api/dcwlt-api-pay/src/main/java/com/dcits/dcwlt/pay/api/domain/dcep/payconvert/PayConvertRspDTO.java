@@ -2,6 +2,7 @@ package com.dcits.dcwlt.pay.api.domain.dcep.payconvert;
 
 import com.alibaba.fastjson.annotation.JSONField;
 import com.dcits.dcwlt.pay.api.domain.dcep.DCEPRspBody;
+import com.dcits.dcwlt.pay.api.domain.dcep.convert.ConvertRsp;
 
 
 /**
@@ -11,14 +12,14 @@ import com.dcits.dcwlt.pay.api.domain.dcep.DCEPRspBody;
  */
 public class PayConvertRspDTO extends DCEPRspBody {
 
-    private PayConvertRsp convertRsp;
+    private ConvertRsp convertRsp;
 
     @JSONField(name = "ConvertRsp")
-    public PayConvertRsp getConvertRsp() {
+    public ConvertRsp getConvertRsp() {
         return convertRsp;
     }
 
-    public void setConvertRsp(PayConvertRsp convertRsp) {
+    public void setConvertRsp(ConvertRsp convertRsp) {
         this.convertRsp = convertRsp;
     }
 

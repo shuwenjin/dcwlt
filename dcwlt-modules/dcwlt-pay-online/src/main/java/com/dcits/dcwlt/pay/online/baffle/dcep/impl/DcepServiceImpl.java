@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.dcits.dcwlt.pay.api.domain.dcep.DCEPReqDTO;
 import com.dcits.dcwlt.pay.api.domain.dcep.dspt.DsptReqDTO;
 import com.dcits.dcwlt.pay.api.domain.dcep.freefrmt.FreeFrmtDTO;
+import com.dcits.dcwlt.pay.api.domain.dcep.payconvert.PayConvertReqDTO;
 import com.dcits.dcwlt.pay.api.domain.dcep.resendapply.EcnyReSendApyReqDTO;
 import com.dcits.dcwlt.pay.api.domain.dcep.txstsqryreq.TxStsQryReqDTO;
 import com.dcits.dcwlt.pay.online.baffle.dcep.DcepService;
@@ -214,6 +215,48 @@ public class DcepServiceImpl implements DcepService {
                 "\t\t\t\t\t\"PrcCd\": \"11\",\n" +
                 "\t\t\t\t\t\"RjctCd\": \"222\"\n" +
                 "\t\t\t\t}\n" +
+                "\t\t\t}\n" +
+                "\t\t}\n" +
+                "\t}\n" +
+                "}");
+    }
+
+    @Override
+    public JSONObject receive228(DCEPReqDTO<PayConvertReqDTO> dtodcepReqDTO) {
+        return JSONObject.parseObject("{\n" +
+                "\t\"ecnyHead\": {\n" +
+                "\t\t\"Sender\": \"C1030644021075\",\n" +
+                "\t\t\"SignSN\": \"01\",\n" +
+                "\t\t\"Ver\": \"01\",\n" +
+                "\t\t\"Receiver\": \"C1010311000014\",\n" +
+                "\t\t\"MsgSN\": \"20210113106040120333044574013001\",\n" +
+                "\t\t\"SndDtTm\": \"2021-01-13T20:37:31\",\n" +
+                "\t\t\"MsgTp\": \"dcep.228.001.01\"\n" +
+                "\t},\n" +
+                "\t\"body\": {\n" +
+                "\t\t\"ConvertRsp\": {\n" +
+                "\t\t\t\"GrpHdr\": {\n" +
+                "\t\t\t\t\"CreDtTm\": \"2021-01-13T20:33:33\",\n" +
+                "\t\t\t\t\"InstdPty\": {\n" +
+                "\t\t\t\t\t\"InstdDrctPty\": \"C1010311000014\"\n" +
+                "\t\t\t\t},\n" +
+                "\t\t\t\t\"InstgPty\": {\n" +
+                "\t\t\t\t\t\"InstgDrctPty\": \"C1030644021075\"\n" +
+                "\t\t\t\t},\n" +
+                "\t\t\t\t\"MsgId\": \"20210113106040120333044574013001\"\n" +
+                "\t\t\t},\n" +
+                "\t\t\t\"OrgnlGrpHdr\": {\n" +
+                "\t\t\t\t\"orgnlMsgId\": \"11\",\n" +
+                "\t\t\t\t\"orgnlInstgPty\": \"111\",\n" +
+                "\t\t\t\t\"orgnlMT\": \"1111\"\n" +
+                "\t\t\t},\n" +
+                "\t\t\t\"RspsnInf\": {\n" +
+                "\t\t\t\t\"PrcSts\": \"PR00\",\n" +
+                "\t\t\t\t\"RspsnSts\": \"1\",\n" +
+                "\t\t\t\t\"RjctCd\": \"1\",\n" +
+                "\t\t\t\t\"RjctInf\": \"11\",\n" +
+                "\t\t\t\t\"BatchId\": \"11\",\n" +
+                "\t\t\t\t\"MsgSndCd\": \"1\"\n" +
                 "\t\t\t}\n" +
                 "\t\t}\n" +
                 "\t}\n" +

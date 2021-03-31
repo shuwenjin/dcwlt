@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.dcits.dcwlt.pay.api.domain.dcep.DCEPReqDTO;
 import com.dcits.dcwlt.pay.api.domain.dcep.dspt.DsptReqDTO;
 import com.dcits.dcwlt.pay.api.domain.dcep.freefrmt.FreeFrmtDTO;
+import com.dcits.dcwlt.pay.api.domain.dcep.payconvert.PayConvertReqDTO;
 import com.dcits.dcwlt.pay.api.domain.dcep.resendapply.EcnyReSendApyReqDTO;
 import com.dcits.dcwlt.pay.api.domain.dcep.txstsqryreq.TxStsQryReqDTO;
 
@@ -18,4 +19,6 @@ public interface DcepService {
     JSONObject receive920(DCEPReqDTO<EcnyReSendApyReqDTO> dcepReqDTO);
 
     JSONObject receive412(DCEPReqDTO<TxStsQryReqDTO> dcepReqDTO);
+
+    JSONObject receive228(DCEPReqDTO<PayConvertReqDTO> dtodcepReqDTO);
 }
