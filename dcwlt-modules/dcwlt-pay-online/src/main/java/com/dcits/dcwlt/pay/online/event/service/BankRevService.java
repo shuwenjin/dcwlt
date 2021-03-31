@@ -2,8 +2,10 @@ package com.dcits.dcwlt.pay.online.event.service;
 
 import com.alibaba.csp.sentinel.util.StringUtil;
 import com.alibaba.fastjson.JSONObject;
+import com.dcits.dcwlt.common.core.utils.SpringUtils;
 import com.dcits.dcwlt.common.pay.channel.bankcore.dto.BankCore996666.BankCore996666Rsp;
 import com.dcits.dcwlt.common.pay.channel.bankcore.dto.BankCoreReqHeader;
+import com.dcits.dcwlt.common.pay.channel.bankcore.dto.bankcore351100.BankCore351100InnerRsp;
 import com.dcits.dcwlt.common.pay.channel.bankcore.dto.bankcore998889.BankCore998889Rsp;
 import com.dcits.dcwlt.pay.api.domain.dcep.eventBatch.EventDealRspMsg;
 import com.dcits.dcwlt.common.pay.constant.AppConstant;
@@ -30,6 +32,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.lang.reflect.Method;
 
 /**
  * @author zhanguohai
@@ -279,19 +283,28 @@ public class BankRevService implements IEventService {
             }
             //存在回调处理，调用应用的冲正回调
             String coreProcStatus = getCoreStatusMap(bankCore998889Rsp.getCoreStatus());
-            IBankRevCallBack callBack = (IBankRevCallBack) Class.forName(callBackClassName).newInstance();
+            //IBankRevCallBack callBack = (IBankRevCallBack) Class.forName(callBackClassName).newInstance();
+            Object bean = SpringUtils.getBean(callBackClassName.substring(callBackClassName.lastIndexOf(".")+1));
             if (Constant.CORESTATUS_SUCCESS.equals(coreProcStatus)) {
                 eventDealRspMsg.setRespCode(Constant.CORESTATUS_SUCCESS);
-                return callBack.bankRevSucc(eventDealRspMsg, bankCore998889Rsp, eventParam);
+                //return callBack.bankRevSucc(eventDealRspMsg, bankCore998889Rsp, eventParam);
+                Method coreSucc = bean.getClass().getDeclaredMethod("bankRevSucc", EventDealRspMsg.class, BankCore998889Rsp.class, JSONObject.class);
+                return (EventDealRspMsg)coreSucc.invoke(bean,eventDealRspMsg, bankCore998889Rsp, eventParam);
             } else if ("TC1003".equals(bankCore998889Rsp.getErrorCode())) {
                 eventDealRspMsg.setRespCode(Constant.CORESTATUS_SUCCESS);
-                return callBack.bankRevHadSucc(eventDealRspMsg, bankCore998889Rsp, eventParam);
+                //return callBack.bankRevHadSucc(eventDealRspMsg, bankCore998889Rsp, eventParam);
+                Method coreSucc = bean.getClass().getDeclaredMethod("bankRevHadSucc", EventDealRspMsg.class, BankCore998889Rsp.class, JSONObject.class);
+                return (EventDealRspMsg)coreSucc.invoke(bean,eventDealRspMsg, bankCore998889Rsp, eventParam);
             } else if (Constant.CORESTATUS_ABEND.equals(coreProcStatus)) {
                 eventDealRspMsg.setRespCode(Constant.CORESTATUS_ABEND);
-                return callBack.bankRevException(eventDealRspMsg, bankCore998889Rsp, eventParam);
+                //return callBack.bankRevException(eventDealRspMsg, bankCore998889Rsp, eventParam);
+                Method coreSucc = bean.getClass().getDeclaredMethod("bankRevException", EventDealRspMsg.class, BankCore998889Rsp.class, JSONObject.class);
+                return (EventDealRspMsg)coreSucc.invoke(bean,eventDealRspMsg, bankCore998889Rsp, eventParam);
             } else if (Constant.CORESTATUS_FAILED.equals(coreProcStatus)) {
                 eventDealRspMsg.setRespCode(Constant.CORESTATUS_FAILED);
-                return callBack.bankRevFail(eventDealRspMsg, bankCore998889Rsp, eventParam);
+                //return callBack.bankRevFail(eventDealRspMsg, bankCore998889Rsp, eventParam);
+                Method coreSucc = bean.getClass().getDeclaredMethod("bankRevFail", EventDealRspMsg.class, BankCore998889Rsp.class, JSONObject.class);
+                return (EventDealRspMsg)coreSucc.invoke(bean,eventDealRspMsg, bankCore998889Rsp, eventParam);
             } else {
                 eventDealRspMsg.setRespCode(PlatformError.OTHER_BUSI_ERROR.getErrorCode());
             }

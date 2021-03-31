@@ -13,10 +13,12 @@ import com.dcits.dcwlt.pay.online.service.impl.TxEndNtfcntHandleServiceImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 /**
  * 补入账核心回查
  */
+@Component("ReCreditCoreQryCallBack")
 public class ReCreditCoreQryCallBack implements ICoreQryCallBack {
 
     @Autowired

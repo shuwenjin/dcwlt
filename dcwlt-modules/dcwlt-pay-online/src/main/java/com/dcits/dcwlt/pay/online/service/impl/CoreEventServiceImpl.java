@@ -117,7 +117,7 @@ public class CoreEventServiceImpl {
         eventDealReqMsg.setExceptEventSeqNo(payDate+splitStr+paySerno);
         eventDealReqMsg.setExceptEventContext(paramStr);
 
-    //    eventRegisterAppService.registerEvent(eventDealReqMsg,EVENT);
+        eventRegisterAppService.registerEvent(eventDealReqMsg,EVENT);
 
     }
 

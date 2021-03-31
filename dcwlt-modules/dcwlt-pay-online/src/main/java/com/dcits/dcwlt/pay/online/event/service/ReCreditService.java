@@ -1,6 +1,8 @@
 package com.dcits.dcwlt.pay.online.event.service;
 
 import com.alibaba.fastjson.JSONObject;
+import com.dcits.dcwlt.common.core.utils.SpringUtils;
+import com.dcits.dcwlt.common.pay.channel.bankcore.dto.BankCore996666.BankCore996666Rsp;
 import com.dcits.dcwlt.common.pay.channel.bankcore.dto.bankcore351100.BankCore351100InnerReq;
 import com.dcits.dcwlt.common.pay.channel.bankcore.dto.bankcore351100.BankCore351100InnerRsp;
 import com.dcits.dcwlt.pay.api.domain.dcep.eventBatch.EventDealRspMsg;
@@ -26,6 +28,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.lang.reflect.Method;
 
 /**
  * 补入账事件处理
@@ -273,22 +277,28 @@ public class ReCreditService implements IEventService {
             }
             //存在回调,调用对应回调方法
             String coreProcStatus = bankCore351100InnerRsp.getCoreStatus();
-            IReCreditCallBack callBack = (IReCreditCallBack) Class.forName(callBackClassName).newInstance();
+            //IReCreditCallBack callBack = (IReCreditCallBack) Class.forName(callBackClassName).newInstance();
+            Object bean = SpringUtils.getBean(callBackClassName.substring(callBackClassName.lastIndexOf(".")+1));
 
             if (Constant.CORESTATUS_SUCCESS.equals(coreProcStatus)) {
                 logger.info("补登成功");
                 eventDealRspMsg.setRespCode(Constant.CORESTATUS_SUCCESS);
-                return callBack.reCreditSucc(eventDealRspMsg, bankCore351100InnerRsp, eventParam);
-
+                //return callBack.reCreditSucc(eventDealRspMsg, bankCore351100InnerRsp, eventParam);
+                Method coreSucc = bean.getClass().getDeclaredMethod("reCreditSucc", EventDealRspMsg.class, BankCore351100InnerRsp.class, JSONObject.class);
+                return (EventDealRspMsg)coreSucc.invoke(bean,eventDealRspMsg, bankCore351100InnerRsp, eventParam);
             } else if (Constant.CORESTATUS_FAILED.equals(coreProcStatus)) {
                 logger.info("补登失败");
                 eventDealRspMsg.setRespCode(Constant.CORESTATUS_FAILED);
-                return callBack.reCreditFail(eventDealRspMsg, bankCore351100InnerRsp, eventParam);
+                Method coreSucc = bean.getClass().getDeclaredMethod("reCreditFail", EventDealRspMsg.class, BankCore351100InnerRsp.class, JSONObject.class);
+                return (EventDealRspMsg)coreSucc.invoke(bean,eventDealRspMsg, bankCore351100InnerRsp, eventParam);
+                //return callBack.reCreditFail(eventDealRspMsg, bankCore351100InnerRsp, eventParam);
 
             } else if (Constant.CORESTATUS_ABEND.equals(coreProcStatus)) {
                 logger.info("补登异常");
                 eventDealRspMsg.setRespCode(Constant.CORESTATUS_ABEND);
-                return callBack.reCreditException(eventDealRspMsg, bankCore351100InnerRsp, eventParam);
+                Method coreSucc = bean.getClass().getDeclaredMethod("reCreditException", EventDealRspMsg.class, BankCore351100InnerRsp.class, JSONObject.class);
+                return (EventDealRspMsg)coreSucc.invoke(bean,eventDealRspMsg, bankCore351100InnerRsp, eventParam);
+                //return callBack.reCreditException(eventDealRspMsg, bankCore351100InnerRsp, eventParam);
 
             } else {
                 eventDealRspMsg.setRespCode(PlatformError.OTHER_BUSI_ERROR.getErrorCode());

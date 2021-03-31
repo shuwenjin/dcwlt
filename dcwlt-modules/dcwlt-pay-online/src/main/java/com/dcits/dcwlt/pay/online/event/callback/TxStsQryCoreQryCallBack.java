@@ -12,10 +12,12 @@ import com.dcits.dcwlt.pay.online.service.IPayTransDtlInfoService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 /**
  * 交易状态查询回查核心回调
  */
+@Component("TxStsQryCoreQryCallBack")
 public class TxStsQryCoreQryCallBack implements ICoreQryCallBack {
     private static final Logger logger = LoggerFactory.getLogger(TxStsQryCoreQryCallBack.class);
 

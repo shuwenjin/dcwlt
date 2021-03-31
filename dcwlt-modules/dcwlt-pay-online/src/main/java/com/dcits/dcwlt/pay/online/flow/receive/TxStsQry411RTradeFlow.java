@@ -15,6 +15,7 @@ import com.dcits.dcwlt.pay.api.model.StateMachine;
 import com.dcits.dcwlt.pay.online.baffle.core.IBankCoreService;
 import com.dcits.dcwlt.pay.api.mq.event.exception.EcnyTransError;
 import com.dcits.dcwlt.pay.api.mq.event.exception.EcnyTransException;
+import com.dcits.dcwlt.pay.online.event.callback.TxStsQryCoreQryCallBack;
 import com.dcits.dcwlt.pay.online.flow.builder.EcnyTradeContext;
 import com.dcits.dcwlt.pay.online.flow.builder.EcnyTradeFlowBuilder;
 import com.dcits.dcwlt.pay.online.mapper.PayTransDtlInfoMapper;
@@ -238,7 +239,7 @@ public class TxStsQry411RTradeFlow {
 
         if(!AppConstant.CORESTATUS_SUCCESS.equals(coreProcStatus) && !AppConstant.CORESTATUS_FAILED.equals(coreProcStatus)){
             logger.info("回查核心异常,登记核心回查事件");
-//            coreEventService.registerCoreQry(payTransDtlInfoDO.getCoreReqDate(), payTransDtlInfoDO.getCoreReqSerno(), payTransDtlInfoDO.getPayDate(), payTransDtlInfoDO.getPaySerno(), TxStsQryCoreQryCallBack.class);
+            coreEventService.registerCoreQry(payTransDtlInfoDO.getCoreReqDate(), payTransDtlInfoDO.getCoreReqSerno(), payTransDtlInfoDO.getPayDate(), payTransDtlInfoDO.getPaySerno(), TxStsQryCoreQryCallBack.class);
         }
         return coreProcStatus;
     }

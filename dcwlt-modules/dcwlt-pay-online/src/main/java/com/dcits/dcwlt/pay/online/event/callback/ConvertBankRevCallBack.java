@@ -9,6 +9,7 @@ import com.dcits.dcwlt.pay.online.event.coreqry.IBankRevCallBack;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 /**
  * @author wuguofeng01
@@ -16,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
  * @Version 1.0
  * Description:兑出交易冲正回调
  */
+@Component("ConvertBankRevCallBack")
 public class ConvertBankRevCallBack implements IBankRevCallBack {
 
     private static final Logger logger = LoggerFactory.getLogger(ConvertBankRevCallBack.class);

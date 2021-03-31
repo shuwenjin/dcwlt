@@ -14,10 +14,12 @@ import com.dcits.dcwlt.pay.online.service.impl.TxEndNtfcntHandleServiceImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 /**
  * 终态通知 220 或 221 回查核心后回调处理
  */
+@Component("TxEndNTCoreQryCallBack")
 public class TxEndNTCoreQryCallBack implements ICoreQryCallBack {
 
     @Autowired

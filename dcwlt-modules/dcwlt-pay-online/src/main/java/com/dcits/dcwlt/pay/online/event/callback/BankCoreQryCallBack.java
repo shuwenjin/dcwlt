@@ -20,7 +20,7 @@ import org.springframework.stereotype.Component;
 /**
  * Description:终态通知差错贷记调账核心回查回调
  */
-@Component
+@Component("BankCoreQryCallBack")
 public class BankCoreQryCallBack implements ICoreQryCallBack {
 
     @Autowired

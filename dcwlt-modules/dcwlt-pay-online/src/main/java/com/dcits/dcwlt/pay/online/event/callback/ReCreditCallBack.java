@@ -11,10 +11,12 @@ import com.dcits.dcwlt.pay.online.service.impl.PayTransDtlInfoServiceImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 /**
  * 调用补入账事件回调
  */
+@Component("ReCreditCallBack")
 public class ReCreditCallBack implements IReCreditCallBack {
 
     private static final Logger logger = LoggerFactory.getLogger(ReCreditCallBack.class);
