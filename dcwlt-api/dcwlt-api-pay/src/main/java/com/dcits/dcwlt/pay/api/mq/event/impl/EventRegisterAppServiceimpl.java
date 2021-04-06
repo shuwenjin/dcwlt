@@ -24,7 +24,6 @@ import org.springframework.stereotype.Service;
 public class EventRegisterAppServiceimpl implements IEventRegisterAppService {
 
     private static final Logger logger = LoggerFactory.getLogger(EventRegisterAppServiceimpl.class);
-    private static final String EVENT_REGISTER_PRODUCT = "eventRegisterProduct";
 
     @Autowired
     private EventConfigMapper eventConfigMapper;
@@ -53,14 +52,14 @@ public class EventRegisterAppServiceimpl implements IEventRegisterAppService {
         //获取异常配置表信息，
         String eventCode = reqMsg.getExceptEventCode();
         EventConfigDO config = loadEventConfig(eventCode);
-        // todo 异常事件配置表参数不明
+        // 延时级别
         int intervalMin = EventConst.EVENT_INTERVAL_TIME.get(config.getExceptEventDealIntervalMin());
 
         //保存事件的消息标签，用于重试
         reqMsg.setExceptEventMsgTag(msgTag);
 
         //发送消息中心
-        eventProducer.sendMsg("topic-dcwlt",JSON.toJSON(reqMsg).toString());
+        eventProducer.sendMsg(msgTag, "topic-dcwlt", JSON.toJSON(reqMsg).toString(), intervalMin);
     }
 
 
@@ -75,7 +74,7 @@ public class EventRegisterAppServiceimpl implements IEventRegisterAppService {
         EventConfigDO config = eventConfigMapper.queryEventConfig(eventCode);
         if (null == config) {
             logger.error("异常事件参数未配置！");
-           throw new EcnyTransException(EcnyTransError.ECNY_SEND_REQUEST_ERROR);
+            throw new EcnyTransException(EcnyTransError.ECNY_SEND_REQUEST_ERROR);
         }
         return config;
     }
