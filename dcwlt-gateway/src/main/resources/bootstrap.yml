@@ -13,6 +13,9 @@ spring:
   main:
     allow-bean-definition-overriding: true
   cloud:
+#    zk注册中心
+#    zookeeper:
+#      connect-string: 127.0.0.1:2181
     nacos:
       discovery:
         # 服务注册地址

@@ -22,11 +22,20 @@
             <artifactId>spring-cloud-starter-gateway</artifactId>
         </dependency>
 
-        <!-- SpringCloud Ailibaba Nacos -->
+        <!-- Nacos 注册中心 -->
         <dependency>
             <groupId>com.alibaba.cloud</groupId>
             <artifactId>spring-cloud-starter-alibaba-nacos-discovery</artifactId>
         </dependency>
+        <!-- zk注册中心 -->
+<!--        <dependency>-->
+<!--            <groupId>org.springframework.cloud</groupId>-->
+<!--            <artifactId>spring-cloud-starter-zookeeper-discovery</artifactId>-->
+<!--        </dependency>-->
+<!--        <dependency>-->
+<!--            <groupId>com.netflix.hystrix</groupId>-->
+<!--            <artifactId>hystrix-javanica</artifactId>-->
+<!--        </dependency>-->
 
         <!-- SpringCloud Ailibaba Nacos Config -->
         <dependency>
