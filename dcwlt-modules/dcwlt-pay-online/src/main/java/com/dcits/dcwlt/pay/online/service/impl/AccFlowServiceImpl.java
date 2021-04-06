@@ -12,7 +12,7 @@ import java.util.Map;
 
 
 /**
- * @author zhanguohai
+ * @author
  * @Time 2020/10/14 9:39
  * @Version 1.0
  * Description:账务流水表数据访问组件

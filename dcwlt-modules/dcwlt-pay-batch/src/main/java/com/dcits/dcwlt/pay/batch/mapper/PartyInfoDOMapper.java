@@ -8,7 +8,7 @@ import java.util.List;
 /**
  * 机构Mapper接口
  * 
- * @author dcwlt
+ * @author 
  * @date 2021-03-03
  */
 public interface PartyInfoDOMapper 

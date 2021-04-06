@@ -45,7 +45,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 /**
  * 终态通知后处理
- * @author chenyanchun
+ * @author
  */
 @Service("txEndNtfcntHandleService")
 public class TxEndNtfcntHandleServiceImpl {

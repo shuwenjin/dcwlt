@@ -9,7 +9,7 @@ import java.text.ParseException;
  * 生效类型处理
  * 针对不同的生效类型， 使用不同的实现
  *
- * @author majun
+ * @author
  * @date 2020/12/30
  */
 public interface PartyChangeProcess {

@@ -4,7 +4,7 @@ package com.dcits.dcwlt.pay.api.domain.dcep.check;
 import com.alibaba.fastjson.annotation.JSONField;
 
 /**
- * @Author maozewu
+ * @author
  * @Date 2021/1/14 16:58
  * @Version 1.0
  * Description:杈撳嚭鏄庣粏瀵硅处缁撴灉鏌ヨ瀹炰綋

@@ -6,7 +6,7 @@ import java.util.List;
 /**
  * 金融交易统计报表Mapper接口
  * 
- * @author yangjld
+ * @author 
  * @date 2021-03-11
  */
 public interface FinanceReportDOMapper 

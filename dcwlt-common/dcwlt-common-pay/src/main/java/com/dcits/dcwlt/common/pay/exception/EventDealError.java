@@ -2,7 +2,7 @@ package com.dcits.dcwlt.common.pay.exception;
 
 /**
  * 事件处理错误枚举
- * @author liuyuanhui
+ * @author
  *
  */
 public enum EventDealError {

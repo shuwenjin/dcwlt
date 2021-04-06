@@ -12,7 +12,7 @@ import java.util.List;
 /**
  * 临时机构信息数据库处理组件
  *
- * @author majun
+ * @author
  * @date 2020/12/30
  */
 @Service

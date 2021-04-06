@@ -12,7 +12,7 @@ import java.util.Map;
  *
  * @param <T>
  * @param <R>
- * @author liuyuanhui
+ * @author
  */
 @SuppressWarnings("unchecked")
 public class EcnyTradeContext<T, R> extends TradeContext<T, R> {

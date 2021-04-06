@@ -22,7 +22,7 @@ import org.springframework.stereotype.Component;
 /**
  * 即时生效处理
  *
- * @author majun
+ * @author
  * @date 2020/12/30
  */
 @Component("eF00FctvTpProcess")

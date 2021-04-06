@@ -4,7 +4,7 @@ import java.lang.reflect.Method;
 
 /**
  * FunInvoker 方法调用类
- * @author zhangyaodong
+ * @author
  */
 public class FunInvoker {
     /**

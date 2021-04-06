@@ -4,7 +4,7 @@ import com.dcits.dcwlt.pay.api.domain.dcep.eventBatch.EventDealReqMsg;
 
 /**
  * FunInvoker 方法执行类
- * @author zhangyaodong
+ * @author
  */
 public class FunExecutor {
 

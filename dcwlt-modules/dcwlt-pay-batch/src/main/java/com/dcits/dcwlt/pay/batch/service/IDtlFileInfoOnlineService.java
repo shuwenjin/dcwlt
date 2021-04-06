@@ -8,7 +8,7 @@ import java.util.List;
 /**
  * 联机库查询对账文件列表
  *
- * @author majun
+ * @author 
  * @date 2021/1/7
  */
 public interface IDtlFileInfoOnlineService {

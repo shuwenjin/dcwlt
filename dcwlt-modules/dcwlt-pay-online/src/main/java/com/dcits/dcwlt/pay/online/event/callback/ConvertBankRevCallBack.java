@@ -12,7 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 /**
- * @author wuguofeng01
+ * @author
  * @Time 2021/01/02 15:29
  * @Version 1.0
  * Description:兑出交易冲正回调

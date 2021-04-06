@@ -8,7 +8,7 @@ import org.springframework.stereotype.Repository;
 
 
 /**
- * @Author weimeiyuan
+ * @author
  * @Date 2021/1/6 22:41
  * @Version 1.0
  * Description: 汇总信息分类及业务清单信息接口

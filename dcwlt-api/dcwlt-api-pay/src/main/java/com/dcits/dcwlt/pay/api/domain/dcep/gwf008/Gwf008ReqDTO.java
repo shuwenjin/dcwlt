@@ -6,7 +6,7 @@ import javax.validation.constraints.NotNull;
 /**
  * GWF003-下载商户文件请求报文
  *
- * @author majun
+ * @author
  * @date 2021/1/5
  */
 public class Gwf008ReqDTO extends CommonReqBody {

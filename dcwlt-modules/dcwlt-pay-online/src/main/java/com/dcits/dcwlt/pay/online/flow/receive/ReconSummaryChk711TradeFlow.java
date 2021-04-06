@@ -32,7 +32,7 @@ import org.springframework.context.annotation.Configuration;
 
 
 /**
- * @author weimeiyuan
+ * @author
  * @Time 2021/1/3 17:40
  * @Version 1.0
  * Description:机构对账汇总流程  711报文

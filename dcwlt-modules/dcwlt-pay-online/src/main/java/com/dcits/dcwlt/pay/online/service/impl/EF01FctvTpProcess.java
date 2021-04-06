@@ -24,7 +24,7 @@ import java.util.List;
 /**
  * 定时生效处理
  *
- * @author majun
+ * @author
  * @date 2020/12/30
  */
 @Component("eF01FctvTpProcess")

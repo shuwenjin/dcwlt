@@ -11,7 +11,7 @@ import com.dcits.dcwlt.pay.batch.service.IBatchCheckClearDOService;
 /**
  * 资金调整汇总核对Service业务层处理
  * 
- * @author yangjld
+ * @author 
  * @date 2021-03-09
  */
 @Service

@@ -6,7 +6,7 @@ import com.dcits.dcwlt.pay.api.domain.BaseReqDto;
 /**
  * 开放平台初始实体
  *
- * @author majun
+ * @author
  * @date 2021/1/7
  */
 public class CommonReqDTO<T extends CommonReqBody> extends BaseReqDto {

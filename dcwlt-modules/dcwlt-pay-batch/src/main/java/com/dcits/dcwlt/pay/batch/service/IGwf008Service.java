@@ -9,7 +9,7 @@ import com.dcits.dcwlt.pay.api.model.DtlFileInfDO;
 /**
  * 对账文下载申请服务
  *
- * @author majun
+ * @author 
  * @date 2021/1/6
  */
 public interface IGwf008Service {

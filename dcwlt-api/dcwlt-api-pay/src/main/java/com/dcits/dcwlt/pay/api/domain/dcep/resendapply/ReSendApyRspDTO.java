@@ -4,7 +4,7 @@ package com.dcits.dcwlt.pay.api.domain.dcep.resendapply;
 import com.dcits.dcwlt.pay.api.domain.ecny.ECNYRspBody;
 
 /**
- * @author zhangwang
+ * @author
  * @date  2021/1/5
  * @version 1.0.0
  * <p>重发申请响应报文</p>

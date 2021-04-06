@@ -37,7 +37,7 @@ import org.springframework.context.annotation.Configuration;
 /**
  * 兑出交易处理配置
  *
- * @author majun , yangqijun-xfzx
+ * @author
  */
 @Configuration
 public class Login933STradeFlow {

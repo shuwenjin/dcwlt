@@ -8,7 +8,7 @@ import java.util.List;
 /**
  * @desc 分页查询返回对象
  *
- * @author wanyangwei
+ * @author
  *
  */
 public class PageResult<T> extends ECNYRspBody {

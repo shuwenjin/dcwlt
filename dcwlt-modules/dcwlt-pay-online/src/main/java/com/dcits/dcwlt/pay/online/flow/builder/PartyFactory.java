@@ -17,7 +17,7 @@ import org.slf4j.LoggerFactory;
 /**
  * 机构报文转换工厂
  *
- * @author majun
+ * @author
  * @date 2020/12/30
  */
 public final class PartyFactory {

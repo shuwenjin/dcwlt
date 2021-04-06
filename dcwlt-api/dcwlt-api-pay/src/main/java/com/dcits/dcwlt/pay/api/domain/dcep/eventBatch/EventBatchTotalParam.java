@@ -4,7 +4,7 @@ import com.alibaba.fastjson.annotation.JSONField;
 
 /**
  * 应用间参数传第对象格式
- * @author maozewu-yfzx
+ * @author
  */
 public class EventBatchTotalParam {
     /**

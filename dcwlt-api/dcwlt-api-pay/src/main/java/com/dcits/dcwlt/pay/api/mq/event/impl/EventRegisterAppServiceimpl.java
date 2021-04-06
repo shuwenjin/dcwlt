@@ -15,7 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 /**
- * @author zhanguohai
+ * @author
  * @Time 2020/10/29 11:39
  * @Version 1.0
  * Description:异常事件注册服务

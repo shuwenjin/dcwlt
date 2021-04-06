@@ -19,7 +19,7 @@ import java.util.List;
 /**
  * 转移联机数据库对账文件清单数据到批量数据库
  *
- * @author majun
+ * @author 
  * @date 2021/1/7
  */
 @Service

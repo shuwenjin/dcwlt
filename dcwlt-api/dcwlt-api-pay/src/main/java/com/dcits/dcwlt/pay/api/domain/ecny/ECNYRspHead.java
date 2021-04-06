@@ -1,7 +1,7 @@
 package com.dcits.dcwlt.pay.api.domain.ecny;
 
 /**
- * @author zhanguohai
+ * @author
  * @Time 2021/1/3 15:46
  * @Version 1.0
  */

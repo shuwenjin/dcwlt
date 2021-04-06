@@ -3,7 +3,7 @@ package com.dcits.dcwlt.pay.api.domain.dcep.eventBatch;
 /**
  * 异常事件请求信息
  *
- * @author zhanguohai
+ * @author
  */
 public class EventDealReqMsg {
     private String exceptEventCode;        // 异常事件代码

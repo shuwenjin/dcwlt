@@ -24,7 +24,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * @author weimeiyuan
+ * @author
  * @Time 2021/2/4 15:24
  * @Version 1.0
  * Description:机构对账汇总事务同时处理入库

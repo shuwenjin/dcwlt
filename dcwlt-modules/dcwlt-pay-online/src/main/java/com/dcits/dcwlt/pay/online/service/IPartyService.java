@@ -7,7 +7,7 @@ import com.dcits.dcwlt.pay.api.model.PartyInfoDO;
 /**
  * 机构服务
  *
- * @author majun
+ * @author
  * @date 2021/1/3
  */
 public interface IPartyService {

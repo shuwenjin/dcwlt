@@ -9,7 +9,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * @author zhanguohai
+ * @author
  * @Time 2020/10/14 16:08
  * @Version 1.0
  * Description:核心会计引擎方式配置数据层访问组件

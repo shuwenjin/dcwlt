@@ -32,7 +32,7 @@ import javax.validation.Valid;
  * 交易明细查询
  * 交易路径 五羊支付 --》 金融开放平台 --》互联互通
  *
- * @author yangqijun-yfzx
+ * @author
  */
 @Service
 @Validated

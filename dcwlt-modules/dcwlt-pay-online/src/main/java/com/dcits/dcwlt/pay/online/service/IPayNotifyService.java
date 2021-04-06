@@ -5,7 +5,7 @@ import com.dcits.dcwlt.pay.api.model.PayNotifyDO;
 
 /**
  * 终态通知请求登记表
- * @author chenyanchun
+ * @author
  */
 public interface IPayNotifyService {
 

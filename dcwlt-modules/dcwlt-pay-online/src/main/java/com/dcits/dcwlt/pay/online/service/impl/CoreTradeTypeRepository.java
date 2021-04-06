@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * @author zhanguohai
+ * @author
  * @Time 2020/10/14 15:24
  * @Version 1.0
  * Description:核算规则配置表数据访问组件

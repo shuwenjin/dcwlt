@@ -17,7 +17,7 @@ import org.springframework.stereotype.Service;
 
 /**
  * 各种事件处理服务
- * @author maozewu-yfzx
+ * @author 
  */
 @Service
 @Component("batch")

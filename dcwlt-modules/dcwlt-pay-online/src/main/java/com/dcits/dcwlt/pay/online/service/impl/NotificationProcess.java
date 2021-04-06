@@ -18,7 +18,7 @@ import org.springframework.stereotype.Service;
 /**
  * 机构状态变更逻辑实现
  *
- * @author majun
+ * @author
  * @date 2020/12/31
  */
 @Service

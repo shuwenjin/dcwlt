@@ -32,7 +32,7 @@ import org.springframework.context.annotation.Configuration;
 
 /**
  * 平台回查银行-交易状态查询
- * @author chenyanchun
+ * @author
  */
 @Configuration
 public class TxStsQry411RTradeFlow {

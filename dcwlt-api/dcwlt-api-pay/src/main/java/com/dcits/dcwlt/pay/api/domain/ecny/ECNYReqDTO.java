@@ -6,7 +6,7 @@ import com.dcits.dcwlt.pay.api.domain.BaseReqDto;
 import javax.validation.Valid;
 
 /**
- * @author zhanguohai
+ * @author
  * @Time 2021/1/3 15:42
  * @Version 1.0
  * Description:五羊支付子应用请求报文

@@ -4,7 +4,7 @@ package com.dcits.dcwlt.pay.online.service;
 import com.dcits.dcwlt.pay.api.domain.dcep.clrsummrychk.ClrSummryChk;
 
 /**
- * @author wanyangwei
+ * @author
  * @desc 资金调整汇总核对服务
  */
 

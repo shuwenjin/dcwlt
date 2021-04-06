@@ -1,7 +1,7 @@
 package com.dcits.dcwlt.pay.api.domain.dcep.eventBatch;
 
 /**
- * @author zhanguohai
+ * @author
  * @Time 2020/10/29 10:55
  * @Version 1.0
  * Description:异常事件登记流水表

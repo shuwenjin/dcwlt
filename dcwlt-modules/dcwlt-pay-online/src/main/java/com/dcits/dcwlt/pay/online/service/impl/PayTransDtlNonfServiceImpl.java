@@ -12,7 +12,7 @@ import java.util.List;
 /**
  * 非金融报文登记簿数据库处理组件
  *
- * @author majun
+ * @author
  * @date 2020/12/29
  */
 @Component

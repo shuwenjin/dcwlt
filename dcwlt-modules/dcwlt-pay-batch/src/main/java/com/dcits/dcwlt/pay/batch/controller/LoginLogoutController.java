@@ -27,7 +27,7 @@ import com.dcits.dcwlt.common.core.web.page.TableDataInfo;
 /**
  * 登录登出Controller
  *
- * @author dcwlt
+ * @author 
  * @date 2021-03-03
  */
 @RestController

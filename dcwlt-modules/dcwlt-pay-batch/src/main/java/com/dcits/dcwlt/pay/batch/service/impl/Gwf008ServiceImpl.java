@@ -21,7 +21,7 @@ import java.util.List;
 /**
  * 批量文件下载申请请求
  *
- * @author majun
+ * @author 
  * @date 2021/1/6
  */
 @Service

@@ -8,7 +8,7 @@ import java.util.List;
 /**
  * 临时机构组件
  *
- * @author majun
+ * @author
  * @date 2020/12/30
  */
 @Component

@@ -6,7 +6,7 @@ import org.springframework.stereotype.Service;
 import java.security.SecureRandom;
 
 /**
- * @author zhangwang
+ * @author
  * @version 1.0.0
  * <p>ECNY序列服务</p>
  * @date 2021/1/4

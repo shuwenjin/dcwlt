@@ -37,7 +37,7 @@ import java.util.List;
 /**
  * 机构变更处理配置
  *
- * @author majun
+ * @author
  */
 @Configuration
 public class Party917RTradeFlow {

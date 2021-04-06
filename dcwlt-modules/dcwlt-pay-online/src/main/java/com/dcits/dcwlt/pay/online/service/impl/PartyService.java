@@ -29,7 +29,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 /**
  * 机构定时临时数据生效转移
  *
- * @author majun
+ * @author
  * @date 2021/1/3
  */
 //@FunService(namespace = "party")
@@ -90,7 +90,7 @@ public class PartyService implements IPartyService {
 
     /*
      * 业务权限临时表信息插入业务权限表
-     * @author wanyangwei
+     * @author
      * */
     public void transformAuthInfo() {
         //失败条数

@@ -5,7 +5,7 @@ import com.dcits.dcwlt.common.pay.enums.SettleTaskErrorEnum;
 /**
  * 清算批次异常类
  *
- * @author liuyuanhui
+ * @author
  */
 public class SettleTaskException extends TransException {
 

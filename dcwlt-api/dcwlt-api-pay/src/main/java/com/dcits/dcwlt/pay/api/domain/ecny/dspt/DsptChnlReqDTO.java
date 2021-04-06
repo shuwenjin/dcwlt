@@ -6,7 +6,7 @@ import org.hibernate.validator.constraints.Length;
 import javax.validation.constraints.NotBlank;
 
 /**
- * @author zhanguohai
+ * @author
  * @Time 2021/1/3 19:08
  * @Version 1.0
  * Description:差错贷记调账接口请求

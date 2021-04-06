@@ -25,7 +25,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * @author wanyangwei
+ * @author
  * @desc 资金调整汇总核对服务
  */
 @Service

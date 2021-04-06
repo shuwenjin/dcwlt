@@ -6,7 +6,7 @@ import com.alibaba.fastjson.annotation.JSONField;
 //import com.rtp.dubbo.common.Head;
 
 /**
- * @author zhanguohai
+ * @author
  * @Time 2020年3月30日下午3:38:43
  * @Version
  *          <p>

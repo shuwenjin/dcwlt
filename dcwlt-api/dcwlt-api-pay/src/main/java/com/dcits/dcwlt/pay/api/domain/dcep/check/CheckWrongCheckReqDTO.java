@@ -4,7 +4,7 @@ package com.dcits.dcwlt.pay.api.domain.dcep.check;
 import com.dcits.dcwlt.pay.api.domain.ecny.ECNYReqBody;
 
 /**
- * @author maozewu
+ * @author
  * @Date 2021/1/26
  * @Version 1.0
  * Description:对账不平结果重对账服务化接口请求

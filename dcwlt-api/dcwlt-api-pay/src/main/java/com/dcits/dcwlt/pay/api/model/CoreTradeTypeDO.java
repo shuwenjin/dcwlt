@@ -10,7 +10,7 @@
 package com.dcits.dcwlt.pay.api.model;
 
 /**
- * @author zhanguohai
+ * @author
  * @Time 2020/10/14 9:32
  * @Version 1.0
  * Description:核算规则配置表数据实体

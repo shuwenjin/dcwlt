@@ -4,7 +4,7 @@ import com.alibaba.fastjson.annotation.JSONField;
 import org.hibernate.validator.constraints.Length;
 
 /**
- * @author wanyangwei
+ * @author
  * @desc 自由格式查询结果集
  */
 public class FreeFrmtResultDTO {

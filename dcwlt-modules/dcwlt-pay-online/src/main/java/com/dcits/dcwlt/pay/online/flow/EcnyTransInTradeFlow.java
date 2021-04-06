@@ -16,7 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 /**
- * @author zhanguohai
+ * @author
  * @Time 2021/1/5 16:51
  * @Version 1.0
  * Description:对外行内渠道，公共处理

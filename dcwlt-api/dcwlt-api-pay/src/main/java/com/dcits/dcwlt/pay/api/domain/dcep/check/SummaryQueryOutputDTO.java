@@ -8,7 +8,7 @@ import org.hibernate.validator.constraints.Length;
 import javax.validation.Valid;
 
 /**
- * @Author weimeiyuan
+ * @author
  * @Date 2021/1/14 16:58
  * @Version 1.0
  * Description:输出对账汇总查询实体

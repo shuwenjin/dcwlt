@@ -4,7 +4,7 @@ package com.dcits.dcwlt.pay.api.domain.dcep.txstsqry;
 import com.dcits.dcwlt.pay.api.domain.ecny.ECNYReqBody;
 
 /**
- * @author zhanguohai
+ * @author
  * @Time 2021/1/3 15:59
  * @Version 1.0
  * Description:交易查询接口请求报文

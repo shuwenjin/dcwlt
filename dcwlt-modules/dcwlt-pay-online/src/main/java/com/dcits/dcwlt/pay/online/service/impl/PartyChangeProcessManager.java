@@ -17,7 +17,7 @@ import javax.annotation.Resource;
 /**
  * 生效类型处理管理类
  *
- * @author majun
+ * @author
  * @date 2020/12/30
  */
 @Service("effectiveCdProcessManager")

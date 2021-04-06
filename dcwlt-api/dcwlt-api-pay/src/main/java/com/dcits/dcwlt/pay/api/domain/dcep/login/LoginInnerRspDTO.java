@@ -5,7 +5,7 @@ import com.dcits.dcwlt.pay.api.domain.ecny.ECNYRspBody;
 /**
  * 行内登录退出响应报文
  *
- * @author majun
+ * @author
  * @date 2021/1/4
  */
 public class LoginInnerRspDTO extends ECNYRspBody {

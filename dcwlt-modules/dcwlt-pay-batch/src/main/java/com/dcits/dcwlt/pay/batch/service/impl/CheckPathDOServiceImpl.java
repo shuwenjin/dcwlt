@@ -11,7 +11,7 @@ import com.dcits.dcwlt.pay.batch.service.ICheckPathDOService;
 /**
  * 对账汇总Service业务层处理
  * 
- * @author lihch
+ * @author 
  * @date 2021-03-09
  */
 @Service

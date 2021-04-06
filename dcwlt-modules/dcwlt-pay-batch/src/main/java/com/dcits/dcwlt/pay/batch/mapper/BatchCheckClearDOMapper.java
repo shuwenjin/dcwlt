@@ -6,7 +6,7 @@ import com.dcits.dcwlt.pay.api.model.BatchCheckClearDO;
 /**
  * 资金调整汇总核对Mapper接口
  * 
- * @author yangjld
+ * @author 
  * @date 2021-03-09
  */
 public interface BatchCheckClearDOMapper 

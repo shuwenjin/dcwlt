@@ -8,7 +8,7 @@ import java.util.List;
 /**
  * 业务权限变更信息Mapper接口
  * 
- * @author dcwlt
+ * @author 
  * @date 2021-03-03
  */
 public interface PayCommPartyauthMapper 

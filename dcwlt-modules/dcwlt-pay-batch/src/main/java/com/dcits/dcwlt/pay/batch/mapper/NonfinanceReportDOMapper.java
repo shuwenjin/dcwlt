@@ -6,7 +6,7 @@ import com.dcits.dcwlt.pay.api.model.NonfinanceReportDO;
 /**
  * 非金融交易统计报表Mapper接口
  * 
- * @author yangjld
+ * @author 
  * @date 2021-03-11
  */
 public interface NonfinanceReportDOMapper 

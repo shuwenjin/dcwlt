@@ -7,7 +7,7 @@ import com.dcits.dcwlt.common.pay.constant.BusiConst;
 /**
  * 文件下载请求报文工厂
  *
- * @author majun
+ * @author
  * @date 2021/1/6
  */
 public final class Gwf008ReqFactory {

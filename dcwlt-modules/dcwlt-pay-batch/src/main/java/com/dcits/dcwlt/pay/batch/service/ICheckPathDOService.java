@@ -8,7 +8,7 @@ import java.util.List;
 /**
  * 对账汇总Service接口
  * 
- * @author lihch
+ * @author 
  * @date 2021-03-09
  */
 public interface ICheckPathDOService 

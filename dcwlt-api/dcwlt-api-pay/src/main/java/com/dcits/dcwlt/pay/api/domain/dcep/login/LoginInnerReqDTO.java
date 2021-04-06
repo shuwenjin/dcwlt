@@ -8,7 +8,7 @@ import javax.validation.constraints.Size;
 /**
  * 行内登录请求参数
  *
- * @author majun
+ * @author
  * @date 2021/1/4
  */
 public class LoginInnerReqDTO extends ECNYReqBody {

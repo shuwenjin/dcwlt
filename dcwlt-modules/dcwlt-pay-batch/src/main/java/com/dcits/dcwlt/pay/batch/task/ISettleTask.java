@@ -6,7 +6,7 @@ import com.dcits.dcwlt.pay.api.model.SettleTaskExecDO;
 
 /**
  * 清算任务接口
- * @author liuyuanhui
+ * @author
  *
  */
 public interface ISettleTask {

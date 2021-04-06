@@ -4,7 +4,7 @@ package com.dcits.dcwlt.pay.api.domain.ecny.freeFrmt;
 import com.dcits.dcwlt.pay.api.domain.ecny.ECNYReqBody;
 
 /**
- * @author zhanguohai
+ * @author
  * @Time 2021/1/3 19:08
  * @Version 1.0
  * Description:自由格式报文服务化接口请求

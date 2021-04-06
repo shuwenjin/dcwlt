@@ -7,7 +7,7 @@ import java.util.List;
 /**
  * 机构信息组件接口
  *
- * @author majun
+ * @author
  * @date 2020/12/30
  */
 public interface IPartyToBeEffectiveService {

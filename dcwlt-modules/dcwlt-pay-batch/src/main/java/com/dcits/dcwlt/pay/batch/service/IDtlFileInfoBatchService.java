@@ -8,7 +8,7 @@ import java.util.List;
 /**
  * 批次查询对账明细文件列表
  *
- * @author majun
+ * @author 
  * @date 2021/1/7
  */
 public interface IDtlFileInfoBatchService {

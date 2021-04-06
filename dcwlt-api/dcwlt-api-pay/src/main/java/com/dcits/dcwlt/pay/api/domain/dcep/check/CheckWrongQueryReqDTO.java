@@ -8,7 +8,7 @@ import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 
 /**
- * @Author maozewu
+ * @author
  * @Date 2021/1/16 9:55
  * @Version 1.0
  * Description:明细对账结果查询条件输入

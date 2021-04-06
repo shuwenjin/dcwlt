@@ -3,7 +3,7 @@ package com.dcits.dcwlt.pay.api.model;
 import com.dcits.dcwlt.common.pay.util.HiddenUtil;
 
 /**
- * @author zhanguohai
+ * @author
  * @Time 2020/10/14 9:32
  * @Version 1.0
  * Description:账务流水表数据实体

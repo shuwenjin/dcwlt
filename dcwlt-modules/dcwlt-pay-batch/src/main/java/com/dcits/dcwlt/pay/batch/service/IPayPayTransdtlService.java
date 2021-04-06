@@ -7,7 +7,7 @@ import java.util.List;
 /**
  * 金融交易登记Service接口
  * 
- * @author dcwlt
+ * @author 
  * @date 2021-03-03
  */
 public interface IPayPayTransdtlService 

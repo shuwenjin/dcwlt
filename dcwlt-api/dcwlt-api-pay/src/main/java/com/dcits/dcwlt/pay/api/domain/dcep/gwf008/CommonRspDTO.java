@@ -6,7 +6,7 @@ import com.dcits.dcwlt.pay.api.domain.BaseRespDto;
 /**
  * 开放平台响应报文
  *
- * @author majun
+ * @author
  * @date 2021/1/7
  */
 public class CommonRspDTO<T extends CommonRspBody> extends BaseRespDto {

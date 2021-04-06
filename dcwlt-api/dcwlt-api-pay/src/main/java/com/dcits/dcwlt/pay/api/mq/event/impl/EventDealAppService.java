@@ -31,7 +31,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 /**
- * @author zhanguohai
+ * @author
  * @Time 2020/10/29 11:36
  * @Version 1.0
  * Description:异常事件处理服务

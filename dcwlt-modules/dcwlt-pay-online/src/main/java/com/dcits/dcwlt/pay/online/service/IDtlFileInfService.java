@@ -4,7 +4,7 @@ import com.dcits.dcwlt.pay.api.model.DtlFileInfDO;
 
 
 /**
- * @author weimeiyuan
+ * @author
  * @version 1.0.0
  * Description:对帐明细文件接口
  * @Date 2021/1/5 15:14

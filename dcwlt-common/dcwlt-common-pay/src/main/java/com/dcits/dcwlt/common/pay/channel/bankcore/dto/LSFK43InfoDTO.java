@@ -1,7 +1,7 @@
 package com.dcits.dcwlt.common.pay.channel.bankcore.dto;
 
 /**
- * @author zhangwang
+ * @author
  * @date 2021/1/21
  * @version 1.0
  * <p>反洗錢服務化接口信息</p>

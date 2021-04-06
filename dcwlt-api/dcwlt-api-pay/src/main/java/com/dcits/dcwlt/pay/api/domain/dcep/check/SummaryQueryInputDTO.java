@@ -7,7 +7,7 @@ import org.hibernate.validator.constraints.Length;
 import javax.validation.constraints.NotNull;
 
 /**
- * @Author weimeiyuan
+ * @author
  * @Date 2021/1/16 9:55
  * @Version 1.0
  * Description:汇总对账查询条件输入

@@ -29,7 +29,7 @@ import org.springframework.context.annotation.Configuration;
 import java.util.List;
 
 /**
- * @author wanyangwei
+ * @author
  * @desc 业务权限变更配置类
  */
 

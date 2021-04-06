@@ -58,7 +58,7 @@ import java.util.Map;
 /**
  * 兑出交易处理配置
  *
- * @author liuyuanhui，wuguofeng01
+ * @author
  */
 @Configuration
 public class PayConvert227STradeFlow {

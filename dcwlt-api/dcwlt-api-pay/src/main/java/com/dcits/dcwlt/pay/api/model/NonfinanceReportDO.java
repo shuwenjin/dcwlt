@@ -8,7 +8,7 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 /**
  * 非金融交易统计报表对象 pay_batch_nonfinance_report
  * 
- * @author yangjld
+ * @author
  * @date 2021-03-11
  */
 public class NonfinanceReportDO extends BaseEntity

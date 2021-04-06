@@ -26,7 +26,7 @@ import org.springframework.context.annotation.Configuration;
 /**
  * 机构状态变更处理配置
  *
- * @author majun
+ * @author
  */
 @Configuration
 public class PartyStatus931RTradeFlow {

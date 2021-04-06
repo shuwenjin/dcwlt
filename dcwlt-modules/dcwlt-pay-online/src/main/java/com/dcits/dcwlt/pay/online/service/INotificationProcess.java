@@ -8,7 +8,7 @@ import com.dcits.dcwlt.pay.api.domain.dcep.party.trblntfctn.TrblNtfctnDTO;
 /**
  * 机构状态变更处理接口
  *
- * @author majun
+ * @author
  * @date 2020/12/31
  */
 public interface INotificationProcess {

@@ -11,7 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 /**
- * @author zhanguohai
+ * @author
  * @Time 2021/1/3 17:18
  * @Version 1.0
  * Description:主动请求互联互通服务组件

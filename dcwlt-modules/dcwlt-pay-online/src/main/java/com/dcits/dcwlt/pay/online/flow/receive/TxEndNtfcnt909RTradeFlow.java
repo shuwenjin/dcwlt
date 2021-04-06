@@ -35,7 +35,7 @@ import org.springframework.context.annotation.Configuration;
 
 /**
  * 交易终态通知
- * @author chenyanchun
+ * @author
  */
 @Configuration
 public class TxEndNtfcnt909RTradeFlow {

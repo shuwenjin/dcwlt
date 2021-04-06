@@ -22,7 +22,7 @@ import com.dcits.dcwlt.common.core.web.page.TableDataInfo;
 /**
  * 资金调整汇总核对Controller
  * 
- * @author yangjld
+ * @author 
  * @date 2021-03-09
  */
 @RestController

@@ -3,7 +3,7 @@ package com.dcits.dcwlt.pay.api.domain.ecny;
 /**
  * 响应报文体
  *
- * @author zhanguohai
+ * @author
  */
 public class ECNYRspBody implements ECNYBody {
 

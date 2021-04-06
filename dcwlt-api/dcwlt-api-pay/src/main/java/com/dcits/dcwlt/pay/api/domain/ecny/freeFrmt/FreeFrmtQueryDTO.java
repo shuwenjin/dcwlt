@@ -8,7 +8,7 @@ import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 
 /**
- * @author wanyangwei
+ * @author
  * @desc 自由格式查询实体
  */
 public class FreeFrmtQueryDTO extends ECNYReqBody {

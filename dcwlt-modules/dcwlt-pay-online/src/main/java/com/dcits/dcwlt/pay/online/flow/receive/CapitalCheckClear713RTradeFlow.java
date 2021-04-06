@@ -27,7 +27,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 /**
- * @author wanyangwei
+ * @author
  * @desc 资金调整汇总核对交易配置
  */
 @Configuration

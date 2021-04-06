@@ -8,7 +8,7 @@ import org.slf4j.LoggerFactory;
 
 /**
  * 方法调用工厂类
- * @author zhangyaodong
+ * @author
  */
 public class FunInvokerFactory {
 

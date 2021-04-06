@@ -8,7 +8,7 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
 
 /**
- * @author zhangwang
+ * @author
  * @date  2021/1/5
  * @version 1.0.0
  * <p>重发申请请求报文</p>
