@@ -20,8 +20,8 @@ public class SysJobLogServiceImpl implements ISysJobLogService
     @Autowired
     private SysJobLogMapper jobLogMapper;
 
-    @Autowired
-    private IGenerateCodeService generateCodeService;
+    //@Autowired
+    //private IGenerateCodeService generateCodeService;
 
     /**
      * 调度任务日志查询
@@ -56,8 +56,8 @@ public class SysJobLogServiceImpl implements ISysJobLogService
     public void addJobLog(SysJobLog jobLog)
     {
         if (null == jobLog.getJobLogId() || "".equals(jobLog.getJobLogId())) {
-            //jobLog.setJobLogId(UUID.randomUUID().toString());
-            jobLog.setJobLogId(generateCodeService.generateCoreReqSerno());
+            jobLog.setJobLogId(UUID.randomUUID().toString());
+            //jobLog.setJobLogId(generateCodeService.generateCoreReqSerno());
         }
         jobLogMapper.insertJobLog(jobLog);
     }

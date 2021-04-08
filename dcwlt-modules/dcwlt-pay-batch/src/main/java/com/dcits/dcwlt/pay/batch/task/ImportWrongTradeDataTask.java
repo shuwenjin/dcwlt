@@ -27,7 +27,7 @@ public class ImportWrongTradeDataTask implements ISettleTask {
     private ICheckResultService checkResultService;
     private List<CheckResultDO> list;
 
-    @Value("{ecny.check.wrong.max.count}")
+    @Value("${ecny.check.wrong.max.count:100}")
     private String checkWrongMaxCount;
     /**
      * 任务执行前初始化

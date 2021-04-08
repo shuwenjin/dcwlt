@@ -29,7 +29,7 @@ import java.util.stream.Collectors;
 public class CheckWrongTask implements ISettleTask {
 	private static final Logger logger = LoggerFactory.getLogger(CheckWrongTask.class);
 
-	@Value("{ecny.check.wrong.max.count}")
+	@Value("${ecny.check.wrong.max.count:100}")
 	private String checkWrongMaxCount;
 	@Autowired
     private ICheckCollectService checkCollectService;

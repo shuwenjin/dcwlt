@@ -38,8 +38,8 @@ public abstract class AbstractQuartzJob implements Job
     @Autowired
     ISysJobLogService jobLogService;
 
-    @Autowired
-    private IGenerateCodeService generateCodeService;
+    //@Autowired
+    //private IGenerateCodeService generateCodeService;
 
     /**
      * 线程本地变量
@@ -107,8 +107,8 @@ public abstract class AbstractQuartzJob implements Job
 
         final SysJobLog sysJobLog = new SysJobLog();
         BeanUtils.copyBeanProp(sysJobLog, sysJob);
-        //String jobLogId = UUID.randomUUID().toString();
-        String jobLogId = generateCodeService.generateCoreReqSerno();
+        String jobLogId = UUID.randomUUID().toString();
+        //String jobLogId = generateCodeService.generateCoreReqSerno();
         sysJobLog.setJobLogId(jobLogId);
         sysJobLog.setStartTime(startTime);
         sysJobLog.setStopTime(new Date());
@@ -162,8 +162,8 @@ public abstract class AbstractQuartzJob implements Job
                 SysJob sysRetryJob = new SysJob();
                 BeanUtils.copyBeanProp(sysRetryJob, sysJob);
                 // 生成新的jobId
-                //String retryJobId = UUID.randomUUID().toString();
-                String retryJobId = generateCodeService.generateCoreReqSerno();
+                String retryJobId = UUID.randomUUID().toString();
+                //String retryJobId = generateCodeService.generateCoreReqSerno();
                 sysRetryJob.setJobId(retryJobId);
                 // 设置父任务Id
                 sysRetryJob.setFjobId(sysJob.getJobId());
