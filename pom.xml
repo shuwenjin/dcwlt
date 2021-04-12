@@ -278,6 +278,7 @@
         <module>dcwlt-modules</module>
         <module>dcwlt-api</module>
         <module>dcwlt-common</module>
+        <module>dcwlt-dcepgw</module>
     </modules>
     <packaging>pom</packaging>
 

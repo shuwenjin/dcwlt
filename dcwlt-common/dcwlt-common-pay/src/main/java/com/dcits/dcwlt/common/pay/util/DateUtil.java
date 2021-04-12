@@ -91,6 +91,20 @@ public class DateUtil {
 
 
 	/**
+	 * @Description:获取yyyy-MM-dd'T'HH:mm:ss格式
+	 * @param dateTime yyyyMMddHHmmss格式字符串
+	 * @return
+	 * @throws java.text.ParseException
+	 */
+	public static String formatIsoDateTime(String dateTime) {
+		try {
+			return STANDARD_DATETIME_FORMATTER.format(DEFAULT_SECONDS_FORMATTER.parse(dateTime));
+		} catch (ParseException e) {
+			return getISODateTime();
+		}
+	}
+
+	/**
 	 * @Description:获取yyyyMMdd格式
 	 * @param dateTime yyyy-MM-dd 转换为yyyyMMdd
 	 * @return

@@ -78,10 +78,10 @@
             <artifactId>dcwlt-common-swagger</artifactId>
         </dependency>
 
-        <!-- dcits pay api-->
+        <!-- dcits pay-->
         <dependency>
             <groupId>com.dcits</groupId>
-            <artifactId>dcwlt-api-pay</artifactId>
+            <artifactId>dcwlt-common-pay</artifactId>
         </dependency>
         <dependency>
             <groupId>org.bouncycastle</groupId>

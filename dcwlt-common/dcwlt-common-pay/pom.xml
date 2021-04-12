@@ -108,5 +108,9 @@
             <groupId>com.dcits</groupId>
             <artifactId>dcwlt-common-core</artifactId>
         </dependency>
+        <dependency>
+            <groupId>com.dcits</groupId>
+            <artifactId>dcwlt-common-mq</artifactId>
+        </dependency>
     </dependencies>
 </project>

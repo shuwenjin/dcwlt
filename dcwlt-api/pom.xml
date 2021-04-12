@@ -10,7 +10,6 @@
 
     <modules>
         <module>dcwlt-api-system</module>
-        <module>dcwlt-api-pay</module>
     </modules>
 
     <artifactId>dcwlt-api</artifactId>
