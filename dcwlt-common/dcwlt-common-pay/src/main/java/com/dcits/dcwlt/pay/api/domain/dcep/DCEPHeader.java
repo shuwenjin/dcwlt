@@ -59,17 +59,15 @@ public class DCEPHeader {
 //    @Length(max = 14)
 //    private String receiver;
 //
-//    /**
-//     * 签名证书序列号
-//     */
-//    @NotBlank
-//    @Length(max = 10)
-//    private String signSN;
-//
-//    /**
-//     * 加密证书序列号
-//     */
-//    private String ncrptnSN;
+    /**
+     * 签名证书序列号
+     */
+    private String signSN;
+
+    /**
+     * 加密证书序列号
+     */
+    private String ncrptnSN;
 
     /**
      * 数字信封
@@ -310,29 +308,29 @@ public class DCEPHeader {
 //        return receiver;
         return origReceiver;
     }
-//
+
 //    public void setReceiver(String receiver) {
 //        this.receiver = receiver;
 //    }
-//
-//    @JSONField(name = "SignSN")
-//    public String getSignSN() {
-//        return signSN;
-//    }
-//
-//    public void setSignSN(String signSN) {
-//        this.signSN = signSN;
-//    }
-//
-//    @JSONField(name = "NcrptnSN")
-//    public String getNcrptnSN() {
-//        return ncrptnSN;
-//    }
-//
-//    public void setNcrptnSN(String ncrptnSN) {
-//        this.ncrptnSN = ncrptnSN;
-//    }
-//
+
+    @JSONField(name = "SignSN")
+    public String getSignSN() {
+        return signSN;
+    }
+
+    public void setSignSN(String signSN) {
+        this.signSN = signSN;
+    }
+
+    @JSONField(name = "NcrptnSN")
+    public String getNcrptnSN() {
+        return ncrptnSN;
+    }
+
+    public void setNcrptnSN(String ncrptnSN) {
+        this.ncrptnSN = ncrptnSN;
+    }
+
     @JSONField(name = "DgtlEnvlp")
     public String getDgtlEnvlp() {
         return dgtlEnvlp;
