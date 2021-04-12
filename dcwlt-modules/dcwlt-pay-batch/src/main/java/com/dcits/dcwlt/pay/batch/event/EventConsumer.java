@@ -30,7 +30,6 @@ public class EventConsumer implements RocketMQListener<String> {
             } else {
                 logger.info("dcwlt-pay-batch支付批量服务只处理BATCH消息，其它消息由dcwlt-pay-online支付联机服务处理");
             }
-            eventDealAppService.eventDeal(eventDealReqMsg);
         } catch (Exception e) {
             logger.error("事件登记异常:{}", e.getMessage(), e);
             throw e;
