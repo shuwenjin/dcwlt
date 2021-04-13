@@ -233,13 +233,6 @@
                 <artifactId>dcwlt-api-system</artifactId>
                 <version>${ruoyi.version}</version>
             </dependency>
-
-            <!-- 支付接口 -->
-            <dependency>
-                <groupId>com.dcits</groupId>
-                <artifactId>dcwlt-api-pay</artifactId>
-                <version>${ruoyi.version}</version>
-            </dependency>
             <!-- xml解析 -->
             <dependency>
                 <groupId>dom4j</groupId>

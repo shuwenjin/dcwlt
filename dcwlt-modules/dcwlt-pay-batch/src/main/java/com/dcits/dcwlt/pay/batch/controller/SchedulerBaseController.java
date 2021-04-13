@@ -9,6 +9,7 @@ import java.util.concurrent.Executors;
 
 import javax.servlet.http.HttpServletRequest;
 
+import com.alibaba.fastjson.JSONObject;
 import com.dcits.dcwlt.common.pay.enums.TaskGroupEnum;
 import com.dcits.dcwlt.common.pay.sequence.service.IGenerateCodeService;
 import com.dcits.dcwlt.common.pay.util.DateUtil;
@@ -20,6 +21,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -56,14 +59,14 @@ public class SchedulerBaseController {
     @Value("${ency.batch.task.execute.threads}")
     private String threadNum;
 
-    @RequestMapping("/schedulerController")
-    public String schedulerController(HttpServletRequest request) {
+    @PostMapping("/schedulerController")
+    public String schedulerController(@RequestBody JSONObject paramObj) {
         logger.info("ecny scheduler controller start.");
-        // 请求参数
-        Map<String, String[]> parameterMap = request.getParameterMap();
         // 转Map<String,String>
         Map<String, String> paramMap = new HashMap<>();
-        parameterMap.forEach((key, value) -> paramMap.put(key, value[0]));
+        for (String key: paramObj.keySet()) {
+            paramMap.put(key, paramObj.getString(key));
+        }
         logger.info("请求参数：{}", paramMap.toString());
         String result = SUCC;
         String settleDate = paramMap.get("settleDate");
