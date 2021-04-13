@@ -14,6 +14,8 @@ public class DtlFileInfDO {
     private String batchId;
     //源文件路径
     private String srcFilePath;
+    //目标文件路径
+    private String destFilePath;
     //文件名
     private String fileName;
     //最后更新日期
@@ -47,6 +49,14 @@ public class DtlFileInfDO {
 
     public void setSrcFilePath(String srcFilePath) {
         this.srcFilePath = srcFilePath;
+    }
+
+    public String getDestFilePath() {
+        return destFilePath;
+    }
+
+    public void setDestFilePath(String destFilePath) {
+        this.destFilePath = destFilePath;
     }
 
     public String getFileName() {
@@ -89,18 +99,19 @@ public class DtlFileInfDO {
         this.localFilePath = localFilePath;
     }
 
+
     @Override
     public String toString() {
-        return "CheckFilelistDO{" +
+        return "DtlFileInfDO{" +
                 "msgId='" + msgId + '\'' +
                 ", batchId='" + batchId + '\'' +
                 ", srcFilePath='" + srcFilePath + '\'' +
+                ", destFilePath='" + destFilePath + '\'' +
                 ", fileName='" + fileName + '\'' +
                 ", lastUpDate='" + lastUpDate + '\'' +
                 ", lastUpTime='" + lastUpTime + '\'' +
+                ", fileProcStatus='" + fileProcStatus + '\'' +
+                ", localFilePath='" + localFilePath + '\'' +
                 '}';
     }
-
-
-
 }

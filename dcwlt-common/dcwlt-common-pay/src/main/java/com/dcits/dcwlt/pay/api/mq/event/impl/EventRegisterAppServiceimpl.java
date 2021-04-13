@@ -57,9 +57,13 @@ public class EventRegisterAppServiceimpl implements IEventRegisterAppService {
 
         //保存事件的消息标签，用于重试
         reqMsg.setExceptEventMsgTag(msgTag);
+        if("BATCH".equals(msgTag)) {
+            //发送消息中心
+            eventProducer.sendMsg(msgTag, "topic-dcwlt-batch", JSON.toJSON(reqMsg).toString(), intervalMin);
+        } else {
+            eventProducer.sendMsg(msgTag, "topic-dcwlt", JSON.toJSON(reqMsg).toString(), intervalMin);
+        }
 
-        //发送消息中心
-        eventProducer.sendMsg(msgTag, "topic-dcwlt", JSON.toJSON(reqMsg).toString(), intervalMin);
     }
 
 
