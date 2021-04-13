@@ -1,6 +1,7 @@
 package com.dcits.dcwlt.pay.online.service;
 
 import com.alibaba.fastjson.JSONObject;
+import com.dcits.dcwlt.common.core.constant.ServiceNameConstants;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -10,7 +11,7 @@ import org.springframework.web.bind.annotation.PathVariable;
  * 
  * @author ruoyi
  */
-@FeignClient(name="coreservice",url ="http://10.7.24.24:9205")
+@FeignClient(name="coreservice",url = ServiceNameConstants.CORE_PATH_SERVICE)
 public interface CoreServiceSend
 {
     /**
