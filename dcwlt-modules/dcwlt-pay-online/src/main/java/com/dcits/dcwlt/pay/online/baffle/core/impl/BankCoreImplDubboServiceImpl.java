@@ -10,6 +10,7 @@
 package com.dcits.dcwlt.pay.online.baffle.core.impl;
 
 import com.alibaba.csp.sentinel.util.StringUtil;
+import com.alibaba.fastjson.JSONObject;
 import com.dcits.dcwlt.common.pay.channel.bankcore.IBankCoreBody;
 import com.dcits.dcwlt.common.pay.channel.bankcore.IBankCoreBodyArrayInfo;
 import com.dcits.dcwlt.common.pay.channel.bankcore.dto.*;
@@ -28,6 +29,7 @@ import com.dcits.dcwlt.common.pay.util.DateUtil;
 import com.dcits.dcwlt.common.pay.util.IOCheckUtil;
 import com.dcits.dcwlt.pay.api.model.CoreTradeTypeDO;
 import com.dcits.dcwlt.pay.online.baffle.dcep.impl.BankCoreDubboServiceImpl;
+import com.dcits.dcwlt.pay.online.service.CoreServiceSend;
 import com.dcits.dcwlt.pay.online.service.impl.CoreTradeTypeRepository;
 import com.dcits.dcwlt.pay.online.service.impl.HostEngCfgRepository;
 import org.apache.commons.lang3.StringUtils;
@@ -61,6 +63,9 @@ public class BankCoreImplDubboServiceImpl {
 
     @Autowired
     private HostEngCfgRepository hostEngCfgRepository;
+
+    @Autowired
+    private CoreServiceSend coreServiceSend;
 
     /**
      * 账户查询接口，只传账号
@@ -305,9 +310,9 @@ public class BankCoreImplDubboServiceImpl {
      */
     public BankCore351100InnerRsp coreServer(BankCoreReqHeader bankCoreReqHeader, BankCore351100InnerReq bankCore351100InnerReq) {
         // 核心请求日期
-//        String coreReqDate = bankCore351100InnerReq.getCoreReqDate();
-//        // 获取服务化调用请求流水 --核心请求流水
-//        String seqNo = bankCore351100InnerReq.getCoreReqSerno();
+        String coreReqDate = bankCore351100InnerReq.getCoreReqDate();
+        // 获取服务化调用请求流水 --核心请求流水
+        String seqNo = bankCore351100InnerReq.getCoreReqSerno();
 //        Map<String, Object> map = initBankCore351100ReqMsg(bankCore351100InnerReq);
 //        BankCore351100Req bankCore351100Req = null;
 //        if (!map.isEmpty()) {
@@ -345,12 +350,18 @@ public class BankCoreImplDubboServiceImpl {
 //
 //         //处理返回结果
 //        return dealRspCoreMsg(rspMsg, bankCore351100InnerReq.getReqType());
-        BankCore351100InnerRsp bankCore351100InnerRsp = new BankCore351100InnerRsp();
-        bankCore351100InnerRsp.setCoreRspSerno("12334");
-        bankCore351100InnerRsp.setCoreStatus("1");
-        bankCore351100InnerRsp.setErrorCode("CI0016");
-        bankCore351100InnerRsp.setErrorMsg("客户名称不一致");
-        bankCore351100InnerRsp.setCoreRspDate(DateUtil.getDefaultDate());
+
+        String trid=bankCoreReqHeader.getTlId();
+         JSONObject RESULT=coreServiceSend.result(trid);
+        BankCore351100InnerRsp bankCore351100InnerRsp=JSONObject.parseObject(RESULT.toString(),BankCore351100InnerRsp.class);
+        bankCore351100InnerRsp.setCoreReqDate(coreReqDate);
+        bankCore351100InnerRsp.setCoreReqSerno(seqNo);
+//        BankCore351100InnerRsp bankCore351100InnerRsp = new BankCore351100InnerRsp();
+//        bankCore351100InnerRsp.setCoreRspSerno("12334");
+//        bankCore351100InnerRsp.setCoreStatus("1");
+//        bankCore351100InnerRsp.setErrorCode("CI0016");
+//        bankCore351100InnerRsp.setErrorMsg("客户名称不一致");
+//        bankCore351100InnerRsp.setCoreRspDate(DateUtil.getDefaultDate());
         return  bankCore351100InnerRsp;
 
     }
