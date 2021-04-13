@@ -25,10 +25,6 @@ public class EventConsumer implements RocketMQListener<String> {
             JSONObject msgBody = JSONObject.parseObject(o);
             logger.info("接收mq消息：{}",msgBody.toJSONString());
             EventDealReqMsg eventDealReqMsg = JSONObject.toJavaObject(msgBody, EventDealReqMsg.class);
-            if (EventConst.BATCH.equals(eventDealReqMsg.getExceptEventMsgTag())) {
-                logger.info("dcwlt-pay-online支付联机服务不处理BATCH消息， 由dcwlt-pay-batch支付批量服务处理");
-                return;
-            }
             eventDealAppService.eventDeal(eventDealReqMsg);
         } catch (Exception e) {
             logger.error("事件登记异常:{}", e.getMessage(), e);

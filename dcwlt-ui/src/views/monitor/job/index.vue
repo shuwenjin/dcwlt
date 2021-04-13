@@ -510,7 +510,7 @@ export default {
         jobGroup: undefined,
         invokeTarget: undefined,
         cronExpression: undefined,
-        misfirePolicy: 1,
+        misfirePolicy: 3,
         concurrent: 1,
         status: "0",
         retryCron: undefined,

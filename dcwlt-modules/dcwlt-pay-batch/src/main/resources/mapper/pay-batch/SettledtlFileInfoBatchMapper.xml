@@ -16,7 +16,7 @@
         FROM pay_batch_checkfilelist
     </sql>
 
-    <insert id="replaceDtlFileInfo">
+    <insert id="replaceDtlFileInfo" parameterType="java.util.List">
         REPLACE INTO pay_batch_checkfilelist(
         MSGID,
         BATCHID,
@@ -27,16 +27,20 @@
         FILEPROCSTATUS,
         LASTUPDATE,
         LASTUPTIME
-        ) VALUE
-        (#{msgId},
-        #{batchId},
-        #{srcFilePath},
-        #{destFilePath},
-        #{localFilePath},
-        #{fileName},
-        #{fileProcStatus},
-        #{lastUpDate},
-        #{lastUpTime})
+        ) VALUES
+        <foreach collection="list" item="item" index= "index" separator =",">
+            (
+            #{item.msgId},
+            #{item.batchId},
+            #{item.srcFilePath},
+            #{item.destFilePath},
+            #{item.localFilePath},
+            #{item.fileName},
+            #{item.fileProcStatus},
+            #{item.lastUpDate},
+            #{item.lastUpTime}
+            )
+        </foreach>
     </insert>
     <select id="queryDtlFileInfoByBatchId" resultType="com.dcits.dcwlt.pay.api.model.DtlFileInfDO">
         <include refid="querySql"></include>

@@ -48,4 +48,39 @@ public class DcwltPayBatchTask {
         result.setSuccess(true);
         return result;
     }
+
+    public TaskResult checkData(String settleDate/*${yyyyMMdd}*/) throws Exception {
+        TaskResult result = new TaskResult();
+        // 解析成日期字符串
+        String params = DateUtils.parseTaskDate(settleDate);
+        // 把字符串用单引号包裹
+        result.setInvokeTarget("dcwltPayBatchTask.checkData(" + StringUtils.toTaskString(params) + ")");
+        // 初始化执行结果为失败
+        result.setSuccess(false);
+
+        System.out.println("执行方法：dcwltPayBatchTask.checkData(" + StringUtils.toTaskString(settleDate) + ")");
+
+        String ret = null;
+        try {
+            JSONObject paramObj = new JSONObject();
+            paramObj.put("settleDate", params);
+            paramObj.put("serviceName", "ImportDataService");
+            paramObj.put("batchId", "B" + params + "1600");
+            ret = remotePayBatchService.schedulerController(paramObj);
+        } catch (Exception e) {
+            result.setMessage(e.getMessage());
+            // 必须转成JSONString
+            throw new Exception(JSONObject.toJSONString(result));
+        }
+
+        // 执行结果
+        result.setRet(ret);
+        if (null == ret) {
+            result.setSuccess(false);
+        } else {
+            // 执行成功
+            result.setSuccess(true);
+        }
+        return result;
+    }
 }

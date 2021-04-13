@@ -1,10 +1,13 @@
 package com.dcits.dcwlt.system.api.factory;
 
+import com.alibaba.fastjson.JSONObject;
 import com.dcits.dcwlt.system.api.RemotePayBatchService;
 import feign.hystrix.FallbackFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
+
+import javax.servlet.http.HttpServletRequest;
 
 /**
  * 支付批量服务降级处理
@@ -25,6 +28,11 @@ public class RemotePayBatchFallbackFactory implements FallbackFactory<RemotePayB
             @Override
             public void statistics(String reportDate) throws Exception {
                 throw new Exception(throwable.getMessage());
+            }
+
+            @Override
+            public String schedulerController(JSONObject paramObj) {
+                return "1";
             }
         };
     }
