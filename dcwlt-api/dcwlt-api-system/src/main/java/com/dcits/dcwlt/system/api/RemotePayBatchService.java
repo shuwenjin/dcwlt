@@ -1,11 +1,10 @@
 package com.dcits.dcwlt.system.api;
 
-import com.alibaba.fastjson.JSONObject;
 import com.dcits.dcwlt.common.core.constant.ServiceNameConstants;
 import com.dcits.dcwlt.system.api.factory.RemotePayBatchFallbackFactory;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 /**

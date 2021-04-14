@@ -51,7 +51,7 @@ public class Gwf008RspDTO extends CommonRspBody {
 
     @Override
     public String toString() {
-        return "Gwf003RspDTO{" +
+        return "Gwf008RspDTO{" +
                 "errorCode='" + errorCode + '\'' +
                 ", errorMsg='" + errorMsg + '\'' +
                 ", fileName='" + fileName + '\'' +

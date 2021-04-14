@@ -78,11 +78,11 @@ public class DtlFileParseServiceImpl implements IDtlFileParseService {
                 }
 
                 //判断文件的完整性
-                String endFile = dtlFileInfDO.getLocalFilePath() + ".end";
+                /*String endFile = dtlFileInfDO.getLocalFilePath() + ".end";
                 if (!FileUtil.isFileExist(endFile)) {
                     logger.error("对账明细文件不完整，end文件不存在");
                     throw new SettleTaskException(SettleTaskErrorEnum.BC0116.getCode(), SettleTaskErrorEnum.BC0116.getDesc());
-                }
+                }*/
 
                 int indexZip = filePath.lastIndexOf(".zip");
                 destPath = filePath.substring(0, indexZip) + ".txt";
@@ -204,10 +204,10 @@ public class DtlFileParseServiceImpl implements IDtlFileParseService {
             //避免最后一次统计无法入库
             if (!checkPathDetailDOS.isEmpty()) {
                 int replaceSum = checkPathDetailService.replaceCheckPathDtl(checkPathDetailDOS);
-                if (replaceSum != count) {
+                /*if (replaceSum != count) {
                     logger.error("批次号{}中文件{}有数据入库失败", dtlFileInfDO.getBatchId(), dtlFileInfDO.getFileName());
                     throw new SettleTaskException(SettleTaskErrorEnum.BC0112);
-                }
+                }*/
                 logger.debug("解析文件{}，解析入库{}条", dtlFileInfDO.getFileName(), fileDataCount);
                 logger.info("批次号：{}，文件{}当前完成处理{}条数据", dtlFileInfDO.getBatchId(), dtlFileInfDO.getFileName(), fileDataCount);
             }
