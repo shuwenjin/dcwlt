@@ -181,11 +181,16 @@ public class BankCoreImplDubboServiceImpl {
         // 请求核心服务
         //BankCoreRspMessage rsp = bankCoreDubboServiceImpl.bankCoreRequests(msg, BankCore998889Req.class, null);
         BankCoreRspMessage rsp = new BankCoreRspMessage();
-        BankCore996666Rsp bankCore996666Rsp = new BankCore996666Rsp();
-        bankCore996666Rsp.setCoreRetCode("000000");
-        bankCore996666Rsp.setCoreRetMsg("核心处理成功");
-        bankCore996666Rsp.setHostAcdate("20120602");
-        bankCore996666Rsp.setTxnSts("1");
+//        BankCore996666Rsp bankCore996666Rsp = new BankCore996666Rsp();
+//        bankCore996666Rsp.setCoreRetCode("000000");
+//        bankCore996666Rsp.setCoreRetMsg("核心处理成功");
+//        bankCore996666Rsp.setHostAcdate("20120602");
+//        bankCore996666Rsp.setTxnSts("1");
+        //通过调用核心服务测试挡板返回
+        String trid="996666";
+        JSONObject RESULT=coreServiceSend.result(trid);
+        BankCore996666Rsp bankCore996666Rsp =JSONObject.parseObject(RESULT.toString(),BankCore996666Rsp.class);
+
         rsp.setBody(bankCore996666Rsp);
 
         // 后续补充检查
@@ -238,8 +243,14 @@ public class BankCoreImplDubboServiceImpl {
         //BankCoreRspMessage<BankCore998889Rsp, IBankCoreBodyArrayInfo> rsp = bankCoreDubboService.bankCoreRequest(msg, BankCore998889Rsp.class, null);
 
         //处理响应报文
-        return null;
         //return dealRspReverseCoreMsg(rsp);
+//        return null;
+
+        //通过调用核心服务测试挡板返回
+        String trid="998889";
+        JSONObject RESULT=coreServiceSend.result(trid);
+        BankCore998889Rsp bankCore998889Rsp=JSONObject.parseObject(RESULT.toString(),BankCore998889Rsp.class);
+        return bankCore998889Rsp;
     }
 
     /**
@@ -351,7 +362,7 @@ public class BankCoreImplDubboServiceImpl {
 //         //处理返回结果
 //        return dealRspCoreMsg(rspMsg, bankCore351100InnerReq.getReqType());
 
-        String trid=bankCoreReqHeader.getTlId();
+        String trid="351100";
          JSONObject RESULT=coreServiceSend.result(trid);
         BankCore351100InnerRsp bankCore351100InnerRsp=JSONObject.parseObject(RESULT.toString(),BankCore351100InnerRsp.class);
         bankCore351100InnerRsp.setCoreReqDate(coreReqDate);

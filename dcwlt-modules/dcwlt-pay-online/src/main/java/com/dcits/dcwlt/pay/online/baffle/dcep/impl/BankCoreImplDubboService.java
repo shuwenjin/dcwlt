@@ -125,7 +125,7 @@ public class BankCoreImplDubboService {
 //        rspHead.setTranDate(coreReqDate);
 //        rspHead.setSeqNo(seqNo);
 
-        String trid=bankCoreReqHeader.getTlId();
+        String trid="351100";
         JSONObject RESULT=coreServiceSend.result(trid);
         BankCore351100InnerRsp bankCore351100InnerRsp=JSONObject.parseObject(RESULT.toString(),BankCore351100InnerRsp.class);
         bankCore351100InnerRsp.setCoreReqDate(coreReqDate);
@@ -199,19 +199,23 @@ public class BankCoreImplDubboService {
 //        BankCoreRspHeader bankCoreHeader = rspMsg.getBankCoreHeader();
 //        String coreProcStatus = getCoreStatus(rspHead, bankCoreHeader);
 
-        //实例化响应报文 todo 核心应答暂时写死
-        BankCore351100InnerRsp core351100InnerRsp = new BankCore351100InnerRsp();
-        core351100InnerRsp.setCoreStatus("1");
-        core351100InnerRsp.setCoreReqDate(coreReqDate);
-        core351100InnerRsp.setCoreReqSerno(seqNo);
+        String trid="351100";
+        JSONObject RESULT=coreServiceSend.result(trid);
+        BankCore351100InnerRsp core351100InnerRsp=JSONObject.parseObject(RESULT.toString(),BankCore351100InnerRsp.class);
 
-        //核心响应报文头不为NULL时赋值
-        core351100InnerRsp.setCoreRspDate("202011");
-        core351100InnerRsp.setCoreRspSerno("1");
-        core351100InnerRsp.setHostDate("2");
-        core351100InnerRsp.setErrorCode("4");
-        core351100InnerRsp.setErrorMsg("5");
-        core351100InnerRsp.setCoreStatus("1");
+//        //实例化响应报文 todo 核心应答暂时写死
+//        BankCore351100InnerRsp core351100InnerRsp = new BankCore351100InnerRsp();
+//        core351100InnerRsp.setCoreStatus("1");
+//        core351100InnerRsp.setCoreReqDate(coreReqDate);
+//        core351100InnerRsp.setCoreReqSerno(seqNo);
+//
+//        //核心响应报文头不为NULL时赋值
+//        core351100InnerRsp.setCoreRspDate("202011");
+//        core351100InnerRsp.setCoreRspSerno("1");
+//        core351100InnerRsp.setHostDate("2");
+//        core351100InnerRsp.setErrorCode("4");
+//        core351100InnerRsp.setErrorMsg("5");
+//        core351100InnerRsp.setCoreStatus("1");
         return core351100InnerRsp;
     }
 
