@@ -8,7 +8,9 @@ import com.dcits.dcwlt.common.security.annotation.EnableRyFeignClients;
 import com.dcits.dcwlt.common.swagger.annotation.EnableCustomSwagger2;
 import org.springframework.boot.SpringApplication;
 import org.springframework.cloud.client.SpringCloudApplication;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
+import org.springframework.web.client.RestTemplate;
 
 @EnableCustomConfig
 @EnableCustomSwagger2
@@ -20,5 +22,11 @@ public class DcwltPayBatchApplication {
     {
         SpringApplication.run(DcwltPayBatchApplication.class, args);
         System.out.println("#####  支付批量模块启动成功  #####\n");
+    }
+
+    @Bean
+
+    public RestTemplate restTemplate() {
+        return new RestTemplate();
     }
 }
