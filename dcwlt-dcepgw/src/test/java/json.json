@@ -1,0 +1,86 @@
+{
+  "Header": {
+    "BeginFlag": "{H:",
+    "VersionID": "04",
+    "OrigSender": "G4001011000013",
+    "OrigSenderSID": "DCPS",
+    "OrigReceiver": "C1091231000013",
+    "OrigReceiverSID": "DCPS",
+    "OrigSendDate": "20201030",
+    "OrigSendTime": "094508",
+    "StructType": "XML",
+    "MesgType": "caps.227.001.01",
+    "MesgID": "202011171021221000000000001120010001",
+    "MesgRefID": "202011171021221000000000001120010001",
+    "MesgPriority": "3",
+    "MesgDirection": "U",
+    "SderReserved": "",
+    "RcverReserved": "",
+    "CenterReserved": "",
+    "Reserve": "",
+    "EndFlag": "}",
+    "SignSN": "2000002",
+    "DigitalSignature": "MEQCIGHJ5uw84vJortpd7bcHP3e6Z9fMSVIqOU1TQn19n0j2AiBi975aJyqxQZiTCY8clHgnaVPBw3YroIk7oYMpLJ7PZg==",
+    "NcrptnSN": "1000001",
+    "DgtlEnvlp": "1cef788b9e9a68d01014a4a4f1382d32"
+  },
+  "Body": {
+    "FinCdChngNtfctn": {
+      "Prttn": {
+        "EndNb": "1",
+        "StartNb": "1",
+        "TtlNb": "1"
+      },
+      "GrpHdr": {
+        "Rmk": "测试",
+        "CreDtTm": "2020-10-10T09:30:30",
+        "InstdPty": {
+          "InstdDrctPty": "C1091231000013"
+        },
+        "InstgPty": {
+          "InstgDrctPty": "G4001011000013"
+        },
+        "MsgId": "2010101000001261"
+      },
+      "ChngInf": [
+        {
+          "PtySts": "ST02",
+          "Mail": "shanghaibank.shbk.com",
+          "PtyAli": "000001",
+          "PtyNm": "上海银行股份有限公司测试行号",
+          "Tel": "13810108888",
+          "PtyTp": "PT00",
+          "Fax": "021-88990011",
+          "PtyId": "C1091231000013",
+          "ChngCtrl": {
+            "FctvDt": "2020-10-11T00:00:00",
+            "IfctvDt": "2030-10-10T00:00:00",
+            "FctvTp": "EF01",
+            "ChngTp": "CC00"
+          },
+          "Contact": "杨超"
+        },
+        {
+          "PtySts": "ST02",
+          "Mail": "nanjingibank.njbk.com",
+          "PtyAli": "000001",
+          "PtyNm": "南京银行股份有限公司测试行号",
+          "Tel": "13810108889",
+          "PtyTp": "PT00",
+          "Fax": "021-88990012",
+          "PtyId": "C1086932000016",
+          "ChngCtrl": {
+            "FctvDt": "2020-10-11T00:00:00",
+            "IfctvDt": "2030-10-10T00:00:00",
+            "FctvTp": "EF01",
+            "ChngTp": "CC00"
+          },
+          "Contact": "杨超越"
+        }
+      ],
+      "NbInf": {
+        "ChngNb": "1"
+      }
+    }
+  }
+}
