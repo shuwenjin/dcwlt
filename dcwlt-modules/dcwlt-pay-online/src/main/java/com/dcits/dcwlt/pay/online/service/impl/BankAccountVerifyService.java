@@ -1,5 +1,6 @@
 package com.dcits.dcwlt.pay.online.service.impl;
 
+import com.alibaba.fastjson.JSONObject;
 import com.dcits.dcwlt.common.core.utils.StringUtils;
 import com.dcits.dcwlt.common.pay.constant.AppConstant;
 import com.dcits.dcwlt.common.pay.constant.Constant;
@@ -10,6 +11,7 @@ import com.dcits.dcwlt.common.pay.channel.bankcore.dto.bankcore358040.BankCore35
 import com.dcits.dcwlt.pay.api.mq.event.exception.EcnyTransError;
 import com.dcits.dcwlt.pay.api.mq.event.exception.EcnyTransException;
 import com.dcits.dcwlt.common.pay.channel.bankcore.dto.LSFK43ReqMsg;
+import com.dcits.dcwlt.pay.online.service.CoreServiceSend;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,6 +47,8 @@ public class BankAccountVerifyService {
     @Autowired
     private GenerateCodeServiceImpl generateCodeService;
 
+    @Autowired
+    private CoreServiceSend coreServiceSend;
     /**
      * 反洗钱接口调用
      *
@@ -228,16 +232,22 @@ public class BankAccountVerifyService {
 //            throw new EcnyTransException(AppConstant.TRXSTATUS_FAILED, AppConstant.CRPM_SYS_ID, retCode, bankCoreRspMessage.getHead().getRetInfo());
 //        }
 //        BankCore358040Rsp body = bankCoreRspMessage.getBody();
-        BankCore358040Rsp bankCore358040Rsp = new BankCore358040Rsp();
-        bankCore358040Rsp.setCiSts("0");
-        bankCore358040Rsp.setType("1");
-        bankCore358040Rsp.setAcSts("N");
-        bankCore358040Rsp.setAcBlockSts("N");
-        bankCore358040Rsp.setAcStsw("1");
-        bankCore358040Rsp.setCiStsw("1");
-        bankCore358040Rsp.setAcClass("1");
-        bankCore358040Rsp.setAcAttr("26");
-        bankCore358040Rsp.setCardJointTyp("N");
+
+        //通过调用核心服务测试挡板返回
+        String trid="358040";
+        JSONObject RESULT=coreServiceSend.result(trid);
+        BankCore358040Rsp bankCore358040Rsp =JSONObject.parseObject(RESULT.toString(),BankCore358040Rsp.class);
+
+//        BankCore358040Rsp bankCore358040Rsp = new BankCore358040Rsp();
+//        bankCore358040Rsp.setCiSts("0");
+//        bankCore358040Rsp.setType("1");
+//        bankCore358040Rsp.setAcSts("N");
+//        bankCore358040Rsp.setAcBlockSts("N");
+//        bankCore358040Rsp.setAcStsw("1");
+//        bankCore358040Rsp.setCiStsw("1");
+//        bankCore358040Rsp.setAcClass("1");
+//        bankCore358040Rsp.setAcAttr("26");
+//        bankCore358040Rsp.setCardJointTyp("N");
         return bankCore358040Rsp;
     }
 
