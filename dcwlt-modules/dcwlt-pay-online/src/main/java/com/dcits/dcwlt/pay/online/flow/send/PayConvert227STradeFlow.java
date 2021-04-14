@@ -56,7 +56,7 @@ import java.math.BigDecimal;
 import java.util.Map;
 
 /**
- * 兑出交易处理配置
+ * 汇款兑出交易处理配置
  *
  * @author
  */
