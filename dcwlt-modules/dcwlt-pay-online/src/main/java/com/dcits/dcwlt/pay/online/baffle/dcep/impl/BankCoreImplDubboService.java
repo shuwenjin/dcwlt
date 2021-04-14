@@ -12,10 +12,12 @@ package com.dcits.dcwlt.pay.online.baffle.dcep.impl;
 
 
 import com.alibaba.csp.sentinel.util.StringUtil;
+import com.alibaba.fastjson.JSONObject;
 import com.dcits.dcwlt.common.pay.channel.bankcore.dto.BankCoreReqHeader;
 import com.dcits.dcwlt.common.pay.channel.bankcore.dto.bankcore351100.BankCore351100InnerReq;
 import com.dcits.dcwlt.common.pay.channel.bankcore.dto.bankcore351100.BankCore351100InnerRsp;
 import com.dcits.dcwlt.pay.online.base.Constant;
+import com.dcits.dcwlt.pay.online.service.CoreServiceSend;
 import com.dcits.dcwlt.pay.online.service.impl.CoreTradeTypeRepository;
 import com.dcits.dcwlt.pay.online.service.impl.HostEngCfgRepository;
 import org.apache.commons.lang3.StringUtils;
@@ -41,7 +43,8 @@ public class BankCoreImplDubboService {
 
     @Autowired
     private HostEngCfgRepository hostEngCfgRepository;
-
+    @Autowired
+    private CoreServiceSend coreServiceSend;
 
 /**
  * 推断核心状态
@@ -122,8 +125,14 @@ public class BankCoreImplDubboService {
 //        rspHead.setTranDate(coreReqDate);
 //        rspHead.setSeqNo(seqNo);
 
+        String trid="351100";
+        JSONObject RESULT=coreServiceSend.result(trid);
+        BankCore351100InnerRsp bankCore351100InnerRsp=JSONObject.parseObject(RESULT.toString(),BankCore351100InnerRsp.class);
+        bankCore351100InnerRsp.setCoreReqDate(coreReqDate);
+        bankCore351100InnerRsp.setCoreReqSerno(seqNo);
+        return bankCore351100InnerRsp;
         // 处理返回结果
-        return dealRspCoreMsg(coreReqDate,seqNo,bankCore351100InnerReq.getReqType());
+//        return dealRspCoreMsg(coreReqDate,seqNo,bankCore351100InnerReq.getReqType());
 
     }
 
@@ -190,19 +199,23 @@ public class BankCoreImplDubboService {
 //        BankCoreRspHeader bankCoreHeader = rspMsg.getBankCoreHeader();
 //        String coreProcStatus = getCoreStatus(rspHead, bankCoreHeader);
 
-        //实例化响应报文 todo 核心应答暂时写死
-        BankCore351100InnerRsp core351100InnerRsp = new BankCore351100InnerRsp();
-        core351100InnerRsp.setCoreStatus("1");
-        core351100InnerRsp.setCoreReqDate(coreReqDate);
-        core351100InnerRsp.setCoreReqSerno(seqNo);
+        String trid="351100";
+        JSONObject RESULT=coreServiceSend.result(trid);
+        BankCore351100InnerRsp core351100InnerRsp=JSONObject.parseObject(RESULT.toString(),BankCore351100InnerRsp.class);
 
-        //核心响应报文头不为NULL时赋值
-        core351100InnerRsp.setCoreRspDate("202011");
-        core351100InnerRsp.setCoreRspSerno("1");
-        core351100InnerRsp.setHostDate("2");
-        core351100InnerRsp.setErrorCode("4");
-        core351100InnerRsp.setErrorMsg("5");
-        core351100InnerRsp.setCoreStatus("1");
+//        //实例化响应报文 todo 核心应答暂时写死
+//        BankCore351100InnerRsp core351100InnerRsp = new BankCore351100InnerRsp();
+//        core351100InnerRsp.setCoreStatus("1");
+//        core351100InnerRsp.setCoreReqDate(coreReqDate);
+//        core351100InnerRsp.setCoreReqSerno(seqNo);
+//
+//        //核心响应报文头不为NULL时赋值
+//        core351100InnerRsp.setCoreRspDate("202011");
+//        core351100InnerRsp.setCoreRspSerno("1");
+//        core351100InnerRsp.setHostDate("2");
+//        core351100InnerRsp.setErrorCode("4");
+//        core351100InnerRsp.setErrorMsg("5");
+//        core351100InnerRsp.setCoreStatus("1");
         return core351100InnerRsp;
     }
 

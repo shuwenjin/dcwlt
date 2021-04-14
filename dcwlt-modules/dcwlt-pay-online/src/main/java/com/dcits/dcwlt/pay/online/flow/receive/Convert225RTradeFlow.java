@@ -24,12 +24,16 @@ import com.dcits.dcwlt.pay.online.baffle.dcep.impl.BankCoreImplDubboService;
 import com.dcits.dcwlt.pay.online.base.Constant;
 import com.dcits.dcwlt.pay.api.mq.event.exception.EcnyTransError;
 import com.dcits.dcwlt.pay.api.mq.event.exception.EcnyTransException;
+import com.dcits.dcwlt.pay.online.event.callback.ReCreditCallBack;
+import com.dcits.dcwlt.pay.online.event.callback.ReCreditCoreQryCallBack;
+import com.dcits.dcwlt.pay.online.event.callback.TxEndNTCoreQryCallBack;
 import com.dcits.dcwlt.pay.online.flow.builder.EcnyTradeContext;
 import com.dcits.dcwlt.pay.online.flow.builder.EcnyTradeFlowBuilder;
 import com.dcits.dcwlt.pay.online.mapper.SignInfoMapper;
 import com.dcits.dcwlt.pay.online.service.IAuthInfoService;
 import com.dcits.dcwlt.pay.online.service.ICoreProcessService;
 import com.dcits.dcwlt.pay.online.service.IPayTransDtlInfoService;
+import com.dcits.dcwlt.pay.online.service.impl.CoreEventServiceImpl;
 import com.dcits.dcwlt.pay.online.service.impl.PartyService;
 import com.dcits.dcwlt.pay.online.task.ParamConfigCheckTask;
 import org.apache.commons.lang3.StringUtils;
@@ -71,6 +75,11 @@ public class Convert225RTradeFlow {
 
     @Autowired
     private ICoreProcessService bankCoreProcessService;
+    @Autowired
+    private CoreEventServiceImpl coreEventServiceImpl;
+    @Autowired
+    private IPayTransDtlInfoService payTransDtlInfoService;
+
 
     @Bean(name = CONVER_TRADE_FLOW)
     public TradeFlow convertTradeFlow() {
@@ -375,6 +384,10 @@ public class Convert225RTradeFlow {
             // todo 请求核心的代码
             bankCore351100InnerRsp = bankCoreImplDubboService.coreServer(bankCore351100InnerReq);
         } catch (Exception e) {
+            //核心记账异常，将异常存入MQ
+            PayTransDtlInfoDO payTransDtlInfoDO = payTransDtlInfoService.query(bankCore351100InnerReq.getPayDate(),bankCore351100InnerReq.getPaySerno());
+            coreEventServiceImpl.registerReCredit(payTransDtlInfoDO.getPayDate(), payTransDtlInfoDO.getPaySerno(), ReCreditCallBack.class);
+
             logger.error("核心通讯异常：{}-{}-{}", LogMonitorLevelCdEnum.ECNY_LOG_MONITOR_NORMAL.getCode(), e.getMessage(), e);
             throw new EcnyTransException(AppConstant.TRXSTATUS_ABEND, EcnyTransError.GATEWAY_REQUEST_ERROR);
         }

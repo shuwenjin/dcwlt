@@ -12,6 +12,7 @@ import com.dcits.dcwlt.common.pay.util.DateUtil;
 import com.dcits.dcwlt.pay.api.mq.event.exception.EcnyTransError;
 import com.dcits.dcwlt.pay.api.mq.event.exception.EcnyTransException;
 import com.dcits.dcwlt.pay.online.baffle.core.impl.BankCoreImplDubboServiceImpl;
+import com.dcits.dcwlt.pay.online.event.callback.ReCreditCoreQryCallBack;
 import com.dcits.dcwlt.pay.online.service.ICoreProcessService;
 import com.dcits.dcwlt.pay.online.service.IPayTransDtlInfoService;
 import org.slf4j.Logger;
@@ -42,7 +43,8 @@ public class BankCoreProcessServiceImpl implements ICoreProcessService {
     @Autowired
     private GenerateCodeServiceImpl generateCodeService;
 
-
+    @Autowired
+    private CoreEventServiceImpl coreEventServiceImpl;
     /**
      * 初始化核心请求报文
      *
@@ -151,6 +153,11 @@ public class BankCoreProcessServiceImpl implements ICoreProcessService {
         try {
             bankCore351100InnerRsp = bankCoreImplDubboServiceImpl.coreServer(bankCore351100InnerReq);
         } catch (Exception e) {
+
+            //2021-04-14 核心记账异常，将异常存入MQ
+            PayTransDtlInfoDO payTransDtlInfoDO = payTransDtlInfoService.query(bankCore351100InnerReq.getPayDate(),bankCore351100InnerReq.getPaySerno());
+            coreEventServiceImpl.registerCoreQry(payTransDtlInfoDO.getCoreReqDate(), payTransDtlInfoDO.getCoreReqSerno(), payTransDtlInfoDO.getPayDate(), payTransDtlInfoDO.getPaySerno(), ReCreditCoreQryCallBack.class);
+
             logger.error("核心通讯异常：{}-{}", e.getMessage(), e);
             throw new EcnyTransException(AppConstant.TRXSTATUS_ABEND, EcnyTransError.GATEWAY_REQUEST_ERROR);
         }
