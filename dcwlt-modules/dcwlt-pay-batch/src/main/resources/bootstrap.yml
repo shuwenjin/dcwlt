@@ -51,12 +51,17 @@ ency:
 sftp:
   client:
     protocol: sftp
-    host: 127.0.0.1
+    host: 10.0.23.169
     port: 22
     username: sftp
-    password: sftp
+    password: Dcwltpass12
   # 根路径
     root: /home/sftp/
+  # 本地下载根路径
+    # linux
+    localHome: /home/sftp
+    # windows
+    #localHome: D:\sftp
   # 密钥文件路径
     privateKey:
   # 密钥的密码
