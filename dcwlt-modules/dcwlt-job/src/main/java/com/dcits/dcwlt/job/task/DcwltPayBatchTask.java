@@ -62,11 +62,7 @@ public class DcwltPayBatchTask {
 
         String ret = null;
         try {
-            JSONObject paramObj = new JSONObject();
-            paramObj.put("settleDate", params);
-            paramObj.put("serviceName", "ImportDataService");
-            paramObj.put("batchId", "B" + params + "1600");
-            ret = remotePayBatchService.schedulerController(paramObj);
+            ret = remotePayBatchService.schedulerController(params, "B" + params + "1600", "ImportDataService");
         } catch (Exception e) {
             result.setMessage(e.getMessage());
             // 必须转成JSONString

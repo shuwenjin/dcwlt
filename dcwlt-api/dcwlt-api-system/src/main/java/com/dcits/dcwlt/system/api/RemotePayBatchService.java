@@ -20,6 +20,9 @@ public interface RemotePayBatchService {
     public void statistics(@RequestParam("reportDate")  String reportDate) throws Exception;
 
     @PostMapping("/schedulerController")
-    public String schedulerController(@RequestBody JSONObject paramObj);
+    public String schedulerController(
+            @RequestParam("settleDate")  String settleDate,
+            @RequestParam("batchId")  String batchId,
+            @RequestParam("serviceName")  String serviceName);
 
 }
