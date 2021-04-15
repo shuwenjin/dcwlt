@@ -80,14 +80,22 @@ public class FreeFrmtController extends BaseController
      */
     @PostMapping(value = "/sendFreeFrmt")
     public AjaxResult getInfo(@RequestBody  PayTransDtlNonfDO payTransDtlNonfDO){
+
         JSONObject jsonObject = this.freeFmt("11", payTransDtlNonfDO.getMessageContext(), payTransDtlNonfDO.getInstdDrctPty());
+
         String url="http://localhost:9301/dcwlt/pymtFrdmFmtMsgSnd";
+
         ResponseEntity<String> stringResponseEntity = restTemplate.postForEntity(url, jsonObject, String.class);
+
+        logger.info("自由格式返回的内容=====>"+stringResponseEntity.getBody());
+
         boolean flag = this.checkResult(stringResponseEntity);
         if (flag) {
             return AjaxResult.success("发送自由格式成功");
         }else {
-            return AjaxResult.error("发送自由格式失败");
+
+
+            return AjaxResult.error("发送自由格式失败"+this.getErrorInfo(stringResponseEntity));
         }
     }
 
@@ -124,7 +132,6 @@ public class FreeFrmtController extends BaseController
         Map<String,String> body=new HashMap<>();
         body.put("tlrNo",trlNo);
         body.put("msgContext",msgContext);
-        //
         body.put("instdDrctPty",instdDrctPty);
 
         Map<String,String> ecnyHead=new HashMap<>();
@@ -157,8 +164,22 @@ public class FreeFrmtController extends BaseController
         if (retCode.equals("000000")){
             return true;
         }else {
+            String retInfo = head.getString("retInfo");
+            logger.error("自由格式发送失败原因====>"+retInfo);
             return false;
         }
+    }
+
+    /**
+     * 异常信息
+     * @param stringResponseEntity
+     * @return
+     */
+    private  String getErrorInfo(ResponseEntity<String> stringResponseEntity){
+        String  result=stringResponseEntity.getBody();
+        JSONObject jsonObject = JSONObject.parseObject(result);
+        JSONObject body = jsonObject.getJSONObject("body");
+        return body.getString("procResult");
     }
 
 
