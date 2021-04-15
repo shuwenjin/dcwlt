@@ -118,6 +118,7 @@ public class PayConvert227STradeFlow {
     @Autowired
     private DcepService dcepService;
 
+
     @Bean(name = PAY_CONVERT_TRADE_FLOW)
     public TradeFlow payConvertTradeFlow() {
         return EcnyTradeFlowBuilder.get()
@@ -505,8 +506,8 @@ public class PayConvert227STradeFlow {
      */
     public JSONObject sendDcep(DCEPReqDTO<PayConvertReqDTO> dcepReqDTO, PayTransDtlInfoDO payTransDtlInfoDO) {
         try {
-            //JSONObject rspObj = dcepSendService.sendDcep(dcepReqDTO);
-            JSONObject jsonObject = dcepService.receive228(dcepReqDTO);
+            JSONObject jsonObject = dcepSendService.sendDcep(dcepReqDTO);
+            //JSONObject jsonObject = dcepService.receive228(dcepReqDTO);
             return jsonObject;
         } catch (Exception e) {
             logger.error("发送互联互通平台异常：{}-{}-{}", LogMonitorLevelCdEnum.ECNY_LOG_MONITOR_NORMAL.getCode(), e.getMessage(), e);

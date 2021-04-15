@@ -56,6 +56,17 @@
     <el-row :gutter="10" class="mb8">
       <el-col :span="1.5">
         <el-button
+          type="info"
+          plain
+          icon="el-icon-s-operation"
+          size="mini"
+          @click="handleDetail"
+          :disabled="single"
+          v-hasPermi="['pay-batch:checkpath:list']"
+        >对账明细</el-button>
+      </el-col>
+      <el-col :span="1.5">
+        <el-button
           type="warning"
           plain
           icon="el-icon-download"
@@ -81,20 +92,44 @@
       <el-table-column label="批次日期" align="center" prop="batchDate" v-if="columns[9].visible" />
       <el-table-column label="交易批次号" align="center" prop="batchId" v-if="columns[10].visible" />
       <el-table-column label="总笔数" align="center" prop="countNum" v-if="columns[11].visible" />
-      <el-table-column label="总金额" align="center" prop="countAmt" v-if="columns[12].visible" />
+      <el-table-column label="总金额" align="center" prop="countAmt" v-if="columns[12].visible" >
+          <template slot-scope="scope">
+            <span>{{ parseMoney(scope.row.countAmt) }}</span>
+          </template>
+        </el-table-column>
       <el-table-column label="货币代码" align="center" prop="ccy" v-if="columns[13].visible" />
       <el-table-column label="付款笔数" align="center" prop="dBITCountNum" v-if="columns[14].visible" />
-      <el-table-column label="付款金额" align="center" prop="dBITCountAmt" v-if="columns[15].visible" />
+      <el-table-column label="付款金额" align="center" prop="dBITCountAmt" v-if="columns[15].visible" >
+          <template slot-scope="scope">
+            <span>{{ parseMoney(scope.row.dBITCountAmt) }}</span>
+          </template>
+        </el-table-column>
       <el-table-column label="收款笔数" align="center" prop="cRDTCountNum" v-if="columns[16].visible" />
-      <el-table-column label="收款金额" align="center" prop="cRDTCountAmt" v-if="columns[17].visible" />
+      <el-table-column label="收款金额" align="center" prop="cRDTCountAmt" v-if="columns[17].visible" >
+          <template slot-scope="scope">
+            <span>{{ parseMoney(scope.row.cRDTCountAmt) }}</span>
+          </template>
+        </el-table-column>
       <el-table-column label="报文编号" align="center" prop="msgType" v-if="columns[18].visible" />
       <el-table-column label="业务状态" align="center" prop="msgBizStatus" :formatter="msgbizstatusFormat" v-if="columns[19].visible" />
       <el-table-column label="总笔数" align="center" prop="msgCountNum" v-if="columns[20].visible" />
-      <el-table-column label="总金额" align="center" prop="msgCountAmt" v-if="columns[21].visible" />
+      <el-table-column label="总金额" align="center" prop="msgCountAmt" v-if="columns[21].visible" >
+          <template slot-scope="scope">
+            <span>{{ parseMoney(scope.row.msgCountAmt) }}</span>
+          </template>
+        </el-table-column>
       <el-table-column label="付款笔数" align="center" prop="msgDBITCountNum" v-if="columns[22].visible" />
-      <el-table-column label="付款金额" align="center" prop="msgDBITCountAmt" v-if="columns[23].visible" />
+      <el-table-column label="付款金额" align="center" prop="msgDBITCountAmt" v-if="columns[23].visible" >
+          <template slot-scope="scope">
+            <span>{{ parseMoney(scope.row.msgDBITCountAmt) }}</span>
+          </template>
+        </el-table-column>
       <el-table-column label="收款笔数" align="center" prop="msgCRDTCountNum" v-if="columns[24].visible" />
-      <el-table-column label="收款金额" align="center" prop="msgCRDTCountAmt" v-if="columns[25].visible" />
+      <el-table-column label="收款金额" align="center" prop="msgCRDTCountAmt" v-if="columns[25].visible" >
+          <template slot-scope="scope">
+            <span>{{ parseMoney(scope.row.msgCRDTCountAmt) }}</span>
+          </template>
+        </el-table-column>
       <el-table-column label="对账标识" align="center" prop="checkStatus" :formatter="checkstatusFormat" v-if="columns[26].visible" />
       <el-table-column label="最后更新日期" align="center" prop="lastUpDate" v-if="columns[27].visible" />
       <el-table-column label="最后更新时间" align="center" prop="lastUpTime" v-if="columns[28].visible" />
@@ -131,12 +166,14 @@ export default {
     return {
       // 遮罩层
       loading: true,
-      // 选中数组
+      // 选中id数组
       ids: [],
       // 非单个禁用
       single: true,
       // 非多个禁用
       multiple: true,
+      // 选中行数据
+      selectRow: {},
       // 显示搜索条件
       showSearch: true,
       // 总条数
@@ -163,35 +200,35 @@ export default {
       },
       // 列信息
       columns: [
-        { key: 0, label: `平台日期`, visible: true },
-        { key: 1, label: `平台流水`, visible: true },
-        { key: 2, label: `平台时间`, visible: true },
-        { key: 3, label: `报文标识号`, visible: true },
+        { key: 0, label: `平台日期`, visible: false },
+        { key: 1, label: `平台流水`, visible: false },
+        { key: 2, label: `平台时间`, visible: false },
+        { key: 3, label: `报文标识号`, visible: false },
         { key: 4, label: `报文发送时间`, visible: true },
         { key: 5, label: `发起机构`, visible: true },
         { key: 6, label: `接收机构`, visible: true },
-        { key: 7, label: `备注`, visible: true },
-        { key: 8, label: `数字信封`, visible: true },
+        { key: 7, label: `备注`, visible: false },
+        { key: 8, label: `数字信封`, visible: false },
         { key: 9, label: `批次日期`, visible: true },
         { key: 10, label: `交易批次号`, visible: true },
         { key: 11, label: `总笔数`, visible: true },
         { key: 12, label: `总金额`, visible: true },
-        { key: 13, label: `货币代码`, visible: true },
-        { key: 14, label: `付款笔数`, visible: true },
-        { key: 15, label: `付款金额`, visible: true },
-        { key: 16, label: `收款笔数`, visible: true },
-        { key: 17, label: `收款金额`, visible: true },
+        { key: 13, label: `货币代码`, visible: false },
+        { key: 14, label: `付款笔数`, visible: false },
+        { key: 15, label: `付款金额`, visible: false },
+        { key: 16, label: `收款笔数`, visible: false },
+        { key: 17, label: `收款金额`, visible: false },
         { key: 18, label: `报文编号`, visible: true },
-        { key: 19, label: `业务状态`, visible: true },
-        { key: 20, label: `总笔数`, visible: true },
-        { key: 21, label: `总金额`, visible: true },
-        { key: 22, label: `付款笔数`, visible: true },
-        { key: 23, label: `付款金额`, visible: true },
-        { key: 24, label: `收款笔数`, visible: true },
-        { key: 25, label: `收款金额`, visible: true },
-        { key: 26, label: `对账标识`, visible: true },
-        { key: 27, label: `最后更新日期`, visible: true },
-        { key: 28, label: `最后更新时间`, visible: true },
+        { key: 19, label: `业务状态`, visible: false },
+        { key: 20, label: `总笔数`, visible: false },
+        { key: 21, label: `总金额`, visible: false },
+        { key: 22, label: `付款笔数`, visible: false },
+        { key: 23, label: `付款金额`, visible: false },
+        { key: 24, label: `收款笔数`, visible: false },
+        { key: 25, label: `收款金额`, visible: false },
+        { key: 26, label: `对账标识`, visible: false },
+        { key: 27, label: `最后更新日期`, visible: false },
+        { key: 28, label: `最后更新时间`, visible: false },
       ],
       // 表单参数
       form: {},
@@ -283,6 +320,10 @@ export default {
     // 多选框选中数据
     handleSelectionChange(selection) {
       this.ids = selection.map(item => item.paydate)
+      // 单选时选中的一行数据
+      if (selection && selection.length > 0) {
+        this.selectRow = selection[0];
+      }
       this.single = selection.length!==1
       this.multiple = !selection.length
     },
@@ -341,6 +382,10 @@ export default {
       this.download('pay-batch/checkpath/export', {
         ...this.queryParams
       }, `pay-batch_checkpath.xlsx`)
+    },
+    /** 对账明细按钮操作 */
+    handleDetail() {
+      this.$router.push({name: 'Checkpathdtl', params: {data: this.selectRow}});
     }
   }
 };
