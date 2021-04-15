@@ -348,7 +348,15 @@ public class DcspMsgUtil {
                 //银行账户挂接管理请求报文
                 String[] elements = {"SgnAcctId", "SgnAcctNm", "IDNo", "Tel", "WltId"};
                 bodyMsg = updateXmlValue(xmlMsg, elements, key, true);
-            } else {
+            } else if ("dcep.909.001.01".equals(msgType)) {
+                //银行账户挂接管理请求报文
+                String[] elements = {"Cntt"};
+                bodyMsg = updateXmlValue(xmlMsg, elements, key, true);
+            }else if ("dcep.951.001.01".equals(msgType)) {
+                //银行账户挂接管理请求报文
+                String[] elements = {"Cntt"};
+                bodyMsg = updateXmlValue(xmlMsg, elements, key, true);
+            }else {
                 bodyMsg = xmlMsg;
             }
         } catch (Exception e) {
@@ -393,7 +401,15 @@ public class DcspMsgUtil {
                 //银行账户挂接管理请求报文
                 String[] elements = {"SgnAcctId", "SgnAcctNm", "IDNo", "Tel", "WltId"};
                 bodyMsg = updateXmlValue(xmlMsg, elements, key, false);
-            } else {
+            } else if ("dcep.909.001.01".equals(msgType)) {
+                //银行账户挂接管理请求报文
+                String[] elements = {"Cntt"};
+                bodyMsg = updateXmlValue(xmlMsg, elements, key, false);
+            }else if ("dcep.951.001.01".equals(msgType)) {
+                //银行账户挂接管理请求报文
+                String[] elements = {"Cntt"};
+                bodyMsg = updateXmlValue(xmlMsg, elements, key, false);
+            }else {
                 bodyMsg = xmlMsg;
             }
         } catch (Exception e) {

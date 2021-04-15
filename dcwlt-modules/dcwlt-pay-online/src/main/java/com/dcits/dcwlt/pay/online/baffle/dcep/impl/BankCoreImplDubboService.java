@@ -17,8 +17,8 @@ import com.dcits.dcwlt.common.pay.channel.bankcore.dto.BankCoreReqHeader;
 import com.dcits.dcwlt.common.pay.channel.bankcore.dto.bankcore351100.BankCore351100InnerReq;
 import com.dcits.dcwlt.common.pay.channel.bankcore.dto.bankcore351100.BankCore351100InnerRsp;
 import com.dcits.dcwlt.pay.online.base.Constant;
-import com.dcits.dcwlt.pay.online.service.CoreServiceSend;
 import com.dcits.dcwlt.pay.online.service.impl.CoreTradeTypeRepository;
+import com.dcits.dcwlt.pay.online.service.impl.DcepSendService;
 import com.dcits.dcwlt.pay.online.service.impl.HostEngCfgRepository;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -43,8 +43,10 @@ public class BankCoreImplDubboService {
 
     @Autowired
     private HostEngCfgRepository hostEngCfgRepository;
+//    @Autowired
+//    private CoreServiceSend coreServiceSend;
     @Autowired
-    private CoreServiceSend coreServiceSend;
+    private DcepSendService dcepSendService;
 
 /**
  * 推断核心状态
@@ -126,7 +128,8 @@ public class BankCoreImplDubboService {
 //        rspHead.setSeqNo(seqNo);
 
         String trid="351100";
-        JSONObject RESULT=coreServiceSend.result(trid);
+//        JSONObject RESULT=coreServiceSend.result(trid);
+        JSONObject RESULT=dcepSendService.getNonce(trid);
         BankCore351100InnerRsp bankCore351100InnerRsp=JSONObject.parseObject(RESULT.toString(),BankCore351100InnerRsp.class);
         bankCore351100InnerRsp.setCoreReqDate(coreReqDate);
         bankCore351100InnerRsp.setCoreReqSerno(seqNo);
@@ -200,7 +203,8 @@ public class BankCoreImplDubboService {
 //        String coreProcStatus = getCoreStatus(rspHead, bankCoreHeader);
 
         String trid="351100";
-        JSONObject RESULT=coreServiceSend.result(trid);
+//        JSONObject RESULT=coreServiceSend.result(trid);
+        JSONObject RESULT=dcepSendService.getNonce(trid);
         BankCore351100InnerRsp core351100InnerRsp=JSONObject.parseObject(RESULT.toString(),BankCore351100InnerRsp.class);
 
 //        //实例化响应报文 todo 核心应答暂时写死

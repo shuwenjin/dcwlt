@@ -7,9 +7,6 @@ import cn.hutool.crypto.symmetric.SM4;
 import com.alibaba.fastjson.JSONObject;
 import com.dcits.dcwlt.dcepgw.utils.DcspMsgUtil;
 import com.dcits.dcwlt.dcepgw.utils.JsonXmlUtil;
-import org.dom4j.DocumentException;
-
-import java.nio.charset.Charset;
 
 public class Test {
 

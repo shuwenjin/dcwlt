@@ -6,7 +6,7 @@ server:
 spring: 
   application:
     # 应用名称
-    name: dcwlt-pay-online-xjj
+    name: dcwlt-pay-online
   profiles:
     # 环境配置
     active: dev
@@ -26,3 +26,6 @@ spring:
 
 dcepgw:
   server-addr: http://localhost:8008/dcepgw/
+core:
+  server: http://10.7.24.24:9205/core/sendBack/
+
