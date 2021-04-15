@@ -358,14 +358,13 @@ public class JsonXmlUtil {
             msgTp = json.getJSONObject(HEAD).getString(MESGTYPE_KEY);
         }
         Element root = document.addElement(DCSP_ROOT_ELM,DCSP_ROOT_ATT_XMLNS_V.replace("{MSGTP}", msgTp));
-
+//        Element root =DocumentHelper.createElement(DCSP_ROOT_ELM);
         root.addAttribute(DCSP_ROOT_ATT_XSI, DCSP_ROOT_ATT_XSI_V);
 
         if (json.containsKey(BODY)) {
             for (String bodyChildKey : json.getJSONObject(BODY).keySet()) {
-                Element bodyChild = DocumentHelper.createElement(bodyChildKey);
-                bodyChild = addJsonToElement(json.getJSONObject(BODY).getJSONObject(bodyChildKey), bodyChild);
-                root.add(bodyChild);
+                Element bodyChild = root.addElement(bodyChildKey);
+                addJsonToElement(json.getJSONObject(BODY).getJSONObject(bodyChildKey), bodyChild);
             }
         }
 //        document.add(root);
@@ -402,28 +401,35 @@ public class JsonXmlUtil {
             if (child instanceof JSONObject) {
                 //带币种的特殊处理
                 if (((JSONObject) child).containsKey(KEY_CCY) && ((JSONObject) child).containsKey(KEY_VALUE)) {
-                    Element element = DocumentHelper.createElement(key);
+                    Element element = node.addElement(key);
                     element.setText(json.getJSONObject(key).getString(KEY_VALUE) == null ? "" : json.getJSONObject(key).getString(KEY_VALUE));
                     element.addAttribute(KEY_CCY, json.getJSONObject(key).getString(KEY_CCY));
-                    node.add(element);
+//                    node.add(element);
                 } else {
-                    Element nodeChild = DocumentHelper.createElement(key);
-                    node.add(addJsonToElement(json.getJSONObject(key), nodeChild));
+//                    Element nodeChild = DocumentHelper.createElement(key);
+//                    node.add(addJsonToElement(json.getJSONObject(key), nodeChild));
+                    Element nodeChild = node.addElement(key);
+                    addJsonToElement(json.getJSONObject(key), nodeChild);
                 }
 
             } else if (child instanceof JSONArray) {
                 //数组处理
                 JSONArray jsonArray = (JSONArray) child;
                 for (int i = 0; i < jsonArray.size(); i++) {
-                    Element nodeChild = DocumentHelper.createElement(key);
+//                    Element nodeChild = DocumentHelper.createElement(key);
+//                    JSONObject arrayChild = jsonArray.getJSONObject(i);
+//                    node.add(addJsonToElement(arrayChild, nodeChild));
+                    Element nodeChild = node.addElement(key);
                     JSONObject arrayChild = jsonArray.getJSONObject(i);
-                    node.add(addJsonToElement(arrayChild, nodeChild));
+                    addJsonToElement(arrayChild, nodeChild);
                 }
             } else {
                 //字符串
-                Element element = DocumentHelper.createElement(key);
+//                Element element = DocumentHelper.createElement(key);
+//                element.setText(json.getString(key) == null ? "" : json.getString(key));
+//                node.add(element);
+                Element element = node.addElement(key);
                 element.setText(json.getString(key) == null ? "" : json.getString(key));
-                node.add(element);
             }
         }
 
