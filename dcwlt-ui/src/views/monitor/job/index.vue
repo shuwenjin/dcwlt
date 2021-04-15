@@ -271,6 +271,8 @@
       </div>
     </el-dialog>
 
+
+
     <!-- 任务日志详细 -->
     <el-dialog title="任务详细" :visible.sync="openView" width="700px" append-to-body>
       <el-form ref="form" :model="form" label-width="120px" size="mini">
