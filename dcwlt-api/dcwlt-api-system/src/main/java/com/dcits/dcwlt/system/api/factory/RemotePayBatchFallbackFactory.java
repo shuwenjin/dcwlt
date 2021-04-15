@@ -31,7 +31,7 @@ public class RemotePayBatchFallbackFactory implements FallbackFactory<RemotePayB
             }
 
             @Override
-            public String schedulerController(JSONObject paramObj) {
+            public String schedulerController(String settleDate, String batchId, String serviceName) {
                 return "1";
             }
         };

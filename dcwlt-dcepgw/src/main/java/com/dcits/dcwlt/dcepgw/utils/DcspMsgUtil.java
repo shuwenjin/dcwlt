@@ -72,17 +72,20 @@ public class DcspMsgUtil {
         String body = signAndBody.substring(bodyStartIdx);
 
         //验签 TODO 根据序号获取对方公钥，暂时用固定的
-        boolean verify = verifyDigitalSignature(body,headerMap.get(DIGITALSIGNATURE_KEY),PUBLICKEY);
-        if(!verify){
-            log.error("报文验签不通过！");
+        if(StrUtil.isNotBlank(headerMap.get(SIGNSN_KEY))) {
+            boolean verify = verifyDigitalSignature(body, headerMap.get(DIGITALSIGNATURE_KEY), PUBLICKEY);
+            if (!verify) {
+                log.error("报文验签不通过！");
+            }
         }
         //解密 TODO 根据序号获取我方私钥，暂时用固定的
-        byte[] key = getDigitalEnvelopePlain(PRIVATEKEY,headerMap.get(DGTLENVLP_KEY));
-        //将数字信封密码HEX存放到数字信封
-        headerMap.put(DGTLENVLP_KEY, HexUtil.encodeHexStr(key));
-        //解密敏感字段
-        body = decryptField(headerMap.get(HEAD_KEY_ARRAY[9]),body,key);
-
+        if(StrUtil.isNotBlank(headerMap.get(NCRPTNSN_KEY))) {
+            byte[] key = getDigitalEnvelopePlain(PRIVATEKEY, headerMap.get(DGTLENVLP_KEY));
+            //将数字信封密码HEX存放到数字信封
+            headerMap.put(DGTLENVLP_KEY, HexUtil.encodeHexStr(key));
+            //解密敏感字段
+            body = decryptField(headerMap.get(HEAD_KEY_ARRAY[9]), body, key);
+        }
         //报文转换
         JSONObject jsonBody = JsonXmlUtil.dcspXmlToJson(body);
 
@@ -151,18 +154,27 @@ public class DcspMsgUtil {
         String msgType = jsonObject.getJSONObject(JsonXmlUtil.HEAD).getString(HEAD_KEY_ARRAY[9]);
         //随机生成对称密钥
         byte[] sm4Key = new SM4().getSecretKey().getEncoded();
-        bodyXml = encryptField(msgType,bodyXml,sm4Key);
+        String nsn = "";
+        if(StrUtil.isNotBlank(nsn)) {
+            bodyXml = encryptField(msgType, bodyXml, sm4Key);
+        }
         //报文头
         String headString = packFixHead(jsonObject.getJSONObject(JsonXmlUtil.HEAD));
 
         //签名
 
-        String ssn = "2000002";//TODO  根据序号获取我方私钥，暂时用固定的
+        String ssn = "";//TODO  根据序号获取我方私钥，暂时用固定的
         //报文签名
-        String dsg = getDigitalSignature(bodyXml, PRIVATEKEY);
-        String nsn = "1000001"; //TODO  根据序号获取对方公钥，暂时用固定的
+        String dsg = "";
+        if(StrUtil.isNotBlank(ssn)) {
+            dsg = getDigitalSignature(bodyXml, PRIVATEKEY);
+        }
+        //TODO  根据序号获取对方公钥，暂时用固定的
         //数字信封
-        String dep = getDigitalEnvelopeCipher(PUBLICKEY, sm4Key);
+        String dep = "";
+        if(StrUtil.isNotBlank(nsn)){
+            dep = getDigitalEnvelopeCipher(PUBLICKEY, sm4Key);
+        }
         //签名域
         String tagString = packTagSign(ssn, dsg, nsn, dep);
 
@@ -202,17 +214,19 @@ public class DcspMsgUtil {
      * @return String 数字签名域
      */
     private static String packTagSign(String ssn, String dsg, String nsn, String dep) {
-        if (StrUtil.isBlank(ssn) && StrUtil.isBlank(nsn)) {
-            //如果签名证书序列号 和 加密证书序列号 都为空 则可以没有签名域
-            return "";
-        }
+//        if (StrUtil.isBlank(ssn) && StrUtil.isBlank(nsn)) {
+//            //如果签名证书序列号 和 加密证书序列号 都为空 则可以没有签名域
+//            return "";
+//        }
         StringBuilder tagString = new StringBuilder();
         tagString.append(SIGN_BEGIN_FLAG);
         //签名证书序列号
-        if (StrUtil.isNotBlank(ssn)) {
-            tagString.append(SIGNSN_TAG)
-                    .append(ssn);
-        }
+//        if (StrUtil.isNotBlank(ssn)) {
+//            tagString.append(SIGNSN_TAG)
+//                    .append(ssn);
+//        }
+        tagString.append(SIGNSN_TAG).append(ssn);
+
         //加密证书序列号 、数字信封
         if (StrUtil.isNotBlank(nsn)) {
             tagString.append(NCRPTNSN_TAG)
@@ -221,9 +235,9 @@ public class DcspMsgUtil {
                     .append(dep);
         }
         //报文签名
+        tagString.append(DIGITALSIGNATURE_TAG);
         if (StrUtil.isNotBlank(ssn)) {
-            tagString.append(DIGITALSIGNATURE_TAG)
-                    .append(dsg);
+            tagString.append(dsg);
         }
         tagString.append(END_FLAG);
 

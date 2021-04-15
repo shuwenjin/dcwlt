@@ -46,11 +46,11 @@ public final class Gwf008ReqFactory {
 //        gwf008ReqDTO.setSrcMerId(srcMerId);
 //        gwf008ReqDTO.setChannel(channel);
 //        gwf008ReqDTO.setFileType(fileType);
-//        gwf008ReqDTO.setFileName(fileName);
-//        gwf008ReqDTO.setFilePath(filePath);
-//        gwf008ReqDTO.setTransDate(transDate);
-//        gwf008ReqDTO.setOverWrite(overWrite);
-//        gwf008ReqDTO.setExChangeKey(exChangeKey);
+        gwf008ReqDTO.setFileName(fileName);
+        gwf008ReqDTO.setFilePath(filePath);
+        gwf008ReqDTO.setTransDate(transDate);
+        gwf008ReqDTO.setOverWrite(overWrite);
+        gwf008ReqDTO.setExChangeKey(exChangeKey);
 
         return gwf008ReqDTO;
     }

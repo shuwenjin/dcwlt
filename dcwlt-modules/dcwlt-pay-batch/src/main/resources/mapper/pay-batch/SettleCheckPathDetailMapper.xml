@@ -29,15 +29,39 @@
     </insert>
     
     <!--通道对账明细表入库-->
-    <insert id="replace">
+    <insert id="replace" parameterType="java.util.List">
         REPLACE INTO PAY_BATCH_CHECKPATHDTL
         (WORKDATE, MSGID, BATCHID,  FILENAME, DTLBIZTIME, MSGTYPE, DTLMSGID, INSTGDRCTPTY,
         DBITPARTY, CRDTPARTY, CCY, AMOUNT, DTLBIZSTATUS, DTLDESC, PAYEENAME, PAYEEACCOUNT, PAYEEWALLETID,
         PAYERACCOUNT, OGNLMSGTYPE, OGNLMSGID, CHECKSTATUS, LASTUPDATE, LASTUPTIME)
-        VALUES(#{workdate}, #{msgId}, #{batchId}, #{fileName}, #{dtlBizTime}, #{msgType},
-        #{dtlMsgId}, #{instgDrctPty}, #{dBITParty}, #{cRDTParty}, #{ccy}, #{amount}, #{dtlBizStatus},
-        #{dtlDesc}, #{payeeName}, #{payeeAccount}, #{payeeWalletId}, #{payerAccount}, #{ognlMsgType},
-        #{ognlMsgId}, #{checkStatus}, #{lastUpDate}, #{lastUpTime})
+        VALUES
+        <foreach collection="list" item="item" index= "index" separator =",">
+            (
+            #{item.workdate},
+            #{item.msgId},
+            #{item.batchId},
+            #{item.fileName},
+            #{item.dtlBizTime},
+            #{item.msgType},
+            #{item.dtlMsgId},
+            #{item.instgDrctPty},
+            #{item.dBITParty},
+            #{item.cRDTParty},
+            #{item.ccy},
+            #{item.amount},
+            #{item.dtlBizStatus},
+            #{item.dtlDesc},
+            #{item.payeeName},
+            #{item.payeeAccount},
+            #{item.payeeWalletId},
+            #{item.payerAccount},
+            #{item.ognlMsgType},
+            #{item.ognlMsgId},
+            #{item.checkStatus},
+            #{item.lastUpDate},
+            #{item.lastUpTime}
+            )
+        </foreach>
     </insert>
 
     <!-- 查询通道对账明细表 -->

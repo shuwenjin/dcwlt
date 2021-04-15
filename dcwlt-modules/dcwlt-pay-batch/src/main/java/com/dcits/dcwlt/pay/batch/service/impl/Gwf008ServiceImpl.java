@@ -3,6 +3,7 @@ package com.dcits.dcwlt.pay.batch.service.impl;
 import com.alibaba.fastjson.JSONObject;
 
 import com.dcits.dcwlt.common.pay.constant.BusiConst;
+import com.dcits.dcwlt.common.pay.constant.FileConst;
 import com.dcits.dcwlt.common.pay.enums.DtlFileProcStatusEnum;
 import com.dcits.dcwlt.common.pay.enums.SettleTaskErrorEnum;
 import com.dcits.dcwlt.common.pay.exception.SettleTaskException;
@@ -11,11 +12,15 @@ import com.dcits.dcwlt.pay.api.domain.dcep.gwf008.*;
 import com.dcits.dcwlt.pay.api.model.DtlFileInfDO;
 import com.dcits.dcwlt.pay.batch.service.IDtlFileInfoBatchService;
 import com.dcits.dcwlt.pay.batch.service.IGwf008Service;
+import com.dcits.dcwlt.pay.batch.sftp.service.SftpService;
+import com.dcits.dcwlt.common.pay.util.FileUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import java.io.File;
 import java.util.List;
 
 /**
@@ -32,6 +37,11 @@ public class Gwf008ServiceImpl implements IGwf008Service {
     @Autowired
     private IDtlFileInfoBatchService dtlFileInfoBatchService;
 
+    @Value("${sftp.client.localHome}")
+    private String localHome;
+
+    @Autowired
+    private SftpService sftpService;
     /**
      * 初始文件下载申请报文
      *
@@ -110,9 +120,29 @@ public class Gwf008ServiceImpl implements IGwf008Service {
     private CommonRspDTO<Gwf008RspDTO> sendReq(CommonReqDTO commonReqDTO) {
         logger.info("开始发送文件下载申请请求到开放平台， 请求发送参数{}", commonReqDTO);
         //String rsp = RpcHttpJsonUtil.executeExt(BusiConst.SERVER_CODE_GWF008, JsonUtil.toJSONString(commonReqDTO));
-        String rsp ="";
+        //String rsp ="";
+        Gwf008ReqDTO gwf008ReqDTO = (Gwf008ReqDTO)commonReqDTO.getBody();
+        String srcFileName = gwf008ReqDTO.getFileName() + ".sec";
+        String srcFilePath = gwf008ReqDTO.getFilePath();
+        String filePath = srcFilePath.substring(srcFilePath.indexOf("/"));
+        String localPath = localHome + filePath;
+        try {
+            File file = sftpService.downloadFile(filePath + srcFileName);
+            File targetFile = new File(localPath + gwf008ReqDTO.getFileName());
+            FileUtil.copyFile(file, targetFile, true);
+        } catch (Exception e) {
+            JSONObject jsonObject = new JSONObject();
+            jsonObject.put("errorCode", "000001");
+            jsonObject.put("errorMsg", e.getMessage());
+            return jsonToDCEPRsqDTO(jsonObject);
+        }
 
-        JSONObject jsonObject = JSONObject.parseObject(rsp);
+        JSONObject jsonBodyObject = new JSONObject();
+        jsonBodyObject.put("errorCode", "000000");
+        jsonBodyObject.put("fileName", gwf008ReqDTO.getFileName());
+        jsonBodyObject.put("filePath", localPath);
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("body", jsonBodyObject);
 
         return jsonToDCEPRsqDTO(jsonObject);
     }
@@ -139,7 +169,10 @@ public class Gwf008ServiceImpl implements IGwf008Service {
             //判断是否收到成功响应码，成功响应更新库
             dtlFileInfDO.setLastUpTime(DateUtil.getDefaultTime());
             dtlFileInfDO.setLastUpDate(DateUtil.getDefaultDate());
-            dtlFileInfDO.setFileProcStatus(DtlFileProcStatusEnum.APLY.getCode());
+            dtlFileInfDO.setDestFilePath(gwf008RspDTO.getFilePath());
+            dtlFileInfDO.setLocalFilePath(gwf008RspDTO.getFilePath() + gwf008RspDTO.getFileName());
+            //dtlFileInfDO.setFileProcStatus(DtlFileProcStatusEnum.APLY.getCode());
+            dtlFileInfDO.setFileProcStatus(DtlFileProcStatusEnum.MOVE.getCode());
 
             //调用数据库更新操作
             int successNum = dtlFileInfoBatchService.updateDtlFileInfo(dtlFileInfDO);

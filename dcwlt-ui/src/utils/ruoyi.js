@@ -164,3 +164,15 @@ export function tansParams(params) {
 	})
 	return result
 }
+
+/**
+ * 数据库中金额单位是分，需要转换成圆
+ * @param {*} number 
+ */
+export function parseMoney(number) {
+	if (isNaN(number)) {
+		return null
+	} else {
+		return (number / 100).toFixed(2);
+	}
+}
