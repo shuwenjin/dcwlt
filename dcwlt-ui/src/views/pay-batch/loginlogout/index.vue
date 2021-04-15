@@ -66,7 +66,40 @@
           v-hasPermi="['batch:nonf:remove']"
         >删除</el-button>
       </el-col>-->
+
+
       <el-col :span="1.5">
+
+    <!--    <el-button
+            type="danger"
+            plain
+            icon="el-icon-delete"
+            size="mini"
+            :disabled="multiple"
+            @click="handleDelete"
+            v-hasPermi="['batch:nonf:remove']"
+          >删除</el-button>
+        </el-col> -->
+
+        <el-button
+          type="warning"
+          plain
+          icon="el-icon-edit"
+          size="mini"
+          @click="handleLogin"
+          v-hasPermi="['batch:nonf:loginin']"
+        >登入</el-button>
+
+        <el-button
+          type="warning"
+          plain
+          icon="el-icon-edit"
+          size="mini"
+          @click="handleLoginout"
+          v-hasPermi="['batch:nonf:loginout']"
+        >登出</el-button>
+
+
         <el-button
           type="warning"
           plain
@@ -145,7 +178,7 @@
 </template>
 
 <script>
-import { listNonf, getNonf, delNonf, addNonf, updateNonf } from "@/api/pay-batch/loginlogout";
+import { listNonf, getNonf, delNonf, addNonf, updateNonf,handerLogin,handerLoginout } from "@/api/pay-batch/loginlogout";
 
 export default {
   name: "Nonf",
@@ -327,6 +360,36 @@ export default {
         }).then(() => {
           this.getList();
           this.msgSuccess("删除成功");
+        })
+    },
+
+
+    /** 登入按钮操作 */
+    handleLogin() {
+      const msgIds ="11" ;//row.msgId || this.ids;
+      this.$confirm('是否登入', "警告", {
+          confirmButtonText: "确定",
+          cancelButtonText: "取消",
+          type: "warning"
+        }).then(function() {
+          return handerLogin(msgIds);
+        }).then(() => {
+          this.msgSuccess("登入成功");
+        })
+    },
+
+    /** 登出按钮操作 */
+    handleLoginout() {
+      const msgIds = "11";
+      //row.msgId || this.ids;
+      this.$confirm('是否登出', "警告", {
+          confirmButtonText: "确定",
+          cancelButtonText: "取消",
+          type: "warning"
+        }).then(function() {
+          return handerLoginout(msgIds);
+        }).then(() => {
+          this.msgSuccess("登出成功");
         })
     },
     /** 导出按钮操作 */
