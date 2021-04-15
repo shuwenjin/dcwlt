@@ -151,7 +151,7 @@
 <el-table-column label="业务拒绝信息" align="center" prop="rejectinfo" v-if="columns[13].visible" :show-overflow-tooltip="true"/>
 <el-table-column label="柜员号" align="center" prop="tlrno" v-if="columns[14].visible" :show-overflow-tooltip="true"/>
 <el-table-column label="备注" align="center" prop="remark" v-if="columns[15].visible" :show-overflow-tooltip="true"/>
-<el-table-column label="信息内容" align="center" prop="messagecontext" v-if="columns[16].visible" :show-overflow-tooltip="true"/>
+<el-table-column label="信息内容" align="center" prop="messageContext" v-if="columns[16].visible" :show-overflow-tooltip="true"/>
 <el-table-column label="最后更新日期" align="center" prop="lastupdate" v-if="columns[17].visible" :show-overflow-tooltip="true"/>
 <el-table-column label="最后更新时间" align="center" prop="lastuptime"v-if="columns[18].visible" :show-overflow-tooltip="true"/>
 
@@ -217,8 +217,8 @@
 
 
       <el-col :span="24">
-        <el-form-item label="消息内容" prop="messagecontext">
-          <el-input type="textarea" :rows="2" v-model.trim="form.messagecontext" placeholder="请输入消息内容" />
+        <el-form-item label="消息内容" prop="messageContext">
+          <el-input type="textarea" :rows="2" v-model.trim="form.messageContext" placeholder="请输入消息内容" />
         </el-form-item>
       </el-col>
       </el-row>
@@ -373,7 +373,7 @@
   rejectinfo: null,
   tlrno: null,
   remark: null,
-  messagecontext: null,
+  messageContext: null,
   lastupdate: null,
   lastuptime: null
   };
