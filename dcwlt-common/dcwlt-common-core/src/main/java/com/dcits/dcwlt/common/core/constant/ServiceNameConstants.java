@@ -28,7 +28,7 @@ public class ServiceNameConstants
     public static final String PAY_BATCH_SERVICE = "dcwlt-pay-batch";
 
     /**
-     * 接出挡板serviceid
+     * 接出核心挡板serviceid
      */
     public static final String CORE_PATH_SERVICE = "http://10.7.24.24:9205";
 }
