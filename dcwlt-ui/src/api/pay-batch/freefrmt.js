@@ -9,6 +9,27 @@ export function listNonf(query) {
   })
 }
 
+
+// 查询机构编码列表
+export function queryPartyList() {
+  return request({
+    url: '/pay-batch/party/list',
+    method: 'get'
+   // params: query
+  })
+}
+
+
+// 新增定时任务调度
+export function addNonf(data) {
+  console.info(data);
+  return request({
+    url: '/pay-batch/freefrmt/sendFreeFrmt',
+    method: 'post',
+    data: data
+  })
+}
+
 // 查询自由格式详细
 export function getNonf(msgid) {
   return request({

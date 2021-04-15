@@ -17,3 +17,20 @@ export function getNonf(msgid) {
   })
 }
 
+// 登入
+export function handerLogin(msgid) {
+  console.info("123123");
+  return request({
+    url: '/pay-batch/login/login' + msgid,
+    method: 'get'
+  })
+}
+
+
+// 登出
+export function handerLoginout(msgid) {
+  return request({
+    url: '/pay-batch/login/loginout' + msgid,
+    method: 'get'
+  })
+}

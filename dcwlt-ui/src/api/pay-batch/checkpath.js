@@ -17,3 +17,20 @@ export function getCheckpath(paydate) {
   })
 }
 
+//send801
+export function send801(data){
+  return request({
+    url:'/pay-batch/checkpath/executeSend801',
+    method: 'post',
+    params: data
+  })
+ }
+
+  //send801
+  export function executeReconciliation(data){
+    return request({
+      url:'/pay-batch/checkpath/reconciliation',
+      method: 'post',
+      params: data
+    })
+}
