@@ -28,6 +28,7 @@ import com.dcits.dcwlt.pay.online.flow.builder.EcnyTradeContext;
 import com.dcits.dcwlt.pay.online.flow.builder.EcnyTradeFlowBuilder;
 import com.dcits.dcwlt.pay.online.service.IPartyInfoservice;
 import com.dcits.dcwlt.pay.online.service.IPayTransDtlNonfService;
+import com.dcits.dcwlt.pay.online.service.impl.DcepSendService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -69,6 +70,8 @@ public class Login933STradeFlow {
     IGenerateCodeService generateCodeService;
     @Autowired
     private DcepService dcepService;
+    @Autowired
+    private DcepSendService dcepSendService;
 
     @Bean(name = LOGIN_TRADE_FLOW)
     public TradeFlow payConvertTradeFlow() {
@@ -208,8 +211,8 @@ public class Login933STradeFlow {
         logger.info("登录/退出交易请求发送.");
         DCEPReqDTO dcepReqDTO = (DCEPReqDTO) EcnyTradeContext.getTempContext(tradeContext).get(KEY_DCEP_LOGIN_REQ);
         //通过金融开放平台 --》互联互通
-       // JSONObject jsonObject = dcepSendService.sendDcep(dcepReqDTO);
-        JSONObject jsonObject = dcepService.receive902From933(dcepReqDTO);
+        JSONObject jsonObject = dcepSendService.sendDcep(dcepReqDTO);
+        //JSONObject jsonObject = dcepService.receive902From933(dcepReqDTO);
         EcnyTradeContext.getTempContext(tradeContext).put(KEY_DCEP_LOGIN_RSP, jsonObject);
     }
 
