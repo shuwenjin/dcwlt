@@ -1,0 +1,8 @@
+server:
+  port: 8008
+
+gateway:
+  server-addr: http://localhost:8000/dcep/dcep/online
+
+decp:
+  server-addr: http://localhost:8888/common
