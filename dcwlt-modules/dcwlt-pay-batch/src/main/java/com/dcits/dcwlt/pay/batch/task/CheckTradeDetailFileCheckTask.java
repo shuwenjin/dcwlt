@@ -114,10 +114,11 @@ public class CheckTradeDetailFileCheckTask implements ISettleTask {
                 moved += fixMove;
                 logger.info("明细对账文件检查移动兜底执行完毕，修复移动{}条", fixMove);
             }
+
             //兜底检查结束后依旧存在没有移动的文件， 抛出异常，该任务需要下次再次拉起
             if (moved != dtlFileInfDOS.size()) {
-                logger.warn("对账明细文件修复检查执行完毕，任然有{}条未完成移动的文件", dtlFileInfDOS.size() - moved);
-                throw new SettleTaskException(SettleTaskErrorEnum.BC0102.getCode(), SettleTaskErrorEnum.BC0102.getDesc());
+                //logger.warn("对账明细文件修复检查执行完毕，任然有{}条未完成移动的文件", dtlFileInfDOS.size() - moved);
+                //throw new SettleTaskException(SettleTaskErrorEnum.BC0102.getCode(), SettleTaskErrorEnum.BC0102.getDesc());
             }
         }
     }

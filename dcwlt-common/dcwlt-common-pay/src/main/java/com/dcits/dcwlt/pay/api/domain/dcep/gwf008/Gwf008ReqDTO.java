@@ -126,7 +126,7 @@ public class Gwf008ReqDTO extends CommonReqBody {
 
     @Override
     public String toString() {
-        return "Gwf003ReqDTO{" +
+        return "Gwf008ReqDTO{" +
                 "merId='" + merId + '\'' +
                 ", appId='" + appId + '\'' +
                 ", srcMerId='" + srcMerId + '\'' +
@@ -136,7 +136,7 @@ public class Gwf008ReqDTO extends CommonReqBody {
                 ", filePath='" + filePath + '\'' +
                 ", transDate='" + transDate + '\'' +
                 ", overWrite='" + overWrite + '\'' +
-                ", xChangeKey='" + exChangeKey + '\'' +
+                ", exChangeKey='" + exChangeKey + '\'' +
                 '}';
     }
 }

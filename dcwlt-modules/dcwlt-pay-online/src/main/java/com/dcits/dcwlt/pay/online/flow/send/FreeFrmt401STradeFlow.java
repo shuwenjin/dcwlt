@@ -39,6 +39,7 @@ import com.dcits.dcwlt.pay.online.flow.builder.EcnyTradeFlowBuilder;
 import com.dcits.dcwlt.pay.online.mapper.MonitorMapper;
 import com.dcits.dcwlt.pay.online.service.IAuthInfoService;
 import com.dcits.dcwlt.pay.online.service.IPartyService;
+import com.dcits.dcwlt.pay.online.service.impl.DcepSendService;
 import com.dcits.dcwlt.pay.online.service.impl.FreeFormatServiceimpl;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -81,6 +82,9 @@ public class    FreeFrmt401STradeFlow {
 
     @Autowired
     private IPartyService partyService;
+
+    @Autowired
+    private DcepSendService dcepSendService;
 
     //@Autowired
     //private DcepSendService dcepSendService;
@@ -201,8 +205,8 @@ public class    FreeFrmt401STradeFlow {
     public void sendReqMsg(TradeContext<?, ?> context) {
         DCEPReqDTO<FreeFrmtDTO> dcepReqDTO = (DCEPReqDTO<FreeFrmtDTO>) EcnyTradeContext.getTempContext(context).get("dcepReqDTO");
         //发送请求报文,接收响应 TODO 互联互通返回假数据
-        //JSONObject rspObj = dcepSendService.sendDcep(dcepReqDTO);
-        JSONObject rspObj = dcepService.receive902From401(dcepReqDTO);
+        JSONObject rspObj = dcepSendService.sendDcep(dcepReqDTO);
+        //JSONObject rspObj = dcepService.receive902From401(dcepReqDTO);
         EcnyTradeContext.getTempContext(context).put("rspObj", rspObj);
     }
 
