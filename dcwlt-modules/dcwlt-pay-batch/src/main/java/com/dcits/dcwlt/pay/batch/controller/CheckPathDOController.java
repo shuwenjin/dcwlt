@@ -33,8 +33,11 @@ import com.dcits.dcwlt.common.core.web.page.TableDataInfo;
 @RequestMapping("/checkpath")
 public class CheckPathDOController extends BaseController
 {
+
     @Autowired
     private ICheckPathDOService checkPathDOService;
+
+
 
     /**
      * 查询对账汇总列表
@@ -70,5 +73,24 @@ public class CheckPathDOController extends BaseController
     {
         return AjaxResult.success(checkPathDOService.selectCheckPathDOById(paydate));
     }
+
+    /**
+     * 发送801 手动差错
+     * @param checkPathDO
+     * @return
+     */
+    @PostMapping(value = "/executeSend801")
+    public AjaxResult executeSend801(CheckPathDO checkPathDO){
+          boolean checkResult=checkPathDOService.execute801(checkPathDO);
+        if (checkResult) {
+            return AjaxResult.success("手动差错成功");
+        } else {
+            return AjaxResult.error("手动差错失败");
+        }
+    }
+
+
+
+
 
 }

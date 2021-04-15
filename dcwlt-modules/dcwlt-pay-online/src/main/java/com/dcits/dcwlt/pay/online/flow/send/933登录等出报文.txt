@@ -1,3 +1,5 @@
+
+//参数有问题
 {
 	"ecnyHead": {
 		"busiChnl": "1111",
@@ -13,4 +15,29 @@
 		"opterationType": "151",
 		"tlrNo": "11"
 	}
+}
+
+
+
+
+{
+	"ecnyHead": {
+		"busiChnl": "1111",
+		"busiChnl2": "2222",
+		"zoneno": "01",
+		"brno": "01234",
+		"tellerno": "111",
+		"origChnl": "11",
+		"origChnl2": "22",
+		"origChnlDtl": "2"
+	},
+	"body": {
+		"opterationType": "OT01",
+		"tlrNo": "11"
+	},
+      "head": {
+    "tranDate": "20210317",
+    "tranTime": "103524",
+    "seqNo": "20210113000122532910308590900000"
+  }
 }
