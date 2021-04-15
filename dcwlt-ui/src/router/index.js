@@ -119,6 +119,19 @@ export const constantRoutes = [
     ]
   },
   {
+    path: '/pay',
+    component: Layout,
+    hidden: true,
+    children: [
+      {
+        path: 'checkpathdtl',
+        component: (resolve) => require(['@/views/pay-batch/checkpath/checkpathdtl'], resolve),
+        name: 'Checkpathdtl',
+        meta: { title: '对账明细' }
+      }
+    ]
+  },
+  {
     path: '/gen',
     component: Layout,
     hidden: true,

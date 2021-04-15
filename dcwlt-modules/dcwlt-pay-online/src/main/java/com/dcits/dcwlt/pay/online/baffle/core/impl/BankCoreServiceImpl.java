@@ -10,15 +10,19 @@ import com.dcits.dcwlt.common.pay.channel.bankcore.dto.bankcore998889.BankCore99
 import com.dcits.dcwlt.common.pay.constant.Constant;
 import com.dcits.dcwlt.common.pay.util.APPUtil;
 import com.dcits.dcwlt.pay.online.baffle.core.IBankCoreService;
-import com.dcits.dcwlt.pay.online.service.CoreServiceSend;
+//import com.dcits.dcwlt.pay.online.service.CoreServiceSend;
+import com.dcits.dcwlt.pay.online.service.impl.DcepSendService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
 public class BankCoreServiceImpl implements IBankCoreService {
 
+//    @Autowired
+//    private CoreServiceSend coreServiceSend;
+
     @Autowired
-    private CoreServiceSend coreServiceSend;
+    DcepSendService dcepSendService;
     /**
      * 回查核心状态
      *
@@ -64,7 +68,8 @@ public class BankCoreServiceImpl implements IBankCoreService {
 
         //通过调用核心服务测试挡板返回
         String trid="996666";
-        JSONObject RESULT=coreServiceSend.result(trid);
+//        JSONObject RESULT=coreServiceSend.result(trid);
+        JSONObject RESULT=dcepSendService.getNonce(trid);
         BankCore996666Rsp bankCore996666Rsp =JSONObject.parseObject(RESULT.toString(),BankCore996666Rsp.class);
 
         // 后续补充检查

@@ -1,6 +1,8 @@
 package com.dcits.dcwlt.pay.batch.service;
 
+import com.dcits.dcwlt.common.core.web.domain.AjaxResult;
 import com.dcits.dcwlt.pay.api.model.CheckPathDO;
+import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.List;
 
@@ -29,4 +31,12 @@ public interface ICheckPathDOService
      */
     public List<CheckPathDO> selectCheckPathDOList(CheckPathDO checkPathDO);
 
+    /**
+     * 执行801手动差错
+     * @param checkPathDO
+     * @return AjaxResult
+     */
+    boolean execute801(CheckPathDO checkPathDO);
+
+    boolean reconciliation(CheckPathDO checkPathDO);
 }

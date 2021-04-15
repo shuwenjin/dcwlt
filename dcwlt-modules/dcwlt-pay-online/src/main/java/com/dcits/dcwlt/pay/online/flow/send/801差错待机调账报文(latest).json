@@ -1,0 +1,22 @@
+{
+  "ecnyHead": {
+    "busiChnl": "1111",
+    "busiChnl2": "2222",
+    "zoneno": "01",
+    "brno": "01234",
+    "tellerno": "111",
+    "origChnl": "11",
+    "origChnl2": "222",
+    "origChnlDtl": "22"
+  },
+  "body": {
+    "instdDrctPty": "1",
+    "msgContext":"111",
+    "tlrNO":"tlrNO"
+  },
+  "head": {
+    "tranDate": "20210317",
+    "tranTime": "103524",
+    "seqNo": "20210113000122532910308590900000"
+  }
+}

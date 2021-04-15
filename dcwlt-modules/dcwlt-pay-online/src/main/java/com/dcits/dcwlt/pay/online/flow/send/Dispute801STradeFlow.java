@@ -51,6 +51,7 @@ import com.dcits.dcwlt.pay.online.service.IAuthInfoService;
 import com.dcits.dcwlt.pay.online.service.IPartyService;
 import com.dcits.dcwlt.pay.online.service.IPayTransDtlInfoService;
 import com.dcits.dcwlt.pay.online.service.ITxStsQryNetPartyService;
+import com.dcits.dcwlt.pay.online.service.impl.DcepSendService;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -95,6 +96,9 @@ public class Dispute801STradeFlow {
 
     @Autowired
     private ITxStsQryNetPartyService txStsQryNetPartyService;
+
+    @Autowired
+    private DcepSendService dcepSendService;
 
     @Bean(name = DSPT_TRADE_FLOW)
     public TradeFlow dsptTradeFlow() {
@@ -372,8 +376,8 @@ public class Dispute801STradeFlow {
     private JSONObject sendToDcep(DCEPReqDTO<DsptReqDTO> dsptReqDTODCEPReqDTO, PayTransDtlInfoDO payTransDtlInfoDO) {
         try {
             //TODO 模拟互联互通接收
-            //return dcepSendService.sendDcep(dsptReqDTODCEPReqDTO);
-            return dcepService.receive802From801(dsptReqDTODCEPReqDTO);
+            return dcepSendService.sendDcep(dsptReqDTODCEPReqDTO);
+            //return dcepService.receive802From801(dsptReqDTODCEPReqDTO);
         } catch (Exception e) {
             logger.error("发送801到互联互通请求失败：{}-{}", e.getMessage(), e);
             // 发送互联互通交易状态查询

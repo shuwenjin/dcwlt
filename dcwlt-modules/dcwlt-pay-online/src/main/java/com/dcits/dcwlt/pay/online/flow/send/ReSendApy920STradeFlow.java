@@ -24,6 +24,7 @@ import com.dcits.dcwlt.pay.api.mq.event.exception.EcnyTransException;
 import com.dcits.dcwlt.pay.online.flow.builder.EcnyTradeContext;
 import com.dcits.dcwlt.pay.online.flow.builder.EcnyTradeFlowBuilder;
 import com.dcits.dcwlt.pay.online.mapper.PayTransDtlNonfMapper;
+import com.dcits.dcwlt.pay.online.service.impl.DcepSendService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
@@ -72,7 +73,10 @@ public class ReSendApy920STradeFlow {
 //    private ECNYSerNoService ecnySerNoService;
 
     @Autowired
-    private DcepService dcepSendService;
+    private DcepService dcepService;
+
+    @Autowired
+    private DcepSendService dcepSendService;
 
 //    @Autowired
 //    private IPayTransDtlNonfRepository payTransDtlNonfRepository;
@@ -263,8 +267,8 @@ public class ReSendApy920STradeFlow {
         JSONObject rspObj = null;
         try {
             logger.info("请求报文:{}", dcepReqDTO);
-//            rspObj = dcepSendService.sendDcep(dcepReqDTO);
-            rspObj = dcepSendService.receive920(dcepReqDTO);
+            rspObj = dcepSendService.sendDcep(dcepReqDTO);
+            //rspObj = dcepSendService.receive920(dcepReqDTO);
         } catch (Exception e) {
             logger.error("发送重发申请到互联互通请求失败：{}-{}", e.getMessage(), e);
             throw new EcnyTransException(AppConstant.TRXSTATUS_FAILED, EcnyTransError.OTHER_TECH_ERROR);

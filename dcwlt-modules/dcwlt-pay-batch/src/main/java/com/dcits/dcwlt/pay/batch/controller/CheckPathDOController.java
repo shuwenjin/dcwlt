@@ -1,27 +1,20 @@
 package com.dcits.dcwlt.pay.batch.controller;
 
-import java.util.List;
-import java.io.IOException;
-import javax.servlet.http.HttpServletResponse;
-
-import com.dcits.dcwlt.pay.api.model.CheckPathDO;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import com.dcits.dcwlt.common.core.utils.poi.ExcelUtil;
+import com.dcits.dcwlt.common.core.web.controller.BaseController;
+import com.dcits.dcwlt.common.core.web.domain.AjaxResult;
+import com.dcits.dcwlt.common.core.web.page.TableDataInfo;
 import com.dcits.dcwlt.common.log.annotation.Log;
 import com.dcits.dcwlt.common.log.enums.BusinessType;
 import com.dcits.dcwlt.common.security.annotation.PreAuthorize;
+import com.dcits.dcwlt.pay.api.model.CheckPathDO;
 import com.dcits.dcwlt.pay.batch.service.ICheckPathDOService;
-import com.dcits.dcwlt.common.core.web.controller.BaseController;
-import com.dcits.dcwlt.common.core.web.domain.AjaxResult;
-import com.dcits.dcwlt.common.core.utils.poi.ExcelUtil;
-import com.dcits.dcwlt.common.core.web.page.TableDataInfo;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
+
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.util.List;
 
 /**
  * 对账汇总Controller
@@ -33,8 +26,11 @@ import com.dcits.dcwlt.common.core.web.page.TableDataInfo;
 @RequestMapping("/checkpath")
 public class CheckPathDOController extends BaseController
 {
+
     @Autowired
     private ICheckPathDOService checkPathDOService;
+
+
 
     /**
      * 查询对账汇总列表
@@ -70,5 +66,46 @@ public class CheckPathDOController extends BaseController
     {
         return AjaxResult.success(checkPathDOService.selectCheckPathDOById(paydate));
     }
+
+    /**
+     * 发送801 手动差错
+     * @param checkPathDO
+     * @return
+     */
+    @PostMapping(value = "/executeSend801")
+    public AjaxResult executeSend801(CheckPathDO checkPathDO){
+          boolean checkResult=checkPathDOService.execute801(checkPathDO);
+        if (checkResult) {
+            return AjaxResult.success("手动差错成功");
+        } else {
+            return AjaxResult.error("手动差错失败");
+        }
+    }
+
+
+    /**
+     * 重新对账
+     * @param checkPathDO
+     * @return
+     */
+    @PostMapping(value = "/reconciliation")
+    public AjaxResult reconciliation (CheckPathDO checkPathDO){
+        boolean checkResult=checkPathDOService.reconciliation(checkPathDO);
+        if (checkResult) {
+            return AjaxResult.success("重新对账成功");
+        } else {
+            return AjaxResult.error("重新对账失败");
+        }
+    }
+
+
+
+
+
+
+
+
+
+
 
 }
