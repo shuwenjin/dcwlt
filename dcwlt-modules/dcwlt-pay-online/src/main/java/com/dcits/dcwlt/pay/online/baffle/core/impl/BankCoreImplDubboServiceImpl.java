@@ -29,8 +29,8 @@ import com.dcits.dcwlt.common.pay.util.DateUtil;
 import com.dcits.dcwlt.common.pay.util.IOCheckUtil;
 import com.dcits.dcwlt.pay.api.model.CoreTradeTypeDO;
 import com.dcits.dcwlt.pay.online.baffle.dcep.impl.BankCoreDubboServiceImpl;
-import com.dcits.dcwlt.pay.online.service.CoreServiceSend;
 import com.dcits.dcwlt.pay.online.service.impl.CoreTradeTypeRepository;
+import com.dcits.dcwlt.pay.online.service.impl.DcepSendService;
 import com.dcits.dcwlt.pay.online.service.impl.HostEngCfgRepository;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -64,9 +64,10 @@ public class BankCoreImplDubboServiceImpl {
     @Autowired
     private HostEngCfgRepository hostEngCfgRepository;
 
+//    @Autowired
+//    private CoreServiceSend coreServiceSend;
     @Autowired
-    private CoreServiceSend coreServiceSend;
-
+    private DcepSendService dcepSendService;
     /**
      * 账户查询接口，只传账号
      *
@@ -188,7 +189,8 @@ public class BankCoreImplDubboServiceImpl {
 //        bankCore996666Rsp.setTxnSts("1");
         //通过调用核心服务测试挡板返回
         String trid="996666";
-        JSONObject RESULT=coreServiceSend.result(trid);
+//        JSONObject RESULT=coreServiceSend.result(trid);
+        JSONObject RESULT=dcepSendService.getNonce(trid);
         BankCore996666Rsp bankCore996666Rsp =JSONObject.parseObject(RESULT.toString(),BankCore996666Rsp.class);
 
         rsp.setBody(bankCore996666Rsp);
@@ -248,7 +250,8 @@ public class BankCoreImplDubboServiceImpl {
 
         //通过调用核心服务测试挡板返回
         String trid="998889";
-        JSONObject RESULT=coreServiceSend.result(trid);
+//        JSONObject RESULT=coreServiceSend.result(trid);
+        JSONObject RESULT=dcepSendService.getNonce(trid);
         BankCore998889Rsp bankCore998889Rsp=JSONObject.parseObject(RESULT.toString(),BankCore998889Rsp.class);
         return bankCore998889Rsp;
     }
@@ -363,7 +366,8 @@ public class BankCoreImplDubboServiceImpl {
 //        return dealRspCoreMsg(rspMsg, bankCore351100InnerReq.getReqType());
 
         String trid="351100";
-         JSONObject RESULT=coreServiceSend.result(trid);
+//         JSONObject RESULT=coreServiceSend.result(trid);
+         JSONObject RESULT=dcepSendService.getNonce(trid);
         BankCore351100InnerRsp bankCore351100InnerRsp=JSONObject.parseObject(RESULT.toString(),BankCore351100InnerRsp.class);
         bankCore351100InnerRsp.setCoreReqDate(coreReqDate);
         bankCore351100InnerRsp.setCoreReqSerno(seqNo);

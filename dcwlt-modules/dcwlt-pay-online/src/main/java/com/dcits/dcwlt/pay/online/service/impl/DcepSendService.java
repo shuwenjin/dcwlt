@@ -9,10 +9,12 @@ import org.apache.http.HttpEntity;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.methods.CloseableHttpResponse;
+import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
+import org.apache.http.impl.client.HttpClients;
 import org.apache.http.util.EntityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -39,6 +41,9 @@ public class DcepSendService {
     @Value("${dcepgw.server-addr}")
     private String dcepgw_addr;
 
+    //核心服务器挡板
+    @Value("${core.server}")
+    private String core_server;
     /**
      * 请求互联互通
      *
@@ -101,6 +106,44 @@ public class DcepSendService {
             }
         }
         return rspMsg;
+    }
+
+    /**
+     * get方式请求核心挡板服务
+     * @param username
+     * @return
+     */
+    public JSONObject getNonce(String username) {
+        String url = core_server + username;
+        JSONObject jsonObject = null;
+        String nonce = null;
+        //发送get请求
+        CloseableHttpClient httpClient = HttpClients.createDefault();
+        try {
+            HttpGet httpGet = new HttpGet(url);
+            CloseableHttpResponse response = httpClient.execute(httpGet);
+            try {
+                //获取响应实体
+                HttpEntity entity = response.getEntity();
+                if (entity != null) {
+                    String content = EntityUtils.toString(entity);
+                    jsonObject = JSONObject.parseObject(content);
+                }
+            } finally {
+                response.close();
+            }
+        } catch (IOException ioException) {
+            ioException.printStackTrace();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }  finally {
+            try {
+                httpClient.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        return jsonObject;
     }
 
 }
