@@ -25,7 +25,7 @@ public class AppConstant {
      * 外部系统标识
      */
     public static final String UWAP_SYS_ID                   = "UWAP";       //数字钱包
-    public static final String DCEP_SYS_ID                   = "DCPS";       //互联互通
+    public static final String DCEP_SYS_ID                   = "DCEP";       //互联互通
     public static final String DCPS_SYS_ID                   = "DCPS";       //城银清
 
     /**

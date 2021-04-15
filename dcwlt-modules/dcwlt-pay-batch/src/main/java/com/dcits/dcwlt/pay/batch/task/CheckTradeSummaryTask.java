@@ -56,6 +56,7 @@ public class CheckTradeSummaryTask implements ISettleTask {
     @Override
     public void runTask(SettleTaskExecDO taskExec) throws SettleTaskException {
         logger.info("开始执行汇总对账，对账日期:{},对账批次:{}", taskExec.getSettleDate(), taskExec.getBatchId());
+        /*
         //查询人行的汇总对账数据
         List<CheckPathDO> pathList = checkPathService.select(taskExec.getSettleDate(), taskExec.getBatchId());
         if (pathList == null || pathList.isEmpty()) {
@@ -109,7 +110,7 @@ public class CheckTradeSummaryTask implements ISettleTask {
             		checkPathService.updateStatus(path.getPayDate(), path.getPaySerno(), CheckStatusEnum.SAME.getCode());
             	}
             }
-        }
+        }*/
     }
     
     /**
