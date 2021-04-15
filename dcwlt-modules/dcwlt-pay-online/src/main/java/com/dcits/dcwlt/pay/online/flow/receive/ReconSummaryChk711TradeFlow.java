@@ -40,7 +40,7 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class ReconSummaryChk711TradeFlow {
     private static final Logger logger = LoggerFactory.getLogger(ReconSummaryChk711TradeFlow.class);
-    private static final String SUMMARY_TRADE_FLOW = "ReconSummaryChk711TradeFlow";
+    public static final String SUMMARY_TRADE_FLOW = "ReconSummaryChk711TradeFlow";
     private static final String INSERT_SQL = "对账汇总711报文数据库新增失败";
     @Autowired
     private ReconSummaryChkimpl reconSummaryChkRepository;

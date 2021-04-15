@@ -69,6 +69,17 @@ public class CheckPathDOServiceImpl implements ICheckPathDOService {
         return  checkResult;
     }
 
+    @Override
+    public boolean reconciliation(CheckPathDO checkPathDO) {
+        JSONObject sendData = new JSONObject();
+        String url="http://10.7.91.61:8888/711";
+
+        ResponseEntity<String> responseEntity = restTemplate.getForEntity(url,  String.class);
+
+        logger.info("responseEntity===>{}",responseEntity);
+        return  true;
+    }
+
     /**
      * {
      * "head": {

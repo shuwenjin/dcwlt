@@ -37,4 +37,6 @@ public interface ICheckPathDOService
      * @return AjaxResult
      */
     boolean execute801(CheckPathDO checkPathDO);
+
+    boolean reconciliation(CheckPathDO checkPathDO);
 }
