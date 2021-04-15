@@ -68,13 +68,17 @@
 </el-form>
 
 <el-row :gutter="10" class="mb8">
-<!--  <el-col :span="1.5">-->
-<!--    <el-button-->
-<!--      type="primary"-->
-<!--      plain-->
-<!--      icon="el-icon-plus"-->
-<!--      size="mini"-->
-<!--    @click="handleAdd"-->
+
+
+
+
+<!--  <el-col :span="1.5">
+<!--    <el-button
+<!--      type="primary"
+<!--      plain
+<!--      icon="el-icon-plus"
+<!--      size="mini"
+<!--    @click="handleAdd"
 <!--    v-hasPermi="['system:nonf:add']"-->
 <!--    >新增-->
 <!--  </el-button>-->
@@ -104,6 +108,16 @@
 <!--</el-button>-->
 <!--  </el-col>-->
 <el-col :span="1.5">
+
+  <el-button
+    type="warning"
+    plain
+    icon="el-icon-add"
+    size="mini"
+  @click="handleAdd()"
+  v-hasPermi="['system:nonf:add']"
+  >自由格式添加
+  </el-button>
   <el-button
     type="warning"
     plain
@@ -174,6 +188,40 @@
   <!-- 添加或修改非金融登记簿对话框 -->
 <el-dialog :title="title" :visible.sync="open" width="500px" append-to-body>
   <el-form ref="form" :model="form" :rules="rules" label-width="80px">
+    <el-row>
+
+
+
+ <!--     <el-col :span="24">
+        <el-form-item label="柜员号" prop="tlrNo">
+          <el-input v-model.trim="form.tlrNo" placeholder="请输入柜员号Id" />
+        </el-form-item>
+      </el-col> -->
+
+
+
+     <el-col :span="24">
+       <el-form-item label="接收机构" prop="instdDrctPty">
+         <el-select v-model.trim="form.instdDrctPty" placeholder="请选择接收机构" clearable size="small">
+           <el-option
+             v-for="dict in partList"
+             :key="dict.partyID"
+             :value="dict.partyID"
+            :label="dict.partyID"
+           >{{dict.partyID}}-{{dict.partyName}}</el-option>
+         </el-select>
+       </el-form-item>
+       </el-col>
+
+
+
+
+      <el-col :span="24">
+        <el-form-item label="消息内容" prop="messagecontext">
+          <el-input type="textarea" :rows="2" v-model.trim="form.messagecontext" placeholder="请输入消息内容" />
+        </el-form-item>
+      </el-col>
+      </el-row>
   </el-form>
   <div slot="footer" class="dialog-footer">
     <el-button type="primary"
@@ -188,7 +236,7 @@
   </template>
 
 <script>
-  import { listNonf, getNonf, delNonf, addNonf, updateNonf,exportNonf } from "@/api/pay-batch/freefrmt";
+  import { listNonf, getNonf, delNonf, addNonf, updateNonf,exportNonf,queryPartyList } from "@/api/pay-batch/freefrmt";
 
   export default {
   name: "Nonf",
@@ -210,6 +258,9 @@
   total: 0,
   // 非金融登记簿表格数据
   nonfList: [],
+
+  partList: [],
+
   // 弹出层标题
   title: "",
   // 是否显示弹出层
@@ -260,11 +311,19 @@
   },
   created() {
   this.getList();
+  this.getPartyList();
   this.getDicts("drct").then(response => {
   this.drctOptions = response.data;
   });
+
+  // this.queryPartyList().then(response=>{
+  //   this.retryStatusOptions=response.data.rows;
+  // });
+
   },
   methods: {
+
+
   /** 查询非金融登记簿列表 */
   getList() {
   this.loading = true;
@@ -274,6 +333,18 @@
   this.loading = false;
   });
   },
+
+
+  getPartyList(){
+
+ //   this.loading=true;
+    queryPartyList().then(response=>{
+
+    this.partList=response.rows;
+ //   console.log("partList===>"+partList);
+    });
+  },
+
   // 报文方向字典翻译
   drctFormat(row, column) {
   return this.selectDictLabel(this.drctOptions, row.drct);
@@ -328,7 +399,7 @@
   handleAdd() {
   this.reset();
   this.open = true;
-  this.title = "添加非金融登记簿";
+  this.title = "添加自由格式报文";
   },
   /** 修改按钮操作 */
   handleUpdate(row) {

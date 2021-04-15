@@ -98,6 +98,23 @@
       <el-table-column label="对账标识" align="center" prop="checkStatus" :formatter="checkstatusFormat" v-if="columns[26].visible" />
       <el-table-column label="最后更新日期" align="center" prop="lastUpDate" v-if="columns[27].visible" />
       <el-table-column label="最后更新时间" align="center" prop="lastUpTime" v-if="columns[28].visible" />
+      <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
+        <template slot-scope="scope">
+          <el-button
+            size="mini"
+            type="primary" plain
+
+            @click="executeSend801(scope.row)"
+
+          >手动差错</el-button>
+         <el-button
+            size="mini"
+            type="primary" plain
+           @click="executereconciliation(scope.row)"
+
+          >重新对账</el-button>
+        </template>
+      </el-table-column>
     </el-table>
 
     <pagination
@@ -121,7 +138,7 @@
 </template>
 
 <script>
-import { listCheckpath, getCheckpath, delCheckpath, addCheckpath, updateCheckpath } from "@/api/pay-batch/checkpath";
+import { listCheckpath, getCheckpath, delCheckpath, addCheckpath, updateCheckpath,send801,executeReconciliation } from "@/api/pay-batch/checkpath";
 
 export default {
   name: "Checkpath",
@@ -341,7 +358,21 @@ export default {
       this.download('pay-batch/checkpath/export', {
         ...this.queryParams
       }, `pay-batch_checkpath.xlsx`)
-    }
+    },
+
+    executeSend801(row){
+      console.log("row==="+row)
+      send801(row).then(response=>{
+        this.msgSuccess("手动差错成功");
+      });
+    },
+
+    executereconciliation(row){
+      console.log("row==="+row)
+      executeReconciliation(row).then(response=>{
+        this.msgSuccess("重新对账成功");
+      });
+    },
   }
 };
 </script>

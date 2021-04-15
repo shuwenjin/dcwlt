@@ -22,6 +22,10 @@ import Pagination from "@/components/Pagination";
 // 自定义表格工具扩展
 import RightToolbar from "@/components/RightToolbar"
 
+
+import Axios from "axios"					//axios接口引用
+Vue.prototype.$axios=Axios	
+
 // 全局方法挂载
 Vue.prototype.getDicts = getDicts
 Vue.prototype.getConfigKey = getConfigKey
