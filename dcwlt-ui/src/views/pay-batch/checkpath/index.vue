@@ -177,6 +177,7 @@
               :value="dict.dictValue"
             />
           </el-select>
+        </el-form-item>  
 
       <el-form-item label="平台日期" prop="paydate">
         <el-input v-model="form.paydate" placeholder="请输入平台日期" />
@@ -199,6 +200,7 @@
             :value="dict.dictValue"
           />
         </el-select>
+      </el-form-item>
 
       <el-form-item label="差错原因说明" prop="paramDesc">
         <el-input type="textarea" rows=2 v-model="form.paramDesc" placeholder="请输入参数描述" />
