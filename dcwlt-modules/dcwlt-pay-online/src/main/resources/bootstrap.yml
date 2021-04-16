@@ -27,5 +27,5 @@ spring:
 dcepgw:
   server-addr: http://localhost:8008/dcepgw/
 core:
-  server: http://10.7.24.24:9205/core/sendBack/
+  server: http://localhost:9205/core/sendBack/
 
