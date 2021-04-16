@@ -23,7 +23,7 @@ public class GatewayController {
         System.out.println(reqmsg);
         try {
             //组包
-            //String msg = DcspMsgUtil.pack(reqmsg);
+            String msg = DcspMsgUtil.pack(reqmsg);
             //发送至城银清
             rspMsg = RestUtil.getRsp(reqmsg, decp_addr);
         } catch (Exception e) {

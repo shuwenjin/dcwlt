@@ -15,6 +15,8 @@ import com.dcits.dcwlt.pay.online.service.ISignInfoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @Repository
 public class SignInfoServiceImpl implements ISignInfoService {
 
@@ -54,5 +56,11 @@ public class SignInfoServiceImpl implements ISignInfoService {
     @Override
     public int updateByWltIdAndAcctId(SignInfoDO signInfoDO) {
         return signInfoMapper.updateByWltIdAndAcctId(signInfoDO);
+    }
+
+
+    @Override
+    public List<SignInfoDO> selectPartSignInfo(SignInfoDO signInfoDO) {
+        return signInfoMapper.selectPartSignInfo(signInfoDO);
     }
 }

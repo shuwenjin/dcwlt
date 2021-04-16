@@ -179,6 +179,53 @@
         </where>
     </select>
 
+
+    <select id="selectPartSignJrn" resultType="com.dcits.dcwlt.pay.api.model.SignJrnDO">
+        SELECT
+        PAYDATE                                   payDate,
+        PAYSERNO                                  paySerNo,
+        PAYTIME                                   payTime,
+        MSGID                                     msgId,
+        INSTGPTY                                  instGpTy,
+        INSTDPTY                                  instDpTy,
+        DIRECT                                    direct,
+        MANAGETYPE                                manageType,
+        SIGNTYPE                                  signType,
+        SIGNNO                                    signNo,
+        MSGSENDCODE                               msgSendCode,
+        MSGVERIFYCODE                             msgVerifyCode,
+        TRXSTATUS                                 trxStatus,
+        TRXRETCODE                                trxRetCode,
+        TRXRETMSG                                 trxRetMsg,
+        RSPMSGID                                  rspMsgId,
+        RSPSTATUS                                 rspStatus,
+        RSPCODE                                   rspCode,
+        RSPMSG                                    rspMsg,
+        ACCTPTYID                                 acctPtyId,
+        ACCTTYPE                                  acctType,
+        ACCTID                                    acctId,
+        ACCTNAME                                  acctName,
+        IDTYPE                                    idType,
+        IDNO                                      idNo,
+        TELEPHONE                                 telephone,
+        WALLETPTYID                               walletPtyId,
+        WALLETID                                  walletId,
+        WALLETTYPE                                walletType,
+        WALLETLEVEL                               walletLevel,
+        LASTUPJRNNO                               lastUpJrnNo,
+        LASTUPDATE                                lastUpDate,
+        LASTUPTIME                                lastUpTime,
+        REMARK                                    remark
+        FROM pay_sign_signinfo_jrn
+        <where>
+            <if test="signNo != null  and signNo != ''"> and SIGNNO = #{signNo}</if>
+            <if test="idNo != null  and idNo != ''"> and IDNO = #{idNo}</if>
+            <if test="walletId != null  and walletId != ''"> and WALLETID = #{walletId}</if>
+            <if test="payDate != null  and payDate != ''"> and PAYDATE = #{payDate}</if>
+            <if test="paySerNo != null  and paySerNo != ''"> and PAYSERNO = #{paySerNo}</if>
+        </where>
+    </select>
+
     <update id="update" parameterType="com.dcits.dcwlt.pay.api.model.SignJrnDO">
         update pay_sign_signinfo_jrn
         <set>

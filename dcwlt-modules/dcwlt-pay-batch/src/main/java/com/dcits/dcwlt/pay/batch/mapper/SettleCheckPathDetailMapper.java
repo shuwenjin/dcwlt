@@ -19,7 +19,8 @@ public interface SettleCheckPathDetailMapper {
 
      int insert(CheckPathDetialDO checkPathDetialDO);
 
-     List<CheckPathDetialDO> selectPathDetail(@Param("workdate")String workdate, @Param("batchId")String batchId);
+     List<CheckPathDetialDO> selectPathDetail(@Param("workdate")String workdate, @Param("batchId")String batchId,@Param("checkstatus")String checkstatus);
+
 
      int insertByBatch(List<CheckPathDetialDO> checkPathDetialDOS);
 
