@@ -30,8 +30,8 @@ public class CheckPathDetailServiceImpl implements ICheckPathDetailService {
     }
 
     @Override
-    public List<CheckPathDetialDO> select(String workdate, String batchId) {
-        return settleCheckPathDetailMapper.selectPathDetail(workdate, batchId);
+    public List<CheckPathDetialDO> select(String workdate, String batchId,String checkstatus) {
+        return settleCheckPathDetailMapper.selectPathDetail(workdate, batchId,checkstatus);
     }
 
     @Override
