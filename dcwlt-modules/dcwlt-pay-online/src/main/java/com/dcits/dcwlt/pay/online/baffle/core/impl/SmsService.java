@@ -1,11 +1,18 @@
 package com.dcits.dcwlt.pay.online.baffle.core.impl;
 
+import com.alibaba.fastjson.JSONObject;
+import com.dcits.dcwlt.common.pay.channel.bankcore.dto.bankcore351100.BankCore351100InnerRsp;
+import com.dcits.dcwlt.common.pay.channel.bankcore.dto.bankcore998889.BankCore998889Rsp;
+import com.dcits.dcwlt.pay.online.service.impl.DcepSendService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Map;
 
 @Service
 public class SmsService {
+    @Autowired
+    private DcepSendService dcepSendService;
     /**
      *
      * @param phoneNum    手机号码
@@ -19,9 +26,20 @@ public class SmsService {
      */
     public boolean sendMsg(String phoneNum, String tempCode, String smsId, String channelCode, String sendBranch, Map<String, String> msgMap, boolean isSync) {
 
-        return true;
+//        return true;
         //todo
 //        return SmsUtils.sendMsg(phoneNum,tempCode,smsId,channelCode,sendBranch,msgMap,isSync);
+
+        //通过核心系统接口发送短信
+        String trid="SMS";
+//      JSONObject RESULT=coreServiceSend.result(trid);
+        JSONObject RESULT=dcepSendService.getNonce(trid);
+        BankCore998889Rsp bankCore998889Rsp=JSONObject.parseObject(RESULT.toString(),BankCore998889Rsp.class);
+        if("000000".equals(bankCore998889Rsp.getErrorCode())){
+            return true;
+        }else{
+            return false;
+        }
     }
 
 
