@@ -32,6 +32,22 @@
         <el-table-column label="对账标识" align="center" prop="checkStatus" v-if="columns[21].visible" />
         <el-table-column label="最后更新日期" align="center" prop="lastUpDate" v-if="columns[22].visible" />
         <el-table-column label="最后更新时间" align="center" prop="lastUpTime" v-if="columns[23].visible" />
+        <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
+          <template slot-scope="scope">
+
+
+            <!--当前状态不是“SAME” 就显示，进行调账-->
+             <el-button
+                size="mini"
+                type="primary" plain
+                 v-bind:disabled="scope.row.checkStatus=='SAME'"
+               @click="executereconciliation(scope.row)"
+
+              >手动差错</el-button>
+
+          </template>
+        </el-table-column>
+
     </el-table>
 
     <pagination

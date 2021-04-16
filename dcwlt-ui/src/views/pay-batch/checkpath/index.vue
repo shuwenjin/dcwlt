@@ -135,19 +135,15 @@
       <el-table-column label="最后更新时间" align="center" prop="lastUpTime" v-if="columns[28].visible" />
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope">
-          <el-button
-            size="mini"
-            type="primary" plain
+        
+          <!--当前状态不是 init 或 eertykzz 就显示-->
+           <el-button
+              size="mini"
+              type="primary" plain
+              v-bind:disabled="scope.row.checkStatus=='INIT' || scope.row.checkStatus!=='eertykzz'"
+              @click="executereconciliation(scope.row)"
+            >重新对账</el-button>
 
-            @click="executeSend801(scope.row)"
-
-          >手动差错</el-button>
-         <el-button
-            size="mini"
-            type="primary" plain
-           @click="executereconciliation(scope.row)"
-
-          >重新对账</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -171,13 +167,13 @@
          <el-select v-model="form.paramType" placeholder="请选择差错类型">
            <!-- <el-option label="请选择字典生成" value="" /> -->
             <el-option
-              v-for="dict in paramTypeOptions"
+              v-for="dict in drOptions"
               :key="dict.dictValue"
               :label="dict.dictLabel"
               :value="dict.dictValue"
             />
           </el-select>
-        </el-form-item>  
+        </el-form-item>
 
       <el-form-item label="平台日期" prop="paydate">
         <el-input v-model="form.paydate" placeholder="请输入平台日期" />
@@ -194,7 +190,7 @@
        <el-select v-model="form.paramType" placeholder="差错贷记调整原因码">
          <!-- <el-option label="请选择字典生成" value="" /> -->
           <el-option
-            v-for="dict in paramTypeOptions"
+            v-for="dict in otOptions"
             :key="dict.dictValue"
             :label="dict.dictLabel"
             :value="dict.dictValue"
@@ -301,12 +297,18 @@ export default {
   },
   created() {
     this.getList();
-    this.getDicts("msgbizstatus").then(response => {
+    this.getDicts("OT").then(response => {
       this.msgbizstatusOptions = response.data;
     });
-    this.getDicts("checkstatus").then(response => {
+    this.getDicts("DR").then(response => {
       this.checkstatusOptions = response.data;
     });
+    // this.getDicts("DR").then(response => {
+    //   this.drOptions = response.data;
+    // });
+    // this.getDicts("OT").then(response => {
+    //   this.otOptions = response.data;
+    // });
   },
   methods: {
     /** 查询对账汇总列表 */
