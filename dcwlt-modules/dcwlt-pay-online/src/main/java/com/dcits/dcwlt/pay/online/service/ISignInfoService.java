@@ -2,6 +2,8 @@ package com.dcits.dcwlt.pay.online.service;
 
 import com.dcits.dcwlt.pay.api.model.SignInfoDO;
 
+import java.util.List;
+
 /**
  * @author
  * @date  2020/12/31
@@ -20,4 +22,5 @@ public interface ISignInfoService {
 
 	int updateByWltIdAndAcctId(SignInfoDO signInfoDO);
 
+	List<SignInfoDO> selectPartSignInfo(SignInfoDO signInfoDO);
 }
