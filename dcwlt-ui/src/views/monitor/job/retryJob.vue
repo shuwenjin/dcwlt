@@ -251,7 +251,7 @@
 import { listJob, getJob, delJob, addJob, updateJob, runJob, changeJobStatus, changeRetryJobStatus } from "@/api/monitor/job";
 
 export default {
-  name: "Job",
+  name: "RetryJob",
   data() {
     return {
       // 遮罩层

@@ -1,4 +1,11 @@
 {
+    "head": {
+      "seqNo": "1",
+      "retCode": "0",
+      "retInfo": "",
+      "tranDate": "20210308",
+      "tranTime": "183056",
+    },
     "Header": {
         "Ver": "01",
         "SndDtTm": "2021-01-13T11:45:54",
