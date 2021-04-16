@@ -135,7 +135,7 @@
       <el-table-column label="最后更新时间" align="center" prop="lastUpTime" v-if="columns[28].visible" />
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope">
-        
+
           <!--当前状态不是 init 或 eertykzz 就显示-->
            <el-button
               size="mini"
@@ -156,57 +156,6 @@
       @pagination="getList"
     />
 
-
-
-    <!-- 添加或修改对账汇总对话框 -->
-    <el-dialog :title="title" :visible.sync="open" width="500px" append-to-body>
-      <el-form ref="form" :model="form" :rules="rules" label-width="80px">
-
-        <el-form-item label="差错类型" prop="paramType">
-        <!--  <el-input v-model="form.paramType" placeholder="请输入参数id" /> -->
-         <el-select v-model="form.paramType" placeholder="请选择差错类型">
-           <!-- <el-option label="请选择字典生成" value="" /> -->
-            <el-option
-              v-for="dict in drOptions"
-              :key="dict.dictValue"
-              :label="dict.dictLabel"
-              :value="dict.dictValue"
-            />
-          </el-select>
-        </el-form-item>
-
-      <el-form-item label="平台日期" prop="paydate">
-        <el-input v-model="form.paydate" placeholder="请输入平台日期" />
-      </el-form-item>
-      <el-form-item label="平台流水" prop="paySerno">
-        <el-input v-model="form.paySerno" placeholder="请输入平台流水" />
-      </el-form-item>
-      <el-form-item label="交易批次号" prop="batchid">
-        <el-input t v-model="form.batchid" placeholder="请输入交易批次" />
-      </el-form-item>
-
-      <el-form-item label="差错贷记调整原因码" prop="paramType">
-      <!--  <el-input v-model="form.paramType" placeholder="请输入参数id" /> -->
-       <el-select v-model="form.paramType" placeholder="差错贷记调整原因码">
-         <!-- <el-option label="请选择字典生成" value="" /> -->
-          <el-option
-            v-for="dict in otOptions"
-            :key="dict.dictValue"
-            :label="dict.dictLabel"
-            :value="dict.dictValue"
-          />
-        </el-select>
-      </el-form-item>
-
-      <el-form-item label="差错原因说明" prop="paramDesc">
-        <el-input type="textarea" rows=2 v-model="form.paramDesc" placeholder="请输入参数描述" />
-      </el-form-item>
-      </el-form>
-      <div slot="footer" class="dialog-footer">
-        <el-button type="primary" @click="submitForm">确 定</el-button>
-        <el-button @click="cancel">取 消</el-button>
-      </div>
-    </el-dialog>
   </div>
 </template>
 
@@ -297,10 +246,10 @@ export default {
   },
   created() {
     this.getList();
-    this.getDicts("OT").then(response => {
+    this.getDicts("msgbizstatus").then(response => {
       this.msgbizstatusOptions = response.data;
     });
-    this.getDicts("DR").then(response => {
+    this.getDicts("checkstatus").then(response => {
       this.checkstatusOptions = response.data;
     });
     // this.getDicts("DR").then(response => {
