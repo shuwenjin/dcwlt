@@ -35,13 +35,14 @@
         <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
           <template slot-scope="scope">
 
-
+            <!--
+            v-bind:disabled="scope.row.checkStatus=='SAME'"
+            -->
             <!--当前状态不是“SAME” 就显示，进行调账-->
              <el-button
                 size="mini"
                 type="primary" plain
-                 v-bind:disabled="scope.row.checkStatus=='SAME'"
-               @click="executereconciliation(scope.row)"
+               @click="handleUpdate(scope.row)"
 
               >手动差错</el-button>
 
@@ -57,11 +58,61 @@
       :limit.sync="queryParams.pageSize"
       @pagination="getList"
     />
+
+
+
+    <!-- 添加或修改对账汇总对话框 -->
+    <el-dialog :title="title" :visible.sync="open" width="650px" append-to-body>
+      <el-form ref="form" :model="form" :rules="rules" size="mini" label-width="80px">
+
+        <el-form-item label="差错类型" prop="operType">
+        <el-select v-model="form.operType" placeholder="请选择差错类型">
+            <el-option
+              v-for="dict in drOptions"
+              :key="dict.dictValue"
+              :label="dict.dictLabel"
+              :value="dict.dictValue"
+            >{{dict.dictValue}}-{{dict.dictLabel}}</el-option>
+          </el-select>
+        </el-form-item>
+
+
+     <el-form-item label="平台日期" prop="workdate">
+        <el-input v-model="form.workdate"  placeholder="请输入平台日期" />
+      </el-form-item>
+      <el-form-item label="平台流水" prop="amount">
+        <el-input v-model="form.amount" placeholder="请输入平台流水" />
+      </el-form-item>
+      <el-form-item label="交易批次号" prop="batchId">
+        <el-input t v-model="form.batchId" placeholder="请输入交易批次" />
+      </el-form-item>
+
+     <el-form-item label="差错贷记调整原因码" size="mini" prop="disputeReasonCode">
+       <el-select v-model="form.disputeReasonCode" placeholder="差错贷记调整原因码">
+
+          <el-option
+            v-for="dict in otOptions"
+            :key="dict.dictValue"
+            :label="dict.dictLabel"
+            :value="dict.dictValue"
+          >{{dict.dictValue}}-{{dict.dictLabel}}</el-option>
+        </el-select>
+      </el-form-item>
+
+    <el-form-item label="差错原因说明" size="mini" prop="disputeReason">
+        <el-input type="textarea" rows=3 v-model="form.disputeReason" placeholder="差错原因说明" />
+      </el-form-item>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button type="primary" @click="submitForm">确 定</el-button>
+        <el-button @click="cancel">取 消</el-button>
+      </div>
+   </el-dialog>
   </div>
 </template>
 
 <script>
-import {listCheckpathdtl} from "@/api/pay-batch/checkpathdtl";
+import {send801,listCheckpathdtl,executereconciliation,querySingle} from "@/api/pay-batch/checkpathdtl";
 
 
 export default {
@@ -76,12 +127,29 @@ export default {
       total: 0,
       // 对账汇总表格数据
       checkpathdtlList: [],
+
+      // 弹出层标题
+      title: "",
+      drOptions:[],
+      otOptions:[],
+      form:{
+        workdate:'',
+        amount:'',
+        batchId:''
+      },
+
+      open: false,
       // 查询参数
       queryParams: {
         pageNum: 1,
         pageSize: 10,
         batchId: null,
         workdate: null,
+      },
+
+      querySingleParamer:{
+        msgId: null,
+        dtlMsgId:null,
       },
       // 列信息
       columns: [
@@ -110,10 +178,25 @@ export default {
         { key: 22, label: '最后更新日期', visible: false },
         { key: 23, label: '最后更新时间', visible: false },
       ],
+
+      // 表单参数
+      form: {},
+      // 表单校验
+      rules: {
+        // paydate: [
+        //   { required: true, message: "平台日期不能为空", trigger: "blur" }
+        // ],
+      }
     };
   },
   created() {
     this.getList();
+    this.getDicts("DR").then(response => {
+      this.drOptions = response.data;
+    });
+    this.getDicts("OT").then(response => {
+      this.otOptions = response.data;
+    });
   },
   methods: {
     /** 查询对账汇总列表 */
@@ -128,6 +211,72 @@ export default {
         this.loading = false;
       });
     },
+
+    /** 手动差错操作 */
+   send801() {
+      this.reset();
+      this.open = true;
+      this.title = "手动差错";
+    },
+
+
+    /** 修改按钮操作 */
+    handleUpdate(row) {
+      this.reset();
+      this.querySingleParamer.msgId = row.msgId;
+
+      this.querySingleParamer.dtlMsgId = row.dtlMsgId;
+      querySingle(this.querySingleParamer).then(response => {
+        this.form = response.data;
+        this.open = true;
+        this.title = "差错处理";
+      });
+    },
+
+    //   /** 手动差错操作 */
+    //   executereconciliation(row){
+    //     console.log("row==="+row)
+    //     executeReconciliation(row).then(response=>{
+    //       this.msgSuccess("手动差错成功");
+    //     });
+    // },
+
+
+
+    /** 提交按钮 */
+    submitForm() {
+
+      console.log(this.form)
+        send801(this.form).then(response => {
+        this.msgSuccess("新增成功");
+        this.open = false;
+        this.getList();
+      });
+    },
+
+
+    // 取消按钮
+    cancel() {
+      this.open = false;
+      this.reset();
+    },
+
+
+    // 表单重置
+    reset() {
+      this.form = {
+        id: null,
+        paramType: null,
+        paramKey: null,
+        paramValue: null,
+        paramDesc: null,
+        paramStatus: 0,
+        createTime: null,
+        updateTime: null
+      };
+      this.resetForm("form");
+    },
+
   }
 };
 </script>
