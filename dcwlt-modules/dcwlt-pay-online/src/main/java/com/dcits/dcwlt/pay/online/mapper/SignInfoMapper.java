@@ -2,6 +2,7 @@ package com.dcits.dcwlt.pay.online.mapper;
 
 import com.dcits.dcwlt.pay.api.model.SignInfoDO;
 import org.mapstruct.Mapper;
+import java.util.List;
 
 @Mapper
 public interface SignInfoMapper {
@@ -15,6 +16,8 @@ public interface SignInfoMapper {
     int updateByWltIdAndAcctId(SignInfoDO signInfoDO);
 
     SignInfoDO selectBySignNo(String signNo);
+
+    List<SignInfoDO> selectPartSignInfo(SignInfoDO signInfoDO);
 }
 
 
