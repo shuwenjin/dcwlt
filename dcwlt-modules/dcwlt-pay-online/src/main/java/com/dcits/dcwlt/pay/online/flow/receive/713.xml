@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/" xmlns:head="http://www.dcep.com/dcep/header/">
+    <soap:Header>
+        <head:Ver>01</head:Ver>
+        <head:SndDtTm>2021-01-08T14:34:43</head:SndDtTm>
+        <head:MsgTp>dcep.713.001.01</head:MsgTp>
+        <!--报文编号-->
+        <head:MsgSN>202101140001713607485979056000000001</head:MsgSN>
+        <!--通讯级标识号-->
+        <head:Sender>G4001011000013</head:Sender>
+        <!-- 发起方运营机构-->
+        <head:Receiver>C1030644021075</head:Receiver>
+        <!-- 接收方运营机构-->
+        <head:SignSN>1</head:SignSN>
+    </soap:Header>
+    <soap:Body>
+        <wstxns1:ClrSummryChk xmlns:wstxns1="http://www.dcep.com/dcep/71300101/">
+            <GrpHdr>
+                <MsgId>20210114000171360748597905600000</MsgId>
+                <CreDtTm>2021-01-08T14:34:43</CreDtTm>
+                <InstgPty>
+                    <InstgDrctPty>G4001011000013</InstgDrctPty>
+                </InstgPty>
+                <InstdPty>
+                    <InstdDrctPty>C1030644021075</InstdDrctPty>
+                </InstdPty>
+                <Rmk>1</Rmk>
+            </GrpHdr>
+            <SummryChkInf>
+                <ClrDt></ClrDt>
+                <ClrCntNb></ClrCntNb>
+                <DbtCntAmt Ccy="CNY">100.00</DbtCntAmt>
+                <CdtCntAmt Ccy="CNY">1000.00</CdtCntAmt>
+                <ClrList>
+                    <ClrInf>
+                        <ClrNetgRnd>1</ClrNetgRnd>
+                        <ClrReptFlg></ClrReptFlg>
+                        <CdtDbtInd></CdtDbtInd>
+                        <ClrAmt Ccy="CNY">800.00</ClrAmt>
+                        <BatchList>
+                            <BatchInf>
+                                <BatchId>2</BatchId>
+                                <CdtDbtInd></CdtDbtInd>
+                                <NetgAmt Ccy="CNY">800.00</NetgAmt>
+                            </BatchInf>
+                        </BatchList>
+                    </ClrInf>
+                </ClrList>
+            </SummryChkInf>
+        </wstxns1:ClrSummryChk>
+    </soap:Body>
+</soap:Envelope>

@@ -1,8 +1,8 @@
 {
-    "ecnyHead": {
+    "Header": {
         "Ver": "01",
         "SndDtTm": "2021-01-13T11:45:54",
-        "MsgTp": "dcep.711.001.01",
+        "MsgTp": "dcep.713.001.01",
         "MsgSN": "202101130001917941057896199000000991",
         "Sender": "G4001011000013",
         "Receiver": "C1030644021075",
@@ -12,7 +12,7 @@
         "busiChnl": "vbss"
     },
     "body": {
-        "msgType": "dcep.711.001.01",
-        "checkDate":"20210113"
+        "msgType": "dcep.713.001.01",
+        "clearDate":"20210308"
     }
 }
