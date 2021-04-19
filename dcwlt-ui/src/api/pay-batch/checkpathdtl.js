@@ -29,5 +29,15 @@ export function querySingle(query) {
     url: '/pay-batch/checkpathdtl/querySingle',
     method: 'get',
     params:query
+    })
+ }
+ 
+ 
+// 查询对账明细(不平对账)
+export function listCheckpathdetails(query) {
+  return request({
+    url: '/pay-batch/checkpathdtl/detailsList',
+    method: 'get',
+    params: query
   })
 }

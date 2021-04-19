@@ -30,7 +30,8 @@ public class TransInService {
     @Autowired(required = false)
     private EcnyTradeConfig ecnyTradeConfig;
 
-
+    @Autowired
+    IIdempotentRepository idempotentRepository;
     /**
      * 记录请求信息，堵重使用
      *
@@ -46,7 +47,7 @@ public class TransInService {
             idempotentDO.setReceiver(dcepHead.getReceiver());
             idempotentDO.setSender(dcepHead.getSender());
             idempotentDO.setSndDtTm(dcepHead.getSndDtTm());
-//            idempotentRepository.insert(idempotentDO);
+            idempotentRepository.insert(idempotentDO);
         } catch (DuplicateKeyException e) {
             //不进行堵重时，返回false，即不进行堵重，调出方法
             boolean idempotent = allowIdempotent(dcepHead.getMsgTp());
