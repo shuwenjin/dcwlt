@@ -14,7 +14,7 @@ import org.springframework.stereotype.Component;
 @Component
 @RocketMQMessageListener(topic = "topic-dcwlt-batch",
         selectorExpression = "*",
-        consumerGroup = "consumer-group-1")
+        consumerGroup = "consumer-group-2")
 public class EventConsumer implements RocketMQListener<String> {
     private static final Logger logger = LoggerFactory.getLogger(EventConsumer.class);
     @Autowired

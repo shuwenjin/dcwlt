@@ -15,8 +15,9 @@ export function send801(data){
   console.info(data)
   return request({
     url:'/pay-batch/checkpath/executeSend801',
-    method: 'post',
-    params: data
+    method:'post',
+    data:JSON.stringify(data),
+    dataType:"json"
   })
  }
 
@@ -31,8 +32,8 @@ export function querySingle(query) {
     params:query
     })
  }
- 
- 
+
+
 // 查询对账明细(不平对账)
 export function listCheckpathdetails(query) {
   return request({
