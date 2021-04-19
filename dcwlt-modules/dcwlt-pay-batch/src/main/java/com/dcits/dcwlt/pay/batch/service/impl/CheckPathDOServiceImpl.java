@@ -6,6 +6,7 @@ import java.util.Map;
 
 import com.alibaba.fastjson.JSONObject;
 import com.dcits.dcwlt.common.core.web.domain.AjaxResult;
+import com.dcits.dcwlt.pay.api.domain.ecny.dspt.DsptChnlReqDTO;
 import com.dcits.dcwlt.pay.api.model.CheckPathDO;
 import org.apache.poi.hssf.record.DVALRecord;
 import org.aspectj.weaver.loadtime.Aj;
@@ -33,7 +34,7 @@ public class CheckPathDOServiceImpl implements ICheckPathDOService {
     @Autowired
     private RestTemplate restTemplate;
 
-    private static final String url = "http://localhost:8000/dcwlt-pay-online/dcwlt/dcepPymtWrngAcctDeal   ";
+    private static final String url = "http://localhost:9301/dcwlt/dcepPymtWrngAcctDeal";
 
 
 
@@ -60,8 +61,8 @@ public class CheckPathDOServiceImpl implements ICheckPathDOService {
     }
 
     @Override
-    public boolean execute801(CheckPathDO checkPathDO) {
-        JSONObject sendData = this.sendData(checkPathDO);
+    public boolean execute801(JSONObject dsptChnlReqDTO) {
+        JSONObject sendData = this.sendData(dsptChnlReqDTO);
         logger.info("sendData{}",sendData);
         ResponseEntity<String> responseEntity = restTemplate.postForEntity(url, sendData, String.class);
 
@@ -103,21 +104,26 @@ public class CheckPathDOServiceImpl implements ICheckPathDOService {
      * }
      * }
      *
-     * @param checkPathDO
+     * @param dsptChnlReqDTO
      * @return
      */
-    protected JSONObject sendData(CheckPathDO checkPathDO) {
+    protected JSONObject sendData(JSONObject dsptChnlReqDTO) {
         Map<String, String> head = new HashMap<>();
         head.put("tranDate", "20210317");
         head.put("tranTime", "103524");
         head.put("seqNo", "20210113000122532910308590900000");
 
         Map<String, String> body = new HashMap<>();
-        body.put("tranDate", checkPathDO.getPayDate());
-        body.put("paySerno", checkPathDO.getPaySerno());
-        body.put("count","10");
-        body.put("queryPageFlag","0");
-     //   body.put("");
+        body.put("tranDate", dsptChnlReqDTO.getString("payDate"));
+        body.put("paySerno", dsptChnlReqDTO.getString("paySerno"));
+        body.put("msgId",dsptChnlReqDTO.getString("msgId"));
+        body.put("checkStatus",dsptChnlReqDTO.getString("checkStatus"));
+        body.put("operType",dsptChnlReqDTO.getString("operType"));
+        body.put("disputeReasonCode",dsptChnlReqDTO.getString("disputeReasonCode"));
+        body.put("disputeReason",dsptChnlReqDTO.getString("disputeReason"));
+        body.put("instgPty",dsptChnlReqDTO.getString("batchId"));
+        body.put("msgTp",dsptChnlReqDTO.getString("msgTp"));
+
 
 
 

@@ -1,15 +1,10 @@
 package com.dcits.dcwlt.pay.online.controller;
 
 import com.dcits.dcwlt.common.pay.constant.ApiConstant;
-import com.dcits.dcwlt.pay.api.domain.dcep.check.SummaryQueryInputDTO;
-import com.dcits.dcwlt.pay.api.domain.dcep.check.SummaryQueryOutputDTO;
 import com.dcits.dcwlt.pay.api.domain.dcep.freefrmt.EcnyFreeFrmtReqDTO;
 import com.dcits.dcwlt.pay.api.domain.dcep.login.LoginInnerReqDTO;
-import com.dcits.dcwlt.pay.api.domain.dcep.payconvert.PayConvertReqDTO;
-import com.dcits.dcwlt.pay.api.domain.dcep.payconvert.PayConvertRspDTO;
 import com.dcits.dcwlt.pay.api.domain.dcep.resendapply.ReSendApyReqDTO;
 import com.dcits.dcwlt.pay.api.domain.dcep.resendapply.ReSendApyRspDTO;
-import com.dcits.dcwlt.pay.api.domain.dcep.summarychk.ReconSummaryChkDTO;
 import com.dcits.dcwlt.pay.api.domain.ecny.ECNYReqDTO;
 import com.dcits.dcwlt.pay.api.domain.ecny.ECNYRspDTO;
 import com.dcits.dcwlt.pay.api.domain.ecny.dspt.DsptChnlReqDTO;
@@ -18,7 +13,6 @@ import com.dcits.dcwlt.pay.api.domain.ecny.freeFrmt.FreeFrmtRspDTO;
 import com.dcits.dcwlt.pay.api.domain.ecny.payconvert.PayConvertChnlReqDTO;
 import com.dcits.dcwlt.pay.api.domain.ecny.payconvert.PayConvertChnlRspDTO;
 import com.dcits.dcwlt.pay.online.flow.EcnyTransInTradeFlow;
-import com.dcits.dcwlt.pay.online.flow.receive.ReconSummaryChk711TradeFlow;
 import com.dcits.dcwlt.pay.online.flow.send.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -47,8 +41,8 @@ public class DcwltController {
     }
 
     @PostMapping(value = ApiConstant.DSPT_SERVICE_NAME)
-    public ECNYRspDTO<SummaryQueryOutputDTO> dspt(@RequestBody ECNYReqDTO<SummaryQueryInputDTO> summaryQueryInputDTO) {
-        return ecnyTransInTradeFlow.execute(summaryQueryInputDTO, Dispute801STradeFlow.DSPT_TRADE_FLOW);
+    public ECNYRspDTO<DsptChnlRspDTO> dspt(@RequestBody ECNYReqDTO<DsptChnlReqDTO> dsptChnlReqDTOECNYReqDTO) {
+        return ecnyTransInTradeFlow.execute(dsptChnlReqDTOECNYReqDTO, Dispute801STradeFlow.DSPT_TRADE_FLOW);
     }
 
     @PostMapping(value = ApiConstant.LOGINOUT_SERVICE_NAME)
