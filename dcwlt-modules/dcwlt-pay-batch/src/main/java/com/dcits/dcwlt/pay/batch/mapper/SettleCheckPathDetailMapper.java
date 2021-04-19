@@ -70,4 +70,5 @@ public interface SettleCheckPathDetailMapper {
      List<CheckPathDetialDO> selectPathDetailWhitCgbNotFound(@Param("workdate")String workdate, @Param("batchId")String batchId, @Param("offset")Integer offset, @Param("limit")Integer limit);
 
 
+    CheckPathDetialDO querySingle(@Param("msgId") String msgId,@Param("dtlmsgId") String dtlmsgId);
 }

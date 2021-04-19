@@ -224,6 +224,37 @@
         	</if>
         </if> 
      </select>
+
+
+    <!-- 查询通道对账明细表 -->
+    <select id ="querySingle" resultType="com.dcits.dcwlt.pay.api.model.CheckPathDetialDO">
+        SELECT t.WORKDATE  workdate,
+        t.MSGID     msgId,
+        t.BATCHID    batchId,
+        t.FILENAME    fileName,
+        t.DTLBIZTIME   dtlBizTime,
+        t.MSGTYPE    msgType,
+        t.DTLMSGID    dtlMsgId,
+        t.INSTGDRCTPTY      instgDrctPty,
+        t.DBITPARTY    dBITParty,
+        t.CRDTPARTY    cRDTParty,
+        t.CCY     ccy,
+        t.AMOUNT    amount,
+        t.DTLBIZSTATUS      dtlBizStatus,
+        t.DTLDESC    dtlDesc,
+        t.PAYEENAME    payeeName,
+        t.PAYEEACCOUNT      payeeAccount,
+        t.PAYEEWALLETID      payeeWalletId,
+        t.PAYERACCOUNT      payerAccount,
+        t.OGNLMSGTYPE   ognlMsgType,
+        t.OGNLMSGID    ognlMsgId,
+        t.CHECKSTATUS   checkStatus,
+        t.LASTUPDATE   lastUpDate,
+        t.LASTUPTIME   lastUpTime
+        FROM PAY_BATCH_CHECKPATHDTL t
+        where t.MSGID = #{msgId}
+        AND t.DTLMSGID = #{dtlmsgId}
+    </select>
     
     
 </mapper>

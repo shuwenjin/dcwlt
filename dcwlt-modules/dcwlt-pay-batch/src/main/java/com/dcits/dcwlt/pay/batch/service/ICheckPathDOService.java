@@ -1,6 +1,8 @@
 package com.dcits.dcwlt.pay.batch.service;
 
+import com.alibaba.fastjson.JSONObject;
 import com.dcits.dcwlt.common.core.web.domain.AjaxResult;
+import com.dcits.dcwlt.pay.api.domain.ecny.dspt.DsptChnlReqDTO;
 import com.dcits.dcwlt.pay.api.model.CheckPathDO;
 import org.springframework.web.bind.annotation.RequestBody;
 
@@ -33,10 +35,15 @@ public interface ICheckPathDOService
 
     /**
      * 执行801手动差错
-     * @param checkPathDO
+     * @param dsptChnlReqDTO
      * @return AjaxResult
      */
-    boolean execute801(CheckPathDO checkPathDO);
+    AjaxResult execute801(JSONObject dsptChnlReqDTO);
 
+    /**
+     * 重新对账
+     * @param checkPathDO
+     * @return
+     */
     boolean reconciliation(CheckPathDO checkPathDO);
 }

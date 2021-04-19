@@ -1,22 +1,20 @@
 package com.dcits.dcwlt.pay.batch.service.impl;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 import com.alibaba.fastjson.JSONObject;
 import com.dcits.dcwlt.common.core.web.domain.AjaxResult;
 import com.dcits.dcwlt.pay.api.model.CheckPathDO;
-import org.apache.poi.hssf.record.DVALRecord;
-import org.aspectj.weaver.loadtime.Aj;
+import com.dcits.dcwlt.pay.batch.mapper.CheckPathDOMapper;
+import com.dcits.dcwlt.pay.batch.service.ICheckPathDOService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import com.dcits.dcwlt.pay.batch.mapper.CheckPathDOMapper;
-import com.dcits.dcwlt.pay.batch.service.ICheckPathDOService;
 import org.springframework.web.client.RestTemplate;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * 对账汇总Service业务层处理
@@ -26,14 +24,15 @@ import org.springframework.web.client.RestTemplate;
  */
 @Service
 public class CheckPathDOServiceImpl implements ICheckPathDOService {
-    private Logger logger= LoggerFactory.getLogger(this.getClass());
+    private final Logger logger= LoggerFactory.getLogger(this.getClass());
 
     @Autowired
     private CheckPathDOMapper checkPathDOMapper;
     @Autowired
     private RestTemplate restTemplate;
 
-    private static final String url = "http://localhost:8000/dcwlt-pay-online/dcwlt/dcepPymtWrngAcctDeal   ";
+    //执行801报文
+    private static final String DCEP_PYMT_WRNG_ACCT_DEAL_URL = "http://localhost:9301/dcwlt/dcepPymtWrngAcctDeal";
 
 
 
@@ -60,13 +59,19 @@ public class CheckPathDOServiceImpl implements ICheckPathDOService {
     }
 
     @Override
-    public boolean execute801(CheckPathDO checkPathDO) {
-        JSONObject sendData = this.sendData(checkPathDO);
+    public AjaxResult execute801(JSONObject dsptChnlReqDTO) {
+        JSONObject sendData = this.sendData(dsptChnlReqDTO);
         logger.info("sendData{}",sendData);
-        ResponseEntity<String> responseEntity = restTemplate.postForEntity(url, sendData, String.class);
+        ResponseEntity<String> responseEntity = restTemplate.postForEntity(DCEP_PYMT_WRNG_ACCT_DEAL_URL, sendData, String.class);
 
-        boolean checkResult = this.checkResult(responseEntity);
-        return  checkResult;
+        JSONObject result = this.checkResult(responseEntity);
+        if (result.getBoolean("checkRetCodeStatus")){
+            return  AjaxResult.success("手动差错成功");
+        }else {
+            logger.error("手动差错失败:原因==>{}",result.getString("retInfo"));
+            return  AjaxResult.error("手动差错失败:原因==>"+result.getString("retInfo"));
+        }
+
     }
 
     @Override
@@ -81,6 +86,7 @@ public class CheckPathDOServiceImpl implements ICheckPathDOService {
     }
 
     /**
+     * 拼接后的json
      * {
      * "head": {
      * "tranDate": "20210317",
@@ -103,19 +109,28 @@ public class CheckPathDOServiceImpl implements ICheckPathDOService {
      * }
      * }
      *
-     * @param checkPathDO
+     * @param dsptChnlReqDTO
      * @return
      */
-    protected JSONObject sendData(CheckPathDO checkPathDO) {
-        Map<String, String> head = new HashMap<>();
+    protected JSONObject sendData(JSONObject dsptChnlReqDTO) {
+        Map<String, String> head = new HashMap<>(3);
         head.put("tranDate", "20210317");
         head.put("tranTime", "103524");
         head.put("seqNo", "20210113000122532910308590900000");
 
         Map<String, String> body = new HashMap<>();
-        body.put("tranDate", checkPathDO.getPayDate());
-        body.put("paySerno", checkPathDO.getPaySerno());
-        //
+        body.put("tranDate", dsptChnlReqDTO.getString("payDate"));
+        body.put("paySerno", dsptChnlReqDTO.getString("paySerno"));
+        body.put("msgId",dsptChnlReqDTO.getString("msgId"));
+        body.put("checkStatus",dsptChnlReqDTO.getString("checkStatus"));
+        body.put("operType",dsptChnlReqDTO.getString("operType"));
+        body.put("disputeReasonCode",dsptChnlReqDTO.getString("disputeReasonCode"));
+        body.put("disputeReason",dsptChnlReqDTO.getString("disputeReason"));
+        body.put("instgPty",dsptChnlReqDTO.getString("batchId"));
+        body.put("msgTp",dsptChnlReqDTO.getString("msgTp"));
+
+
+
 
         Map<String, String> ecnyHead = new HashMap<>();
         ecnyHead.put("busiChnl", "1111");
@@ -139,13 +154,19 @@ public class CheckPathDOServiceImpl implements ICheckPathDOService {
      * {"head":{"retCode":"000000","retInfo":"交易成功","tranDate":"20210413","tranTime":"154350","seqNo":"123"},
      * "ecnyRspHead":{"trxStatus":"1"},"body":{"procResult":"登录/退出成功。"}}
      **/
-    protected boolean checkResult(ResponseEntity<String> stringResponseEntity) {
+    private JSONObject checkResult(ResponseEntity<String> stringResponseEntity) {
         String body = stringResponseEntity.getBody();
+
         logger.info("body{}",body);
+
         JSONObject jsonObject = JSONObject.parseObject(body);
         JSONObject head = jsonObject.getJSONObject("head");
         String retCode = head.getString("retCode");
-        return "000000".equals(retCode);
+
+      //  logger.info("返回信息===>{}",retInfo);
+        head.put("checkRetCodeStatus","000000".equals(retCode));
+
+        return head;
     }
 
 
