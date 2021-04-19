@@ -60,7 +60,11 @@ public interface ICheckPathDetailService {
     public List<CheckPathDetialDO> selectPathDetailWhitCgbNotFound(String workdate, String batchId, Integer offset, Integer limit);
 
 
-
-
+    /**
+     * 查询当前的对账明细通过联合主键
+     * @param mshId
+     * @param dtlmsgId
+     * @return
+     */
     CheckPathDetialDO querySingle(String mshId, String dtlmsgId);
 }

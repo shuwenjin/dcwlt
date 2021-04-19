@@ -71,17 +71,12 @@ public class CheckPathDOController extends BaseController
 
     /**
      * 发送801 手动差错
-     * @param checkPathDO
+     * @param dsptChnlReqDTO
      * @return
      */
     @PostMapping(value = "/executeSend801")
     public AjaxResult executeSend801(@RequestBody  JSONObject dsptChnlReqDTO){
-          boolean checkResult=checkPathDOService.execute801(dsptChnlReqDTO);
-        if (checkResult) {
-            return AjaxResult.success("手动差错成功");
-        } else {
-            return AjaxResult.error("手动差错失败");
-        }
+         return checkPathDOService.execute801(dsptChnlReqDTO);
     }
 
 

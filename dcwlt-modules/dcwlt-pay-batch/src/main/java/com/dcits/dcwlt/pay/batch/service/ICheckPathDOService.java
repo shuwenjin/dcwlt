@@ -35,10 +35,15 @@ public interface ICheckPathDOService
 
     /**
      * 执行801手动差错
-     * @param checkPathDO
+     * @param dsptChnlReqDTO
      * @return AjaxResult
      */
-    boolean execute801(JSONObject dsptChnlReqDTO);
+    AjaxResult execute801(JSONObject dsptChnlReqDTO);
 
+    /**
+     * 重新对账
+     * @param checkPathDO
+     * @return
+     */
     boolean reconciliation(CheckPathDO checkPathDO);
 }
