@@ -186,7 +186,7 @@
   />
 
   <!-- 添加或修改非金融登记簿对话框 -->
-<el-dialog :title="title" :visible.sync="open" width="500px" append-to-body>
+<el-dialog :title="title" :visible.sync="open" width="650px" append-to-body>
   <el-form ref="form" :model="form" :rules="rules" label-width="80px">
     <el-row>
 
@@ -218,7 +218,7 @@
 
       <el-col :span="24">
         <el-form-item label="消息内容" prop="messageContext">
-          <el-input type="textarea" :rows="2" v-model.trim="form.messageContext" placeholder="请输入消息内容" />
+          <el-input type="textarea" :rows="3" v-model.trim="form.messageContext" placeholder="请输入消息内容" />
         </el-form-item>
       </el-col>
       </el-row>
@@ -399,7 +399,7 @@
   handleAdd() {
   this.reset();
   this.open = true;
-  this.title = "添加自由格式报文";
+  this.title = "发送自由格式报文";
   },
   /** 修改按钮操作 */
   handleUpdate(row) {
