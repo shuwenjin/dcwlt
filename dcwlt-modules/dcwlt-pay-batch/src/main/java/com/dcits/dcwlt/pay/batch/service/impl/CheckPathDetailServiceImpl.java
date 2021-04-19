@@ -131,4 +131,11 @@ public class CheckPathDetailServiceImpl implements ICheckPathDetailService {
     }
 
 
+
+    @Override
+    public CheckPathDetialDO querySingle(String mshId, String dtlmsgId) {
+        return settleCheckPathDetailMapper.querySingle(mshId,dtlmsgId);
+    }
+
+
 }

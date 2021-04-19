@@ -115,7 +115,11 @@ public class CheckPathDOServiceImpl implements ICheckPathDOService {
         Map<String, String> body = new HashMap<>();
         body.put("tranDate", checkPathDO.getPayDate());
         body.put("paySerno", checkPathDO.getPaySerno());
-        //
+        body.put("count","10");
+        body.put("queryPageFlag","0");
+     //   body.put("");
+
+
 
         Map<String, String> ecnyHead = new HashMap<>();
         ecnyHead.put("busiChnl", "1111");

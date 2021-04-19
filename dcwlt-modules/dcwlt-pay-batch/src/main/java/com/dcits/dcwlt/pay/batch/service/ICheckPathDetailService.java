@@ -58,6 +58,9 @@ public interface ICheckPathDetailService {
      * @return
      */
     public List<CheckPathDetialDO> selectPathDetailWhitCgbNotFound(String workdate, String batchId, Integer offset, Integer limit);
-    
-    
+
+
+
+
+    CheckPathDetialDO querySingle(String mshId, String dtlmsgId);
 }

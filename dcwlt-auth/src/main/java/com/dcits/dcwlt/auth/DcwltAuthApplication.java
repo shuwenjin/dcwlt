@@ -1,8 +1,8 @@
 package com.dcits.dcwlt.auth;
 
+import com.dcits.dcwlt.common.security.annotation.EnableRyFeignClients;
 import org.springframework.boot.SpringApplication;
 import org.springframework.cloud.client.SpringCloudApplication;
-import com.dcits.dcwlt.common.security.annotation.EnableRyFeignClients;
 
 /**
  * 认证授权中心
