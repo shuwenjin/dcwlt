@@ -34,7 +34,19 @@ public class CheckPathDetailController extends BaseController
     public TableDataInfo list(String workdate, String batchId)
     {
         startPage();
-        List<CheckPathDetialDO> list = checkPathDetailService.select(workdate, batchId);
+        List<CheckPathDetialDO> list = checkPathDetailService.select(workdate, batchId,"");
+        return getDataTable(list);
+    }
+
+    /**
+     * 查询对账明细列表（不平对账）
+     */
+    @PreAuthorize(hasPermi = "pay-batch:checkpath:detailsList")
+    @GetMapping("/detailsList")
+    public TableDataInfo detailsList(String workdate, String batchId,String checkstatus)
+    {
+        startPage();
+        List<CheckPathDetialDO> list = checkPathDetailService.select(workdate, batchId,checkstatus);
         return getDataTable(list);
     }
 

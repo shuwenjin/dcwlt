@@ -236,7 +236,7 @@
 import { listJobLog, delJobLog, cleanJobLog } from "@/api/monitor/jobLog";
 
 export default {
-  name: "JobLog",
+  name: "RetryLog",
   data() {
     return {
       // 遮罩层

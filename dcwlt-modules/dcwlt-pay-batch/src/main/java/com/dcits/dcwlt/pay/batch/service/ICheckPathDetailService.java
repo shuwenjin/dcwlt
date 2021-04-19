@@ -30,7 +30,7 @@ public interface ICheckPathDetailService {
     
     public int insert(CheckPathDetialDO checkPathDetialDO);
 
-    public List<CheckPathDetialDO> select(String workdate, String batchId);
+    public List<CheckPathDetialDO> select(String workdate, String batchId,String checkstatus);
     
     public int insertByBatch(List<CheckPathDetialDO> checkPathDetialDOS);
     

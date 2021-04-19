@@ -90,8 +90,17 @@
         t.LASTUPDATE   lastUpDate,
         t.LASTUPTIME   lastUpTime
         FROM PAY_BATCH_CHECKPATHDTL t
-        where t.WORKDATE = #{workdate}
-          AND t.BATCHID = #{batchId}
+        where 1=1
+        <if test="workdate != null and  workdate != ''">
+           AND t.WORKDATE = #{workdate}
+        </if>
+        <if test="batchId != null and  batchId != ''">
+            AND t.BATCHID = #{batchId}
+        </if>
+        <if test="checkstatus != null and  checkstatus != ''">
+            AND t.CHECKSTATUS !=#{checkstatus}
+        </if>
+        ORDER BY T.DTLBIZTIME
     </select>
     
     <update id="updateStatus">

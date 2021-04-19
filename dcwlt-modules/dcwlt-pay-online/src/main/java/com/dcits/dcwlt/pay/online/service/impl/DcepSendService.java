@@ -64,7 +64,7 @@ public class DcepSendService {
 //        String rspMsg = RpcHttpJsonUtil.executeExt(srvcCode, JsonUtil.toJSONString(reqDTO));
         //String srvcCode = reqDTO.getDcepHead().getMsgTp();
         String uri = dcepgw_addr;
-        String reqMsg = reqDTO.toString();//JsonUtil.toJSONString(reqDTO)
+        String reqMsg = JSONObject.toJSONString(reqDTO);
         String rspMsg = getRsp(reqMsg, uri);
         //3、响应
         return JSONObject.parseObject(rspMsg);

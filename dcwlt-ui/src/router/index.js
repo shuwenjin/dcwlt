@@ -132,6 +132,19 @@ export const constantRoutes = [
     ]
   },
   {
+    path: '/resend',
+    component: Layout,
+    hidden: true,
+    children: [
+      {
+        path: 'apply',
+        component: (resolve) => require(['@/views/pay-online/resend-apply'], resolve),
+        name: 'ResendApply',
+        meta: { title: '重发申请' }
+      }
+    ]
+  },
+  {
     path: '/gen',
     component: Layout,
     hidden: true,

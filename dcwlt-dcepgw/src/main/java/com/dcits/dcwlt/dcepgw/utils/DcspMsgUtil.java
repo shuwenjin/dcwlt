@@ -199,7 +199,7 @@ public class DcspMsgUtil {
             } else if (HEAD_LEN_ARRAY.length - 1 == index) {
                 value = END_FLAG;
             }
-            headString.append(StrUtil.fillBefore(null == value ? "" : value, ' ', HEAD_LEN_ARRAY[index]));
+            headString.append(StrUtil.fillAfter(null == value ? "" : value, ' ', HEAD_LEN_ARRAY[index]));
         }
         return headString.toString();
     }
