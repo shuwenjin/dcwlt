@@ -54,7 +54,7 @@
     </div>
 </template>
 <script>
-import { resendApply } from '@/api/pay-online/resendApply'
+import { resend711Apply, resend713Apply } from '@/api/pay-online/resendApply'
 
 export default {
   name: "ResendApply",
