@@ -9,7 +9,7 @@ import java.util.Set;
  */
 public enum CheckStatusEnum {
 
-    SAME("eertykzz","对平"),
+    SAME("SAME","对平"),
     MORE("MORE","行内大额多"),
     LESS("LESS","核对报文多"),
     DIFF("DIFF","要素不符"),
