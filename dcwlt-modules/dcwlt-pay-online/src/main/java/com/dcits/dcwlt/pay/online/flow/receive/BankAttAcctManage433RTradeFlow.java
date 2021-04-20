@@ -26,7 +26,6 @@ import com.dcits.dcwlt.pay.online.mapper.SignInfoMapper;
 import com.dcits.dcwlt.pay.online.mapper.SignJrnMapper;
 import com.dcits.dcwlt.pay.online.service.impl.AuthInfoServiceimpl;
 import com.dcits.dcwlt.pay.online.service.impl.BankAccountVerifyService;
-import com.dcits.dcwlt.pay.online.service.impl.ECNYSerNoService;
 import com.dcits.dcwlt.pay.online.service.impl.PartyService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -121,9 +120,6 @@ public class BankAttAcctManage433RTradeFlow {
 
     @Autowired
     private SignJrnMapper signJrnMapper;
-
-    @Autowired
-    private ECNYSerNoService ecnySerNoService;
 
     @Autowired
     private GenerateCodeServiceImpl generateCodeService;
@@ -417,8 +413,7 @@ public class BankAttAcctManage433RTradeFlow {
         String acctIdNo = reqBody.getSgnInf().getIdNo();
         String acctType = bankCore358040Rsp.getType();
         String acctName = reqBody.getSgnInf().getSgnAcctNm();
-        //      Map<String, String> errMap = bankAccountVerifyService.geteWayLSFK43Imp(acctIdNo, acctType, acctName, DateTimeUtil.getCurrentDateStr(), DateTimeUtil.getCurrentTimeStr(), ecnySerNoService.getNBitsRandNum(6));
-        Map<String, String> errMap = bankAccountVerifyService.invokeLSFK43(acctIdNo, acctType, acctName, DateUtil.getCurDay(), DateUtil.getCurTime(), ecnySerNoService.getNBitsRandNum(6));
+        Map<String, String> errMap = bankAccountVerifyService.invokeLSFK43(acctIdNo, acctType, acctName, DateUtil.getCurDay(), DateUtil.getCurTime(),generateCodeService.generateFlowNo());
         String errorCode = errMap.get(ERRORCODE);
         String errorMsg = errMap.get(ERRORMSG);
         if (!LSFK43_SUCCESS_CODE.equals(errorCode)) {
@@ -629,9 +624,11 @@ public class BankAttAcctManage433RTradeFlow {
 
     private SignInfoDO updateSignInfo(BankAttAcctReq reqBody) {
         SignInfoDO signInfoDO = new SignInfoDO();
-        signInfoDO.setPayDate(DateUtil.getCurDay());                        //平台日期
+//        signInfoDO.setPayDate(DateUtil.getCurDay());                        //平台日期
+        signInfoDO.setPayDate(DateUtil.getSysDate());                        //平台日期
         signInfoDO.setPaySerNo(generateCodeService.generatePlatformFlowNo());           //平台流水
-        signInfoDO.setPayTime(DateUtil.getCurTime());                        //平台时间
+//        signInfoDO.setPayTime(DateUtil.getCurTime());                        //平台时间
+        signInfoDO.setPayTime(DateUtil.getDefaultTime());                        //平台时间
         signInfoDO.setSignStatus(VALID_SIGN_STATUS);                                    //协议状态
         signInfoDO.setAcctPtyId(AppConstant.CGB_FINANCIAL_INSTITUTION_CD);              //签约人银行账户所属机构
         signInfoDO.setAcctType(reqBody.getSgnInf().getSgnAcctTp());                     //签约人银行账户类型

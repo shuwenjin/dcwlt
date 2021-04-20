@@ -56,17 +56,6 @@
     <el-row :gutter="10" class="mb8">
       <el-col :span="1.5">
         <el-button
-          type="info"
-          plain
-          icon="el-icon-s-operation"
-          size="mini"
-          @click="handleDetail"
-          :disabled="single"
-          v-hasPermi="['pay-batch:checkpath:list']"
-        >对账明细</el-button>
-      </el-col>
-      <el-col :span="1.5">
-        <el-button
           type="warning"
           plain
           icon="el-icon-download"
@@ -230,7 +219,7 @@ export default {
         { key: 23, label: `付款金额`, visible: false },
         { key: 24, label: `收款笔数`, visible: false },
         { key: 25, label: `收款金额`, visible: false },
-        { key: 26, label: `对账标识`, visible: false },
+        { key: 26, label: `对账标识`, visible: true },
         { key: 27, label: `最后更新日期`, visible: false },
         { key: 28, label: `最后更新时间`, visible: false },
       ],
@@ -271,11 +260,11 @@ export default {
     },
     // 业务状态字典翻译
     msgbizstatusFormat(row, column) {
-      return this.selectDictLabel(this.msgbizstatusOptions, row.msgbizstatus);
+      return this.selectDictLabel(this.msgbizstatusOptions, row.msgBizStatus);
     },
     // 对账标识字典翻译
     checkstatusFormat(row, column) {
-      return this.selectDictLabel(this.checkstatusOptions, row.checkstatus);
+      return this.selectDictLabel(this.checkstatusOptions, row.checkStatus);
     },
     // 取消按钮
     cancel() {
@@ -408,12 +397,6 @@ export default {
         this.msgSuccess("重新对账成功");
       });
     },
-
-    /** 对账明细按钮操作 */
-    handleDetail() {
-      this.$router.push({name: 'Checkpathdtl', params: {data: this.selectRow}});
-
-  },
   }
 };
 </script>
