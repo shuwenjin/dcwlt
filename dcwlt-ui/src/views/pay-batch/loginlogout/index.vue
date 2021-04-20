@@ -116,9 +116,9 @@
       <el-table-column type="selection" width="55" align="center" />
       <el-table-column label="报文标识号" align="center" prop="msgId" v-if="columns[0].visible"/>
       <el-table-column label="平台日期" align="center" prop="payDate" width="180" v-if="columns[1].visible">
-        <template slot-scope="scope">
+       <!-- <template slot-scope="scope">
           <span>{{ parseTime(scope.row.payDate, '{y}-{m}-{d}') }}</span>
-        </template>
+        </template> -->
       </el-table-column>
       <el-table-column label="平台时间" align="center" prop="payTime" v-if="columns[2].visible"/>
       <el-table-column label="平台流水" align="center" prop="paySerNo" v-if="columns[3].visible"/>
