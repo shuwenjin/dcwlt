@@ -624,9 +624,11 @@ public class BankAttAcctManage433RTradeFlow {
 
     private SignInfoDO updateSignInfo(BankAttAcctReq reqBody) {
         SignInfoDO signInfoDO = new SignInfoDO();
-        signInfoDO.setPayDate(DateUtil.getCurDay());                        //平台日期
+//        signInfoDO.setPayDate(DateUtil.getCurDay());                        //平台日期
+        signInfoDO.setPayDate(DateUtil.getSysDate());                        //平台日期
         signInfoDO.setPaySerNo(generateCodeService.generatePlatformFlowNo());           //平台流水
-        signInfoDO.setPayTime(DateUtil.getCurTime());                        //平台时间
+//        signInfoDO.setPayTime(DateUtil.getCurTime());                        //平台时间
+        signInfoDO.setPayTime(DateUtil.getDefaultTime());                        //平台时间
         signInfoDO.setSignStatus(VALID_SIGN_STATUS);                                    //协议状态
         signInfoDO.setAcctPtyId(AppConstant.CGB_FINANCIAL_INSTITUTION_CD);              //签约人银行账户所属机构
         signInfoDO.setAcctType(reqBody.getSgnInf().getSgnAcctTp());                     //签约人银行账户类型

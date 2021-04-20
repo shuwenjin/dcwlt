@@ -128,8 +128,8 @@
       <el-table-column label="报文发送时间" align="center" prop="senderDateTime" v-if="columns[7].visible"/>
       <el-table-column label="发起机构" align="center" prop="instgDrctPty" v-if="columns[8].visible"/>
       <el-table-column label="接收机构" align="center" prop="instddrctpty" v-if="columns[9].visible"/>
-      <el-table-column label="操作类型" align="center" prop="opterationType" v-if="columns[10].visible"/>
-      <el-table-column label="业务处理状态" align="center" prop="procStatus" v-if="columns[11].visible"/>
+      <el-table-column label="操作类型" align="center" prop="opterationType" :formatter="opterationTypeFormat" v-if="columns[10].visible"/>
+      <el-table-column label="业务处理状态" align="center" prop="procStatus" :formatter="procStatusFormat" v-if="columns[11].visible"/>
       <el-table-column label="业务拒绝码" align="center" prop="rejectCode" v-if="columns[12].visible"/>
       <el-table-column label="业务拒绝信息" align="center" prop="rejectInfo" v-if="columns[13].visible"/>
       <el-table-column label="柜员号" align="center" prop="tlrNo" v-if="columns[14].visible"/>
@@ -206,6 +206,11 @@ export default {
       open: false,
       // 报文方向字典
       drctOptions: [],
+
+      msgbizstatusOptions:[],
+
+      loginOptions:[],
+
       // 查询参数
       queryParams: {
         pageNum: 1,
@@ -251,6 +256,15 @@ export default {
     this.getDicts("drct").then(response => {
       this.drctOptions = response.data;
     });
+    this.getDicts("OT0").then(response => {
+      this.opterationTypeOptions = response.data;
+      console.info(this.opterationTypeOptions);
+    });
+
+    this.getDicts("PR").then(response => {
+      this.procStatusOptions = response.data;
+       console.info(this.procStatusOptions);
+    });
   },
   methods: {
     /** 查询非金融登记簿列表 */
@@ -265,6 +279,17 @@ export default {
     // 报文方向字典翻译
     drctFormat(row, column) {
       return this.selectDictLabel(this.drctOptions, row.drct);
+    },
+
+    // 参数类型字典翻译
+    opterationTypeFormat(row, column) {
+
+      return this.selectDictLabel(this.opterationTypeOptions, row.opterationType);
+    },
+    // 参数状态字典翻译
+    procStatusFormat(row, column) {
+
+      return this.selectDictLabel(this.procStatusOptions, row.procStatus);
     },
     // 取消按钮
     cancel() {
