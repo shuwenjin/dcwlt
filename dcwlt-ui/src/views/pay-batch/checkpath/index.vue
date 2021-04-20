@@ -137,10 +137,12 @@
         <template slot-scope="scope">
 
           <!--当前状态不是 init 或 eertykzz 就显示-->
+          <!--              v-bind:disabled="scope.row.checkStatus=='INIT' || scope.row.checkStatus!=='eertykzz'" -->
+
            <el-button
               size="mini"
               type="primary" plain
-              v-bind:disabled="scope.row.checkStatus=='INIT' || scope.row.checkStatus!=='eertykzz'"
+              v-if="scope.row.checkStatus!='INIT'&&scope.row.checkStatus!='eertykzz'"
               @click="executereconciliation(scope.row)"
             >重新对账</el-button>
 
@@ -249,6 +251,7 @@ export default {
     this.getDicts("msgbizstatus").then(response => {
       this.msgbizstatusOptions = response.data;
     });
+
     this.getDicts("checkstatus").then(response => {
       this.checkstatusOptions = response.data;
     });
