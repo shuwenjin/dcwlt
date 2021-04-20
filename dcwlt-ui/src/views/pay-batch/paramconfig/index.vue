@@ -102,7 +102,7 @@
 
     <el-table v-loading="loading" :data="paramList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
-      <el-table-column label="参数状态" align="center" prop="id" v-if="columns[0].visible" />
+ <!--     <el-table-column label="参数状态" align="center" prop="id" v-if="columns[0].visible" /> -->
       <el-table-column label="参数类型" align="center" prop="paramType" :formatter="paramTypeFormat" v-if="columns[1].visible" />
       <el-table-column label="参数key" align="center" prop="paramKey" v-if="columns[2].visible" />
       <el-table-column label="参数数值" align="center" prop="paramValue" v-if="columns[3].visible" />
