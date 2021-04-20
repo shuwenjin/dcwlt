@@ -97,7 +97,10 @@
         FROM pay_pay_transdtl_nonf E
         <where>
             <if test="msgId != null and msgId != ''">
-                E.MSGID = #{msgId}
+                and E.MSGID = #{msgId}
+            </if>
+            <if test="payDate != null and payDate != ''">
+                and E.PAYDATE = #{payDate}
             </if>
         </where>
     </select>

@@ -1,5 +1,12 @@
 {
-    "ecnyHead": {
+    "head": {
+      "seqNo": "1",
+      "retCode": "0",
+      "retInfo": "",
+      "tranDate": "20210308",
+      "tranTime": "183056",
+    },
+    "Header": {
         "Ver": "01",
         "SndDtTm": "2021-01-13T11:45:54",
         "MsgTp": "dcep.711.001.01",
@@ -13,6 +20,7 @@
     },
     "body": {
         "msgType": "dcep.711.001.01",
-        "checkDate":"20210113"
+        "checkDate":"20210308",
+        "batchId":"B202103081600",
     }
 }

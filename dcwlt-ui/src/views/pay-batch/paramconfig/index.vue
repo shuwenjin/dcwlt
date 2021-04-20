@@ -3,13 +3,18 @@
     <el-form :model="queryParams" ref="queryForm" :inline="true" v-show="showSearch" label-width="68px">
       <el-form-item label="参数类型" prop="paramType">
         <el-select v-model="queryParams.paramType" placeholder="请选择参数类型" clearable size="small">
-          <el-option label="请选择字典生成" value="" />
+          <el-option
+            v-for="dict in paramTypeOptions"
+            :key="dict.dictValue"
+            :label="dict.dictLabel"
+            :value="dict.dictValue"
+          />
         </el-select>
       </el-form-item>
-      <el-form-item label="参数id" prop="paramKey">
+      <el-form-item label="参数key" prop="paramKey">
         <el-input
           v-model="queryParams.paramKey"
-          placeholder="请输入参数id"
+          placeholder="请输入参数key"
           clearable
           size="small"
           @keyup.enter.native="handleQuery"
@@ -33,11 +38,16 @@
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-     <!-- <el-form-item label="参数状态" prop="paramStatus">
+      <el-form-item label="参数状态" prop="paramStatus">
         <el-select v-model="queryParams.paramStatus" placeholder="请选择参数状态" clearable size="small">
-          <el-option label="请选择字典生成" value="" />
+          <el-option
+            v-for="dict in paramStatusOptions"
+            :key="dict.dictValue"
+            :label="dict.dictLabel"
+            :value="dict.dictValue"
+          />
         </el-select>
-      </el-form-item> -->
+      </el-form-item>
       <el-form-item>
         <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
         <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
@@ -92,14 +102,12 @@
 
     <el-table v-loading="loading" :data="paramList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
-      <el-table-column label="参数" align="center" prop="id" v-if="columns[0].visible" />
-      <el-table-column label="参数类型" align="center" prop="paramType" v-if="columns[1].visible" />
-      <el-table-column label="参数id" align="center" prop="paramKey" v-if="columns[2].visible" />
+      <el-table-column label="参数状态" align="center" prop="id" v-if="columns[0].visible" />
+      <el-table-column label="参数类型" align="center" prop="paramType" :formatter="paramTypeFormat" v-if="columns[1].visible" />
+      <el-table-column label="参数key" align="center" prop="paramKey" v-if="columns[2].visible" />
       <el-table-column label="参数数值" align="center" prop="paramValue" v-if="columns[3].visible" />
       <el-table-column label="参数描述" align="center" prop="paramDesc" v-if="columns[4].visible" />
-   <!-- <el-table-column label="参数状态" align="center" prop="paramStatus"
-
-        :formatter="statusFormat" /> -->
+      <el-table-column label="参数状态" align="center" prop="paramStatus" :formatter="paramStatusFormat" v-if="columns[5].visible" />
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope">
           <el-button
@@ -132,47 +140,33 @@
     <el-dialog :title="title" :visible.sync="open" width="500px" append-to-body>
       <el-form ref="form" :model="form" :rules="rules" label-width="80px">
         <el-form-item label="参数类型" prop="paramType">
-        <!--  <el-input v-model="form.paramType" placeholder="请输入参数id" /> -->
-         <el-select v-model="form.paramType" placeholder="请选择参数类型">
-           <!-- <el-option label="请选择字典生成" value="" /> -->
+          <el-select v-model="form.paramType" placeholder="请选择参数类型">
             <el-option
               v-for="dict in paramTypeOptions"
               :key="dict.dictValue"
               :label="dict.dictLabel"
               :value="dict.dictValue"
-            />
+            ></el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="参数id" prop="paramKey">
-          <el-input v-model="form.paramKey" placeholder="请输入参数id" />
+        <el-form-item label="参数key" prop="paramKey">
+          <el-input v-model="form.paramKey" placeholder="请输入参数key" />
         </el-form-item>
         <el-form-item label="参数数值" prop="paramValue">
           <el-input v-model="form.paramValue" placeholder="请输入参数数值" />
         </el-form-item>
         <el-form-item label="参数描述" prop="paramDesc">
-          <el-input type="textarea" rows=2 v-model="form.paramDesc" placeholder="请输入参数描述" />
+          <el-input v-model="form.paramDesc" placeholder="请输入参数描述" />
         </el-form-item>
-      <!--  <el-form-item label="参数状态" prop="paramStatus">
-
-          <!--  <el-radio checked="checked" label="0" >可用</el-radio>
-            <el-radio label="1" >不可用</el-radio> -->
-         <!-- <el-radio
+        <el-form-item label="参数状态">
+          <el-radio-group v-model="form.paramStatus">
+            <el-radio
               v-for="dict in paramStatusOptions"
               :key="dict.dictValue"
-              :label="dict.dictValue"
+              :label="parseInt(dict.dictValue)"
             >{{dict.dictLabel}}</el-radio>
           </el-radio-group>
-         <el-select v-model="form.paramStatus" placeholder="参数状态">
-
-              <el-option
-               v-for="dict in paramStatusOptions"
-               :key="dict.dictValue"
-               :label="dict.dictLabel"
-               :value="dict.dictValue"
-             >{{dict.dictLabel}} </el-option>
-          </el-select>
-
-        </el-form-item> -->
+        </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button type="primary" @click="submitForm">确 定</el-button>
@@ -205,15 +199,14 @@ export default {
       total: 0,
       // 参数配置表格数据
       paramList: [],
-      //参数类型
-      paramTypeOptions:[],
-      //参数状态类型
-      paramStatusOptions:[],
-
       // 弹出层标题
       title: "",
       // 是否显示弹出层
       open: false,
+      // 参数类型字典
+      paramTypeOptions: [],
+      // 参数状态字典
+      paramStatusOptions: [],
       // 查询参数
       queryParams: {
         pageNum: 1,
@@ -228,7 +221,7 @@ export default {
       columns: [
         { key: 0, label: `参数更新时间`, visible: true },
         { key: 1, label: `参数类型`, visible: true },
-        { key: 2, label: `参数id`, visible: true },
+        { key: 2, label: `参数key`, visible: true },
         { key: 3, label: `参数数值`, visible: true },
         { key: 4, label: `参数描述`, visible: true },
         { key: 5, label: `参数状态`, visible: true },
@@ -241,7 +234,13 @@ export default {
           { required: true, message: "参数类型不能为空", trigger: "change" }
         ],
         paramKey: [
-          { required: true, message: "参数id不能为空", trigger: "blur" }
+          { required: true, message: "参数key不能为空", trigger: "blur" }
+        ],
+        paramValue: [
+          { required: true, message: "参数数值不能为空", trigger: "blur" }
+        ],
+        paramStatus: [
+          { required: true, message: "参数状态不能为空", trigger: "blur" }
         ],
       }
     };
@@ -249,10 +248,10 @@ export default {
   created() {
     this.getList();
     this.getDicts("param_type").then(response => {
-    this.paramTypeOptions = response.data;
+      this.paramTypeOptions = response.data;
     });
     this.getDicts("param_status").then(response => {
-    this.paramStatusOptions = response.data;
+      this.paramStatusOptions = response.data;
     });
   },
   methods: {
@@ -265,10 +264,13 @@ export default {
         this.loading = false;
       });
     },
-
-    // 字典状态字典翻译
-    statusFormat(row, column) {
-      return this.selectDictLabel(this.paramStatusOptions, row.status);
+    // 参数类型字典翻译
+    paramTypeFormat(row, column) {
+      return this.selectDictLabel(this.paramTypeOptions, row.paramType);
+    },
+    // 参数状态字典翻译
+    paramStatusFormat(row, column) {
+      return this.selectDictLabel(this.paramStatusOptions, row.paramStatus);
     },
     // 取消按钮
     cancel() {

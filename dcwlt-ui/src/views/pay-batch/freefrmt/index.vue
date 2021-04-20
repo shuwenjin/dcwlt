@@ -1,9 +1,9 @@
 <template>
   <div class="app-container">
     <el-form :model="queryParams" ref="queryForm" :inline="true" v-show="showSearch" label-width="68px">
-      <el-form-item label="报文标识号" prop="msgid">
+      <el-form-item label="报文标识号" prop="msgId">
         <el-input
-          v-model="queryParams.msgid"
+          v-model="queryParams.msgId"
           placeholder="请输入报文标识号"
           clearable
           size="small"
@@ -11,18 +11,18 @@
         />
       </el-form-item>
 
-      <el-form-item label="平台日期" prop="paydate">
+      <el-form-item label="平台日期" prop="payDate">
         <el-date-picker clearable size="small"
-                        v-model="queryParams.paydate"
+                        v-model="queryParams.payDate"
                         type="date"
                         value-format="yyyy-MM-dd"
                         placeholder="选择平台日期">
         </el-date-picker>
       </el-form-item>
 
-      <el-form-item label="平台流水" prop="payserno">
+      <el-form-item label="平台流水" prop="paySerNo">
         <el-input
-          v-model="queryParams.payserno"
+          v-model="queryParams.paySerNo"
           placeholder="请输入平台流水"
           clearable
           size="small"
@@ -39,18 +39,18 @@
           />
         </el-select>
       </el-form-item>
-      <el-form-item label="发起机构" prop="instgdrctpty">
+      <el-form-item label="发起机构" prop="instgDrctPty">
         <el-input
-          v-model="queryParams.instgdrctpty"
+          v-model="queryParams.instgDrctPty"
           placeholder="请输入发起机构"
           clearable
           size="small"
         @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-      <el-form-item label="接收机构" prop="instddrctpty">
+      <el-form-item label="接收机构" prop="instdDrctPty">
         <el-input
-          v-model="queryParams.instddrctpty"
+          v-model="queryParams.instdDrctPty"
           placeholder="请输入接收机构"
           clearable
           size="small"
@@ -135,25 +135,25 @@
 <el-table v-loading="loading" :data="nonfList" @selection-change="handleSelectionChange">
 
 <el-table-column type="selection" width="55" align="center"/>
-<el-table-column label="报文标识号" align="center" prop="msgid" v-if="columns[0].visible" :show-overflow-tooltip="true"/>
-<el-table-column label="平台日期" align="center" prop="paydate" v-if="columns[1].visible" :show-overflow-tooltip="true"/>
-<el-table-column label="平台时间" align="center" prop="paytime" v-if="columns[2].visible" :show-overflow-tooltip="true"/>
-<el-table-column label="平台流水" align="center" prop="payserno" v-if="columns[3].visible" :show-overflow-tooltip="true"/>
-<el-table-column label="报文编号" align="center" prop="pkgno" v-if="columns[4].visible" :show-overflow-tooltip="true"/>
+<el-table-column label="报文标识号" align="center" prop="msgId" v-if="columns[0].visible" :show-overflow-tooltip="true"/>
+<el-table-column label="平台日期" align="center" prop="payDate" v-if="columns[1].visible" :show-overflow-tooltip="true"/>
+<el-table-column label="平台时间" align="center" prop="payTime" v-if="columns[2].visible" :show-overflow-tooltip="true"/>
+<el-table-column label="平台流水" align="center" prop="paySerNo" v-if="columns[3].visible" :show-overflow-tooltip="true"/>
+<el-table-column label="报文编号" align="center" prop="pkgNo" v-if="columns[4].visible" :show-overflow-tooltip="true"/>
 <el-table-column label="报文方向" align="center" prop="drct" v-if="columns[5].visible" :show-overflow-tooltip="true"/>
-<el-table-column label="交易状态" align="center" prop="tradestatus" v-if="columns[6].visible" :show-overflow-tooltip="true"/>
-<el-table-column label="报文发送时间" align="center" prop="senderdatetime" v-if="columns[7].visible" :show-overflow-tooltip="true"/>
-<el-table-column label="发起机构" align="center" prop="instgdrctpty" v-if="columns[8].visible" :show-overflow-tooltip="true"/>
-<el-table-column label="接收机构" align="center" prop="instddrctpty" v-if="columns[9].visible" :show-overflow-tooltip="true"/>
-<el-table-column label="操作类型" align="center" prop="opterationtype" v-if="columns[10].visible" :show-overflow-tooltip="true"/>
-<el-table-column label="业务处理状态" align="center" prop="procstatus" v-if="columns[11].visible" :show-overflow-tooltip="true"/>
-<el-table-column label="业务拒绝码" align="center" prop="rejectcode" v-if="columns[12].visible" :show-overflow-tooltip="true"/>
-<el-table-column label="业务拒绝信息" align="center" prop="rejectinfo" v-if="columns[13].visible" :show-overflow-tooltip="true"/>
-<el-table-column label="柜员号" align="center" prop="tlrno" v-if="columns[14].visible" :show-overflow-tooltip="true"/>
+<el-table-column label="交易状态" align="center" prop="tradeStatus" v-if="columns[6].visible" :show-overflow-tooltip="true"/>
+<el-table-column label="报文发送时间" align="center" prop="senderDateTime" v-if="columns[7].visible" :show-overflow-tooltip="true"/>
+<el-table-column label="发起机构" align="center" prop="instgDrctPty" v-if="columns[8].visible" :show-overflow-tooltip="true"/>
+<el-table-column label="接收机构" align="center" prop="instdDrctPty" v-if="columns[9].visible" :show-overflow-tooltip="true"/>
+<el-table-column label="操作类型" align="center" prop="opterationType" v-if="columns[10].visible" :show-overflow-tooltip="true"/>
+<el-table-column label="业务处理状态" align="center" prop="procStatus" v-if="columns[11].visible" :show-overflow-tooltip="true"/>
+<el-table-column label="业务拒绝码" align="center" prop="rejectCode" v-if="columns[12].visible" :show-overflow-tooltip="true"/>
+<el-table-column label="业务拒绝信息" align="center" prop="rejectInfo" v-if="columns[13].visible" :show-overflow-tooltip="true"/>
+<el-table-column label="柜员号" align="center" prop="tlrNo" v-if="columns[14].visible" :show-overflow-tooltip="true"/>
 <el-table-column label="备注" align="center" prop="remark" v-if="columns[15].visible" :show-overflow-tooltip="true"/>
 <el-table-column label="信息内容" align="center" prop="messageContext" v-if="columns[16].visible" :show-overflow-tooltip="true"/>
-<el-table-column label="最后更新日期" align="center" prop="lastupdate" v-if="columns[17].visible" :show-overflow-tooltip="true"/>
-<el-table-column label="最后更新时间" align="center" prop="lastuptime"v-if="columns[18].visible" :show-overflow-tooltip="true"/>
+<el-table-column label="最后更新日期" align="center" prop="lastUpDate" v-if="columns[17].visible" :show-overflow-tooltip="true"/>
+<el-table-column label="最后更新时间" align="center" prop="lastUpTime"v-if="columns[18].visible" :show-overflow-tooltip="true"/>
 
 <!--<el-table-column label="操作" align="center" class-name="small-padding fixed-width">-->
 <!--  <template slot-scope="scope">-->
@@ -186,7 +186,7 @@
   />
 
   <!-- 添加或修改非金融登记簿对话框 -->
-<el-dialog :title="title" :visible.sync="open" width="500px" append-to-body>
+<el-dialog :title="title" :visible.sync="open" width="650px" append-to-body>
   <el-form ref="form" :model="form" :rules="rules" label-width="80px">
     <el-row>
 
@@ -218,7 +218,7 @@
 
       <el-col :span="24">
         <el-form-item label="消息内容" prop="messageContext">
-          <el-input type="textarea" :rows="2" v-model.trim="form.messageContext" placeholder="请输入消息内容" />
+          <el-input type="textarea" :rows="3" v-model.trim="form.messageContext" placeholder="请输入消息内容" />
         </el-form-item>
       </el-col>
       </el-row>
@@ -271,12 +271,12 @@
   queryParams: {
   pageNum: 1,
   pageSize: 10,
-  msgid: null,
-  paydate: null,
-  payserno: null,
+  msgId: null,
+  payDate: null,
+  paySerNo: null,
   drct: null,
-  instgdrctpty: null,
-  instddrctpty: null,
+  instgDrctPty: null,
+  instdDrctPty: null,
   },
   // 表单参数
   form: {},
@@ -303,7 +303,7 @@
   ],
   // 表单校验
   rules: {
-  paydate: [
+  payDate: [
   { required: true, message: "平台日期不能为空", trigger: "blur" }
   ],
   }
@@ -357,25 +357,25 @@
   // 表单重置
   reset() {
   this.form = {
-  msgid: null,
-  paydate: null,
-  paytime: null,
-  payserno: null,
-  pkgno: null,
+  msgId: null,
+  payDate: null,
+  payTime: null,
+  paySerNo: null,
+  pkgNo: null,
   drct: null,
-  tradestatus: "0",
-  senderdatetime: null,
-  instgdrctpty: null,
-  instddrctpty: null,
-  opterationtype: null,
-  procstatus: "0",
-  rejectcode: null,
-  rejectinfo: null,
-  tlrno: null,
+  tradeStatus: "0",
+  senderDateTime: null,
+  instgDrctPty: null,
+  instdDrctPty: null,
+  opterationType: null,
+  procStatus: "0",
+  rejectCode: null,
+  rejectInfo: null,
+  tlrNo: null,
   remark: null,
   messageContext: null,
-  lastupdate: null,
-  lastuptime: null
+  lastUpDate: null,
+  lastUpTime: null
   };
   this.resetForm("form");
   },
@@ -391,7 +391,7 @@
   },
   // 多选框选中数据
   handleSelectionChange(selection) {
-  this.ids = selection.map(item => item.msgid)
+  this.ids = selection.map(item => item.msgId)
   this.single = selection.length!==1
   this.multiple = !selection.length
   },
@@ -399,13 +399,13 @@
   handleAdd() {
   this.reset();
   this.open = true;
-  this.title = "添加自由格式报文";
+  this.title = "发送自由格式报文";
   },
   /** 修改按钮操作 */
   handleUpdate(row) {
   this.reset();
-  const msgid = row.msgid || this.ids
-  getNonf(msgid).then(response => {
+  const msgId = row.msgId || this.ids
+  getNonf(msgId).then(response => {
   this.form = response.data;
   this.open = true;
   this.title = "修改非金融登记簿";
@@ -415,7 +415,7 @@
   submitForm() {
   this.$refs["form"].validate(valid => {
   if (valid) {
-  if (this.form.msgid != null) {
+  if (this.form.msgId != null) {
   updateNonf(this.form).then(response => {
   this.msgSuccess("修改成功");
   this.open = false;
@@ -433,7 +433,7 @@
   },
   /** 删除按钮操作 */
   handleDelete(row) {
-  const msgids = row.msgid || this.ids;
+  const msgids = row.msgId || this.ids;
   this.$confirm('是否确认删除非金融登记簿编号为"' + msgids + '"的数据项?', "警告", {
   confirmButtonText: "确定",
   cancelButtonText: "取消",

@@ -1,5 +1,6 @@
 package com.dcits.dcwlt.pay.batch.controller;
 
+import com.alibaba.fastjson.JSONObject;
 import com.dcits.dcwlt.common.core.utils.poi.ExcelUtil;
 import com.dcits.dcwlt.common.core.web.controller.BaseController;
 import com.dcits.dcwlt.common.core.web.domain.AjaxResult;
@@ -7,6 +8,7 @@ import com.dcits.dcwlt.common.core.web.page.TableDataInfo;
 import com.dcits.dcwlt.common.log.annotation.Log;
 import com.dcits.dcwlt.common.log.enums.BusinessType;
 import com.dcits.dcwlt.common.security.annotation.PreAuthorize;
+import com.dcits.dcwlt.pay.api.domain.ecny.dspt.DsptChnlReqDTO;
 import com.dcits.dcwlt.pay.api.model.CheckPathDO;
 import com.dcits.dcwlt.pay.batch.service.ICheckPathDOService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -69,17 +71,12 @@ public class CheckPathDOController extends BaseController
 
     /**
      * 发送801 手动差错
-     * @param checkPathDO
+     * @param dsptChnlReqDTO
      * @return
      */
     @PostMapping(value = "/executeSend801")
-    public AjaxResult executeSend801(CheckPathDO checkPathDO){
-          boolean checkResult=checkPathDOService.execute801(checkPathDO);
-        if (checkResult) {
-            return AjaxResult.success("手动差错成功");
-        } else {
-            return AjaxResult.error("手动差错失败");
-        }
+    public AjaxResult executeSend801(@RequestBody  JSONObject dsptChnlReqDTO){
+         return checkPathDOService.execute801(dsptChnlReqDTO);
     }
 
 

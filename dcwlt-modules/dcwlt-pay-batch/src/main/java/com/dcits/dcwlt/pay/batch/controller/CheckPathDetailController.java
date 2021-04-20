@@ -1,10 +1,12 @@
 package com.dcits.dcwlt.pay.batch.controller;
 
 import com.dcits.dcwlt.common.core.web.controller.BaseController;
+import com.dcits.dcwlt.common.core.web.domain.AjaxResult;
 import com.dcits.dcwlt.common.core.web.page.TableDataInfo;
 import com.dcits.dcwlt.common.security.annotation.PreAuthorize;
 import com.dcits.dcwlt.pay.api.model.CheckPathDetialDO;
 import com.dcits.dcwlt.pay.batch.service.ICheckPathDetailService;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -47,4 +49,15 @@ public class CheckPathDetailController extends BaseController
         List<CheckPathDetialDO> list = checkPathDetailService.select(workdate, batchId,checkstatus);
         return getDataTable(list);
     }
+
+    /**
+     * 获取参数配置
+     */
+    @PreAuthorize(hasPermi = "pay-batch:checkpath:list")
+    @GetMapping(value = "/querySingle")
+    public AjaxResult querySingle(String msgId,String dtlMsgId) {
+        CheckPathDetialDO checkPathDetialDO = checkPathDetailService.querySingle(msgId, dtlMsgId);
+        return AjaxResult.success(checkPathDetialDO);
+    }
+
 }
