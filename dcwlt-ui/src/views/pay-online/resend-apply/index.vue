@@ -9,6 +9,7 @@
                     @click="showSend711"
                 >机构对账汇总核对重发申请</el-button>
             </el-col>
+            <!-- 
             <el-col :span="1.5">
                 <el-button
                     type="primary"
@@ -16,7 +17,7 @@
                     size="mini"
                     @click="showSend713"
                 >资金调整汇总核对重发申请</el-button>
-            </el-col>
+            </el-col> -->
         </el-row>
         <!-- 机构对账汇总核对重发申请 -->
         <el-dialog title="机构对账汇总核对重发申请" :visible.sync="open711" width="700px" append-to-body>
@@ -25,11 +26,6 @@
                     <el-col :span="12">
                         <el-form-item label="交易批次号" prop="batchId">
                             <el-input v-model.trim="form711.batchId" placeholder="请输入交易批次号" />
-                        </el-form-item>
-                    </el-col>
-                    <el-col :span="12">
-                        <el-form-item label="对账日期" prop="checkDate">
-                            <el-input v-model.trim="form711.checkDate" placeholder="请输入对账日期" />
                         </el-form-item>
                     </el-col>
                 </el-row>
@@ -75,9 +71,6 @@ export default {
       rules711: {
         batchId: [
           { required: true, message: "交易批次号不能为空", trigger: "blur" }
-        ],
-        checkDate: [
-          { required: true, message: "对账日期不能为空", trigger: "blur" }
         ]
       },
       rules713: {
@@ -110,7 +103,11 @@ export default {
     resendApply711() {
         this.$refs["form711"].validate(valid => {
             if (valid) {
-                resendApply("dcep.711.001.01").then(() => {
+                if (this.form711.batchId.length !== 13) {
+                    this.msgError("交易批次号格式不正确，请检查");
+                    return;
+                }
+                resend711Apply(this.form711.batchId).then(() => {
                     this.msgSuccess("重发成功");
                 });
             }
@@ -119,7 +116,11 @@ export default {
     resendApply713() {
         this.$refs["form713"].validate(valid => {
             if (valid) {
-                resendApply("dcep.713.001.01").then(() => {
+                if (this.form713.clearDate.length !== 8) {
+                    this.msgError("清算日期格式不正确，请检查");
+                    return;
+                }
+                resend713Apply(this.form713.clearDate).then(() => {
                     this.msgSuccess("重发成功");
                 });
             }
