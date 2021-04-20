@@ -13,12 +13,12 @@
         #{checkStatus}, #{procStatus}, #{lastUpDate},  #{lastUpTime})
     </insert>
 	
-	<insert id="insertByBatch" parameterType="com.dcits.dcwlt.pay.api.model.CheckResultDO">
+	<insert id="insertByBatch"  parameterType="java.util.List">
         INSERT INTO PAY_BATCH_CHECKRESULT
         (PAYDATE, PAYSERNO, PAYTIME, COREACCTDATE, MSGTYPE, MSGID, BATCHID, PAYFLAG, INSTGDRCTPTY, DBITPARTY,
         PAYERWALLETID, PAYERACCOUNT, CRDTPARTY, PAYEENAME, PAYEEACCOUNT, PAYEEWALLETID, CCY, AMOUNT, OGNLMSGTYPE,
         OGNLMSGID, TRADESTATUS, CORESTATUS, PATHSTATUS, CHECKSTATUS, PROCSTATUS, LASTUPDATE, LASTUPTIME)
-        VALUES 
+        VALUE
         <foreach collection="list" item="item" index="index" separator=",">
 	       	(#{item.payDate}, #{item.paySerno}, #{item.payTime}, #{item.coreAcctDate}, #{item.msgType}, #{item.msgId}, 
 	       	#{item.batchId}, #{item.payFlag}, #{item.instgDrctPty}, #{item.dbitParty}, #{item.payerWalletId}, #{item.payerAccount}, 

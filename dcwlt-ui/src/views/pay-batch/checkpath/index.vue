@@ -56,17 +56,6 @@
     <el-row :gutter="10" class="mb8">
       <el-col :span="1.5">
         <el-button
-          type="info"
-          plain
-          icon="el-icon-s-operation"
-          size="mini"
-          @click="handleDetail"
-          :disabled="single"
-          v-hasPermi="['pay-batch:checkpath:list']"
-        >对账明细</el-button>
-      </el-col>
-      <el-col :span="1.5">
-        <el-button
           type="warning"
           plain
           icon="el-icon-download"
@@ -411,12 +400,6 @@ export default {
         this.msgSuccess("重新对账成功");
       });
     },
-
-    /** 对账明细按钮操作 */
-    handleDetail() {
-      this.$router.push({name: 'Checkpathdtl', params: {data: this.selectRow}});
-
-  },
   }
 };
 </script>

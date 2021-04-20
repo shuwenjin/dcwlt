@@ -68,10 +68,6 @@ public class ReSendApy920STradeFlow {
 
     private static final String RES_STS_FAILED = "failed";
 
-
-//    @Autowired
-//    private ECNYSerNoService ecnySerNoService;
-
     @Autowired
     private DcepService dcepService;
 

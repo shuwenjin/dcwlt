@@ -16,7 +16,7 @@
     </insert>
 
     <!--通道对账汇总表批量入库-->
-    <insert id="insertByBatch" parameterType="com.dcits.dcwlt.pay.api.model.CheckPathDO">
+    <insert id="insertByBatch" parameterType="java.util.List">
         INSERT INTO PAY_BATCH_CHECKPATH
         (PAYDATE, PAYSERNO, PAYTIME, MSGID, SENDERDATETIME, INSTGDRCTPTY, INSTDDRCTPTY, REMARK, DIGITALENVELOPE,
         BATCHDATE, BATCHID, COUNTNUM, COUNTAMT, CCY, DBITCOUNTNUM, DBITCOUNTAMT, CRDTCOUNTNUM, CRDTCOUNTAMT,
