@@ -13,13 +13,13 @@
         #{ognlMsgId}, #{tradeStatus}, #{coreStatus}, #{pathStatus}, #{lastUpDate}, #{lastUpTime})
     </insert>
 
-    <insert id="insertByBatch">
+    <insert id="insertByBatch" parameterType="java.util.List">
         INSERT INTO PAY_BATCH_CHECKCOLLECT
         (PAYDATE, PAYSERNO, PAYTIME, COREACCTDATE, MSGTYPE, MSGID, BATCHID, PAYFLAG, INSTGDRCTPTY, DBITPARTY,
         PAYERWALLETID,
         PAYERACCOUNT, CRDTPARTY, PAYEENAME, PAYEEACCOUNT, PAYEEWALLETID, CCY, AMOUNT, OGNLMSGTYPE, OGNLMSGID,
         TRADESTATUS, CORESTATUS, PATHSTATUS, LASTUPDATE, LASTUPTIME)
-        VALUES
+        VALUE
         <foreach collection="list" item="item" index="index" separator=",">
             (#{item.payDate}, #{item.paySerno}, #{item.payTime}, #{item.coreAcctDate}, #{item.msgType}, #{item.msgId},
             #{item.batchId}, #{item.payFlag}, #{item.instgDrctPty}, #{item.dBITParty}, #{item.payerWalletId},
