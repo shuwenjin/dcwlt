@@ -35,7 +35,6 @@ import com.dcits.dcwlt.pay.online.service.IPartyService;
 import com.dcits.dcwlt.pay.online.service.IPayTransDtlInfoService;
 import com.dcits.dcwlt.pay.online.service.impl.BankCoreAccTxnServiceImpl;
 import com.dcits.dcwlt.pay.online.service.impl.CoreEventServiceImpl;
-import com.dcits.dcwlt.pay.online.service.impl.ECNYSerNoService;
 import com.dcits.dcwlt.pay.online.task.ParamConfigCheckTask;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
@@ -76,10 +75,6 @@ public class DisputeInfo801RTradeFlow {
 
     @Autowired
     private ICoreProcessService bankCoreProcessService;
-
-
-    @Autowired
-    private ECNYSerNoService ecnySerNoService;
 
     @Autowired
     private BankCoreAccTxnServiceImpl bankCoreAccTxnService;

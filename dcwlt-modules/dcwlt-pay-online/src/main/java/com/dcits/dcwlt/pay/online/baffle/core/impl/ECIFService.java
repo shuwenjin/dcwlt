@@ -1,10 +1,8 @@
 package com.dcits.dcwlt.pay.online.baffle.core.impl;
 
 import com.dcits.dcwlt.common.pay.channel.bankcore.dto.bankcore358040.BankCore358040Rsp;
-import com.dcits.dcwlt.pay.online.service.impl.ECNYSerNoService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 /**
@@ -15,10 +13,6 @@ import org.springframework.stereotype.Service;
 @Service
 public class ECIFService {
     private static final Logger logger = LoggerFactory.getLogger(ECIFService.class);
-
-    @Autowired
-    private ECNYSerNoService ecnySerNoService;
-
 
     private static final String flagY = "Y";
 
