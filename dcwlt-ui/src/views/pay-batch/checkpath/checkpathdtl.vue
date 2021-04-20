@@ -335,17 +335,17 @@
       /** 提交按钮 */
       submitForm() {
 
-        console.log(this.form)
-        this.execute801paramers.msgId = this.form.msgId;
-        this.execute801paramers.disputeReason = this.form.disputeReason;
-        this.execute801paramers.disputeReasonCode = this.form.disputeReasonCode;
-        this.execute801paramers.operType = this.form.operType;
-        this.execute801paramers.payDate = this.form.workdate;
-        this.execute801paramers.batchId = this.form.batchId;
-        this.execute801paramers.msgTp = this.form.msgType;
-        this.execute801paramers.paySerno = this.form.amount;
-        this.execute801paramers.checkstatus = this.form.checkstatus;
-        this.execute801paramers.instgPty = this.form.instgDrctPty;
+        // console.log(this.form)
+        // this.execute801paramers.msgId = this.form.msgId;
+        // this.execute801paramers.disputeReason = this.form.disputeReason;
+        // this.execute801paramers.disputeReasonCode = this.form.disputeReasonCode;
+        // this.execute801paramers.operType = this.form.operType;
+        // this.execute801paramers.payDate = this.form.workdate;
+        // this.execute801paramers.batchId = this.form.batchId;
+        // this.execute801paramers.msgTp = this.form.msgType;
+        // this.execute801paramers.paySerno = this.form.amount;
+        // this.execute801paramers.checkstatus = this.form.checkstatus;
+        // this.execute801paramers.instgPty = this.form.instgDrctPty;
         send801(this.form).then(response => {
           this.msgSuccess("新增成功");
 
