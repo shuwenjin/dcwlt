@@ -1,0 +1,206 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dcits.dcwlt.pay.batch.mapper.SignInfoMapper">
+
+    <!--协议信息入库-->
+    <insert id="insert" parameterType="com.dcits.dcwlt.pay.api.model.SignInfoDO">
+        INSERT INTO pay_sign_signinfo
+        (PAYDATE,
+        PAYSERNO,
+        PAYTIME,
+        SIGNNO,
+        SIGNSTATUS,
+        ACCTPTYID,
+        ACCTTYPE,
+        ACCTID,
+        ACCTNAME,
+        IDTYPE,
+        IDNO,
+        TELEPHONE,
+        WALLETPTYID,
+        WALLETID,
+        WALLETTYPE,
+        WALLETLEVEL,
+        LASTUPJRNNO,
+        LASTUPDATE,
+        LASTUPTIME
+        )
+        VALUES(
+        #{payDate},
+        #{paySerNo},
+        #{payTime},
+        #{signNo},
+        #{signStatus},
+        #{acctPtyId},
+        #{acctType},
+        #{acctId},
+        #{acctName},
+        #{idType},
+        #{idNo},
+        #{telephone},
+        #{walletPtyId},
+        #{walletId},
+        #{walletType},
+        #{walletLevel},
+        #{lastUpJrnNo},
+        #{lastUpDate},
+        #{lastUpTime}
+        )
+    </insert>
+
+    <select id="selectBySignNo" resultType="com.dcits.dcwlt.pay.api.model.SignInfoDO">
+        SELECT
+        PAYDATE        payDate,
+        PAYSERNO       paySerNo,
+        PAYTIME        payTime,
+        SIGNNO         signNo,
+        SIGNSTATUS     signStatus,
+        ACCTPTYID      acctPtyId,
+        ACCTTYPE       acctType,
+        ACCTID         acctId,
+        ACCTNAME       acctName,
+        IDTYPE         idType,
+        IDNO           idNo,
+        TELEPHONE      telephone,
+        WALLETPTYID    walletPtyId,
+        WALLETID       walletId,
+        WALLETTYPE     walletType,
+        WALLETLEVEL    walletLevel,
+        LASTUPJRNNO    lastUpJrnNo,
+        LASTUPDATE     lastUpDate,
+        LASTUPTIME     lastUpTime
+        FROM pay_sign_signinfo WHERE SIGNNO = #{signNo}
+    </select>
+
+    <select id="selectByWltIdAndAcctId" resultType="com.dcits.dcwlt.pay.api.model.SignInfoDO">
+        SELECT
+        PAYDATE        payDate,
+        PAYSERNO       paySerNo,
+        PAYTIME        payTime,
+        SIGNNO         signNo,
+        SIGNSTATUS     signStatus,
+        ACCTPTYID      acctPtyId,
+        ACCTTYPE       acctType,
+        ACCTID         acctId,
+        ACCTNAME       acctName,
+        IDTYPE         idType,
+        IDNO           idNo,
+        TELEPHONE      telephone,
+        WALLETPTYID    walletPtyId,
+        WALLETID       walletId,
+        WALLETTYPE     walletType,
+        WALLETLEVEL    walletLevel,
+        LASTUPJRNNO    lastUpJrnNo,
+        LASTUPDATE     lastUpDate,
+        LASTUPTIME     lastUpTime
+        FROM pay_sign_signinfo
+        WHERE WALLETID = #{walletId}
+        AND   ACCTID   = #{acctId}
+    </select>
+    <update id="updateBySignNo" parameterType="com.dcits.dcwlt.pay.api.model.SignInfoDO">
+        UPDATE pay_sign_signinfo
+        <set>
+            <if test = "payDate     !=null "> PAYDATE      = #{payDate}     ,</if>
+            <if test = "paySerNo    !=null "> PAYSERNO     = #{paySerNo}    ,</if>
+            <if test = "payTime     !=null "> PAYTIME      = #{payTime}     ,</if>
+            <if test = "signStatus  !=null "> SIGNSTATUS   = #{signStatus}  ,</if>
+            <if test = "acctPtyId   !=null "> ACCTPTYID    = #{acctPtyId}   ,</if>
+            <if test = "acctType    !=null "> ACCTTYPE     = #{acctType}    ,</if>
+            <if test = "acctId      !=null "> ACCTID       = #{acctId}      ,</if>
+            <if test = "acctName    !=null "> ACCTNAME     = #{acctName}    ,</if>
+            <if test = "idType      !=null "> IDTYPE       = #{idType}      ,</if>
+            <if test = "idNo        !=null "> IDNO         = #{idNo}        ,</if>
+            <if test = "telephone   !=null "> TELEPHONE    = #{telephone}   ,</if>
+            <if test = "walletPtyId !=null "> WALLETPTYID  = #{walletPtyId} ,</if>
+            <if test = "walletId    !=null "> WALLETID     = #{walletId}    ,</if>
+            <if test = "walletType  !=null "> WALLETTYPE   = #{walletType}  ,</if>
+            <if test = "walletLevel !=null "> WALLETLEVEL  = #{walletLevel} ,</if>
+            <if test = "lastUpJrnNo !=null "> LASTUPJRNNO  = #{lastUpJrnNo} ,</if>
+            <if test = "lastUpDate  !=null "> LASTUPDATE   = #{lastUpDate}  ,</if>
+            <if test = "lastUpTime  !=null "> LASTUPTIME   = #{lastUpTime}   </if>
+        </set>
+        WHERE SIGNNO = #{signNo}
+    </update>
+
+
+    <update id="updateByWltIdAndAcctId" parameterType="com.dcits.dcwlt.pay.api.model.SignInfoDO">
+        UPDATE pay_sign_signinfo
+        <set>
+            <if test = "signNo     !=null ">  SIGNNO      =  #{signNo}     ,</if>
+            <if test = "payDate     !=null "> PAYDATE      = #{payDate}     ,</if>
+            <if test = "paySerNo    !=null "> PAYSERNO     = #{paySerNo}    ,</if>
+            <if test = "payTime     !=null "> PAYTIME      = #{payTime}     ,</if>
+            <if test = "signStatus  !=null "> SIGNSTATUS   = #{signStatus}  ,</if>
+            <if test = "acctPtyId   !=null "> ACCTPTYID    = #{acctPtyId}   ,</if>
+            <if test = "acctType    !=null "> ACCTTYPE     = #{acctType}    ,</if>
+            <if test = "acctName    !=null "> ACCTNAME     = #{acctName}    ,</if>
+            <if test = "idType      !=null "> IDTYPE       = #{idType}      ,</if>
+            <if test = "idNo        !=null "> IDNO         = #{idNo}        ,</if>
+            <if test = "telephone   !=null "> TELEPHONE    = #{telephone}   ,</if>
+            <if test = "walletPtyId !=null "> WALLETPTYID  = #{walletPtyId} ,</if>
+            <if test = "walletType  !=null "> WALLETTYPE   = #{walletType}  ,</if>
+            <if test = "walletLevel !=null "> WALLETLEVEL  = #{walletLevel} ,</if>
+            <if test = "lastUpJrnNo !=null "> LASTUPJRNNO  = #{lastUpJrnNo} ,</if>
+            <if test = "lastUpDate  !=null "> LASTUPDATE   = #{lastUpDate}  ,</if>
+            <if test = "lastUpTime  !=null "> LASTUPTIME   = #{lastUpTime}   </if>
+        </set>
+        WHERE WALLETID = #{walletId}
+        AND ACCTID = #{acctId}
+    </update>
+
+    <resultMap type="com.dcits.dcwlt.pay.api.model.SignInfoDO" id="SignInfoResult">
+        <result property="payDate"    column="paydate"    />
+        <result property="paySerNo"    column="payserno"    />
+        <result property="payTime"    column="paytime"    />
+        <result property="signNo"    column="signno"    />
+        <result property="signStatus"    column="signstatus"    />
+        <result property="acctPtyId"    column="acctptyid"    />
+        <result property="acctType"    column="accttype"    />
+        <result property="acctId"    column="acctid"    />
+        <result property="acctName"    column="acctname"    />
+        <result property="idType"    column="idtype"    />
+        <result property="idNo"    column="idno"    />
+        <result property="telephone"    column="telephone"    />
+        <result property="walletPtyId"    column="walletptyid"    />
+        <result property="walletId"    column="walletid"    />
+        <result property="walletType"    column="wallettype"    />
+        <result property="walletLevel"    column="walletlevel"    />
+        <result property="lastUpJrnNo"    column="lastupjrnno"    />
+        <result property="lastUpDate"    column="lastupdate"    />
+        <result property="lastUpTime"    column="lastuptime"    />
+    </resultMap>
+
+    <sql id="selectSignInfo">
+        SELECT
+        PAYDATE        payDate,
+        PAYSERNO       paySerNo,
+        PAYTIME        payTime,
+        SIGNNO         signNo,
+        SIGNSTATUS     signStatus,
+        ACCTPTYID      acctPtyId,
+        ACCTTYPE       acctType,
+        ACCTID         acctId,
+        ACCTNAME       acctName,
+        IDTYPE         idType,
+        IDNO           idNo,
+        TELEPHONE      telephone,
+        WALLETPTYID    walletPtyId,
+        WALLETID       walletId,
+        WALLETTYPE     walletType,
+        WALLETLEVEL    walletLevel,
+        LASTUPJRNNO    lastUpJrnNo,
+        LASTUPDATE     lastUpDate,
+        LASTUPTIME     lastUpTime
+        FROM pay_sign_signinfo
+    </sql>
+
+    <select id="selectPartSignInfo" parameterType="com.dcits.dcwlt.pay.api.model.SignInfoDO" resultMap="SignInfoResult">
+        <include refid="selectSignInfo"/>
+        <where>
+            <if test="signNo != null  and signNo != ''"> and signno = #{signNo}</if>
+            <if test="signStatus != null  and signStatus != ''"> and signstatus = #{signStatus}</if>
+            <if test="idNo != null  and idNo != ''"> and idno = #{idNo}</if>
+            <if test="walletId != null  and walletId != ''"> and walletid = #{walletId}</if>
+        </where>
+    </select>
+</mapper>
