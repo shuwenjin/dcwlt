@@ -88,7 +88,7 @@
             size="mini"
             type="text"
             icon="el-icon-view"
-            @click="handleView(scope.row)"
+            @click="handleView(scope.row,scope.index)"
             v-hasPermi="['pay-batch:transdtl:query']"
           >详细</el-button>
         </template>
@@ -103,9 +103,9 @@
       @pagination="getList"
     />
 
-    <!-- 操作日志详细 -->
-    <el-dialog title="操作日志详细" :visible.sync="open" width="700px" append-to-body>
-      <el-form ref="form" :model="form" label-width="100px" size="mini">
+    <!-- 金融交易详情 -->
+    <el-dialog title="金融交易详情" :visible.sync="open" width="700px" append-to-body>
+      <el-form ref="form" :model="form" label-width="150px" size="mini">
         <el-row>
           <el-col :span="12">
             <el-form-item label="平台日期">{{ form.payDate }}</el-form-item>
@@ -195,16 +195,6 @@
         <el-button @click="open = false">关 闭</el-button>
       </div>
     </el-dialog>
-    <!-- 添加或修改金融交易登记对话框 -->
-    <el-dialog :title="title" :visible.sync="open" width="500px" append-to-body>
-      <el-form ref="form" :model="form" :rules="rules" label-width="80px">
-      </el-form>
-      <div slot="footer" class="dialog-footer">
-        <el-button type="primary" @click="submitForm">确 定</el-button>
-        <el-button @click="cancel">取 消</el-button>
-      </div>
-    </el-dialog>
-  </div>
   </div>
 </template>
 
