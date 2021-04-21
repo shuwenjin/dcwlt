@@ -116,7 +116,7 @@
         :show-overflow-tooltip="true" />
       <el-table-column label="操作类型" align="center" prop="opterationType" v-if="columns[10].visible"
         :show-overflow-tooltip="true" />
-      <el-table-column label="业务处理状态" align="center" prop="procStatus" v-if="columns[11].visible"
+      <el-table-column label="业务处理状态" align="center" prop="procStatus" :formatter="procStatusFormat" v-if="columns[11].visible"
         :show-overflow-tooltip="true" />
       <el-table-column label="业务拒绝码" align="center" prop="rejectCode" v-if="columns[12].visible"
         :show-overflow-tooltip="true" />
@@ -372,6 +372,11 @@
       //   this.retryStatusOptions=response.data.rows;
       // });
 
+  //业务处理状态数据字典
+  this.getDicts("PR").then(response => {
+    this.procStatusOptions = response.data;
+    console.info(this.procStatusOptions);
+  });
     },
     methods: {
 
@@ -400,6 +405,11 @@
       // 报文方向字典翻译
       drctFormat(row, column) {
         return this.selectDictLabel(this.drctOptions, row.drct);
+      },
+
+      //业务处理状态数据字典
+      procStatusFormat(row, column) {
+        return this.selectDictLabel(this.procStatusOptions, row.procStatus);
       },
       // 取消按钮
       cancel() {
