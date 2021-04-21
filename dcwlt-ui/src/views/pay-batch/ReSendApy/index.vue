@@ -52,9 +52,9 @@
       <el-table-column type="selection" width="55" align="center" />
       <el-table-column label="报文标识号" align="center" prop="msgId" v-if="columns[0].visible" />
       <el-table-column label="平台日期" align="center" prop="payDate" width="180" v-if="columns[1].visible">
-        <template slot-scope="scope">
+       <!-- <template slot-scope="scope">
           <span>{{ parseTime(scope.row.paydate, '{y}-{m}-{d}') }}</span>
-        </template>
+        </template> -->
       </el-table-column>
       <el-table-column label="平台时间" align="center" prop="payTime" v-if="columns[2].visible" />
       <el-table-column label="平台流水" align="center" prop="paySerNo" v-if="columns[3].visible" />
@@ -64,7 +64,8 @@
       <el-table-column label="业务处理状态" align="center" prop="procStatus" v-if="columns[7].visible" />
       <el-table-column label="业务拒绝码" align="center" prop="rejectCode" v-if="columns[8].visible" />
       <el-table-column label="业务拒绝信息" align="center" prop="rejectInfo" v-if="columns[9].visible" />
-      <el-table-column label="柜员号" align="center" prop="tlrNo" v-if="columns[10].visible" />
+<!--      <el-table-column label="柜员号" align="center" prop="tlrNo" v-if="columns[10].visible" />
+ -->
       <el-table-column label="备注" align="center" prop="remark" v-if="columns[11].visible" />
       <el-table-column label="信息内容" align="center" prop="messageContext" v-if="columns[12].visible" />
       <el-table-column label="最后更新日期" align="center" prop="lastUpDate" v-if="columns[13].visible" />
@@ -144,13 +145,13 @@
           { key: 5, label: `报文发送时间`, visible: true },
           { key: 6, label: `接收机构`, visible: true },
           { key: 7, label: `业务处理状态`, visible: true },
-          { key: 8, label: `业务拒绝码`, visible: fasle },
-          { key: 9, label: `业务拒绝信息`, visible: fasle },
+          { key: 8, label: `业务拒绝码`, visible: false },
+          { key: 9, label: `业务拒绝信息`, visible: false },
           { key: 10, label: `柜员号`, visible: true },
-          { key: 11, label: `备注`, visible: fasle },
-          { key: 12, label: `信息内容`, visible: fasle },
-          { key: 13, label: `最后更新日期`, visible: fasle },
-          { key: 14, label: `最后更新时间`, visible: fasle }
+          { key: 11, label: `备注`, visible: false },
+          { key: 12, label: `信息内容`, visible: false },
+          { key: 13, label: `最后更新日期`, visible: false },
+          { key: 14, label: `最后更新时间`, visible: false }
         ],
         // 表单参数
         queryForm: {},
