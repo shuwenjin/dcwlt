@@ -61,7 +61,7 @@
       <el-table-column label="报文编号" align="center" prop="pkgNo" v-if="columns[4].visible" />
       <el-table-column label="报文发送时间" align="center" prop="senderDateTime" v-if="columns[5].visible" />
       <el-table-column label="接收机构" align="center" prop="instdDrctPty" v-if="columns[6].visible" />
-      <el-table-column label="业务处理状态" align="center" prop="procStatus" v-if="columns[7].visible" />
+      <el-table-column label="业务处理状态" align="center" prop="procStatus" :formatter="procStatusFormat" v-if="columns[7].visible" />
       <el-table-column label="业务拒绝码" align="center" prop="rejectCode" v-if="columns[8].visible" />
       <el-table-column label="业务拒绝信息" align="center" prop="rejectInfo" v-if="columns[9].visible" />
 <!--      <el-table-column label="柜员号" align="center" prop="tlrNo" v-if="columns[10].visible" />
@@ -168,6 +168,12 @@
     },
     created() {
       this.getList();
+
+      //业务处理状态数据字典
+    this.getDicts("PR").then(response => {
+      this.procStatusOptions = response.data;
+      console.info(this.procStatusOptions);
+    });
     },
     methods: {
       /** 查询交易重发申请列表 */
@@ -179,6 +185,12 @@
           this.loading = false;
         });
       },
+
+       //业务处理状态数据字典
+      procStatusFormat(row, column) {
+        return this.selectDictLabel(this.procStatusOptions, row.procStatus);
+      },
+
       /** 搜索按钮操作 */
       handleQuery() {
         this.queryParams.pageNum = 1;
