@@ -97,7 +97,7 @@
       <el-table-column label="机构类型" align="center" prop="partyType" :formatter="partytypeFormat" v-if="columns[1].visible":show-overflow-tooltip="true"/>
       <el-table-column label="机构名称" align="center" prop="partyName" v-if="columns[2].visible":show-overflow-tooltip="true"/>
       <el-table-column label="机构标识" align="center" prop="partyAlias" v-if="columns[3].visible":show-overflow-tooltip="true"/>
-      <el-table-column label="机构状态" align="center" prop="partyStatus" v-if="columns[4].visible":show-overflow-tooltip="true"/>
+      <el-table-column label="机构状态" align="center" prop="partyStatus" :formatter="partyStatusFormat" v-if="columns[4].visible":show-overflow-tooltip="true"/>
       <el-table-column label="撤销状态" align="center" prop="status" v-if="columns[5].visible":show-overflow-tooltip="true"/>
       <el-table-column label="联系人" align="center" prop="contact" v-if="columns[6].visible":show-overflow-tooltip="true"/>
       <el-table-column label="电话" align="center" prop="telephone" v-if="columns[7].visible":show-overflow-tooltip="true"/>
@@ -218,6 +218,10 @@
       this.getDicts("partyType").then(response => {
         this.partytypeOptions = response.data;
       });
+
+      this.getDicts("ST").then(response => {
+        this.partyStatusOptions = response.data;
+      });
     },
     methods: {
       /** 查询机构列表 */
@@ -233,6 +237,13 @@
       partytypeFormat(row, column) {
         return this.selectDictLabel(this.partytypeOptions, row.partyType);
       },
+
+
+      // 机构类型字典翻译
+      partyStatusFormat(row, column) {
+        return this.selectDictLabel(this.partyStatusOptions, row.partyStatus);
+      },
+
       // 取消按钮
       cancel() {
         this.open = false;

@@ -50,11 +50,11 @@
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope">
 
-          <!--
-            v-bind:disabled="scope.row.checkStatus=='SAME'"
-            -->
+
+          <!--  v-bind:disabled="scope.row.checkStatus=='SAME'" -->
+
           <!--当前状态不是“SAME” 就显示，进行调账-->
-          <el-button size="mini" type="primary" plain @click="handleUpdate(scope.row)">手动差错</el-button>
+          <el-button size="mini"  v-if="scope.row.checkStatus!='SAME'" type="primary" plain @click="handleUpdate(scope.row)">手动差错</el-button>
 
         </template>
       </el-table-column>
