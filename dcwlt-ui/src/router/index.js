@@ -138,7 +138,7 @@ export const constantRoutes = [
     children: [
       {
         path: 'apply',
-        component: (resolve) => require(['@/views/pay-online/resend-apply'], resolve),
+        component: (resolve) => require(['@/views/pay-batch/ReSendApy'], resolve),
         name: 'ResendApply',
         meta: { title: '重发申请' }
       }
