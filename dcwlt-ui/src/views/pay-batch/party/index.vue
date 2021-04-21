@@ -220,7 +220,9 @@
       });
 
       this.getDicts("ST").then(response => {
+        
         this.partyStatusOptions = response.data;
+        console.info(partyStatusOptions);
       });
     },
     methods: {
@@ -239,7 +241,7 @@
       },
 
 
-      // 机构类型字典翻译
+      // 机构状态字典翻译
       partyStatusFormat(row, column) {
         return this.selectDictLabel(this.partyStatusOptions, row.partyStatus);
       },
