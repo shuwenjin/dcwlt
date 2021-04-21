@@ -2,6 +2,7 @@ package com.dcits.dcwlt.pay.online.controller.front;
 
 import com.dcits.dcwlt.common.core.web.controller.BaseController;
 import com.dcits.dcwlt.common.core.web.domain.AjaxResult;
+import com.dcits.dcwlt.common.core.web.page.TableDataInfo;
 import com.dcits.dcwlt.common.log.annotation.Log;
 import com.dcits.dcwlt.common.log.enums.BusinessType;
 import com.dcits.dcwlt.common.security.annotation.PreAuthorize;
@@ -11,10 +12,9 @@ import com.dcits.dcwlt.pay.api.model.PayTransDtlNonfDO;
 import com.dcits.dcwlt.pay.online.flow.EcnyTransInTradeFlow;
 import com.dcits.dcwlt.pay.online.flow.send.ReSendApy920STradeFlow;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 /**
  * 交易重发申请Controller
@@ -25,15 +25,16 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/ReSendApy")
 public class ReSendApyController extends BaseController {
+
 //    @Autowired
 //    private IPayPayTransdtlNonfService payPayTransdtlNonfService;
 
     @Autowired
     private EcnyTransInTradeFlow ecnyTransInTradeFlow;
-//
-//    /**
-//     * 查询交易重发申请列表
-//     */
+
+    /**
+     * 查询交易重发申请列表
+     */
 //    @PreAuthorize(hasPermi = "pay-batch:ReSendApy:list")
 //    @GetMapping("/list")
 //    public TableDataInfo list(PayTransDtlNonfDO payPayTransdtlNonf) {
