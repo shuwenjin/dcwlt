@@ -1,6 +1,7 @@
 package com.dcits.dcwlt.pay.api.model;
 
 
+import com.dcits.dcwlt.common.core.annotation.Excel;
 import com.dcits.dcwlt.common.pay.enums.LoginOperationTpCdEnum;
 
 /**
@@ -11,24 +12,43 @@ import com.dcits.dcwlt.common.pay.enums.LoginOperationTpCdEnum;
  */
 public class PayTransDtlNonfDO {
 
+    @Excel(name = "报文标识号")
     private String msgId;                           //报文标识号
+    @Excel(name = "平台日期")
     private String payDate;                         //平台日期
+    @Excel(name = "平台时间")
     private String payTime;                         //平台时间
+    @Excel(name = "平台流水")
     private String paySerNo;                        //平台流水
+    @Excel(name = "报文编号")
     private String pkgNo;                           //报文编号
+    @Excel(name = "报文方向")
     private String drct;                            //报文方向
+    @Excel(name = "交易状态")
     private String tradeStatus;                     //交易状态
+    @Excel(name = "报文发送时间")
     private String senderDateTime;                  //报文发送时间
+    @Excel(name = "发起机构")
     private String instgDrctPty;                    //发起机构
+    @Excel(name = "接收机构")
     private String instdDrctPty;                    //接收机构
+    @Excel(name = "操作类型")
     private LoginOperationTpCdEnum opterationType;  //操作类型
+    @Excel(name = "业务处理状态")
     private String procStatus;                      //业务处理状态
+    @Excel(name = "业务拒绝码")
     private String rejectCode;                      //业务拒绝码
+    @Excel(name = "业务拒绝信息")
     private String rejectInfo;                      //业务拒绝信息
+    @Excel(name = "柜员号")
     private String tlrNo;                           //柜员号
+    @Excel(name = "备注")
     private String remark;                          //备注
+    @Excel(name = "信息内容")
     private String messageContext;                  //信息内容
+    @Excel(name = "最后更新日期")
     private String lastUpDate;                      //最后更新日期
+    @Excel(name = "最后更新时间")
     private String lastUpTime;                      //最后更新时间
 
 

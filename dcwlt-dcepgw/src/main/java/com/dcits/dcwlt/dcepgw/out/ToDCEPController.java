@@ -1,17 +1,19 @@
-package com.dcits.dcwlt.dcepgw.controller;
+package com.dcits.dcwlt.dcepgw.out;
 
 import com.dcits.dcwlt.dcepgw.utils.DcspMsgUtil;
 import com.dcits.dcwlt.dcepgw.utils.RestUtil;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 /*
-  接入，转发至城银清
+  应用接入，转发至城银清
  */
 @RestController
-public class GatewayController {
+@Slf4j
+public class ToDCEPController {
 
     @Value("${decp.server-addr}")
     private String decp_addr;
@@ -25,9 +27,12 @@ public class GatewayController {
             //组包
             String msg = DcspMsgUtil.pack(reqmsg);
             //发送至城银清
-            rspMsg = RestUtil.getRsp(reqmsg, decp_addr);
+            rspMsg = RestUtil.getRsp(msg, decp_addr);
+
+            //拆包
+            rspMsg = DcspMsgUtil.unPack(rspMsg).toJSONString();
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error("请求城银清异常！",e);
         }
 
         return rspMsg;
