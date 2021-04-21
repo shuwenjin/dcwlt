@@ -1,25 +1,20 @@
 package com.dcits.dcwlt.pay.online.controller.front;
 
-import com.dcits.dcwlt.common.core.utils.poi.ExcelUtil;
 import com.dcits.dcwlt.common.core.web.controller.BaseController;
 import com.dcits.dcwlt.common.core.web.domain.AjaxResult;
-import com.dcits.dcwlt.common.core.web.page.TableDataInfo;
 import com.dcits.dcwlt.common.log.annotation.Log;
 import com.dcits.dcwlt.common.log.enums.BusinessType;
 import com.dcits.dcwlt.common.security.annotation.PreAuthorize;
+import com.dcits.dcwlt.pay.api.domain.dcep.resendapply.ReSendApyReqDTO;
+import com.dcits.dcwlt.pay.api.domain.ecny.ECNYReqDTO;
 import com.dcits.dcwlt.pay.api.model.PayTransDtlNonfDO;
-import com.dcits.dcwlt.pay.api.service.IPayPayTransdtlNonfService;
+import com.dcits.dcwlt.pay.online.flow.EcnyTransInTradeFlow;
+import com.dcits.dcwlt.pay.online.flow.send.ReSendApy920STradeFlow;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
-import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
-import java.util.List;
 
 /**
  * 交易重发申请Controller
@@ -32,6 +27,9 @@ import java.util.List;
 public class ReSendApyController extends BaseController {
 //    @Autowired
 //    private IPayPayTransdtlNonfService payPayTransdtlNonfService;
+
+    @Autowired
+    private EcnyTransInTradeFlow ecnyTransInTradeFlow;
 //
 //    /**
 //     * 查询交易重发申请列表
@@ -65,6 +63,14 @@ public class ReSendApyController extends BaseController {
     @PostMapping("/resend")
     public AjaxResult add(@RequestBody PayTransDtlNonfDO payPayTransdtlNonf) {
 //        return toAjax(payPayTransdtlNonfService.insertPayPayTransdtlNonf(payPayTransdtlNonf));
+       // return
+
+        ECNYReqDTO<ReSendApyReqDTO> reSendApyReqDTO=new ECNYReqDTO<>();
+        //payPayTransdtlNonf 自己组装 reSendApyReqDTO
+        ecnyTransInTradeFlow.execute(reSendApyReqDTO, ReSendApy920STradeFlow.RESEND_APPLY_TRADE_FLOW);
+
+
+        //920
         return toAjax(1);
     }
 }
