@@ -17,8 +17,8 @@ export function getNonf(msgid) {
   })
 }
 
-
-function body(tlrNo, opterationType) {
+//登入登出的报文体
+function reqData(tlrNo, opterationType) {
   var head = {
     "tranDate": "20210317",
     "tranTime": "103524",
@@ -45,7 +45,7 @@ function body(tlrNo, opterationType) {
   }
 
   return requestData;
-  
+
 }
 // 登入
 export function handerLogin(msgid) {
@@ -70,10 +70,10 @@ export function handerLoginout(msgid) {
 
 //登入操作（从pay-online 直接访问）
 export function loginoutFmtMsgSnd(tlrNo, opterationType) {
-  
-  let requestData = body(tlrNo, opterationType);
+
+  let requestData = reqData(tlrNo, opterationType);
   console.info(requestData);
- 
+
   return request({
     url: '/dcwlt-pay-online/dcwlt/loginoutFmtMsgSnd',
     method: 'post',
