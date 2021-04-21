@@ -44,7 +44,7 @@ export function listCheckpathdetails(query) {
 }
 
 
-//登入登出的报文体
+//手动差错的报文体
 function reqData(data) {
   var head = {
     "tranDate": "20210317",

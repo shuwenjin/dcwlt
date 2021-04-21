@@ -46,7 +46,7 @@ export function exportNonf(data) {
   })
 }
 
-//登入登出的报文体
+//自由格式发送的报文体
 function reqData(tlrNO, msgContext,instdDrctPty) {
   var head = {
     "tranDate": "20210317",
