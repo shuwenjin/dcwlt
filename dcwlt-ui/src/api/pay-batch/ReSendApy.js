@@ -12,7 +12,7 @@ export function listReSendApy(query) {
 // 交易重发申请
 export function addReSendApy(data) {
   return request({
-    url: '/pay-online/ReSendApy/resend',
+    url: '/dcwlt-pay-online/ReSendApy/resend',
     method: 'post',
     data: data
   })
