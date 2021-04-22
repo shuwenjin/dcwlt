@@ -1,4 +1,5 @@
-package com.dcits.dcwlt.pay.online.controller.front;
+package com.dcits.dcwlt.pay.batch.controller;
+
 
 import com.dcits.dcwlt.common.core.web.controller.BaseController;
 import com.dcits.dcwlt.common.core.web.domain.AjaxResult;
@@ -9,8 +10,7 @@ import com.dcits.dcwlt.common.security.annotation.PreAuthorize;
 import com.dcits.dcwlt.pay.api.domain.dcep.resendapply.ReSendApyReqDTO;
 import com.dcits.dcwlt.pay.api.domain.ecny.ECNYReqDTO;
 import com.dcits.dcwlt.pay.api.model.PayTransDtlNonfDO;
-import com.dcits.dcwlt.pay.online.flow.EcnyTransInTradeFlow;
-import com.dcits.dcwlt.pay.online.flow.send.ReSendApy920STradeFlow;
+import com.dcits.dcwlt.pay.batch.service.IPayPayTransdtlNonfService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -26,22 +26,22 @@ import java.util.List;
 @RequestMapping("/ReSendApy")
 public class ReSendApyController extends BaseController {
 
-//    @Autowired
-//    private IPayPayTransdtlNonfService payPayTransdtlNonfService;
-
     @Autowired
-    private EcnyTransInTradeFlow ecnyTransInTradeFlow;
+    private IPayPayTransdtlNonfService payPayTransdtlNonfService;
+
+//    @Autowired
+//    private EcnyTransInTradeFlow ecnyTransInTradeFlow;
 
     /**
      * 查询交易重发申请列表
      */
-//    @PreAuthorize(hasPermi = "pay-batch:ReSendApy:list")
-//    @GetMapping("/list")
-//    public TableDataInfo list(PayTransDtlNonfDO payPayTransdtlNonf) {
-//        startPage();
-//        List<PayTransDtlNonfDO> list = payPayTransdtlNonfService.selectPayPayTransdtlNonfList(payPayTransdtlNonf);
-//        return getDataTable(list);
-//    }
+    @PreAuthorize(hasPermi = "pay-batch:ReSendApy:list")
+    @GetMapping("/list")
+    public TableDataInfo list(PayTransDtlNonfDO payPayTransdtlNonf) {
+        startPage();
+        List<PayTransDtlNonfDO> list = payPayTransdtlNonfService.selectPayPayTransdtlNonfList(payPayTransdtlNonf);
+        return getDataTable(list);
+    }
 //
 //    /**
 //     * 导出交易重发申请列表
@@ -64,11 +64,11 @@ public class ReSendApyController extends BaseController {
     @PostMapping("/resend")
     public AjaxResult add(@RequestBody PayTransDtlNonfDO payPayTransdtlNonf) {
 //        return toAjax(payPayTransdtlNonfService.insertPayPayTransdtlNonf(payPayTransdtlNonf));
-       // return
+        // return
 
         ECNYReqDTO<ReSendApyReqDTO> reSendApyReqDTO=new ECNYReqDTO<>();
         //payPayTransdtlNonf 自己组装 reSendApyReqDTO
-        ecnyTransInTradeFlow.execute(reSendApyReqDTO, ReSendApy920STradeFlow.RESEND_APPLY_TRADE_FLOW);
+       // ecnyTransInTradeFlow.execute(reSendApyReqDTO, ReSendApy920STradeFlow.RESEND_APPLY_TRADE_FLOW);
 
 
         //920
