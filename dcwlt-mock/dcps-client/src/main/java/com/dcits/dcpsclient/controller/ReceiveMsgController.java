@@ -25,20 +25,13 @@ public class ReceiveMsgController {
         {
 
             put("dcep.401.001.01.xml", "dcep.902.001.01.xml");
-            put("dcep.221.001.01.xml", "dcep.222.001.01.xml");
-            put("dcep.225.001.01.xml", "dcep.226.001.01.xml");
-            put("dcep.433.001.01.xml", "dcep.434.001.01.xml");
-            put("dcep.711.001.01.xml", "dcep.902.001.01.xml");
+            put("dcep.227.001.01.xml", "dcep.228.001.01.xml");
+            put("dcep.411.001.01.xml", "dcep.412.001.01.xml");
+            put("dcep.417.001.01.xml", "dcep.418.001.01.xml");
             put("dcep.801.001.01.xml", "dcep.802.001.01.xml");
-            put("dcep.900.001.01.xml", "dcep.900.001.01.xml");
-            put("dcep.909.001.01.xml", "dcep.909.001.01.xml");
-            put("dcep.915.001.01.xml", "dcep.902.001.01.xml");
-            put("dcep.917.001.01.xml", "dcep.902.001.01.xml");
-            put("dcep.931.001.01.xml", "dcep.902.001.01.xml");
-            put("dcps.951.001.01.xml", "dcep.902.001.01.xml");
-            put("omss.991.002.01.xml", "omss.992.002.01.xml");
-            put("ccms.903.001.02.xml", "dcep.900.001.01.xml");
-
+            put("dcep.902.001.01.xml", "dcep.902.001.01.xml");
+            put("dcep.920.001.01.xml", "dcep.900.001.01.xml");
+            put("dcep.933.001.01.xml", "dcep.934.001.01.xml");
         }
     };
 
