@@ -83,7 +83,7 @@
 
     <el-table v-loading="loading" :data="nonfList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
-      <el-table-column label="报文标识号" align="center" prop="msgId" v-if="columns[0].visible" />
+      <el-table-column label="报文标识号" align="center" prop="msgId" v-if="columns[0].visible" show-overflow-tooltip/>
       <el-table-column label="平台日期" align="center" prop="payDate" width="180" v-if="columns[1].visible">
         <!-- <template slot-scope="scope">
           <span>{{ parseTime(scope.row.payDate, '{y}-{m}-{d}') }}</span>
@@ -453,7 +453,7 @@
       handleLogin() {
 
         const trlNo = "11"; //row.msgId || this.ids;
-           let opterationType="OT00";
+        let opterationType = "OT00";
         this.$confirm('是否登入', "警告", {
           confirmButtonText: "确定",
           cancelButtonText: "取消",
@@ -463,8 +463,8 @@
           //debugger
 
           //var requestData=this.body(opterationType);
-         // console.info("requestData===>"+requestData)
-          return loginoutFmtMsgSnd(trlNo,opterationType);
+          // console.info("requestData===>"+requestData)
+          return loginoutFmtMsgSnd(trlNo, opterationType);
         }).then(() => {
           this.msgSuccess("登入成功");
         })
@@ -473,19 +473,19 @@
       /** 登出按钮操作 */
       handleLoginout() {
 
-        var trlNo = "11"; 
+        var trlNo = "11";
         //退出状态
-           let opterationType="OT01";
-        
+        let opterationType = "OT01";
+
         this.$confirm('是否登出', "警告", {
           confirmButtonText: "确定",
           cancelButtonText: "取消",
           type: "warning"
         }).then(function() {
           //登出状态
-          let opterationType="OT01";
+          let opterationType = "OT01";
 
-          return loginoutFmtMsgSnd(trlNo,opterationType);
+          return loginoutFmtMsgSnd(trlNo, opterationType);
         }).then(() => {
           this.msgSuccess("登出成功");
         })

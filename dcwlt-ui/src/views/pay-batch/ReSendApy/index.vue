@@ -50,7 +50,7 @@
 
     <el-table v-loading="loading" :data="ReSendApyList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
-      <el-table-column label="报文标识号" align="center" prop="msgId" v-if="columns[0].visible" />
+      <el-table-column label="报文标识号" align="center" prop="msgId" v-if="columns[0].visible" show-overflow-tooltip/>
       <el-table-column label="平台日期" align="center" prop="payDate" width="180" v-if="columns[1].visible">
        <!-- <template slot-scope="scope">
           <span>{{ parseTime(scope.row.paydate, '{y}-{m}-{d}') }}</span>
