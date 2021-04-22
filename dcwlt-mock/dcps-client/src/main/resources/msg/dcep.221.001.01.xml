@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--示例 dcep.221.001.01 DC/EP兑回业务请求报文-->
+<Document xmlns="urn:cbcc:std:dcep:2020:tech:xsd:dcep.221.001.01" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<ReconvertReq>
+		<GrpHdr>
+			<MsgId>20210413000122184595346246598765</MsgId>
+			<CreDtTm>2021-01-13T16:49:07</CreDtTm>
+			<InstgPty>
+				<InstgDrctPty>C1010411000013</InstgDrctPty>
+			</InstgPty>
+			<InstdPty>
+				<InstdDrctPty>C1030644021075</InstdDrctPty>
+			</InstdPty>			
+			<Rmk>测试</Rmk>
+		</GrpHdr>
+		<TrxInf>
+			<TrxBizTp>C201</TrxBizTp>
+			<TrxCtgyPurpCd>03011</TrxCtgyPurpCd>
+			<TrxAmt Ccy="CNY">11.00</TrxAmt>
+			<BatchId>B202103091600</BatchId>
+		</TrxInf>			
+		<DbtrInf>
+			<DbtrPtyId>C1010411000013</DbtrPtyId>
+			<DbtrNm>测试1</DbtrNm>
+			<DbtrWltId>101112345678916</DbtrWltId>
+			<DbtrWltLvl>WL01</DbtrWltLvl>
+			<DbtrWltTp>WT01</DbtrWltTp>
+			<DbtrWltNm>测试钱包</DbtrWltNm>
+		</DbtrInf>
+		<CdtrInf>
+			<CdtrPtyId>C1030644021075</CdtrPtyId>
+			<CdtrAcctTp>AT00</CdtrAcctTp>
+			<CdtrNm>造数泰伯</CdtrNm>
+			<CdtrAcct>6214622121002964305</CdtrAcct>
+		</CdtrInf>		
+	</ReconvertReq>
+</Document>

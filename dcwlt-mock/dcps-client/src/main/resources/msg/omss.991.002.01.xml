@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--示例 omss.991.002.01 HTTP通信级探测报文-->
+<Document xmlns="urn:cbcc:std:dcep:2020:tech:xsd:omss.991.002.01" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<ChckReq>		
+		<ChckInf>			
+			<InstgDrctPty>C1091231000013</InstgDrctPty>
+			<ReqDt>1607170071</ReqDt>
+			<ReqNdNm>SHDCPSAPA</ReqNdNm>
+		</ChckInf>				
+	</ChckReq>
+</Document>

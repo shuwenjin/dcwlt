@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--示例 dcep.909.001.01 交易终态通知报文-->
+<Document xmlns="urn:cbcc:std:dcep:2020:tech:xsd:dcep.909.001.01" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<TxEndNtfctn>
+		<GrpHdr>
+			<MsgId>20210415000190995705123259900000</MsgId>
+			<CreDtTm>2021-01-13T21:18:45</CreDtTm>
+			<InstgPty>
+				<InstgDrctPty>G4001011000013</InstgDrctPty>
+			</InstgPty>
+			<InstdPty>
+				<InstdDrctPty>C1030644021075</InstdDrctPty>
+			</InstdPty>
+			<Rmk>测试</Rmk>
+		</GrpHdr>
+		<OrgnlGrpHdr>
+			<OrgnlMsgId>20210415000122199849129770676546</OrgnlMsgId>
+			<OrgnlInstgPty>C1010411000013</OrgnlInstgPty>
+			<OrgnlMT>dcep.221.001.01</OrgnlMT>
+		</OrgnlGrpHdr>		
+		<OrgnlMsgCntt>
+			<Cntt>{"Header":{"Sender":"C1010411000013","Ver":"01","SignSN":"4","Receiver":"C1030644021075","SndDtTm":"2021-01-13T16:49:07","MsgSN":"202101130001221845953462465000000001","MsgTp":"dcep.221.001.01"},"Body":{"ReconvertReq":{"TrxInf":{"TrxBizTp":"C201","BatchId":"B202101131600","TrxAmt":{"Ccy":"CNY","value":"11.00"},"TrxCtgyPurpCd":"03011"},"GrpHdr":{"CreDtTm":"2021-01-13T16:49:07","InstdPty":{"InstdDrctPty":"C1030644021075"},"InstgPty":{"InstgDrctPty":"C1010411000013"},"MsgId":"20210415000122199849129770676546"},"DbtrInf":{"DbtrWltId":"101112345678916","DbtrWltTp":"WT01","DbtrWltNm":"测试钱包","DbtrPtyId":"C1010411000013","DbtrNm":"测试1","DbtrWltLvl":"WL01"},"CdtrInf":{"CdtrAcctTp":"AT00","CdtrNm":"造数泰伯","CdtrPtyId":"C1030644021075","CdtrAcct":"6214622121002964305"}}}}</Cntt>
+			<PrcSts>PR03</PrcSts>
+			<PrcCd>DCEPI0005</PrcCd>
+		</OrgnlMsgCntt>		
+	</TxEndNtfctn>
+</Document>

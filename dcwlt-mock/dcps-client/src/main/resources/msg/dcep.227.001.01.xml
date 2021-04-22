@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--示例 dcep.227.001.01 DC/EP汇款兑出请求报文-->
+<Document xmlns="urn:cbcc:std:dcep:2020:tech:xsd:dcep.227.001.01" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<ConvertReq>
+		<GrpHdr>
+			<MsgId>2010101000001260</MsgId>
+			<CreDtTm>2020-10-10T09:30:30</CreDtTm>
+			<InstgPty>
+				<InstgDrctPty>C1091231000013</InstgDrctPty>
+			</InstgPty>
+			<InstdPty>
+				<InstdDrctPty>C1030131001288</InstdDrctPty>
+			</InstdPty>			
+			<Rmk>测试</Rmk>
+		</GrpHdr>
+		<TrxInf>
+			<TrxBizTp>D201</TrxBizTp>
+			<TrxCtgyPurpCd>03001</TrxCtgyPurpCd>
+			<TrxAmt Ccy="CNY">89000.00</TrxAmt>	
+			<BatchId>B202103091600</BatchId>
+		</TrxInf>			
+		<DbtrInf>
+			<DbtrPtyId>C1091231000013</DbtrPtyId>
+			<DbtAcctTp>AT00</DbtAcctTp>
+			<DbtrNm>杨超</DbtrNm>
+			<DbtrAcct>6228928899001122</DbtrAcct>			
+		</DbtrInf>
+		<CdtrInf>
+			<CdtrPtyId>C1030131001288</CdtrPtyId>
+			<CdtrNm>杨超</CdtrNm>
+			<CdtrWltId>WLTID00000000000001</CdtrWltId>
+			<CdtrWltLvl>WL01</CdtrWltLvl>
+			<CdtrWltTp>WT01</CdtrWltTp>
+			<CdtrWltNm>测试钱包</CdtrWltNm>
+		</CdtrInf>				
+	</ConvertReq>
+</Document>

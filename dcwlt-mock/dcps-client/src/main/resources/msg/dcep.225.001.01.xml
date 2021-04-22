@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--示例 dcep.225.001.01 DC/EP兑出业务请求报文-->
+<Document xmlns="urn:cbcc:std:dcep:2020:tech:xsd:dcep.225.001.01" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<ConvertReq>
+		<GrpHdr>
+			<MsgId>20210408000122532910308590900000</MsgId>
+			<CreDtTm>2020-10-10T09:30:30</CreDtTm>
+			<InstgPty>
+				<InstgDrctPty>C1010411000013</InstgDrctPty>
+			</InstgPty>
+			<InstdPty>
+				<InstdDrctPty>C1030644021075</InstdDrctPty>
+			</InstdPty>			
+			<Rmk>测试</Rmk>
+		</GrpHdr>
+		<TrxInf>
+			<TrxBizTp>C201</TrxBizTp>
+			<TrxCtgyPurpCd>03011</TrxCtgyPurpCd>
+			<TrxAmt Ccy="CNY">89000.00</TrxAmt>	
+			<BatchId>B202103091600</BatchId>
+		</TrxInf>			
+		<DbtrInf>
+			<DbtrPtyId>C1030644021075</DbtrPtyId>
+			<DbtAcctTp>AT03</DbtAcctTp>
+			<DbtrNm>付款人名称</DbtrNm>
+			<DbtrAcct>6214622121003305144</DbtrAcct>
+			<SgnNo>123456</SgnNo>
+		</DbtrInf>
+		<CdtrInf>
+			<CdtrPtyId>C1010411000013</CdtrPtyId>
+			<CdtrNm>收款人名称</CdtrNm>
+			<CdtrWltId>23534645224653442</CdtrWltId>
+			<CdtrWltLvl>WL01</CdtrWltLvl>
+			<CdtrWltTp>WT01</CdtrWltTp>
+			<CdtrWltNm>收款人钱包名称</CdtrWltNm>
+		</CdtrInf>				
+	</ConvertReq>
+</Document>

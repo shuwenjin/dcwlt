@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--示例 dcep.911.001.01 报文丢弃通知报文-->
+<Document xmlns="urn:cbcc:std:dcep:2020:tech:xsd:dcep.911.001.01" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<Fault>
+		<faultcode>DCEPO0001</faultcode>
+		<faultstring>核签未通过</faultstring>
+		<faultactor>C1030131001288</faultactor>
+		<detail>报文丢弃通知报文示例</detail>		
+	</Fault>
+</Document>

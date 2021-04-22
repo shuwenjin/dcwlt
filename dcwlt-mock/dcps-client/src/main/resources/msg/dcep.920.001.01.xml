@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--示例 dcep.920.001.01 重发申请报文-->
+<Document xmlns="urn:cbcc:std:dcep:2020:tech:xsd:dcep.920.001.01" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<ApplMsg>
+		<GrpHdr>
+			<MsgId>2010101000001261</MsgId>
+			<CreDtTm>2020-10-10T09:30:30</CreDtTm>
+			<InstgPty>
+				<InstgDrctPty>C1091231000013</InstgDrctPty>
+			</InstgPty>
+			<InstdPty>
+				<InstdDrctPty>G4001011000013</InstdDrctPty>
+			</InstdPty>			
+			<Rmk>测试</Rmk>
+		</GrpHdr>		
+		<ApplInf>			
+			<MT>dcep.711.001.01</MT>
+			<MsgDesc>B202010101000</MsgDesc>					
+		</ApplInf>				
+	</ApplMsg>
+</Document>

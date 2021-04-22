@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--示例 dcep.902.001.01 通信级确认报文-->
+<Document xmlns="urn:cbcc:std:dcep:2020:tech:xsd:dcep.902.001.01" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<ComConf>
+		<ConfInf>
+			<OrigSndDtTm>2020-10-10T09:30:30</OrigSndDtTm>
+			<OrgnlMsgId>2010101000001260</OrgnlMsgId>
+			<OrgnlInstgPty>C1091231000013</OrgnlInstgPty>
+			<OrgnlMT>dcep.227.001.01</OrgnlMT>	
+			<PrcSts>PR00</PrcSts>
+			<Remark>测试</Remark>			
+		</ConfInf>				
+	</ComConf>
+</Document>

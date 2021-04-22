@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--示例 dcep.418.001.01 交易明细查询应答报文-->
+<Document xmlns="urn:cbcc:std:dcep:2020:tech:xsd:dcep.418.001.01" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<TxDtlsQryRsp>
+		<GrpHdr>
+			<MsgId>2010101000001261</MsgId>
+			<CreDtTm>2020-10-10T09:30:30</CreDtTm>
+			<InstgPty>
+				<InstgDrctPty>G4001011000013</InstgDrctPty>
+			</InstgPty>
+			<InstdPty>
+				<InstdDrctPty>C1091231000013</InstdDrctPty>
+			</InstdPty>
+			<Rmk>测试</Rmk>
+		</GrpHdr>
+		<BizQryRef>
+			<QryRef>2010101000001260</QryRef>
+			<QryNm>C1091231000013</QryNm>
+			<QryRs>PR00</QryRs>
+		</BizQryRef>		
+		<BizRpt>			
+			<TrnRs>PR00</TrnRs>		
+			<Rsn>
+				<PrcCd>DCEPI0000</PrcCd>							
+			</Rsn>			
+			<OrgnlMsgCntt>
+				<Cntt>xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx</Cntt>
+				<OrgnlMsgId>2010101000001230</OrgnlMsgId>
+				<OrgnlInstgPty>C1091231000013</OrgnlInstgPty>
+				<OrgnlMT>dcep.227.001.01</OrgnlMT>							
+			</OrgnlMsgCntt>				
+		</BizRpt>				
+	</TxDtlsQryRsp>
+</Document>
