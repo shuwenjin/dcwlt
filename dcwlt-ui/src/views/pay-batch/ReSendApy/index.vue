@@ -14,7 +14,7 @@
         <el-date-picker clearable size="small"
                         v-model="queryParams.payDate"
                         type="date"
-                        value-format="yyyy-MM-dd"
+                        value-format="yyyyMMdd"
                         placeholder="选择平台日期">
         </el-date-picker>
       </el-form-item>
@@ -32,7 +32,7 @@
           icon="el-icon-refresh"
           size="mini"
           @click="handleResend"
-          v-hasPermi="['pay-batch:ReSendApy:resend']"
+          v-hasPermi="['pay-online:ReSendApy:resend']"
         >机构对账汇总核对重发申请</el-button>
       </el-col>
       <el-col :span="1.5">
@@ -199,7 +199,7 @@
       /** 重置按钮操作 */
       resetQuery() {
         this.resetForm("queryForm");
-        this.handleQuery();
+        // this.handleQuery();
       },
       // 多选框选中数据
       handleSelectionChange(selection) {

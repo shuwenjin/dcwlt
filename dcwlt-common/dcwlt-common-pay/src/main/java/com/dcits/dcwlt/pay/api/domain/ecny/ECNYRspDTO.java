@@ -45,7 +45,7 @@ public class ECNYRspDTO<T extends ECNYRspBody> extends BaseRespDto {
      * @param ecnyRspHead 响应报文头
      * @param body        报文体
      */
-    public static <T extends ECNYRspBody> ECNYRspDTO<T> newInstance(
+    public static <T extends ECNYRspBody> ECNYRspDTO<T>  newInstance(
             ECNYReqDTO ecnyReqDTO, ECNYRspHead ecnyRspHead, T body, String retCode, String retInfo) {
         ECNYRspDTO<T> msg = new ECNYRspDTO<>();
         //设置响应服务化报文头

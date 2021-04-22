@@ -98,7 +98,7 @@ public class SegmentIdGenImpl implements SegmentIdGenerator {
     //通过定时任务每分钟扫描一次数据库，动态更新加载biz_tag的变化，实现热更新
     @PostConstruct
     private void updateCacheFromDb() {
-        logger.info("update cache from db");
+        logger.debug("update cache from db");
         try {
             List<String> dbTags = segAllocMapper.getAllTags();
             if (dbTags == null || dbTags.isEmpty()) {

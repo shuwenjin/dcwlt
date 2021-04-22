@@ -5,9 +5,15 @@ import com.dcits.dcwlt.common.core.web.domain.AjaxResult;
 import com.dcits.dcwlt.common.core.web.page.TableDataInfo;
 import com.dcits.dcwlt.common.log.annotation.Log;
 import com.dcits.dcwlt.common.log.enums.BusinessType;
+import com.dcits.dcwlt.common.pay.constant.Constant;
+import com.dcits.dcwlt.common.pay.enums.MsgTpEnum;
 import com.dcits.dcwlt.common.security.annotation.PreAuthorize;
+import com.dcits.dcwlt.pay.api.domain.Head;
 import com.dcits.dcwlt.pay.api.domain.dcep.resendapply.ReSendApyReqDTO;
+import com.dcits.dcwlt.pay.api.domain.dcep.resendapply.ReSendApyRspDTO;
 import com.dcits.dcwlt.pay.api.domain.ecny.ECNYReqDTO;
+import com.dcits.dcwlt.pay.api.domain.ecny.ECNYReqHead;
+import com.dcits.dcwlt.pay.api.domain.ecny.ECNYRspDTO;
 import com.dcits.dcwlt.pay.api.model.PayTransDtlNonfDO;
 import com.dcits.dcwlt.pay.online.flow.EcnyTransInTradeFlow;
 import com.dcits.dcwlt.pay.online.flow.send.ReSendApy920STradeFlow;
@@ -15,6 +21,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * 交易重发申请Controller
@@ -59,19 +66,24 @@ public class ReSendApyController extends BaseController {
     /**
      * 新增交易重发申请
      */
-    @PreAuthorize(hasPermi = "pay-batch:ReSendApy:resend")
+    @PreAuthorize(hasPermi = "pay-online:ReSendApy:resend")
     @Log(title = "交易重发申请", businessType = BusinessType.INSERT)
     @PostMapping("/resend")
-    public AjaxResult add(@RequestBody PayTransDtlNonfDO payPayTransdtlNonf) {
-//        return toAjax(payPayTransdtlNonfService.insertPayPayTransdtlNonf(payPayTransdtlNonf));
-       // return
+    public AjaxResult add(@RequestBody Map<String, String> req) {
+        ECNYReqDTO<ReSendApyReqDTO> ecnyReqDTO = ECNYReqDTO.getInstanceWithDefaultHead();
 
-        ECNYReqDTO<ReSendApyReqDTO> reSendApyReqDTO=new ECNYReqDTO<>();
-        //payPayTransdtlNonf 自己组装 reSendApyReqDTO
-        ecnyTransInTradeFlow.execute(reSendApyReqDTO, ReSendApy920STradeFlow.RESEND_APPLY_TRADE_FLOW);
+        ReSendApyReqDTO reSendApyReqDTO = new ReSendApyReqDTO();
+        reSendApyReqDTO.setBatchId(req.get("batchId"));
+        reSendApyReqDTO.setMsgType(MsgTpEnum.DCEP711.getCode());
+        ecnyReqDTO.setBody(reSendApyReqDTO);
 
+        ECNYRspDTO<ReSendApyRspDTO> rspDTO = ecnyTransInTradeFlow.execute(ecnyReqDTO, ReSendApy920STradeFlow.RESEND_APPLY_TRADE_FLOW);
 
-        //920
-        return toAjax(1);
+        if (ReSendApy920STradeFlow.RES_STS_SUCCESS.equals(rspDTO.getBody().getPrcSts())) {
+            return toAjax(1);
+        } else {
+            return AjaxResult.error(rspDTO.getBody().getPrcDesc());
+        }
+
     }
 }

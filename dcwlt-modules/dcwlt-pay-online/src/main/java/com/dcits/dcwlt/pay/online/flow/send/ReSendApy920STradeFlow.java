@@ -64,7 +64,7 @@ public class ReSendApy920STradeFlow {
 
     private static final String RES_DESC_FAILED = "失败";
 
-    private static final String RES_STS_SUCCESS = "success";
+    public static final String RES_STS_SUCCESS = "success";
 
     private static final String RES_STS_FAILED = "failed";
 

@@ -1,7 +1,9 @@
 package com.dcits.dcwlt.pay.api.domain.ecny;
 
 import com.alibaba.fastjson.annotation.JSONField;
+import com.dcits.dcwlt.common.pay.constant.Constant;
 import com.dcits.dcwlt.pay.api.domain.BaseReqDto;
+import com.dcits.dcwlt.pay.api.domain.Head;
 
 import javax.validation.Valid;
 
@@ -44,5 +46,22 @@ public class ECNYReqDTO<T extends ECNYReqBody> extends BaseReqDto {
                 "ecnyHead=" + ecnyHead +
                 ", body=" + body +
                 '}';
+    }
+
+    /**
+     * 构造包含默认head 的请求对象
+     * */
+    public static ECNYReqDTO getInstanceWithDefaultHead(){
+        ECNYReqDTO reqDTO = new ECNYReqDTO<>();
+        ECNYReqHead ecnyReqHead = new ECNYReqHead();
+        ecnyReqHead.setTellerno("11");//TODO 柜员号
+        ecnyReqHead.setBusiChnl(Constant.ECNY_SYS_ID);
+        ecnyReqHead.setOrigChnl(Constant.REQ_CHNL);
+        ecnyReqHead.setBrno(Constant.MASTERBANK);
+        reqDTO.setEcnyHead(ecnyReqHead);
+
+        Head head = new Head();
+        reqDTO.setHead(head);
+        return reqDTO;
     }
 }
