@@ -131,7 +131,7 @@
            <el-button
               size="mini"
               type="primary" plain
-              v-if="scope.row.checkStatus!='INIT'&&scope.row.checkStatus!='eertykzz'"
+              v-if="scope.row.checkStatus!='INIT'&&scope.row.checkStatus!='SAME'"
               @click="executereconciliation(scope.row)"
             >重新对账</el-button>
 

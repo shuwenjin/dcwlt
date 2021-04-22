@@ -55,4 +55,12 @@
         <include refid="selectCheckPathDOVo"/>
         where paydate = #{payDate}
     </select>
+
+    <!--更新对账标识-->
+    <update id="updateCheckPathDO" parameterType="com.dcits.dcwlt.pay.api.model.CheckPathDO">
+        update pay_batch_checkpath
+        set checkstatus=#{checkStatus}
+        where paydate = #{payDate}
+        and payserno=#{paySerno}
+    </update>
 </mapper>

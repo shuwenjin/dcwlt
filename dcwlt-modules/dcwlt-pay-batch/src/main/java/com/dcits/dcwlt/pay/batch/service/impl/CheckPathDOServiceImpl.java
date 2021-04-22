@@ -2,6 +2,7 @@ package com.dcits.dcwlt.pay.batch.service.impl;
 
 import com.alibaba.fastjson.JSONObject;
 import com.dcits.dcwlt.common.core.web.domain.AjaxResult;
+import com.dcits.dcwlt.common.pay.enums.CheckStatusEnum;
 import com.dcits.dcwlt.pay.api.model.CheckPathDO;
 import com.dcits.dcwlt.pay.batch.mapper.CheckPathDOMapper;
 import com.dcits.dcwlt.pay.batch.service.ICheckPathDOService;
@@ -77,12 +78,22 @@ public class CheckPathDOServiceImpl implements ICheckPathDOService {
     @Override
     public boolean reconciliation(CheckPathDO checkPathDO) {
         JSONObject sendData = new JSONObject();
-        String url="http://10.7.91.61:8888/711";
+        String url="http://10.0.23.169:8888/711";
 
         ResponseEntity<String> responseEntity = restTemplate.getForEntity(url,  String.class);
 
-        logger.info("responseEntity===>{}",responseEntity);
-        return  true;
+        //执行重新对账的操作，更改状态
+        checkPathDO.setCheckStatus(CheckStatusEnum.SAME);
+
+        int flag = checkPathDOMapper.updateCheckPathDO(checkPathDO);
+
+        if (flag>0){
+            logger.info("responseEntity===>{}",responseEntity);
+            return  true;
+        }else {
+            return false;
+        }
+
     }
 
     /**
