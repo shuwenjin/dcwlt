@@ -420,8 +420,17 @@ public class JsonXmlUtil {
 //                    JSONObject arrayChild = jsonArray.getJSONObject(i);
 //                    node.add(addJsonToElement(arrayChild, nodeChild));
                     Element nodeChild = node.addElement(key);
-                    JSONObject arrayChild = jsonArray.getJSONObject(i);
-                    addJsonToElement(arrayChild, nodeChild);
+                    Object object =  jsonArray.get(i);
+                    if(object instanceof JSONObject) {
+                        JSONObject arrayChild = jsonArray.getJSONObject(i);
+                        addJsonToElement(arrayChild, nodeChild);
+                    }else if(object instanceof JSONArray){
+                        JSONArray arrayChild = jsonArray.getJSONArray(i);
+//                        addJsonToElement(arrayChild, nodeChild);
+                        //TODO
+                    }else{
+                        nodeChild.setText(jsonArray.getString(i));
+                    }
                 }
             } else {
                 //字符串
