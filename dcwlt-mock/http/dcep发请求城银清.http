@@ -1,0 +1,175 @@
+### 自由格式报文 401
+POST http://localhost:8008/dcepgw
+Content-Type: application/json
+
+{
+  "Header": {
+    "BeginFlag": "{H:",
+    "VersionID": "04",
+    "OrigSender": "G4001011000013",
+    "OrigSenderSID": "DCPS",
+    "OrigReceiver": "C1091231000013",
+    "OrigReceiverSID": "DCPS",
+    "OrigSendDate": "20201030",
+    "OrigSendTime": "094508",
+    "StructType": "XML",
+    "MesgType": "dcep.401.001.01",
+    "MesgID": "202104221130032000000000001120010001",
+    "MesgRefID": "202104221130032000000000001120010001",
+    "MesgPriority": "3",
+    "MesgDirection": "U",
+    "SderReserved": "",
+    "RcverReserved": "",
+    "CenterReserved": "",
+    "Reserve": "",
+    "EndFlag": "}",
+    "SignSN": "1036581724",
+    "DigitalSignature": "MEQCIB37PmISKwKb/nPTYpupY7q13elGDcSycezhskxvds5IAiAmvONk9MOz2cu9zBozHfZ7lh11GXmxJYkZxxo9HcU7Lw=="
+  },
+  "Body": {
+    "FreeFrmt": {
+      "GrpHdr": {
+        "Rmk": "测试",
+        "CreDtTm": "2020-10-10T09:30:30",
+        "InstdPty": {
+          "InstdDrctPty": "C1010311000014"
+        },
+        "InstgPty": {
+          "InstgDrctPty": "C1030644021075"
+        },
+        "MsgId": "20210413106040120333044574013000"
+      },
+      "FreeFrmtInf": {
+        "MsgCnt": "各合作银行，本报文为自由格式报文测试"
+      }
+    }
+  }
+}
+
+### 机构对账汇总核对报文 711
+POST http://localhost:8008/dcepgw
+Content-Type: application/json
+
+{
+  "Header": {
+    "BeginFlag": "{H:",
+    "VersionID": "04",
+    "OrigSender": "G4001011000013",
+    "OrigSenderSID": "DCPS",
+    "OrigReceiver": "C1091231000013",
+    "OrigReceiverSID": "DCPS",
+    "OrigSendDate": "20201030",
+    "OrigSendTime": "094508",
+    "StructType": "XML",
+    "MesgType": "dcep.711.001.01",
+    "MesgID": "202104221612058000000000001120010001",
+    "MesgRefID": "202104221612058000000000001120010001",
+    "MesgPriority": "3",
+    "MesgDirection": "U",
+    "SderReserved": "",
+    "RcverReserved": "",
+    "CenterReserved": "",
+    "Reserve": "",
+    "EndFlag": "}",
+    "SignSN": "1036581724",
+    "DigitalSignature": "MEUCIQDBmSuP5I8clwk64J83oaxABESfy2cMtddwoKVbnEUM9QIgFArYemvBk1W0cWpcInADYcianWBane6JDNu5dm8LYsU="
+  },
+  "Body": {
+    "ReconSummaryChk": {
+      "GrpHdr": {
+        "Rmk": "机构对账汇总核对报文",
+        "CreDtTm": "2021-01-13T16:12:27",
+        "InstdPty": {
+          "InstdDrctPty": "C1030644021075"
+        },
+        "InstgPty": {
+          "InstgDrctPty": "G4001011000013"
+        },
+        "MsgId": "20210309000171181982980514700000"
+      },
+      "SummaryChkInf": {
+        "SummaryHdr": {
+          "BatchId": "B202103091600",
+          "CntAmt": {
+            "Ccy": "CNY",
+            "value": "10161.34"
+          },
+          "DbtCntAmt": {
+            "Ccy": "CNY",
+            "value": "103.96"
+          },
+          "CdtCntNb": "11",
+          "CdtCntAmt": {
+            "Ccy": "CNY",
+            "value": "10057.38"
+          },
+          "CntNb": "4",
+          "DbtCntNb": "4"
+        },
+        "ReconIndex": "0x7b75633e709800a1e4ddc97a1fb54d56a65593b432ea79eeab57cec41dc229ba",
+        "DtlFileInf": {
+          "FileInfList": {
+            "FileInf": [
+              {
+                "FilePath": "10.0.23.169:22/dcrecon/20200525/C1010511003703/trade/00/",
+                "FileNameList": {
+                  "FileName": [
+                    "B202005251500_00_01.zip.sec"
+                  ]
+                }
+              }
+            ]
+          },
+          "FileInfNb": "1"
+        },
+        "SummaryBody": {
+          "SummaryGrp": [
+            {
+              "Nb": "00",
+              "CntAmt": {
+                "Ccy": "CNY",
+                "value": "10161.34"
+              },
+              "DbtCntAmt": {
+                "Ccy": "CNY",
+                "value": "0.00"
+              },
+              "CdtCntNb": "4",
+              "ChkPayList": {
+                "ChkPayInf": [
+                  {
+                    "CntAmt": {
+                      "Ccy": "CNY",
+                      "value": "10161.34"
+                    },
+                    "DbtCntAmt": {
+                      "Ccy": "CNY",
+                      "value": "0.00"
+                    },
+                    "CdtCntNb": "4",
+                    "CdtCntAmt": {
+                      "Ccy": "CNY",
+                      "value": "10161.34"
+                    },
+                    "CntNb": "4",
+                    "MsgTp": "dcep.227.001.01",
+                    "BizSts": "PR00",
+                    "DbtCntNb": "0"
+                  }
+                ]
+              },
+              "CdtCntAmt": {
+                "Ccy": "CNY",
+                "value": "10161.34"
+              },
+              "CntNb": "4",
+              "DbtCntNb": "0"
+            }
+          ]
+        }
+      }
+    }
+  }
+}
+
+###
