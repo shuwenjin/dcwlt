@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--示例 dcep.801.001.01 差错贷记调账请求报文-->
+<Document xmlns="urn:cbcc:std:dcep:2020:tech:xsd:dcep.801.001.01" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<DsptReq>
+		<GrpHdr>
+			<MsgId>20210113000180137727331885800000</MsgId>
+			<CreDtTm>2021-01-13T20:46:20</CreDtTm>
+			<InstgPty>
+				<InstgDrctPty>C1010411000013</InstgDrctPty>
+			</InstgPty>
+			<InstdPty>
+				<InstdDrctPty>C1030644021075</InstdDrctPty>
+			</InstdPty>			
+			<Rmk>贷记调整test</Rmk>
+		</GrpHdr>
+		<OrgnlGrpHdr>
+			<OrgnlMsgId>20210112106122714525999867002000</OrgnlMsgId>
+			<OrgnlInstgPty>C1010411000013</OrgnlInstgPty>
+			<OrgnlMT>dcep.227.001.01</OrgnlMT>
+		</OrgnlGrpHdr>
+		<DsptInf>
+			<DsptBizTp>E100</DsptBizTp>
+			<DsptCtgyPurpCd>08001</DsptCtgyPurpCd>
+			<DsptRsnCd>DR01</DsptRsnCd>
+			<DsptRsnDesc>内测环境测试</DsptRsnDesc>
+			<DsptAmt Ccy="CNY">1231.45</DsptAmt>
+			<BatchId>B202103091600</BatchId>
+			<OrgnlTxRef>
+				<OrgnlTxAmt Ccy="CNY">123.45</OrgnlTxAmt>
+			</OrgnlTxRef>		
+		</DsptInf>	
+	</DsptReq>
+</Document>

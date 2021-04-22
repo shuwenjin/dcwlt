@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--示例 dcep.411.001.01 交易状态查询请求报文-->
+<Document xmlns="urn:cbcc:std:dcep:2020:tech:xsd:dcep.411.001.01" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<TxStsQryReq>
+		<GrpHdr>
+			<MsgId>20210414000141167173413374306789</MsgId>
+			<CreDtTm>2020-10-10T09:30:30</CreDtTm>
+			<InstgPty>
+				<InstgDrctPty>G4001011000013</InstgDrctPty>
+			</InstgPty>
+			<InstdPty>
+				<InstdDrctPty>C1030644021075</InstdDrctPty>
+			</InstdPty>			
+			<Rmk>测试</Rmk>
+		</GrpHdr>
+		<OrgnlGrpHdr>
+			<OrgnlMsgId>20210114000122199849129770676545</OrgnlMsgId>
+			<OrgnlInstgPty>G4001011000013</OrgnlInstgPty>
+			<OrgnlMT>dcep.221.001.01</OrgnlMT>
+			<OrgnlBizTp>C201</OrgnlBizTp>
+			<OrgnlBizKind>03011</OrgnlBizKind>
+			<OrgnlDbtrWltId>101112345678916</OrgnlDbtrWltId>
+			<OrgnlCdtrWltId></OrgnlCdtrWltId>
+		</OrgnlGrpHdr>		
+	</TxStsQryReq>
+</Document>

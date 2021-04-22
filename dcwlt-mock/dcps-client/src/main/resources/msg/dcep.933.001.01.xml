@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--示例 dcep.933.001.01 登录/退出请求报文-->
+<Document xmlns="urn:cbcc:std:dcep:2020:tech:xsd:dcep.933.001.01" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<LoginReq>
+		<GrpHdr>
+			<MsgId>2010101000001260</MsgId>
+			<CreDtTm>2020-10-10T09:30:30</CreDtTm>
+			<InstgPty>
+				<InstgDrctPty>C1091231000013</InstgDrctPty>
+			</InstgPty>
+			<InstdPty>
+				<InstdDrctPty>G4001011000013</InstdDrctPty>
+			</InstdPty>			
+			<Rmk>测试</Rmk>
+		</GrpHdr>
+		<LoginInf>				
+			<LoginOprTp>OT00</LoginOprTp>
+		</LoginInf>		
+	</LoginReq>
+</Document>

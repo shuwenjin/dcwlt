@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--示例 dcep.443.001.01 银行账户挂接管理请求报文-->
+<Document xmlns="urn:cbcc:std:dcep:2020:tech:xsd:dcep.443.001.01" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<BankAttAcctReq>
+		<GrpHdr>
+			<MsgId>20210114000143363452475859800000</MsgId>
+			<CreDtTm>2021-01-14T16:05:53</CreDtTm>
+			<InstgPty>
+				<InstgDrctPty>C1010411000013</InstgDrctPty>
+			</InstgPty>
+			<InstdPty>
+				<InstdDrctPty>C1030644021075</InstdDrctPty>
+			</InstdPty>			
+			<Rmk>测试</Rmk>
+		</GrpHdr>
+		<MgmtTp>MT01</MgmtTp>
+		<PtcInf>
+			<PtcId>1234</PtcId>
+			<!--挂接协议号-->
+			<MsgSndCd>123456789</MsgSndCd>
+			<!--动态关联码-->
+			<MsgVrfy>1234</MsgVrfy>
+			<!--动态验证码-->
+		</PtcInf>
+		<SgnInf>
+			<SgnAcctPtyId>C1030644021075</SgnAcctPtyId>
+			<SgnAcctTp>AT01</SgnAcctTp>
+			<SgnAcctId>6214622121003509638</SgnAcctId>
+			<SgnAcctNm>造数滢姬君</SgnAcctNm>
+			<IDTp>IT01</IDTp>	
+			<IDNo>65420219740712927X</IDNo>
+			<Tel>18948872074</Tel>
+			<SgnTp>SG01</SgnTp>
+		</SgnInf>		
+		<WltInf>			
+			<WltPtyId>C1010411000013</WltPtyId>
+			<WltId>235347657567556</WltId>
+			<WltTp>WT01</WltTp>
+			<WltLvl>WL01</WltLvl>			
+		</WltInf>				
+	</BankAttAcctReq>
+</Document>

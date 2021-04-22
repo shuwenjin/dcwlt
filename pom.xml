@@ -272,6 +272,7 @@
         <module>dcwlt-api</module>
         <module>dcwlt-common</module>
         <module>dcwlt-dcepgw</module>
+        <module>dcwlt-mock</module>
     </modules>
     <packaging>pom</packaging>
 

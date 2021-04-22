@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--示例 dcep.711.001.01 机构对账汇总核对报文-->
+<Document xmlns="urn:cbcc:std:dcep:2020:tech:xsd:dcep.711.001.01" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<ReconSummaryChk>
+		<GrpHdr>
+			<MsgId>20210309000171181982980514700000</MsgId>
+			<CreDtTm>2021-01-13T16:12:27</CreDtTm>
+			<InstgPty>
+				<InstgDrctPty>G4001011000013</InstgDrctPty>
+			</InstgPty>
+			<InstdPty>
+				<InstdDrctPty>C1030644021075</InstdDrctPty>
+			</InstdPty>
+			<Rmk>机构对账汇总核对报文</Rmk>
+		</GrpHdr>
+		<SummaryChkInf>			
+			<SummaryHdr>
+				<BatchId>B202103091600</BatchId>
+				<CntNb>4</CntNb>
+				<CntAmt Ccy="CNY">10161.34</CntAmt>
+				<DbtCntNb>4</DbtCntNb>
+				<DbtCntAmt Ccy="CNY">103.96</DbtCntAmt>
+				<CdtCntNb>11</CdtCntNb>
+				<CdtCntAmt Ccy="CNY">10057.38</CdtCntAmt>
+			</SummaryHdr>
+			<SummaryBody>
+				<SummaryGrp>
+					<Nb>00</Nb>
+					<CntNb>4</CntNb>
+					<CntAmt Ccy="CNY">10161.34</CntAmt>
+					<DbtCntNb>0</DbtCntNb>
+					<DbtCntAmt Ccy="CNY">0.00</DbtCntAmt>
+					<CdtCntNb>4</CdtCntNb>
+					<CdtCntAmt Ccy="CNY">10161.34</CdtCntAmt>
+					<ChkPayList>
+						<ChkPayInf>
+							<MsgTp>dcep.227.001.01</MsgTp>
+							<BizSts>PR00</BizSts>
+							<CntNb>4</CntNb>
+							<CntAmt Ccy="CNY">10161.34</CntAmt>
+							<DbtCntNb>0</DbtCntNb>
+							<DbtCntAmt Ccy="CNY">0.00</DbtCntAmt>
+							<CdtCntNb>4</CdtCntNb>
+							<CdtCntAmt Ccy="CNY">10161.34</CdtCntAmt>
+						</ChkPayInf>
+					</ChkPayList>
+				</SummaryGrp>
+			</SummaryBody>
+			<DtlFileInf>
+				<FileInfNb>1</FileInfNb>
+				<FileInfList>
+					<FileInf>
+						<FilePath>10.0.23.169:22/dcrecon/20200525/C1010511003703/trade/00/</FilePath>
+						<FileNameList>
+							<FileName>B202005251500_00_01.zip.sec</FileName>
+						</FileNameList>
+					</FileInf>
+				</FileInfList>
+			</DtlFileInf>
+			<ReconIndex>0x7b75633e709800a1e4ddc97a1fb54d56a65593b432ea79eeab57cec41dc229ba</ReconIndex>
+		</SummaryChkInf>			
+	</ReconSummaryChk>
+</Document>

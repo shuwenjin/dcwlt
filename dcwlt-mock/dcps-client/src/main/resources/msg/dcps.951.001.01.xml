@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--示例 dcps.951.001.01 账户借记控制通知报文-->
+<Document xmlns="urn:cbcc:std:dcep:2020:tech:xsd:dcps.951.001.01" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<TrblNtfctn>
+		<GrpHdr>
+			<MsgId>2010101000001261</MsgId>
+			<CreDtTm>2020-10-10T09:30:30</CreDtTm>
+			<InstgPty>
+				<InstgDrctPty>G4001011000013</InstgDrctPty>
+			</InstgPty>
+			<InstdPty>
+				<InstdDrctPty>C1091231000013</InstdDrctPty>
+			</InstdPty>
+			<Rmk>测试</Rmk>
+		</GrpHdr>
+		<StsInf>
+			<AccSts>AS04</AccSts>
+			<PtyId>C1091231000013</PtyId>
+		</StsInf>		
+		<OrgnlMsgCntt>			
+			<Cntt>xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx</Cntt>
+			<OrgnlMsgId>2010101000001230</OrgnlMsgId>
+			<OrgnlInstgPty>C1091231000013</OrgnlInstgPty>
+			<OrgnlMT>dcep.227.001.01</OrgnlMT>	
+			<PrcCd>DCEPO3005</PrcCd>
+			<RjctInf>付款机构账户借记控制</RjctInf>		
+		</OrgnlMsgCntt>				
+	</TrblNtfctn>
+</Document>

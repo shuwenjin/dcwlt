@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--示例 dcep.226.001.01 DC/EP兑出业务应答报文-->
+<Document xmlns="urn:cbcc:std:dcep:2020:tech:xsd:dcep.226.001.01" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<ConvertRsp>
+		<GrpHdr>
+			<MsgId>2010101000001261</MsgId>
+			<CreDtTm>2020-10-10T09:30:30</CreDtTm>
+			<InstgPty>
+				<InstgDrctPty>C1086932000016</InstgDrctPty>
+			</InstgPty>
+			<InstdPty>
+				<InstdDrctPty>C1030131001288</InstdDrctPty>
+			</InstdPty>			
+			<Rmk>测试</Rmk>
+		</GrpHdr>
+		<OrgnlGrpHdr>
+			<OrgnlMsgId>2010101000001260</OrgnlMsgId>
+			<OrgnlInstgPty>C1030131001288</OrgnlInstgPty>
+			<OrgnlMT>dcep.225.001.01</OrgnlMT>			
+		</OrgnlGrpHdr>
+		<RspsnInf>			
+			<RspsnSts>PR01</RspsnSts>			
+			<RjctCd>R021</RjctCd>			
+			<RjctInf>账户不存在</RjctInf>		
+			<BatchId>B202010101000</BatchId>
+		</RspsnInf>				
+	</ConvertRsp>
+</Document>

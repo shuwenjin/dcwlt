@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--示例 dcep.434.001.01 银行账户挂接管理应答报文-->
+<Document xmlns="urn:cbcc:std:dcep:2020:tech:xsd:dcep.434.001.01" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<PmtPtcMgmtRsp>
+		<GrpHdr>
+			<MsgId>2010101000001261</MsgId>
+			<CreDtTm>2020-10-10T09:30:30</CreDtTm>
+			<InstgPty>
+				<InstgDrctPty>C1091231000013</InstgDrctPty>
+			</InstgPty>
+			<InstdPty>
+				<InstdDrctPty>C1030131001288</InstdDrctPty>
+			</InstdPty>			
+			<Rmk>测试</Rmk>
+		</GrpHdr>
+		<OrgnlGrpHdr>
+			<OrgnlMsgId>2010101000001260</OrgnlMsgId>
+			<OrgnlInstgPty>C1030131001288</OrgnlInstgPty>
+			<OrgnlMT>dcep.433.001.01</OrgnlMT>			
+		</OrgnlGrpHdr>
+		<RspsnInf>			
+			<RspsnSts>PR01</RspsnSts>			
+			<RjctCd>R021</RjctCd>			
+			<RjctInf>账户不存在</RjctInf>		
+			<MgmtTp>MT01</MgmtTp>
+			<MsgSndCd>RSPNO00000000000001</MsgSndCd>			
+		</RspsnInf>			
+		<SgnInf>			
+			<SgnAcctTp>AT00</SgnAcctTp>
+			<SgnAcctId>6228928899001122</SgnAcctId>		
+			<SgnAcctNm>杨超</SgnAcctNm>			
+			<SgnTp>SG00</SgnTp>
+		</SgnInf>		
+		<WltInf>						
+			<WltId>WLTID00000000000001</WltId>			
+			<WltTp>WT01</WltTp>
+			<WltLvl>WL01</WltLvl>			
+		</WltInf>							
+	</PmtPtcMgmtRsp>
+</Document>
