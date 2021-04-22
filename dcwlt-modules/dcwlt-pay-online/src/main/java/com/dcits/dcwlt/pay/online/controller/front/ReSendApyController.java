@@ -84,6 +84,5 @@ public class ReSendApyController extends BaseController {
         } else {
             return AjaxResult.error(rspDTO.getBody().getPrcDesc());
         }
-
     }
 }
