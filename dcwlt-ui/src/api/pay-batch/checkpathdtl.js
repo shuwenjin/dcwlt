@@ -37,7 +37,7 @@ export function querySingle(query) {
 // 查询对账明细(不平对账)
 export function listCheckpathdetails(query) {
   return request({
-    url: '/pay-batch/checkpathdtl/detailsList',
+    url: '/dcwlt-pay-batch/checkpathdtl/detailsList',
     method: 'get',
     params: query
   })

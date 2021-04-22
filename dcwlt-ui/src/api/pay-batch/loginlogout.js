@@ -19,53 +19,15 @@ export function getNonf(msgid) {
 
 //登入登出的报文体
 function reqData(tlrNo, opterationType) {
-  var head = {
-    "tranDate": "20210317",
-    "tranTime": "103524",
-    "seqNo": "20210113000122532910308590900000"
-  };
-  var ecnyHead = {
-    "busiChnl": "1111",
-    "busiChnl2": "2222",
-    "zoneno": "01",
-    "brno": "01234",
-    "tellerno": "111",
-    "origChnl": "11",
-    "origChnl2": "22",
-    "origChnlDtl": "2"
-  };
+  
   var body = {
     "opterationType": opterationType,
     "tlrNo": tlrNo
   };
-  var requestData = {
-    "head": head,
-    "ecnyHead": ecnyHead,
-    "body": body
-  }
-
-  return requestData;
+  return body;
 
 }
-// 登入
-export function handerLogin(msgid) {
 
-  var requestData = body("OT00");
-  console.info(requestData);
-  return request({
-    url: '/pay-batch/login/login/' + msgid,
-    method: 'get'
-  })
-}
-
-
-// 登出
-export function handerLoginout(msgid) {
-  return request({
-    url: '/pay-batch/login/loginout/' + msgid,
-    method: 'get'
-  })
-}
 
 
 //登入操作（从pay-online 直接访问）
@@ -75,7 +37,7 @@ export function loginoutFmtMsgSnd(tlrNo, opterationType) {
   console.info(requestData);
 
   return request({
-    url: '/dcwlt-pay-online/dcwlt/loginoutFmtMsgSnd',
+    url: '/dcwlt-pay-online/login/loginoutFmtMsgSnd',
     method: 'post',
     data: requestData
   })
