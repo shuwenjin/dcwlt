@@ -1,0 +1,70 @@
+# 以下所有操作用root账号操作
+# 数字钱包后端部署 -------------------------------------------
+# 停止正在运行的数字钱包相关服务
+/home/dcwlt-app/app-run/stop-all.sh
+# 更新代码并打包
+cd /home/dcwlt
+git pull
+./package.sh
+# 启动数字钱包相关服务
+/home/dcwlt-app/app-run/run-all.sh
+
+# 数字钱包前端部署 -------------------------------------------
+# 在本地打包
+cd dcwlt/dcwlt-ui
+npm run build:prod
+# 将本地打包好的文件上传至服务器
+dcwlt/dcwlt-ui/dist   ==>>  /home/dcwlt-app/public
+
+
+# 城银清挡板部署 ---------------------------------------------
+# 停止城银清挡板服务
+/home/dcwlt-app/app-run/stop-dcps-client.sh
+# 更新代码并打包
+cd /home/dcps-client
+git pull
+./package.sh
+# 启动城银清挡板服务
+/home/dcwlt-app/app-run/dcps-client.sh
+
+
+# 核心挡板部署 -----------------------------------------------
+# 停止核心挡板服务
+/home/dcwlt-app/app-run/stop-corebaffle.sh
+# 更新代码并打包
+cd /home/corebaffle
+git pull
+./package.sh
+# 启动核心挡板服务
+/home/dcwlt-app/app-run/corebaffle.sh
+
+# rocketmq部署 -----------------------------------------------
+cd /usr/local/rocketmq/rocketmq-all-4.3.0-bin-release
+# 启动mqnamesrv
+./start-mqnamesrv.sh
+# 启动broker
+./start-broker.sh
+# 停止broker
+./stop-broker.sh
+# 停止mqnamesrv
+./stop-mqnamesrv.sh
+# 启动rocketmq客户端
+/home/dcwlt-app/rocketmq-client/start-rocketmq-console.sh
+# 停止rocketmq客户端
+/home/dcwlt-app/rocketmq-client/stop-rocketmq-console.sh
+
+
+
+
+
+nohup java -Xmx384m -Xms192m -Xmn96m -jar /home/dcwlt/dcwlt-mock/core-baffle/target/core-baffle-1.0.0.jar >>&1 &
+
+nohup java -Xmx384m -Xms192m -Xmn96m -jar /home/dcwlt/dcwlt-mock/dcps-client/target/dcps-client-1.0.0.jar >>&1 &
+
+corebaffle.sh                
+
+dcps-client.sh   
+
+
+
+
