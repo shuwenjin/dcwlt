@@ -387,12 +387,12 @@ public class Dispute801STradeFlow {
     }
 
     private void sendDcepDone(JSONObject rspObj, PayTransDtlInfoDO payTransDtlInfoDO, TradeContext<?, ?> tradeContext) {
-        if (null == rspObj.getJSONObject("ecnyHead")) {
+        if (null == rspObj.getJSONObject(AppConstant.DCEP_HEAD)) {
             logger.error("互联互通应答后出异常");
             throw new EcnyTransException(AppConstant.TRXSTATUS_ABEND, EcnyTransError.ECNY_DSPT_RESPOSE_ERROR);
         }
         // 互联互通返回报文
-        String msgType = rspObj.getJSONObject("ecnyHead").getString("MsgTp");
+        String msgType = rspObj.getJSONObject(AppConstant.DCEP_HEAD).getString("MsgTp");
 
         // 获取当前状态对象
         StateMachine stateMachine_dis = new StateMachine();
