@@ -3,33 +3,12 @@ POST http://localhost:8008/dcepgw
 Content-Type: application/json
 
 {
-  "Header": {
-    "BeginFlag": "{H:",
-    "VersionID": "04",
-    "OrigSender": "G4001011000013",
-    "OrigSenderSID": "DCPS",
-    "OrigReceiver": "C1091231000013",
-    "OrigReceiverSID": "DCPS",
-    "OrigSendDate": "20201030",
-    "OrigSendTime": "094508",
-    "StructType": "XML",
-    "MesgType": "dcep.401.001.01",
-    "MesgID": "202104221130032000000000001120010001",
-    "MesgRefID": "202104221130032000000000001120010001",
-    "MesgPriority": "3",
-    "MesgDirection": "U",
-    "SderReserved": "",
-    "RcverReserved": "",
-    "CenterReserved": "",
-    "Reserve": "",
-    "EndFlag": "}",
-    "SignSN": "1036581724",
-    "DigitalSignature": "MEQCIB37PmISKwKb/nPTYpupY7q13elGDcSycezhskxvds5IAiAmvONk9MOz2cu9zBozHfZ7lh11GXmxJYkZxxo9HcU7Lw=="
-  },
-  "Body": {
+  "body": {
     "FreeFrmt": {
+      "FreeFrmtInf": {
+        "MsgCnt": "各合作银行，本报文为自由格式报文测试"
+      },
       "GrpHdr": {
-        "Rmk": "测试",
         "CreDtTm": "2020-10-10T09:30:30",
         "InstdPty": {
           "InstdDrctPty": "C1010311000014"
@@ -37,12 +16,33 @@ Content-Type: application/json
         "InstgPty": {
           "InstgDrctPty": "C1030644021075"
         },
-        "MsgId": "20210413106040120333044574013000"
-      },
-      "FreeFrmtInf": {
-        "MsgCnt": "各合作银行，本报文为自由格式报文测试"
+        "MsgId": "20210413106040120333044574013000",
+        "Rmk": "测试"
       }
     }
+  },
+  "dcepHead": {
+    "BeginFlag": "{H:",
+    "CenterReserved": "",
+    "DigitalSignature": "MEUCIANvovmtNDjkteBZln00YGoTD4UWww8l7sGyUJlyz57OAiEArVtkxHrYOm6hGpulog4uHAW+gHSNlkPQPaAYq6thSqc=",
+    "EndFlag": "}",
+    "MesgDirection": "U",
+    "MesgID": "202104231106021000000000001120010001",
+    "MesgPriority": "3",
+    "MesgRefID": "202104231106021000000000001120010001",
+    "MesgType": "dcep.401.001.01",
+    "OrigReceiver": "C1091231000013",
+    "OrigReceiverSID": "DCPS",
+    "OrigSendDate": "20201030",
+    "OrigSendTime": "094508",
+    "OrigSender": "G4001011000013",
+    "OrigSenderSID": "DCPS",
+    "RcverReserved": "",
+    "Reserve": "",
+    "SderReserved": "",
+    "SignSN": "1036581724",
+    "StructType": "XML",
+    "VersionID": "04"
   }
 }
 
