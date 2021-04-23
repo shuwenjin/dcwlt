@@ -22,7 +22,7 @@ import java.util.Map;
 public class MsgUtil {
     private final static Logger logger = LoggerFactory.getLogger(MsgUtil.class);
     //固定报文头
-    public static String header = "{H:04G4001011000013DCPSC1091231000013DCPS20201030094508XML%s     %s     %s     3U                                       }";
+    public static String header = "{H:04G4001011000013DCPSC1091231000013DCPS%sXML%s     %s     %s     3U                                       }";
 
 
     //发送方公钥
@@ -319,7 +319,7 @@ public class MsgUtil {
 
             String msgId = "00000000001120010001" + new SimpleDateFormat("yyyyMMddHHmmsss").format(new Date());
             bodyMsg = String.format(bodyMsg, msgId);
-            String newHeader = String.format(header, msgType.substring(0, 15), msgId, msgId);
+            String newHeader = String.format(header, DateUtil.format(new Date(), "yyyyMMddHHmmss"), msgType.substring(0, 15), msgId, msgId);
 
             reqMsg = newHeader + "\r\n" + getDigitalSign(bodyMsg) + bodyMsg;
 
@@ -341,7 +341,7 @@ public class MsgUtil {
             String bodyMsg = FilesUtil.getInstance().getMsg(msgType);
             String msgId = "00000000001120010001" + new SimpleDateFormat("yyyyMMddHHmmsss").format(new Date());
 
-            String newHeader = String.format(header, msgType.substring(0, 15), msgId, msgId);
+            String newHeader = String.format(header, DateUtil.format(new Date(), "yyyyMMddHHmmss"), msgType.substring(0, 15), msgId, msgId);
 
             rspMsg = newHeader + "\r\n" + getDigitalSign(bodyMsg) + bodyMsg;
 
