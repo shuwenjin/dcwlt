@@ -1,6 +1,7 @@
 package com.dcits.dcpsclient.util;
 
 import cn.hutool.core.convert.Convert;
+import cn.hutool.core.date.DateUtil;
 import cn.hutool.crypto.SmUtil;
 import cn.hutool.crypto.asymmetric.KeyType;
 import org.slf4j.Logger;
@@ -21,7 +22,7 @@ import java.util.Map;
 public class MsgUtil {
     private final static Logger logger = LoggerFactory.getLogger(MsgUtil.class);
     //固定报文头
-    public static String header = "{H:04G4001011000013DCPSC1091231000013DCPS20201030094508XMLcaps.227.001.01     202011171021221000000000001120010001    202011171021221000000000001120010001    3U                                       }";
+    public static String header = "{H:04G4001011000013DCPSC1030644021075DCPS20201030094508XMLcaps.227.001.01     202011171021221000000000001120010001    202011171021221000000000001120010001    3U                                       }";
 
     //发送方公钥
     //public static String SendpublicKey = "MFkwEwYHKoZIzj0CAQYIKoEcz1UBgi0DQgAEdcjKVPXzo9pHK+tSgKRlLME8ViiaaLrOwt7LZ7hUHphx/q8fvGfy1nmbUIZlZJ++E4WKiqrYH457WyaObaG+WQ==";
@@ -315,7 +316,7 @@ public class MsgUtil {
             String bodyMsg = encryptBody(msgType, FilesUtil.getInstance().getMsg(msgType));
             //MesgID -> 202011171021221000000000001120010001
             String msgId = new SimpleDateFormat("yyyyMMddHHmmsss").format(new Date()) + "000000000001120010001";
-            String newHeader = header.substring(0, 58) + msgType.substring(0, 15) + "     " + msgId + "    " + msgId + header.substring(154, header.length());
+            String newHeader =header.substring(0,41)+ DateUtil.format(new Date(),"yyyyMMddHHmmss") + header.substring(55, 58) + msgType.substring(0, 15) + "     " + msgId + "    " + msgId + header.substring(154, header.length());
             reqMsg = newHeader + "\r\n" + getDigitalSign(bodyMsg) + bodyMsg;
         } catch (Exception e) {
             e.printStackTrace();
@@ -385,5 +386,6 @@ public class MsgUtil {
         //System.out.println(MsgUtil.digitalenvelope_cipher());
         //System.out.println(MsgUtil.getReqMsg("dcep.221.001.01.xml"));
 
+        System.out.println(getReqMsg("dcep.221.001.01.xml"));
     }
 }
