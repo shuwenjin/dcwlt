@@ -234,7 +234,7 @@ public class Login933STradeFlow {
 //        }
 
         //解析 DCEPhead
-        DCEPHeader dcepHeader = JSONObject.toJavaObject(jsonObject.getJSONObject("ecnyHead"), DCEPHeader.class);
+        DCEPHeader dcepHeader = JSONObject.toJavaObject(jsonObject.getJSONObject(AppConstant.DCEP_HEAD), DCEPHeader.class);
         if (null == dcepHeader) {
             //响应头缺失
             throw new EcnyTransException(EcnyTransError.ECNY_CHECK_DCEPHEAD_ERROR);
@@ -243,7 +243,7 @@ public class Login933STradeFlow {
         if (MsgTpEnum.DCEP900.getCode().equals(dcepHeader.getMsgTp())) {
             //业务检查不通过
             //获取900报文
-            JSONObject body = (JSONObject) jsonObject.get("body");
+            JSONObject body = (JSONObject) jsonObject.get(AppConstant.DCEP_BODY);
             if (null == body) {
                 //响应没有body
                 throw new EcnyTransException(EcnyTransError.ECNY_TRANS_BODY_ERROR);
@@ -257,8 +257,12 @@ public class Login933STradeFlow {
                                 EcnyTransError.ECNY_LOGIN_TPEY_MISMATCH_ERROR.getErrorMsg() : cmonConf.getCmonConfInf().getRjctInf());
             }
             throw new EcnyTransException(EcnyTransError.ECNY_RESULT_ERROR);
+        }else if (MsgTpEnum.DCEP911.getCode().equals(dcepHeader.getMsgTp())) {
+            //如果响应丢弃
+            logger.error("报文被丢弃！");
+            throw new EcnyTransException(EcnyTransError.DROP_REQ_ERROR);
         }
-        JSONObject body = (JSONObject) jsonObject.get("body");
+        JSONObject body = (JSONObject) jsonObject.get(AppConstant.DCEP_BODY);
         if (null == body) {
             //响应没有body
             throw new EcnyTransException(EcnyTransError.ECNY_TRANS_BODY_ERROR);
@@ -272,7 +276,7 @@ public class Login933STradeFlow {
 
 
         //解析body
-        LoginRspDTO loginRspDTO = JSONObject.toJavaObject(jsonObject.getJSONObject("body"), LoginRspDTO.class);
+        LoginRspDTO loginRspDTO = JSONObject.toJavaObject(jsonObject.getJSONObject(AppConstant.DCEP_BODY), LoginRspDTO.class);
         //业务处理状态
         ProcessStsCdEnum processStatus = loginRspDTO.getLoginRspn().getLoginRspnInf().getPrcSts();
         if (ProcessStsCdEnum.PR00.getCode().equals(processStatus.getCode())) {
@@ -411,18 +415,18 @@ public class Login933STradeFlow {
         //Head 错误码映射，默认使用ECNY000000 成功错误码，
         //判断异常类型，如果是自定义类型错误，获取异常类型中的错误码，否则取其他类型错误码ECNYC13003
         String retErr = Constant.SERVER_SUCC_RSPCODE;
-       // String retInfo = ecnyRspDTO.getHead().getRetInfo();
+        String retInfo = ecnyRspDTO.getHead().getRetInfo();
         if (exception != null) {
             if (exception instanceof EcnyTransException) {
                 retErr = ((EcnyTransException) exception).getErrorCode();
-              //  retInfo = ((EcnyTransException) exception).getErrorMsg();
+                retInfo = ((EcnyTransException) exception).getErrorMsg();
             } else {
                 retErr = EcnyTransError.ECNY_OTHER_ERROR.getErrorCode();
-             //   retInfo = EcnyTransError.ECNY_OTHER_ERROR.getErrorMsg();
+                retInfo = EcnyTransError.ECNY_OTHER_ERROR.getErrorMsg();
             }
         }
-//        ecnyRspDTO.getHead().setRetCode(retErr);
-//        ecnyRspDTO.getHead().setRetInfo(retInfo);
+        ecnyRspDTO.getHead().setRetCode(retErr);
+        ecnyRspDTO.getHead().setRetInfo(retInfo);
         EcnyTradeContext.setRspMsg(tradeContext, ecnyRspDTO);
     }
 

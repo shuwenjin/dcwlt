@@ -39,6 +39,7 @@ public class EcnyTransError extends TransError {
     public static final EcnyTransError GATEWAY_REQUEST_ERROR          = new EcnyTransError("ECNYS01005", "网关请求错误");
     public static final EcnyTransError PARAMS_INVALID                 = new EcnyTransError("ECNYS01006", "入参非法");
     public static final EcnyTransError PARSE_RSP_ERROR                = new EcnyTransError("ECNYS01007","解析响应报文错误");
+    public static final EcnyTransError DROP_REQ_ERROR                 = new EcnyTransError("ECNYS01008","报文丢弃通知");
 
 
 

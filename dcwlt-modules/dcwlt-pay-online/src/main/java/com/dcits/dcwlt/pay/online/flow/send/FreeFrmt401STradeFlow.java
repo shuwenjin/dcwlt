@@ -11,6 +11,7 @@ import com.dcits.dcwlt.common.pay.tradeflow.TradeContext;
 import com.dcits.dcwlt.common.pay.tradeflow.TradeFlow;
 import com.dcits.dcwlt.common.pay.type.OutOrgTypeEnum;
 import com.dcits.dcwlt.common.pay.util.DateUtil;
+import com.dcits.dcwlt.pay.api.domain.dcep.DCEPHeader;
 import com.dcits.dcwlt.pay.api.domain.dcep.DCEPReqDTO;
 import com.dcits.dcwlt.pay.api.domain.dcep.DCEPRspDTO;
 import com.dcits.dcwlt.pay.api.domain.dcep.cmonconf.CmonConfDTO;
@@ -55,9 +56,9 @@ import org.springframework.context.annotation.Configuration;
 public class    FreeFrmt401STradeFlow {
     private static final Logger logger = LoggerFactory.getLogger(DcepTransInTradeFlow.class);
 
-    private static final String ECNY_HEAD = "ecnyHead";
+    private static final String ECNY_HEAD = "dcepHead";
     private static final String HEAD = "head";
-    private static final String MSG_TYPE = "MsgTp";
+    private static final String MSG_TYPE = "MesgType";
     public static final String FREEFRMT_TRADE_FLOW = "FreeFrmt401STradeFlow";
     private static FreeFrmt freeFrmt = new FreeFrmt();
     private String tlrNo;
@@ -220,19 +221,30 @@ public class    FreeFrmt401STradeFlow {
         EcnyFreeFrmtRspDTO freeFrmtRspDTO = new EcnyFreeFrmtRspDTO();
         //获取互联互通响应信息
         JSONObject rspObj = (JSONObject) EcnyTradeContext.getTempContext(context).get("rspObj");
-        String code = (String) rspObj.getJSONObject(HEAD).get("retCode");
-        //平台响应是否成功
-        if (!Constant.SERVER_SUCC_RSPCODE.equals(code)) {
-            //初始化异常内容
-            retCode = code;
-            retMsg = EcnyTransError.RESPOSE_ERROR.getErrorMsg();
-            logger.error("响应报文失败,平台返回码为:{}", code);
-            throw new EcnyTransException(EcnyTransError.OTHER_TECH_ERROR);
+
+
+        logger.info("互联互通的响应repObj===>{}",rspObj);
+//        String code = (String) rspObj.getJSONObject(HEAD).get("retCode");
+//        //平台响应是否成功
+//        if (!Constant.SERVER_SUCC_RSPCODE.equals(code)) {
+//            //初始化异常内容
+//            retCode = code;
+//            retMsg = EcnyTransError.RESPOSE_ERROR.getErrorMsg();
+//            logger.error("响应报文失败,平台返回码为:{}", code);
+//            throw new EcnyTransException(EcnyTransError.OTHER_TECH_ERROR);
+//        }
+
+
+        //解析 DCEPhead
+        DCEPHeader dcepHeader = JSONObject.toJavaObject(rspObj.getJSONObject(AppConstant.DCEP_HEAD), DCEPHeader.class);
+        if (null == dcepHeader) {
+            //响应头缺失
+            throw new EcnyTransException(EcnyTransError.ECNY_CHECK_DCEPHEAD_ERROR);
         }
 
         //平台响应成功,处理响应报文
         //获取响应报文编号
-        String msgTp = rspObj.getJSONObject(ECNY_HEAD).getString(MSG_TYPE);
+        String msgTp =rspObj.getJSONObject(AppConstant.DCEP_HEAD).getString(AppConstant.MSG_TYPE);
         if (msgTp.equals(MsgTpEnum.DCEP902.getCode())) {
             //若响应为902报文,解析封装响应报文
             DCEPRspDTO<ComConfDTO> dcepRspDTO = DCEPRspDTO.jsonToDCEPRspDTO(rspObj, ComConfDTO.class);

@@ -1,16 +1,15 @@
 package com.dcits.dcwlt.dcepgw.utils;
 
 import cn.hutool.core.codec.Base64;
-import cn.hutool.core.convert.Convert;
 import cn.hutool.core.util.HexUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.crypto.SmUtil;
 import cn.hutool.crypto.asymmetric.KeyType;
-import cn.hutool.crypto.asymmetric.SM2;
 import cn.hutool.crypto.digest.SM3;
 import cn.hutool.crypto.symmetric.SM4;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import com.dcits.dcwlt.dcepgw.exception.GwException;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.HashMap;
@@ -35,6 +34,7 @@ public class DcspMsgUtil {
     public static final String SIGN_BEGIN_FLAG = "{S:";
     public static final String END_FLAG = "}\r\n";
 
+    public static final Map<String, String[]> ENCRYPT_FIELD = new LinkedHashMap<String, String[]>();
     //发送方公钥
     public static String SENDPUBLICKEY = "MFkwEwYHKoZIzj0CAQYIKoEcz1UBgi0DQgAEdcjKVPXzo9pHK+tSgKRlLME8ViiaaLrOwt7LZ7hUHphx/q8fvGfy1nmbUIZlZJ++E4WKiqrYH457WyaObaG+WQ==";
     //发送方私钥
@@ -45,6 +45,36 @@ public class DcspMsgUtil {
     //接收方私钥
     public static String PRIVATEKEY = "MIGTAgEAMBMGByqGSM49AgEGCCqBHM9VAYItBHkwdwIBAQQg5QXLcbQxbgpKAQgyBn+Lk0zZzmHPw4ZHo3UZDoFZcpegCgYIKoEcz1UBgi2hRANCAARNxVzMaNMHinuR6uq1IMxxzYJ9UjWPVOva2X1VXmKsQpSdKrVAxEqzHW1vMyOCRlJO3/jBQ1XOAaeT4PwaQcQZ";
 
+    static {
+        //DC/EP兑回业务请求报文
+        String[] F221 = {"DbtrNm", "DbtrWltId", "CdtrNm", "CdtrAcct"};
+        ENCRYPT_FIELD.put("dcep.221.001.01", F221);
+        //DC/EP兑出业务请求报文
+        String[] F225 = {"DbtrNm", "DbtrAcct", "CdtrNm", "CdtrWltId"};
+        ENCRYPT_FIELD.put("dcep.225.001.01", F225);
+        //DC/EP汇款兑出请求报文
+        String[] F227 = {"DbtrNm", "DbtrAcct", "CdtrNm", "CdtrWltId"};
+        ENCRYPT_FIELD.put("dcep.227.001.01", F227);
+        //交易状态查询请求报文
+        String[] F411 = {"OrgnlDbtrWltId", "OrgnlCdtrWltId"};
+        ENCRYPT_FIELD.put("dcep.411.001.01", F411);
+        //交易明细查询应答报文
+        String[] F418 = {"Cntt"};
+        ENCRYPT_FIELD.put("dcep.418.001.01", F418);
+        //交易终态通知报文
+        String[] F909 = {"Cntt"};
+        ENCRYPT_FIELD.put("dcep.909.001.01", F909);
+        //账户借记控制通知报文
+        String[] F951 = {"Cntt"};
+        ENCRYPT_FIELD.put("dcps.951.001.01", F951);
+        //银行账户挂接管理请求报文
+        String[] F433 = {"SgnAcctId", "SgnAcctNm", "IDNo", "Tel", "WltId"};
+        ENCRYPT_FIELD.put("dcep.433.001.01", F433);
+        //银行账户挂接管理应答报文
+        String[] F434 = {"SgnAcctId", "SgnAcctNm", "WltId"};
+        ENCRYPT_FIELD.put("dcep.434.001.01", F434);
+
+    }
 
     /**
      * 拆解混合结构报文
@@ -57,7 +87,7 @@ public class DcspMsgUtil {
         //头
         String head = orgString.substring(0, 202);
         //head定长拆解
-        Map<String,String> headerMap = DcspMsgUtil.unPackFixHead(head);
+        Map<String, String> headerMap = DcspMsgUtil.unPackFixHead(head);
         String signAndBody = orgString.substring(202);
         int bodyStartIdx = 0;
         if (signAndBody.startsWith(SIGN_BEGIN_FLAG)) {
@@ -72,14 +102,15 @@ public class DcspMsgUtil {
         String body = signAndBody.substring(bodyStartIdx);
 
         //验签 TODO 根据序号获取对方公钥，暂时用固定的
-        if(StrUtil.isNotBlank(headerMap.get(SIGNSN_KEY))) {
+        if (StrUtil.isNotBlank(headerMap.get(SIGNSN_KEY))) {
             boolean verify = verifyDigitalSignature(body, headerMap.get(DIGITALSIGNATURE_KEY), PUBLICKEY);
             if (!verify) {
                 log.error("报文验签不通过！");
+                throw new GwException(GwException.CODE_SIGN, "报文验签不通过");
             }
         }
         //解密 TODO 根据序号获取我方私钥，暂时用固定的
-        if(StrUtil.isNotBlank(headerMap.get(NCRPTNSN_KEY))) {
+        if (StrUtil.isNotBlank(headerMap.get(NCRPTNSN_KEY))) {
             byte[] key = getDigitalEnvelopePlain(PRIVATEKEY, headerMap.get(DGTLENVLP_KEY));
             //将数字信封密码HEX存放到数字信封
             headerMap.put(DGTLENVLP_KEY, HexUtil.encodeHexStr(key));
@@ -154,8 +185,8 @@ public class DcspMsgUtil {
         String msgType = jsonObject.getJSONObject(JsonXmlUtil.HEAD).getString(HEAD_KEY_ARRAY[9]);
         //随机生成对称密钥
         byte[] sm4Key = new SM4().getSecretKey().getEncoded();
-        String nsn = "";
-        if(StrUtil.isNotBlank(nsn)) {
+        String nsn = "1";
+        if (StrUtil.isNotBlank(nsn)) {
             bodyXml = encryptField(msgType, bodyXml, sm4Key);
         }
         //报文头
@@ -163,16 +194,16 @@ public class DcspMsgUtil {
 
         //签名
 
-        String ssn = "";//TODO  根据序号获取我方私钥，暂时用固定的
+        String ssn = "1";//TODO  根据序号获取我方私钥，暂时用固定的
         //报文签名
         String dsg = "";
-        if(StrUtil.isNotBlank(ssn)) {
+        if (StrUtil.isNotBlank(ssn)) {
             dsg = getDigitalSignature(bodyXml, PRIVATEKEY);
         }
         //TODO  根据序号获取对方公钥，暂时用固定的
         //数字信封
         String dep = "";
-        if(StrUtil.isNotBlank(nsn)){
+        if (StrUtil.isNotBlank(nsn)) {
             dep = getDigitalEnvelopeCipher(PUBLICKEY, sm4Key);
         }
         //签名域
@@ -287,6 +318,7 @@ public class DcspMsgUtil {
             signature = Base64.encode(data);
         } catch (Exception e) {
             log.error("签名异常", e);
+            throw new GwException(GwException.CODE_SIGN, "签名异常");
         }
 
         return signature;
@@ -309,6 +341,7 @@ public class DcspMsgUtil {
             isVerify = SmUtil.sm2(null, publicKey).verify(SM3.create().digest(msg), Base64.decode(sign));
         } catch (Exception e) {
             log.error("验签异常", e);
+            throw new GwException(GwException.CODE_SIGN, "验签异常");
         }
         return isVerify;
     }
@@ -321,43 +354,11 @@ public class DcspMsgUtil {
      * @param key     加密密钥
      */
     public static String encryptField(String msgType, String xmlMsg, byte[] key) {
-        String bodyMsg = "";
+        String bodyMsg = xmlMsg;
         try {
-            if ("dcep.221.001.01".equals(msgType)) {
-                //DC/EP兑回业务请求报文
-                //<DbtrNm>,<DbtrWltId>,<CdtrNm>,<CdtrAcct>需加密
-                //加密处理并做Base64转码
-                String[] elements = {"DbtrNm", "DbtrWltId", "CdtrNm", "CdtrAcct"};
+            String[] elements = ENCRYPT_FIELD.get(msgType);
+            if (null != elements) {
                 bodyMsg = updateXmlValue(xmlMsg, elements, key, true);
-            } else if ("dcep.225.001.01".equals(msgType)) {
-                //DC/EP兑出业务请求报文
-                //<DbtrNm>,<DbtrAcct>,<CdtrNm>,<CdtrWltId>
-                String[] elements = {"DbtrNm", "DbtrAcct", "CdtrNm", "CdtrWltId"};
-                bodyMsg = updateXmlValue(xmlMsg, elements, key, true);
-            } else if ("dcep.227.001.01".equals(msgType)) {
-                //DC/EP汇款兑出请求报文
-                //<DbtrNm>,<DbtrAcct>,<CdtrNm>,<CdtrWltId>
-                String[] elements = {"DbtrNm", "DbtrAcct", "CdtrNm", "CdtrWltId"};
-                bodyMsg = updateXmlValue(xmlMsg, elements, key, true);
-            } else if ("dcep.411.001.01".equals(msgType)) {
-                //交易状态查询请求报文
-                //<OrgnlDbtrWltId>,<OrgnlCdtrWltId>
-                String[] elements = {"OrgnlDbtrWltId", "OrgnlCdtrWltId"};
-                bodyMsg = updateXmlValue(xmlMsg, elements, key, true);
-            } else if ("dcep.433.001.01".equals(msgType)) {
-                //银行账户挂接管理请求报文
-                String[] elements = {"SgnAcctId", "SgnAcctNm", "IDNo", "Tel", "WltId"};
-                bodyMsg = updateXmlValue(xmlMsg, elements, key, true);
-            } else if ("dcep.909.001.01".equals(msgType)) {
-                //银行账户挂接管理请求报文
-                String[] elements = {"Cntt"};
-                bodyMsg = updateXmlValue(xmlMsg, elements, key, true);
-            }else if ("dcep.951.001.01".equals(msgType)) {
-                //银行账户挂接管理请求报文
-                String[] elements = {"Cntt"};
-                bodyMsg = updateXmlValue(xmlMsg, elements, key, true);
-            }else {
-                bodyMsg = xmlMsg;
             }
         } catch (Exception e) {
             log.error("加密敏感字段异常！", e);
@@ -374,46 +375,15 @@ public class DcspMsgUtil {
      * @param key     加密密钥
      */
     public static String decryptField(String msgType, String xmlMsg, byte[] key) {
-        String bodyMsg = "";
+        String bodyMsg = xmlMsg;
         try {
-            if ("dcep.221.001.01".equals(msgType)) {
-                //DC/EP兑回业务请求报文
-                //<DbtrNm>,<DbtrWltId>,<CdtrNm>,<CdtrAcct>需加密
-                //加密处理并做Base64转码
-                String[] elements = {"DbtrNm", "DbtrWltId", "CdtrNm", "CdtrAcct"};
+            String[] elements = ENCRYPT_FIELD.get(msgType);
+            if (null != elements) {
                 bodyMsg = updateXmlValue(xmlMsg, elements, key, false);
-            } else if ("dcep.225.001.01".equals(msgType)) {
-                //DC/EP兑出业务请求报文
-                //<DbtrNm>,<DbtrAcct>,<CdtrNm>,<CdtrWltId>
-                String[] elements = {"DbtrNm", "DbtrAcct", "CdtrNm", "CdtrWltId"};
-                bodyMsg = updateXmlValue(xmlMsg, elements, key, false);
-            } else if ("dcep.227.001.01".equals(msgType)) {
-                //DC/EP汇款兑出请求报文
-                //<DbtrNm>,<DbtrAcct>,<CdtrNm>,<CdtrWltId>
-                String[] elements = {"DbtrNm", "DbtrAcct", "CdtrNm", "CdtrWltId"};
-                bodyMsg = updateXmlValue(xmlMsg, elements, key, false);
-            } else if ("dcep.411.001.01".equals(msgType)) {
-                //交易状态查询请求报文
-                //<OrgnlDbtrWltId>,<OrgnlCdtrWltId>
-                String[] elements = {"OrgnlDbtrWltId", "OrgnlCdtrWltId"};
-                bodyMsg = updateXmlValue(xmlMsg, elements, key, false);
-            } else if ("dcep.433.001.01".equals(msgType)) {
-                //银行账户挂接管理请求报文
-                String[] elements = {"SgnAcctId", "SgnAcctNm", "IDNo", "Tel", "WltId"};
-                bodyMsg = updateXmlValue(xmlMsg, elements, key, false);
-            } else if ("dcep.909.001.01".equals(msgType)) {
-                //银行账户挂接管理请求报文
-                String[] elements = {"Cntt"};
-                bodyMsg = updateXmlValue(xmlMsg, elements, key, false);
-            }else if ("dcep.951.001.01".equals(msgType)) {
-                //银行账户挂接管理请求报文
-                String[] elements = {"Cntt"};
-                bodyMsg = updateXmlValue(xmlMsg, elements, key, false);
-            }else {
-                bodyMsg = xmlMsg;
             }
         } catch (Exception e) {
             log.error("解密敏感字段异常！", e);
+            throw new GwException(GwException.CODE_ENCRYPT, "解密敏感字段异常");
         }
 
         return bodyMsg;
@@ -439,6 +409,7 @@ public class DcspMsgUtil {
             }
         } catch (Exception e) {
             log.error("加解密敏感字段异常！", e);
+            throw new GwException(GwException.CODE_ENCRYPT, "更新加解密敏感字段异常");
         }
         return xml;
     }
@@ -446,13 +417,10 @@ public class DcspMsgUtil {
     public static String getXmlKeyValue(String xml, String key) {
         //检查数据合法性
         if (xml == null) {
-
             return "";
         }
-
         //检查数据合法性
         if (key == null) {
-
             return "";
         }
         StringBuffer sb = new StringBuffer();
@@ -460,7 +428,6 @@ public class DcspMsgUtil {
         //定位查找字符串
         int len = xml.indexOf("<" + posKey + ">");
         if (len == -1) {
-
             return "";
         }
         int xmlLen = xml.length();
@@ -472,7 +439,6 @@ public class DcspMsgUtil {
                 start = i;
                 break;
             }
-
         }
 
         //提取报文内容
@@ -485,5 +451,27 @@ public class DcspMsgUtil {
         }
 
         return sb.toString();
+    }
+
+    /**
+     * 通用响应报文，900
+     * */
+    public static String get900() {
+        JSONObject header = new JSONObject();
+        header.put("MesgType", "dcep.900.001.01");
+
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("dcepHead", header);
+
+        JSONObject cmonConf = new JSONObject();
+        JSONObject cmonConfInf = new JSONObject();
+        cmonConfInf.put("PrcSts", "PR01");
+        cmonConfInf.put("ProcessCode", "S9007");
+        cmonConfInf.put("RejectInformation", "系统调用失败");
+        cmonConf.put("CmonConfInf", cmonConfInf);
+        JSONObject body = new JSONObject();
+        body.put("CmonConf", cmonConf);
+        jsonObject.put("body", body);
+        return jsonObject.toJSONString();
     }
 }

@@ -37,8 +37,8 @@ public class JsonXmlUtil {
     private static final String ENCODING = "UTF-8";
     private static final String KEY_CCY = "Ccy";
     private static final String KEY_VALUE = "value";
-    public static final String HEAD = "Header";
-    public static final String BODY = "Body";
+    public static final String HEAD = "dcepHead";
+    public static final String BODY = "body";
     private static final String SOAP_ROOT_PREFIX = "soap:";
     private static final String SOAP_HEAD_PREFIX = "head:";
     private static final String SOAP_BODY_PREFIX = "wstxns1:";
@@ -420,8 +420,17 @@ public class JsonXmlUtil {
 //                    JSONObject arrayChild = jsonArray.getJSONObject(i);
 //                    node.add(addJsonToElement(arrayChild, nodeChild));
                     Element nodeChild = node.addElement(key);
-                    JSONObject arrayChild = jsonArray.getJSONObject(i);
-                    addJsonToElement(arrayChild, nodeChild);
+                    Object object =  jsonArray.get(i);
+                    if(object instanceof JSONObject) {
+                        JSONObject arrayChild = jsonArray.getJSONObject(i);
+                        addJsonToElement(arrayChild, nodeChild);
+                    }else if(object instanceof JSONArray){
+                        JSONArray arrayChild = jsonArray.getJSONArray(i);
+//                        addJsonToElement(arrayChild, nodeChild);
+                        //TODO
+                    }else{
+                        nodeChild.setText(jsonArray.getString(i));
+                    }
                 }
             } else {
                 //字符串

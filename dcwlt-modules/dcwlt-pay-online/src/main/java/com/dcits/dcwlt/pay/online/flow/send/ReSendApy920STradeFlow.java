@@ -281,7 +281,7 @@ public class ReSendApy920STradeFlow {
         JSONObject jsonObject = (JSONObject) EcnyTradeContext.getTempContext(tradeContext).get(DCEP_RSP_DTO);
         String prcSts = "";
         try {
-            prcSts = jsonObject.getJSONObject("body").getJSONObject("ComConf").getJSONObject("ConfInf").getString("PrcSts");
+            prcSts = jsonObject.getJSONObject(AppConstant.DCEP_BODY).getJSONObject("ComConf").getJSONObject("ConfInf").getString("PrcSts");
         } catch (Exception e) {
             logger.error("获取互联互通响应失败：{}，{}", EcnyTransError.GET_RSP_INFO_ERROR.getErrorCode(), EcnyTransError.GET_RSP_INFO_ERROR.getErrorMsg());
             throw new EcnyTransException(EcnyTransError.GET_RSP_INFO_ERROR);

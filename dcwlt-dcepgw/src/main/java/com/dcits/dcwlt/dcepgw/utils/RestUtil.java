@@ -1,6 +1,8 @@
 package com.dcits.dcwlt.dcepgw.utils;
 
 
+import com.dcits.dcwlt.dcepgw.exception.GwException;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.http.HttpEntity;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.config.RequestConfig;
@@ -13,7 +15,7 @@ import org.apache.http.util.EntityUtils;
 
 import java.io.IOException;
 
-
+@Slf4j
 public class RestUtil {
 
 
@@ -31,13 +33,11 @@ public class RestUtil {
             response = httpClient.execute(httpPost);
             HttpEntity entity = response.getEntity();
             if (entity != null) {
-                //System.out.println(response.getStatusLine());
                 rspMsg = EntityUtils.toString(entity, "utf-8");
             }
-        } catch (ClientProtocolException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
+        } catch (Exception e) {
+            log.error("通讯处理异常！", e);
+            throw new GwException(GwException.CODE_CALL,"通讯异常！");
         } finally {
             try {
                 // 释放资源

@@ -3,8 +3,9 @@ package com.dcits.dcwlt.common.pay.constant;
 import com.dcits.dcwlt.common.pay.enums.EnvironmentEmum;
 
 public class AppConstant {
-    public static final String DCEP_HEAD = "Header";
-    public static final String DCEP_BODY = "Body";
+    public static final String DCEP_HEAD = "dcepHead";
+    public static final String DCEP_BODY = "body";
+    public static final String MSG_TYPE = "MesgType";
     public static final String SM3 = "SM3";
     /**
      * 发送消息最大长度限制
@@ -33,6 +34,7 @@ public class AppConstant {
      */
     public static final String CGB_FINANCIAL_INSTITUTION_CD      = "C1030644021075";    //广发银行
     public static final String DCEP_FINANCIAL_INSTITUTION_CD = "G4001011000013";        //互联互通机构号
+    public static final String DCPS_FINANCIAL_INSTITUTION_CD = "G4001011000013";        //城银清机构号
 
     public static final String ORGCODE = "106";
 
