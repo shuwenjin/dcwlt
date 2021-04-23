@@ -35,9 +35,9 @@
 
     <el-table v-loading="loading" :data="nonfinancereportList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
+      <el-table-column label="报表日期" align="center" prop="reportDate" v-if="columns[2].visible" />
       <el-table-column label="绑卡数量" align="center" prop="tiedCardNumber" v-if="columns[0].visible" />
       <el-table-column label="解绑数量" align="center" prop="untieNumber" v-if="columns[1].visible" />
-      <el-table-column label="报表日期" align="center" prop="reportDate" v-if="columns[2].visible" />
     </el-table>
 
     <pagination
