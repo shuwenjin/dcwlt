@@ -456,12 +456,12 @@ public class DcspMsgUtil {
     /**
      * 通用响应报文，900
      * */
-    public static String get900() {
+    public static JSONObject get900() {
         JSONObject header = new JSONObject();
         header.put("MesgType", "dcep.900.001.01");
 
         JSONObject jsonObject = new JSONObject();
-        jsonObject.put("dcepHead", header);
+        jsonObject.put(JsonXmlUtil.HEAD, header);
 
         JSONObject cmonConf = new JSONObject();
         JSONObject cmonConfInf = new JSONObject();
@@ -471,7 +471,7 @@ public class DcspMsgUtil {
         cmonConf.put("CmonConfInf", cmonConfInf);
         JSONObject body = new JSONObject();
         body.put("CmonConf", cmonConf);
-        jsonObject.put("body", body);
-        return jsonObject.toJSONString();
+        jsonObject.put(JsonXmlUtil.BODY, body);
+        return jsonObject;
     }
 }
