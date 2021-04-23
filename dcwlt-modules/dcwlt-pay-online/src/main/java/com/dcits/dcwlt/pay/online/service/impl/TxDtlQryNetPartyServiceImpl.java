@@ -78,14 +78,14 @@ public class TxDtlQryNetPartyServiceImpl implements ITxDtlQryNetPartyService {
         JSONObject jsonObject = dcepSendService.sendDcep(dcepReqDTO);
         //解析并响应
         //判断开放平台调用是否成功
-        if (null == jsonObject || null == jsonObject.get("head")) {
-            logger.error("调用金融开放平台异常！响应报文：{}", jsonObject);
-            throw new EcnyTransException(EcnyTransError.CALL_COP_ERROR);
-        }
-        if (!Constant.SERVER_SUCC_RSPCODE.equals(jsonObject.getJSONObject("head").get("retCode"))) {
-            logger.error("调用互联互通异常！响应报文：{}", jsonObject);
-            throw new EcnyTransException(EcnyTransError.CALL_DCEP_ERROR);
-        }
+//        if (null == jsonObject || null == jsonObject.get("head")) {
+//            logger.error("调用金融开放平台异常！响应报文：{}", jsonObject);
+//            throw new EcnyTransException(EcnyTransError.CALL_COP_ERROR);
+//        }
+//        if (!Constant.SERVER_SUCC_RSPCODE.equals(jsonObject.getJSONObject("head").get("retCode"))) {
+//            logger.error("调用互联互通异常！响应报文：{}", jsonObject);
+//            throw new EcnyTransException(EcnyTransError.CALL_DCEP_ERROR);
+//        }
         //判断ecnyhead,响应的是否为 418 报文
         JSONObject body = jsonObject.getJSONObject("body");
         if (null == jsonObject.get("ecnyHead") ||
