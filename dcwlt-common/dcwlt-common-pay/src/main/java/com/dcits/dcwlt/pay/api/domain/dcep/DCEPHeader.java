@@ -204,6 +204,9 @@ public class DCEPHeader {
 //        rspHead.setSndDtTm(DateUtil.getISODateTime());
 //        rspHead.setVer(reqHead.getVer());
         //=========================================================
+        rspHead.setVersionID(reqHead.getVersionID());
+        rspHead.setStructType(reqHead.getStructType());
+
         rspHead.setMesgID(reqHead.getMesgID());
         rspHead.setCenterReserved(reqHead.getCenterReserved());
         rspHead.setMesgDirection(reqHead.getMesgDirection());
