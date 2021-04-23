@@ -37,8 +37,8 @@ public class JsonXmlUtil {
     private static final String ENCODING = "UTF-8";
     private static final String KEY_CCY = "Ccy";
     private static final String KEY_VALUE = "value";
-    public static final String HEAD = "Header";
-    public static final String BODY = "Body";
+    public static final String HEAD = "dcepHead";
+    public static final String BODY = "body";
     private static final String SOAP_ROOT_PREFIX = "soap:";
     private static final String SOAP_HEAD_PREFIX = "head:";
     private static final String SOAP_BODY_PREFIX = "wstxns1:";

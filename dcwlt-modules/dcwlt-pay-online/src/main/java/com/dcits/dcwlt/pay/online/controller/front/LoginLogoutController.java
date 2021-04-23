@@ -4,6 +4,7 @@ import com.dcits.dcwlt.common.core.web.controller.BaseController;
 import com.dcits.dcwlt.common.core.web.domain.AjaxResult;
 import com.dcits.dcwlt.common.security.annotation.PreAuthorize;
 import com.dcits.dcwlt.pay.api.domain.dcep.login.LoginInnerReqDTO;
+import com.dcits.dcwlt.pay.api.domain.dcep.login.LoginInnerRspDTO;
 import com.dcits.dcwlt.pay.api.domain.ecny.ECNYReqDTO;
 import com.dcits.dcwlt.pay.api.domain.ecny.ECNYRspDTO;
 import com.dcits.dcwlt.pay.api.domain.ecny.freeFrmt.FreeFrmtRspDTO;
@@ -42,7 +43,7 @@ public class LoginLogoutController extends BaseController {
         loginInnerReqDTO.setTlrNo(req.get("tlrNo"));
         ecnyReqDTO.setBody(loginInnerReqDTO);
 
-        ECNYRspDTO<FreeFrmtRspDTO> rspDTO = ecnyTransInTradeFlow.execute(ecnyReqDTO, Login933STradeFlow.LOGIN_TRADE_FLOW);
+        ECNYRspDTO<LoginInnerRspDTO> rspDTO = ecnyTransInTradeFlow.execute(ecnyReqDTO, Login933STradeFlow.LOGIN_TRADE_FLOW);
 
         logger.info("body的返回信息{}",rspDTO.getHead());
         if ("000000".equals(rspDTO.getHead().getRetCode())) {

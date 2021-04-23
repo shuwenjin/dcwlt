@@ -3,8 +3,8 @@ package com.dcits.dcwlt.common.pay.constant;
 import com.dcits.dcwlt.common.pay.enums.EnvironmentEmum;
 
 public class AppConstant {
-    public static final String DCEP_HEAD = "Header";
-    public static final String DCEP_BODY = "Body";
+    public static final String DCEP_HEAD = "dcepHead";
+    public static final String DCEP_BODY = "body";
     public static final String SM3 = "SM3";
     /**
      * 发送消息最大长度限制

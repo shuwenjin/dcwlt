@@ -453,4 +453,26 @@ public class DcspMsgUtil {
         return sb.toString();
     }
 
+    /**
+     * 通用响应报文，900
+     * */
+    public static String get900() {
+        String re = "";
+        JSONObject header = new JSONObject();
+        header.put("MesgType", "dcep.900.001.01");
+
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("dcepHead", header);
+
+        JSONObject cmonConf = new JSONObject();
+        JSONObject cmonConfInf = new JSONObject();
+        cmonConfInf.put("PrcSts", "PR01");
+        cmonConfInf.put("ProcessCode", "S9007");
+        cmonConfInf.put("RejectInformation", "系统调用失败");
+        cmonConf.put("CmonConfInf", cmonConfInf);
+        JSONObject body = new JSONObject();
+        body.put("CmonConf", cmonConf);
+        jsonObject.put("body", body);
+        return re;
+    }
 }

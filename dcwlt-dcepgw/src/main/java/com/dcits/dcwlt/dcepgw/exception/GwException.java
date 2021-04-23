@@ -18,6 +18,7 @@ public class GwException extends RuntimeException{
 	public static final String CODE_ENCRYPT = "GW-0001";
 	public static final String CODE_PACK = "GW-0002";
 	public static final String CODE_SIGN = "GW-0003";
+	public static final String CODE_CALL = "GW-0004";
 	public GwException(String errorCode, String errorMsg) {
 		this.errorCode = errorCode;
 		this.errorMsg = errorMsg;
