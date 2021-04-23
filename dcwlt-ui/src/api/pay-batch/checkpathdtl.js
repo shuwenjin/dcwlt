@@ -25,7 +25,7 @@ export function querySingle(query) {
 // 查询对账明细(不平对账)
 export function listCheckpathdetails(query) {
   return request({
-    url: '/dcwlt-pay-batch/checkpathdtl/detailsList',
+    url: '/pay-batch/checkpathdtl/detailsList',
     method: 'get',
     params: query
   })
@@ -53,7 +53,7 @@ function reqData(data) {
 export function send801(form) {
  // let body = reqData(form);
   return request({
-    url: '/dcwlt-pay-online/checkpath/changeAccount',
+    url: '/pay-online/checkpath/changeAccount',
     method: 'post',
     data: form
   })
