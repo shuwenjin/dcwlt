@@ -14,7 +14,7 @@ public class DcepServiceUtil {
      * @param
      * @return
      */
-    private static Map<String, String> map = new HashMap<>();
+    private static Map<String, String> map = new HashMap<String, String> ();
 
     public static String getDcepServiceRsp(String msgType){
         if(map.size()==0){

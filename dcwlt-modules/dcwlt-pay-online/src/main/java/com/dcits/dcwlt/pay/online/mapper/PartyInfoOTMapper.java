@@ -57,11 +57,11 @@ public interface PartyInfoOTMapper
      */
     public int deletePartyTmp(String partyid);
 
-    /**
-     * 批量删除机构
-     * 
-     * @param partyids 需要删除的数据ID
-     * @return 结果
-     */
-    public int deletePartyInfoDOByIds(String[] partyids);
+//    /**
+//     * 批量删除机构
+//     *
+//     * @param partyids 需要删除的数据ID
+//     * @return 结果
+//     */
+//    public int deletePartyInfoDOByIds(String[] partyids);
 }

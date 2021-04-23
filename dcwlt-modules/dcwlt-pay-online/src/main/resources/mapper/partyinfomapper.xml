@@ -4,7 +4,6 @@
 
     <!-- 新增报文登记信息 -->
     <insert id="insertParty">
-        <if test="_databaseId == 'mysql'">
             INSERT INTO pay_comm_party(PARTYID,
             PARTYTYPE,
             PARTYNAME,
@@ -40,7 +39,6 @@
             #{lastUpDate},
             #{lastUpTime}
             )
-        </if>
     </insert>
 
     <update id="updateParty">

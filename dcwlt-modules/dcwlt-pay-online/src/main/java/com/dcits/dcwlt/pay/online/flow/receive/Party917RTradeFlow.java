@@ -161,8 +161,8 @@ public class Party917RTradeFlow {
         //生效日期失效日期校验
         if (party.getChngCtrl().getFctvDt() != null && party.getChngCtrl().getIfctvDt() != null) {
             try {
-                String fctvDt = DateUtil.formatStandardDateTime(party.getChngCtrl().getFctvDt());
-                String ifctvDt = DateUtil.formatStandardDateTime(party.getChngCtrl().getIfctvDt());
+                String fctvDt = DateUtil.formatStandardDateTime(party.getChngCtrl().getFctvDt()).substring(0,8);
+                String ifctvDt = DateUtil.formatStandardDateTime(party.getChngCtrl().getIfctvDt()).substring(0,8);
                 if (DateCompareUtil.compareDate(fctvDt, ifctvDt) > 0) {
                     logger.warn("生效日期{}大于失效日期{}", party.getChngCtrl().getFctvDt(), party.getChngCtrl().getIfctvDt());
                     return false;

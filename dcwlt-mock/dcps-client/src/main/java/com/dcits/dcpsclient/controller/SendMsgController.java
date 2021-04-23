@@ -157,6 +157,41 @@ public class SendMsgController {
         return rspMsg;
     }
 
+    //机构权限
+    @GetMapping("/915")
+    public String do915(){
+        String reqMsg = MsgUtil.getReqMsg("dcep.915.001.01.xml");
+        System.out.println("交易请求报文：");
+        System.out.println(reqMsg);
+        String rspMsg = getRsp(reqMsg);
+        System.out.println("交易响应报文：");
+        System.out.println(rspMsg);
+        return rspMsg;
+    }
+
+    //机构变更
+    @GetMapping("/917")
+    public String do917(){
+        String reqMsg = MsgUtil.getReqMsg("dcep.917.001.01.xml");
+        System.out.println("交易请求报文：");
+        System.out.println(reqMsg);
+        String rspMsg = getRsp(reqMsg);
+        System.out.println("交易响应报文：");
+        System.out.println(rspMsg);
+        return rspMsg;
+    }
+
+    //机构状态变更
+    @GetMapping("/931")
+    public String do931(){
+        String reqMsg = MsgUtil.getReqMsg("dcep.931.001.01.xml");
+        System.out.println("交易请求报文：");
+        System.out.println(reqMsg);
+        String rspMsg = getRsp(reqMsg);
+        System.out.println("交易响应报文：");
+        System.out.println(rspMsg);
+        return rspMsg;
+    }
     //重新加载报文
     @GetMapping("/reload")
     public String reload(){

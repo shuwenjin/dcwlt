@@ -15,7 +15,7 @@ public class FilesUtil {
 
     private static FilesUtil filesUtil = new FilesUtil();
 
-    private Map<String, byte[]> msgMap = new HashMap<>();
+    private Map<String, byte[]> msgMap = new HashMap();
 
     private FilesUtil() {
     }
