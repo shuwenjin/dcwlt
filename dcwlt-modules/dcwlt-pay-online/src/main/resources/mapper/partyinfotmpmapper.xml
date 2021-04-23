@@ -27,7 +27,7 @@
     </sql>
 
     <!-- 新增机构临时数据 -->
-    <insert id="insertPartyTmp">
+    <insert id="insertPartyTmp" parameterType="com.dcits.dcwlt.pay.api.model.PartyToBeEffectiveDO">
             INSERT INTO pay_comm_party_tobeffect(
             PARTYID,
             CHANGETYPE,
@@ -68,7 +68,7 @@
             )
     </insert>
 
-    <update id="updatePartyTmp">
+    <update id="updatePartyTmp" parameterType="com.dcits.dcwlt.pay.api.model.PartyToBeEffectiveDO">
         UPDATE pay_comm_party_tobeffect
         SET CHANGETYPE = #{partyType},
         CHANGETYPE = #{changeType},
@@ -90,11 +90,11 @@
         WHERE PARTYID = #{partyID}
     </update>
 
-    <delete id="deletePartyTmp">
+    <delete id="deletePartyTmp" parameterType="com.dcits.dcwlt.pay.api.model.PartyToBeEffectiveDO">
         DELETE FROM pay_comm_party_tobeffect WHERE PARTYID = #{partyID}
     </delete>
 
-    <select id="queryPartyTmp" resultType="com.dcits.dcwlt.pay.api.model.PartyToBeEffectiveDO">
+    <select id="queryPartyTmp" resultType="com.dcits.dcwlt.pay.api.model.PartyToBeEffectiveDO" parameterType="com.dcits.dcwlt.pay.api.model.PartyToBeEffectiveDO">
         <include refid="querySql"></include>
         <where>
             <if test="partyID != null and partyID != ''">
@@ -104,7 +104,7 @@
     </select>
 
     <!--    查询指定日期会生效的临时机构表信息-->
-    <select id="selectPartyTmpOfEffectiveToDay" resultType="com.dcits.dcwlt.pay.api.model.PartyToBeEffectiveDO">
+    <select id="selectPartyTmpOfEffectiveToDay" resultType="com.dcits.dcwlt.pay.api.model.PartyToBeEffectiveDO" parameterType="com.dcits.dcwlt.pay.api.model.PartyToBeEffectiveDO">
         <include refid="querySql"></include>
         WHERE P.EFFECTDATE &lt;= #{effectDate} OR P.INEFFECTIVEDATE &lt;= #{inEffectiveDate}
     </select>
