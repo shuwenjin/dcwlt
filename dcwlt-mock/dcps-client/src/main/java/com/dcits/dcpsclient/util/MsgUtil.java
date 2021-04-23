@@ -1,6 +1,7 @@
 package com.dcits.dcpsclient.util;
 
 import cn.hutool.core.convert.Convert;
+import cn.hutool.core.date.DateUtil;
 import cn.hutool.crypto.SmUtil;
 import cn.hutool.crypto.asymmetric.KeyType;
 import org.slf4j.Logger;
@@ -22,6 +23,7 @@ public class MsgUtil {
     private final static Logger logger = LoggerFactory.getLogger(MsgUtil.class);
     //固定报文头
     public static String header = "{H:04G4001011000013DCPSC1091231000013DCPS20201030094508XML%s     %s     %s     3U                                       }";
+
 
     //发送方公钥
     //public static String SendpublicKey = "MFkwEwYHKoZIzj0CAQYIKoEcz1UBgi0DQgAEdcjKVPXzo9pHK+tSgKRlLME8ViiaaLrOwt7LZ7hUHphx/q8fvGfy1nmbUIZlZJ++E4WKiqrYH457WyaObaG+WQ==";
@@ -314,9 +316,11 @@ public class MsgUtil {
         try {
             String bodyMsg = encryptBody(msgType, FilesUtil.getInstance().getMsg(msgType));
             //MesgID -> 202011171021221000000000001120010001
+
             String msgId = "00000000001120010001" + new SimpleDateFormat("yyyyMMddHHmmsss").format(new Date());
             bodyMsg = String.format(bodyMsg, msgId);
             String newHeader = String.format(header, msgType.substring(0, 15), msgId, msgId);
+
             reqMsg = newHeader + "\r\n" + getDigitalSign(bodyMsg) + bodyMsg;
 
         } catch (Exception e) {
@@ -389,5 +393,6 @@ public class MsgUtil {
         //System.out.println(MsgUtil.digitalenvelope_cipher());
         //System.out.println(MsgUtil.getReqMsg("dcep.221.001.01.xml"));
 
+        System.out.println(getReqMsg("dcep.221.001.01.xml"));
     }
 }

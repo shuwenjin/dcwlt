@@ -457,7 +457,6 @@ public class DcspMsgUtil {
      * 通用响应报文，900
      * */
     public static String get900() {
-        String re = "";
         JSONObject header = new JSONObject();
         header.put("MesgType", "dcep.900.001.01");
 
@@ -473,6 +472,6 @@ public class DcspMsgUtil {
         JSONObject body = new JSONObject();
         body.put("CmonConf", cmonConf);
         jsonObject.put("body", body);
-        return re;
+        return jsonObject.toJSONString();
     }
 }

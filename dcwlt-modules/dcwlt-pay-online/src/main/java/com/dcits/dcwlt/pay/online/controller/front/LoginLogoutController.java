@@ -40,7 +40,7 @@ public class LoginLogoutController extends BaseController {
 
         LoginInnerReqDTO loginInnerReqDTO = new LoginInnerReqDTO();
         loginInnerReqDTO.setOpterationType(req.get("opterationType"));
-        loginInnerReqDTO.setTlrNo(req.get("tlrNo"));
+        loginInnerReqDTO.setTlrNo(ecnyReqDTO.getEcnyHead().getTellerno());
         ecnyReqDTO.setBody(loginInnerReqDTO);
 
         ECNYRspDTO<LoginInnerRspDTO> rspDTO = ecnyTransInTradeFlow.execute(ecnyReqDTO, Login933STradeFlow.LOGIN_TRADE_FLOW);
