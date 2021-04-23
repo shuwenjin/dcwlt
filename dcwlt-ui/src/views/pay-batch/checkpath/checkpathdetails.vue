@@ -1,6 +1,6 @@
 <template>
   <div class="app-container">
-    <el-form :model="queryParams" ref="queryForm" :inline="true" v-show="showSearch" label-width="68px">
+    <el-form :model="queryParams" ref="queryForm" :inline="true" v-show="showSearch" label-width="88px">
       <el-form-item label="平台日期" prop="paydate">
         <el-date-picker clearable size="small" v-model="queryParams.workdate" type="date" value-format="yyyyMMdd"
           placeholder="选择平台日期">
