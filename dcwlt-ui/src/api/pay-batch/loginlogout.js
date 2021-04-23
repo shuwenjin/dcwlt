@@ -19,7 +19,7 @@ export function getNonf(msgid) {
 
 //登入登出的报文体
 function reqData(tlrNo, opterationType) {
-  
+
   var body = {
     "opterationType": opterationType,
     "tlrNo": tlrNo
@@ -37,7 +37,7 @@ export function loginoutFmtMsgSnd(tlrNo, opterationType) {
   console.info(requestData);
 
   return request({
-    url: '/dcwlt-pay-online/login/loginoutFmtMsgSnd',
+    url: '/pay-online/login/loginoutFmtMsgSnd',
     method: 'post',
     data: requestData
   })
