@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--示例 dcep.900.001.01 通用处理确认报文-->
 <Document xmlns="urn:cbcc:std:dcep:2020:tech:xsd:dcep.900.001.01" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-	<CmonConf>
+	<ComConf>
 		<GrpHdr>
 			<MsgId>2010101000001261</MsgId>
 			<CreDtTm>2020-10-10T09:30:30</CreDtTm>
@@ -18,9 +18,9 @@
 			<OrgnlInstgPty>C1091231000013</OrgnlInstgPty>
 			<OrgnlMT>dcep.227.001.01</OrgnlMT>			
 		</OrgnlGrpHdr>
-		<CmonConfInf>			
+		<ConfInf>
 			<PrcSts>PR00</PrcSts>				
 			<BatchId>B202010101000</BatchId>
-		</CmonConfInf>				
-	</CmonConf>
+		</ConfInf>
+	</ComConf>
 </Document>

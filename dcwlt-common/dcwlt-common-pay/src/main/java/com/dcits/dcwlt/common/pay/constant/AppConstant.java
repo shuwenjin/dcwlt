@@ -5,6 +5,7 @@ import com.dcits.dcwlt.common.pay.enums.EnvironmentEmum;
 public class AppConstant {
     public static final String DCEP_HEAD = "dcepHead";
     public static final String DCEP_BODY = "body";
+    public static final String MSG_TYPE = "MesgType";
     public static final String SM3 = "SM3";
     /**
      * 发送消息最大长度限制

@@ -59,7 +59,7 @@
         </el-form-item>
 
 
-        <el-form-item label="平台日期" prop="tranDate">
+        <el-form-item label="平台日期" prop="workdate">
           <el-input v-model="form.workdate" placeholder="请输入平台日期" />
         </el-form-item>
         <el-form-item label="平台流水" prop="paySerno">
@@ -268,6 +268,7 @@
             visible: false
           },
         ],
+
 
         // 表单参数
         form: {},

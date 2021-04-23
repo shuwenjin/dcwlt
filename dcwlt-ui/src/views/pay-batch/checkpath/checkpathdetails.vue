@@ -54,7 +54,7 @@
           <!--  v-bind:disabled="scope.row.checkStatus=='SAME'" -->
 
           <!--当前状态不是“SAME” 就显示，进行调账-->
-          <el-button size="mini"  v-if="scope.row.checkStatus!='SAME'" type="primary" plain @click="handleUpdate(scope.row)">手动差错</el-button>
+          <el-button size="mini"  type="primary" plain @click="handleUpdate(scope.row)">手动差错</el-button>
 
         </template>
       </el-table-column>
@@ -343,7 +343,7 @@
       /** 提交按钮 */
       submitForm() {
 
-        console.log(this.form)
+       // console.log(this.form)
         this.execute801paramers.msgId = this.form.msgId;
         this.execute801paramers.disputeReason = this.form.disputeReason;
         this.execute801paramers.disputeReasonCode = this.form.disputeReasonCode;
@@ -354,7 +354,7 @@
         this.execute801paramers.paySerno = this.form.amount;
         this.execute801paramers.checkstatus = this.form.checkstatus;
         this.execute801paramers.instgPty = this.form.instgDrctPty;
-        send801(this.form).then(response => {
+        send801(this.execute801paramers).then(response => {
           this.msgSuccess("新增成功");
 
           this.open = false;

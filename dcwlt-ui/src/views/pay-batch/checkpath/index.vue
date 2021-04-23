@@ -398,6 +398,9 @@ export default {
       console.log("row==="+row)
       executeReconciliation(row).then(response=>{
         this.msgSuccess("重新对账成功");
+      }).then(()=>{
+        //刷新一下界面数据
+        this.getList();
       });
     },
   }
