@@ -1,5 +1,8 @@
-### 城银清->dcep
-GET http://localhost:8888/711
+### 自由格式报文
+GET http://localhost:8888/401
 Content-Type: application/json
+
+### 机构对账汇总核对报文
+GET http://localhost:8888/711
 
 ###

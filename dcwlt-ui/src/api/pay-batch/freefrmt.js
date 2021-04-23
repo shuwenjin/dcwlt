@@ -64,7 +64,7 @@ export function pymtFrdmFmtMsgSnd(tlrNO, msgContext,instdDrctPty) {
   let requestData = reqData(tlrNO, msgContext,instdDrctPty);
   console.info(requestData);
   return request({
-    url: '/dcwlt-pay-online/freefrmt/pymtFrdmFmtMsgSnd',
+    url: '/pay-online/freefrmt/pymtFrdmFmtMsgSnd',
     method: 'post',
     data: requestData
   })
