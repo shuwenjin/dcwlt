@@ -34,7 +34,7 @@ public class ToDCEPController {
         } catch (Exception e) {
             log.error("请求城银清异常！",e);
             //组错误响应
-            rspMsg = DcspMsgUtil.get900();
+            rspMsg = DcspMsgUtil.get900().toJSONString();
         }
 
         return rspMsg;
