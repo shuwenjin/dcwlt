@@ -56,15 +56,3 @@ cd /usr/local/rocketmq/rocketmq-all-4.3.0-bin-release
 
 
 
-
-nohup java -Xmx384m -Xms192m -Xmn96m -jar /home/dcwlt/dcwlt-mock/core-baffle/target/core-baffle-1.0.0.jar >>&1 &
-
-nohup java -Xmx384m -Xms192m -Xmn96m -jar /home/dcwlt/dcwlt-mock/dcps-client/target/dcps-client-1.0.0.jar >>&1 &
-
-corebaffle.sh                
-
-dcps-client.sh   
-
-
-
-
