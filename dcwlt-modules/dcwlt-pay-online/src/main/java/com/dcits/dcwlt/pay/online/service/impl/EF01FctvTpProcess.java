@@ -59,8 +59,8 @@ public class EF01FctvTpProcess implements PartyChangeProcess {
         PartyToBeEffectiveDO partyToBeEffectiveDOo = new PartyToBeEffectiveDO();
         partyToBeEffectiveDOo.setPartyID(party.getPtyId());
         List<PartyToBeEffectiveDO> oldPartyInfoList = partyInfoOTMapper.queryPartyTmp(partyToBeEffectiveDOo);
-        PartyToBeEffectiveDO oldPartyInfo = oldPartyInfoList.get(0);
-        if(oldPartyInfo != null){
+        if(oldPartyInfoList.size()>0){
+            PartyToBeEffectiveDO oldPartyInfo = oldPartyInfoList.get(0);
             //如果原来变更期数为99999999， 不进行比较，否则进行比较
             if(oldPartyInfo.getChangeNumber() >= NbInf.MAX_CHNG_NB){
                 partyToBeEffectiveDO.setChangeNumber(nbInf.getChngNb());

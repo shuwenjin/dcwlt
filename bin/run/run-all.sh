@@ -1,0 +1,10 @@
+/home/dcwlt-app/app-run/dcwlt-auth.sh 
+/home/dcwlt-app/app-run/dcwlt-dcepgw.sh 
+/home/dcwlt-app/app-run/dcwlt-gateway.sh 
+/home/dcwlt-app/app-run/dcwlt-job.sh 
+/home/dcwlt-app/app-run/dcwlt-pay-batch.sh 
+/home/dcwlt-app/app-run/dcwlt-pay-online.sh 
+/home/dcwlt-app/app-run/dcwlt-system.sh
+/home/dcwlt-app/app-run/dcwlt-gen.sh
+/home/dcwlt-app/app-run/corebaffle.sh
+/home/dcwlt-app/app-run/dcps-client.sh 

@@ -2,6 +2,11 @@ package com.dcits.dcwlt.pay.online.flow;
 
 import com.alibaba.fastjson.JSONObject;
 import com.dcits.dcwlt.common.pay.constant.AppConstant;
+import com.dcits.dcwlt.common.pay.enums.MsgTpEnum;
+import com.dcits.dcwlt.pay.api.domain.dcep.fault.Fault;
+import com.dcits.dcwlt.pay.api.model.RspCodeMapDO;
+import com.dcits.dcwlt.pay.api.mq.event.exception.EcnyTransError;
+import com.dcits.dcwlt.pay.api.mq.event.exception.EcnyTransException;
 import com.dcits.dcwlt.pay.online.flow.builder.TradeFlowRuner;
 import com.dcits.dcwlt.pay.api.domain.dcep.DCEPHeader;
 import com.dcits.dcwlt.pay.api.domain.dcep.DCEPReqDTO;
@@ -9,6 +14,7 @@ import com.dcits.dcwlt.pay.api.domain.dcep.DCEPRspDTO;
 import com.dcits.dcwlt.pay.api.domain.dcep.fault.FaultDTO;
 import com.dcits.dcwlt.pay.online.flow.builder.EcnyTradeContext;
 import com.dcits.dcwlt.pay.online.service.TransInService;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -75,19 +81,19 @@ public class DcepTransInTradeFlow {
             cause = e;
         }
         DCEPRspDTO<FaultDTO> dcepRspDTO = null;
-//        if (cause instanceof EcnyTransException) {
-//            if (StringUtil.equalsAny(((EcnyTransException) cause).getErrorCode(), EcnyTransError.INPARAMS_INVALID.getErrorCode(), EcnyTransError.DUPLICATE_KEY_ERROR.getErrorCode())) {
-//                RspCodeMapDO rspCodeMapDO = EcnyTransException.convertRspCode((EcnyTransException) cause);
-//                FaultDTO faultDTO = new FaultDTO();
-//                Fault fault = new Fault();
-//                fault.setFaultCode(rspCodeMapDO.getDestRspCode());
-//                fault.setFaultActor(dcepReqDTO.getDcepHead().getSender());
-//                fault.setFaultString(rspCodeMapDO.getRspCodeDsp());
-//                fault.setDetail(rspCodeMapDO.getRspCodeDsp());
-//                faultDTO.setFault(fault);
-//                dcepRspDTO = DCEPRspDTO.newInstance(dcepReqDTO, MsgTpEnum.DCEP911.getCode(), faultDTO);
-//            }
-//        }
+        if (cause instanceof EcnyTransException) {
+            if (StringUtils.equalsAny(((EcnyTransException) cause).getErrorCode(), EcnyTransError.INPARAMS_INVALID.getErrorCode(), EcnyTransError.DUPLICATE_KEY_ERROR.getErrorCode())) {
+                RspCodeMapDO rspCodeMapDO = EcnyTransException.convertRspCode((EcnyTransException) cause);
+                FaultDTO faultDTO = new FaultDTO();
+                Fault fault = new Fault();
+                fault.setFaultCode(rspCodeMapDO.getDestRspCode());
+                fault.setFaultActor(dcepReqDTO.getDcepHead().getSender());
+                fault.setFaultString(rspCodeMapDO.getRspCodeDsp());
+                fault.setDetail(rspCodeMapDO.getRspCodeDsp());
+                faultDTO.setFault(fault);
+                dcepRspDTO = DCEPRspDTO.newInstance(dcepReqDTO, MsgTpEnum.DCEP911.getCode(), faultDTO);
+            }
+        }
         return (JSONObject) JSONObject.toJSON(dcepRspDTO);
     }
 

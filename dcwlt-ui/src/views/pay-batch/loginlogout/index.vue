@@ -6,7 +6,7 @@
           @keyup.enter.native="handleQuery" />
       </el-form-item>
       <el-form-item label="平台日期" prop="payDate">
-        <el-date-picker clearable size="small" v-model="queryParams.payDate" type="date" value-format="yyyy-MM-dd"
+        <el-date-picker clearable size="small" v-model="queryParams.payDate" type="date" value-format="yyyyMMdd"
           placeholder="选择平台日期">
         </el-date-picker>
       </el-form-item>

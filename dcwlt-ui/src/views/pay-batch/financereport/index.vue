@@ -35,6 +35,7 @@
 
     <el-table v-loading="loading" :data="financereportList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
+      <el-table-column label="报表日期" align="center" prop="reportDate" v-if="columns[9].visible" />
       <el-table-column label="兑出金额" align="center" prop="cashoutAmount" v-if="columns[0].visible" />
       <el-table-column label="兑出成功笔数" align="center" prop="cashoutSuccessNumber" v-if="columns[1].visible" />
       <el-table-column label="兑出总笔数" align="center" prop="cashoutTotalNumber" v-if="columns[2].visible" />
@@ -44,7 +45,6 @@
       <el-table-column label="汇款兑出金额" align="center" prop="remitoutAmount" v-if="columns[6].visible" />
       <el-table-column label="汇款兑出成功笔数" align="center" prop="remitoutSuccessNumber" v-if="columns[7].visible" />
       <el-table-column label="汇款兑出总笔数" align="center" prop="remitoutTotalNumber" v-if="columns[8].visible" />
-      <el-table-column label="报表日期" align="center" prop="reportDate" v-if="columns[9].visible" />
     </el-table>
 
     <pagination

@@ -3,8 +3,7 @@
 <mapper namespace="com.dcits.dcwlt.pay.online.mapper.PartyInfoMapper" >
 
     <!-- 新增报文登记信息 -->
-    <insert id="insertParty">
-        <if test="_databaseId == 'mysql'">
+    <insert id="insertParty" parameterType="com.dcits.dcwlt.pay.api.model.PartyInfoDO">
             INSERT INTO pay_comm_party(PARTYID,
             PARTYTYPE,
             PARTYNAME,
@@ -40,10 +39,9 @@
             #{lastUpDate},
             #{lastUpTime}
             )
-        </if>
     </insert>
 
-    <update id="updateParty">
+    <update id="updateParty" parameterType="com.dcits.dcwlt.pay.api.model.PartyInfoDO">
         UPDATE pay_comm_party
         SET PARTYTYPE = #{partyType},
         PARTYNAME = #{partyName},
@@ -72,7 +70,7 @@
         where partyid = #{partyID}
     </select>
 
-    <select id="queryEffectiveParty" resultType="com.dcits.dcwlt.pay.api.model.PartyInfoDO">
+    <select id="queryEffectiveParty" resultType="com.dcits.dcwlt.pay.api.model.PartyInfoDO"  parameterType="com.dcits.dcwlt.pay.api.model.PartyInfoDO">
         SELECT P.PARTYID partyID,
         P.PARTYTYPE partyType,
         P.PARTYNAME partyName,
@@ -106,7 +104,7 @@
         </where>
     </select>
 
-    <select id="queryLoseEffectiveParty" resultType="com.dcits.dcwlt.pay.api.model.PartyInfoDO">
+    <select id="queryLoseEffectiveParty" resultType="com.dcits.dcwlt.pay.api.model.PartyInfoDO"  parameterType="com.dcits.dcwlt.pay.api.model.PartyInfoDO">
         SELECT P.PARTYID partyID,
         P.PARTYTYPE partyType,
         P.PARTYNAME partyName,
@@ -127,7 +125,7 @@
         WHERE P.INEFFECTIVEDATE &lt; #{inEffectiveDate};
     </select>
 
-    <select id="querysParty" resultType="com.dcits.dcwlt.pay.api.model.PartyInfoDO">
+    <select id="querysParty" resultType="com.dcits.dcwlt.pay.api.model.PartyInfoDO"  parameterType="com.dcits.dcwlt.pay.api.model.PartyInfoDO">
         SELECT P.PARTYID partyID,
         P.PARTYTYPE partyType,
         P.PARTYNAME partyName,

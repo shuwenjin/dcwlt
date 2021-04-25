@@ -47,6 +47,7 @@ public class CheckPathController extends BaseController{
         if (Objects.nonNull(disputeReasonCode) && "OT04".equals(disputeReasonCode)) {
             ECNYRspDTO rspDTO = ecnyTransInTradeFlow.execute(ecnyReqDTO, Dispute801STradeFlow.DSPT_TRADE_FLOW);
 
+            logger.info("rspDTO===>{}",rspDTO);
             String retCode = rspDTO.getHead().getRetCode();
             if ("000000".equals(retCode)) {
                 return toAjax(1);

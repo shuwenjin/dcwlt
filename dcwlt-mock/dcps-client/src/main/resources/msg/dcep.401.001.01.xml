@@ -3,7 +3,7 @@
 <Document xmlns="urn:cbcc:std:dcep:2020:tech:xsd:dcep.401.001.01" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 	<FreeFrmt>
 		<GrpHdr>
-			<MsgId>20210413106040120333044574013000</MsgId>
+			<MsgId>%s</MsgId>
 			<CreDtTm>2020-10-10T09:30:30</CreDtTm>
 			<InstgPty>
 				<InstgDrctPty>C1030644021075</InstgDrctPty>
