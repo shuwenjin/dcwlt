@@ -118,7 +118,7 @@
         </template>
       </el-table-column>
     </el-table>
-    
+
     <pagination
       v-show="total>0"
       :total="total"
@@ -130,10 +130,10 @@
     <!-- 添加或修改证书管理对话框 -->
     <el-dialog :title="title" :visible.sync="open" width="500px" append-to-body>
       <el-form ref="form" :model="form" :rules="rules" label-width="80px">
-        <el-form-item label="机构编码" prop="partyId">
+        <el-form-item label="机构编码" prop="partyId" v-if="isAdd">
           <el-input v-model="form.partyId" placeholder="请输入机构编码" />
         </el-form-item>
-        <el-form-item label="证书类型" prop="certType">
+        <el-form-item label="证书类型" prop="certType" v-if="isAdd">
           <el-select v-model="form.certType" placeholder="请选择证书类型">
             <el-option
               v-for="dict in certTypeOptions"
@@ -153,7 +153,7 @@
             ></el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="证书编号" prop="certNo">
+        <el-form-item label="证书编号" prop="certNo" v-if="isAdd">
           <el-input v-model="form.certNo" placeholder="请输入证书编号" />
         </el-form-item>
         <el-form-item label="公钥" prop="publicKey">
@@ -207,6 +207,7 @@ export default {
       title: "",
       // 是否显示弹出层
       open: false,
+      isAdd: true,
       // 证书类型字典
       certTypeOptions: [],
       // 证书状态字典
@@ -318,6 +319,7 @@ export default {
     handleAdd() {
       this.reset();
       this.open = true;
+      this.isAdd = true;
       this.title = "添加证书管理";
     },
     /** 修改按钮操作 */
@@ -327,6 +329,7 @@ export default {
       getCerts(id).then(response => {
         this.form = response.data;
         this.open = true;
+        this.isAdd = false;
         this.title = "修改证书管理";
       });
     },
