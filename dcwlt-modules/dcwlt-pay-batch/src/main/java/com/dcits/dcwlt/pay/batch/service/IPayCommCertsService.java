@@ -14,10 +14,10 @@ public interface IPayCommCertsService
     /**
      * 查询证书管理
      * 
-     * @param partyId 证书管理ID
+     * @param id 证书管理ID
      * @return 证书管理
      */
-    public PayCommCerts selectPayCommCertsById(String partyId);
+    public PayCommCerts selectPayCommCertsById(Long id);
 
     /**
      * 查询证书管理列表
@@ -46,16 +46,16 @@ public interface IPayCommCertsService
     /**
      * 批量删除证书管理
      * 
-     * @param partyIds 需要删除的证书管理ID
+     * @param ids 需要删除的证书管理ID
      * @return 结果
      */
-    public int deletePayCommCertsByIds(String[] partyIds);
+    public int deletePayCommCertsByIds(Long[] ids);
 
     /**
      * 删除证书管理信息
      * 
-     * @param partyId 证书管理ID
+     * @param id 证书管理ID
      * @return 结果
      */
-    public int deletePayCommCertsById(String partyId);
+    public int deletePayCommCertsById(Long id);
 }

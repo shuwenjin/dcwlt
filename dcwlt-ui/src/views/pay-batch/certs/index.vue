@@ -30,6 +30,15 @@
           />
         </el-select>
       </el-form-item>
+      <el-form-item label="证书编号" prop="certNo">
+        <el-input
+          v-model="queryParams.certNo"
+          placeholder="请输入证书编号"
+          clearable
+          size="small"
+          @keyup.enter.native="handleQuery"
+        />
+      </el-form-item>
       <el-form-item>
         <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
         <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
@@ -84,24 +93,12 @@
 
     <el-table v-loading="loading" :data="certsList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
-      <el-table-column label="机构编码" align="center" prop="partyId" v-if="columns[0].visible" />
-      <el-table-column label="证书类型" align="center" prop="certType" :formatter="certTypeFormat" v-if="columns[1].visible" />
-      <el-table-column label="证书状态" align="center" prop="certStatus" :formatter="certStatusFormat" v-if="columns[2].visible" />
-      <el-table-column label="证书编号" align="center" prop="certNo" v-if="columns[3].visible" />
-      <el-table-column label="公钥" align="center" prop="publicKey" v-if="columns[4].visible" />
-      <el-table-column label="私钥" align="center" prop="privateKey" v-if="columns[5].visible" />
-      <el-table-column label="生效时间" align="center" prop="effectTime" v-if="columns[6].visible" />
-      <el-table-column label="失效时间" align="center" prop="expiredTime" v-if="columns[7].visible" />
-      <el-table-column label="创建时间" align="center" prop="createTime" width="180" v-if="columns[8].visible">
-        <template slot-scope="scope">
-          <span>{{ parseTime(scope.row.createTime, '{y}-{m}-{d}') }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column label="更新时间" align="center" prop="updateTime" width="180" v-if="columns[9].visible">
-        <template slot-scope="scope">
-          <span>{{ parseTime(scope.row.updateTime, '{y}-{m}-{d}') }}</span>
-        </template>
-      </el-table-column>
+      <el-table-column label="id" align="center" prop="id" v-if="columns[0].visible" />
+      <el-table-column label="机构编码" align="center" prop="partyId" v-if="columns[1].visible" />
+      <el-table-column label="证书类型" align="center" prop="certType" :formatter="certTypeFormat" v-if="columns[2].visible" />
+      <el-table-column label="证书状态" align="center" prop="certStatus" :formatter="certStatusFormat" v-if="columns[3].visible" />
+      <el-table-column label="证书编号" align="center" prop="certNo" v-if="columns[4].visible" />
+      <el-table-column label="失效时间" align="center" prop="expiredTime" v-if="columns[5].visible" />
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope">
           <el-button
@@ -121,7 +118,7 @@
         </template>
       </el-table-column>
     </el-table>
-
+    
     <pagination
       v-show="total>0"
       :total="total"
@@ -133,7 +130,6 @@
     <!-- 添加或修改证书管理对话框 -->
     <el-dialog :title="title" :visible.sync="open" width="500px" append-to-body>
       <el-form ref="form" :model="form" :rules="rules" label-width="80px">
-
         <el-form-item label="机构编码" prop="partyId">
           <el-input v-model="form.partyId" placeholder="请输入机构编码" />
         </el-form-item>
@@ -171,6 +167,9 @@
         </el-form-item>
         <el-form-item label="失效时间" prop="expiredTime">
           <el-input v-model="form.expiredTime" placeholder="请输入失效时间" />
+        </el-form-item>
+        <el-form-item label="备注" prop="remark">
+          <el-input v-model="form.remark" placeholder="请输入备注" />
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -219,29 +218,32 @@ export default {
         partyId: null,
         certType: null,
         certStatus: null,
+        certNo: null,
       },
       // 列信息
       columns: [
-        { key: 0, label: `机构编码`, visible: true },
-        { key: 1, label: `证书类型`, visible: true },
-        { key: 2, label: `证书状态`, visible: true },
-        { key: 3, label: `证书编号`, visible: true },
-        { key: 4, label: `公钥`, visible: false },
-        { key: 5, label: `私钥`, visible: false },
-        { key: 6, label: `生效时间`, visible: false },
-        { key: 7, label: `失效时间`, visible: true },
-        { key: 8, label: `创建时间`, visible: false },
-        { key: 9, label: `更新时间`, visible: false },
+        { key: 0, label: `id`, visible: true },
+        { key: 1, label: `机构编码`, visible: true },
+        { key: 2, label: `证书类型`, visible: true },
+        { key: 3, label: `证书状态`, visible: true },
+        { key: 4, label: `证书编号`, visible: true },
+        { key: 5, label: `失效时间`, visible: true },
       ],
       // 表单参数
       form: {},
       // 表单校验
       rules: {
+        partyId: [
+          { required: true, message: "机构编码不能为空", trigger: "blur" }
+        ],
         certType: [
           { required: true, message: "证书类型不能为空", trigger: "change" }
         ],
         certStatus: [
           { required: true, message: "证书状态不能为空", trigger: "change" }
+        ],
+        certNo: [
+          { required: true, message: "证书编号不能为空", trigger: "blur" }
         ],
       }
     };
@@ -281,6 +283,7 @@ export default {
     // 表单重置
     reset() {
       this.form = {
+        id: null,
         partyId: null,
         certType: null,
         certStatus: null,
@@ -290,7 +293,8 @@ export default {
         effectTime: null,
         expiredTime: null,
         createTime: null,
-        updateTime: null
+        updateTime: null,
+        remark: null
       };
       this.resetForm("form");
     },

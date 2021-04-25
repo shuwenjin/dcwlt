@@ -65,7 +65,7 @@ public class PayCommCertsController extends BaseController
      */
     @PreAuthorize(hasPermi = "pay-batch:certs:query")
     @GetMapping(value = "/{id}")
-    public AjaxResult getInfo(@PathVariable("id") String id)
+    public AjaxResult getInfo(@PathVariable("id") Long id)
     {
         return AjaxResult.success(payCommCertsService.selectPayCommCertsById(id));
     }
@@ -98,7 +98,7 @@ public class PayCommCertsController extends BaseController
     @PreAuthorize(hasPermi = "pay-batch:certs:remove")
     @Log(title = "证书管理", businessType = BusinessType.DELETE)
 	@DeleteMapping("/{ids}")
-    public AjaxResult remove(@PathVariable String[] ids)
+    public AjaxResult remove(@PathVariable Long[] ids)
     {
         return toAjax(payCommCertsService.deletePayCommCertsByIds(ids));
     }

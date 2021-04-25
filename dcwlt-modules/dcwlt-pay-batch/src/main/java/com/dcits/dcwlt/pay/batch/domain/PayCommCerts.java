@@ -15,6 +15,9 @@ public class PayCommCerts extends BaseEntity
 {
     private static final long serialVersionUID = 1L;
 
+    /** id */
+    private Long id;
+
     /** 机构编码 */
     @Excel(name = "机构编码")
     private String partyId;
@@ -32,21 +35,27 @@ public class PayCommCerts extends BaseEntity
     private String certNo;
 
     /** 公钥 */
-    @Excel(name = "公钥")
     private String publicKey;
 
     /** 私钥 */
-    @Excel(name = "私钥")
     private String privateKey;
 
     /** 生效时间 */
-    @Excel(name = "生效时间")
     private String effectTime;
 
     /** 失效时间 */
     @Excel(name = "失效时间")
     private String expiredTime;
 
+    public void setId(Long id) 
+    {
+        this.id = id;
+    }
+
+    public Long getId() 
+    {
+        return id;
+    }
     public void setPartyId(String partyId) 
     {
         this.partyId = partyId;
@@ -123,6 +132,7 @@ public class PayCommCerts extends BaseEntity
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.MULTI_LINE_STYLE)
+            .append("id", getId())
             .append("partyId", getPartyId())
             .append("certType", getCertType())
             .append("certStatus", getCertStatus())
@@ -133,6 +143,7 @@ public class PayCommCerts extends BaseEntity
             .append("expiredTime", getExpiredTime())
             .append("createTime", getCreateTime())
             .append("updateTime", getUpdateTime())
+            .append("remark", getRemark())
             .toString();
     }
 }

@@ -27,7 +27,7 @@ public class PayCommCertsServiceImpl implements IPayCommCertsService
      * @return 证书管理
      */
     @Override
-    public PayCommCerts selectPayCommCertsById(String id)
+    public PayCommCerts selectPayCommCertsById(Long id)
     {
         return payCommCertsMapper.selectPayCommCertsById(id);
     }
@@ -77,7 +77,7 @@ public class PayCommCertsServiceImpl implements IPayCommCertsService
      * @return 结果
      */
     @Override
-    public int deletePayCommCertsByIds(String[] ids)
+    public int deletePayCommCertsByIds(Long[] ids)
     {
         return payCommCertsMapper.deletePayCommCertsByIds(ids);
     }
@@ -89,7 +89,7 @@ public class PayCommCertsServiceImpl implements IPayCommCertsService
      * @return 结果
      */
     @Override
-    public int deletePayCommCertsById(String id)
+    public int deletePayCommCertsById(Long id)
     {
         return payCommCertsMapper.deletePayCommCertsById(id);
     }

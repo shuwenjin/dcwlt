@@ -10,9 +10,9 @@ export function listCerts(query) {
 }
 
 // 查询证书管理详细
-export function getCerts(partyId) {
+export function getCerts(id) {
   return request({
-    url: '/pay-batch/certs/' + partyId,
+    url: '/pay-batch/certs/' + id,
     method: 'get'
   })
 }
@@ -36,9 +36,9 @@ export function updateCerts(data) {
 }
 
 // 删除证书管理
-export function delCerts(partyId) {
+export function delCerts(id) {
   return request({
-    url: '/pay-batch/certs/' + partyId,
+    url: '/pay-batch/certs/' + id,
     method: 'delete'
   })
 }
