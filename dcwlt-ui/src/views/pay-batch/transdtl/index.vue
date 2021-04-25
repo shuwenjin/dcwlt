@@ -5,7 +5,7 @@
         <el-date-picker clearable size="small"
                         v-model="queryParams.payDate"
                         type="date"
-                        value-format="yyyy-MM-dd"
+                        value-format="yyyyMMdd"
                         placeholder="请输入平台日期">
         </el-date-picker>
       </el-form-item>
