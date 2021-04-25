@@ -392,7 +392,7 @@ public class Dispute801STradeFlow {
             throw new EcnyTransException(AppConstant.TRXSTATUS_ABEND, EcnyTransError.ECNY_DSPT_RESPOSE_ERROR);
         }
         // 互联互通返回报文
-        String msgType = rspObj.getJSONObject(AppConstant.DCEP_HEAD).getString("MsgTp");
+        String msgType = rspObj.getJSONObject(AppConstant.DCEP_HEAD).getString(AppConstant.MSG_TYPE);
 
         // 获取当前状态对象
         StateMachine stateMachine_dis = new StateMachine();
@@ -417,7 +417,7 @@ public class Dispute801STradeFlow {
             // 封装802报文
             DCEPRspDTO<DsptRspDTO> dcepRspDTO = DCEPRspDTO.jsonToDCEPRspDTO(rspObj, DsptRspDTO.class);
             RspsnInf rspsnInf = dcepRspDTO.getBody().getDsptRsp().getRspsnInf();
-            String processStatus = dcepRspDTO.getBody().getDsptRsp().getRspsnInf().getPrcSts();
+            String processStatus = dcepRspDTO.getBody().getDsptRsp().getRspsnInf().getRspsnSts();
 
             payTransDtlInfoDO.setPayPathRetSerno(dcepRspDTO.getBody().getDsptRsp().getGrpHdr().getMsgId());
             payTransDtlInfoDO.setPayPathRspStatus(rspsnInf.getPrcSts());
@@ -497,7 +497,7 @@ public class Dispute801STradeFlow {
     public void response(TradeContext<?, ?> tradeContext) {
         PayTransDtlInfoDO payTransDtlInfoDO = (PayTransDtlInfoDO) EcnyTradeContext.getTempContext(tradeContext).get("PAY_TRANS_DTL");
         ECNYReqDTO<DsptChnlReqDTO> ecnyReqDTO = EcnyTradeContext.getReqMsg(tradeContext);
-        // 响应头
+        // 响应头tradeContext = {EcnyTradeContext@18374} "TradeContext{reqMsg=ECNYReqDTO{ecnyHead=ECNYReqHead{busiChnl='ECNY', busiChnl2='null', zoneno='null', brno='173001', tellerno='11', origChnl='ECN', origChnl2='null', origChnlDtl='null'}, body=DsptChnlReqDTO{payDate='20210413', paySerno='15422340001', checkStatus='null', operType='DR04', disputeReasonCode='OT04', disputeReason='123123123', msgId='20210308000171181982980514700000', instgPty='G4001011000013', msgTp='dcep.711.001.01'}}, rspMsg=null, tempCtx={PAY_TRANS_DTL_OLD=PayTransDtlInfoDO{payDate='20210413', paySerno='15422340001', payTime='154223', direct='R', payFlag='PAYEE', operStep='CRDT', operStatus='EXPT', trxStatus='2', trxRetCode='null', trxRetMsg='null', coreProcStatus='0', coreReqDate='20210113', coreReqSerno='ECNY2021041415423000003050010001', coreAcctDate='null', coreSerno='null', coreRetCode='null', coreRetMsg='null', payPathSerno='20210113000122184595346246598765', payPathDateTime='2021-01-13T16:49:07', pathProcStatus='1', payPathRspStatus='null', payPathRetCode='null',"… View
         ECNYRspHead head = new ECNYRspHead(payTransDtlInfoDO.getTrxStatus());
         // 响应体
         DsptChnlRspDTO rspDTO = new DsptChnlRspDTO();
