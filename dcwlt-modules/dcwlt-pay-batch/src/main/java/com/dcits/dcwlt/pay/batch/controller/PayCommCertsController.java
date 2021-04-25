@@ -64,10 +64,10 @@ public class PayCommCertsController extends BaseController
      * 获取证书管理详细信息
      */
     @PreAuthorize(hasPermi = "pay-batch:certs:query")
-    @GetMapping(value = "/{partyId}")
-    public AjaxResult getInfo(@PathVariable("partyId") String partyId)
+    @GetMapping(value = "/{id}")
+    public AjaxResult getInfo(@PathVariable("id") String id)
     {
-        return AjaxResult.success(payCommCertsService.selectPayCommCertsById(partyId));
+        return AjaxResult.success(payCommCertsService.selectPayCommCertsById(id));
     }
 
     /**
@@ -97,9 +97,9 @@ public class PayCommCertsController extends BaseController
      */
     @PreAuthorize(hasPermi = "pay-batch:certs:remove")
     @Log(title = "证书管理", businessType = BusinessType.DELETE)
-	@DeleteMapping("/{partyIds}")
-    public AjaxResult remove(@PathVariable String[] partyIds)
+	@DeleteMapping("/{ids}")
+    public AjaxResult remove(@PathVariable String[] ids)
     {
-        return toAjax(payCommCertsService.deletePayCommCertsByIds(partyIds));
+        return toAjax(payCommCertsService.deletePayCommCertsByIds(ids));
     }
 }

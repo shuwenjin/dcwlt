@@ -133,6 +133,10 @@
     <!-- 添加或修改证书管理对话框 -->
     <el-dialog :title="title" :visible.sync="open" width="500px" append-to-body>
       <el-form ref="form" :model="form" :rules="rules" label-width="80px">
+
+        <el-form-item label="机构编码" prop="partyId">
+          <el-input v-model="form.partyId" placeholder="请输入机构编码" />
+        </el-form-item>
         <el-form-item label="证书类型" prop="certType">
           <el-select v-model="form.certType" placeholder="请选择证书类型">
             <el-option
@@ -152,6 +156,9 @@
               :value="dict.dictValue"
             ></el-option>
           </el-select>
+        </el-form-item>
+        <el-form-item label="证书编号" prop="certNo">
+          <el-input v-model="form.certNo" placeholder="请输入证书编号" />
         </el-form-item>
         <el-form-item label="公钥" prop="publicKey">
           <el-input v-model="form.publicKey" placeholder="请输入公钥" />
@@ -299,7 +306,7 @@ export default {
     },
     // 多选框选中数据
     handleSelectionChange(selection) {
-      this.ids = selection.map(item => item.partyId)
+      this.ids = selection.map(item => item.id)
       this.single = selection.length!==1
       this.multiple = !selection.length
     },
@@ -312,8 +319,8 @@ export default {
     /** 修改按钮操作 */
     handleUpdate(row) {
       this.reset();
-      const partyId = row.partyId || this.ids
-      getCerts(partyId).then(response => {
+      const id = row.id || this.ids
+      getCerts(id).then(response => {
         this.form = response.data;
         this.open = true;
         this.title = "修改证书管理";
@@ -323,7 +330,7 @@ export default {
     submitForm() {
       this.$refs["form"].validate(valid => {
         if (valid) {
-          if (this.form.partyId != null) {
+          if (this.form.id != null) {
             updateCerts(this.form).then(response => {
               this.msgSuccess("修改成功");
               this.open = false;
@@ -341,13 +348,13 @@ export default {
     },
     /** 删除按钮操作 */
     handleDelete(row) {
-      const partyIds = row.partyId || this.ids;
-      this.$confirm('是否确认删除证书管理编号为"' + partyIds + '"的数据项?', "警告", {
+      const ids = row.id || this.ids;
+      this.$confirm('是否确认删除证书管理编号为"' + ids + '"的数据项?', "警告", {
           confirmButtonText: "确定",
           cancelButtonText: "取消",
           type: "warning"
         }).then(function() {
-          return delCerts(partyIds);
+          return delCerts(ids);
         }).then(() => {
           this.getList();
           this.msgSuccess("删除成功");

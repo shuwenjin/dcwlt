@@ -23,13 +23,13 @@ public class PayCommCertsServiceImpl implements IPayCommCertsService
     /**
      * 查询证书管理
      * 
-     * @param partyId 证书管理ID
+     * @param id 证书管理ID
      * @return 证书管理
      */
     @Override
-    public PayCommCerts selectPayCommCertsById(String partyId)
+    public PayCommCerts selectPayCommCertsById(String id)
     {
-        return payCommCertsMapper.selectPayCommCertsById(partyId);
+        return payCommCertsMapper.selectPayCommCertsById(id);
     }
 
     /**
@@ -73,24 +73,24 @@ public class PayCommCertsServiceImpl implements IPayCommCertsService
     /**
      * 批量删除证书管理
      * 
-     * @param partyIds 需要删除的证书管理ID
+     * @param ids 需要删除的证书管理ID
      * @return 结果
      */
     @Override
-    public int deletePayCommCertsByIds(String[] partyIds)
+    public int deletePayCommCertsByIds(String[] ids)
     {
-        return payCommCertsMapper.deletePayCommCertsByIds(partyIds);
+        return payCommCertsMapper.deletePayCommCertsByIds(ids);
     }
 
     /**
      * 删除证书管理信息
      * 
-     * @param partyId 证书管理ID
+     * @param id 证书管理ID
      * @return 结果
      */
     @Override
-    public int deletePayCommCertsById(String partyId)
+    public int deletePayCommCertsById(String id)
     {
-        return payCommCertsMapper.deletePayCommCertsById(partyId);
+        return payCommCertsMapper.deletePayCommCertsById(id);
     }
 }

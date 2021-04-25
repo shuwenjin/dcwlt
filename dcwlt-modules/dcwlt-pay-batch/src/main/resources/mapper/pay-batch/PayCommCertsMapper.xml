@@ -18,7 +18,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </resultMap>
 
     <sql id="selectPayCommCertsVo">
-        select party_id, cert_type, cert_status, cert_no, public_key, private_key, effect_time, expired_time, create_time, update_time from pay_comm_certs
+        select id,party_id, cert_type, cert_status, cert_no, public_key, private_key, effect_time, expired_time, create_time, update_time from pay_comm_certs
     </sql>
 
     <select id="selectPayCommCertsList" parameterType="PayCommCerts" resultMap="PayCommCertsResult">
@@ -32,7 +32,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     
     <select id="selectPayCommCertsById" parameterType="String" resultMap="PayCommCertsResult">
         <include refid="selectPayCommCertsVo"/>
-        where party_id = #{partyId}
+        where id = #{id}
     </select>
         
     <insert id="insertPayCommCerts" parameterType="PayCommCerts">
@@ -76,17 +76,17 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="createTime != null">create_time = #{createTime},</if>
             <if test="updateTime != null">update_time = #{updateTime},</if>
         </trim>
-        where party_id = #{partyId}
+        where id = #{id}
     </update>
 
     <delete id="deletePayCommCertsById" parameterType="String">
-        delete from pay_comm_certs where party_id = #{partyId}
+        delete from pay_comm_certs where id = #{id}
     </delete>
 
     <delete id="deletePayCommCertsByIds" parameterType="String">
-        delete from pay_comm_certs where party_id in 
-        <foreach item="partyId" collection="array" open="(" separator="," close=")">
-            #{partyId}
+        delete from pay_comm_certs where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
         </foreach>
     </delete>
 </mapper>
