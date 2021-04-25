@@ -511,7 +511,7 @@
       },
       /** 导出按钮操作 */
       handleExport() {
-        this.download('dcwlt-pay-batch/nonf/export', {
+        this.download('/pay-batch/freefrmt/export', {
           ...this.queryParams
         }, `nonf.xlsx`)
       }
