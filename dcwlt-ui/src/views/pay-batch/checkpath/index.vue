@@ -381,7 +381,7 @@ export default {
     },
     /** 导出按钮操作 */
     handleExport() {
-      this.download('pay-batch/checkpath/export', {
+      this.download('/pay-batch/checkpath/export', {
         ...this.queryParams
       }, `pay-batch_checkpath.xlsx`)
     },
