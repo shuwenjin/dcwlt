@@ -492,7 +492,7 @@
       },
       /** 导出按钮操作 */
       handleExport() {
-        this.download('batch/nonf/export', {
+        this.download('/pay-batch/login/export', {
           ...this.queryParams
         }, `batch_nonf.xlsx`)
       }
