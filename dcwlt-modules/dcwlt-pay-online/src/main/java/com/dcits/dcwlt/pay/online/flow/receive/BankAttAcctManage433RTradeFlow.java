@@ -761,8 +761,8 @@ public class BankAttAcctManage433RTradeFlow {
         WltInf wltInf = req.getWltInf();                                                         //钱包信息
 //        SmsFactory factory = SmsFactory.getInstance(Constant.SM3);
         SignJrnDO signJrnDO = new SignJrnDO();
-        signJrnDO.setPayDate(DateUtil.getCurDay());                                  //设置平台日期
-        signJrnDO.setPayTime(DateUtil.getDefaultTime());                                  //设置平台时间
+        signJrnDO.setPayDate(DateUtil.getSysDate());                                             //设置平台日期
+        signJrnDO.setPayTime(DateUtil.getDefaultTime());                                         //设置平台时间
         signJrnDO.setPaySerNo(generateCodeService.generatePlatformFlowNo());                     //设置平台流水号
         signJrnDO.setMsgId(req.getGrpHdr().getMsgId());                                          //设置报文标识号
         signJrnDO.setInstGpTy(req.getGrpHdr().getInstgPty().getInstgDrctPty());                  //设置发起机构
