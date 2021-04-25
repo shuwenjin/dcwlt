@@ -359,7 +359,7 @@ export default {
     },
     /** 导出按钮操作 */
     handleExport() {
-      this.download('system/param/export', {
+      this.download('/pay-batch/param/export', {
         ...this.queryParams
       }, `system_param.xlsx`)
     }
