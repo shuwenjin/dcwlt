@@ -304,12 +304,14 @@
     },
     created() {
       this.getList();
+
       this.getDicts("drct").then(response => {
         this.drctOptions = response.data;
       });
-      this.getDicts("OT0").then(response => {
+
+      this.getDicts("LoginOperationTpCdEnum").then(response => {
         this.opterationTypeOptions = response.data;
-        console.info(this.opterationTypeOptions);
+        //console.info(this.opterationTypeOptions);
       });
 
       this.getDicts("PR").then(response => {
@@ -334,7 +336,7 @@
 
       // 参数类型字典翻译
       opterationTypeFormat(row, column) {
-
+        //debugger
         return this.selectDictLabel(this.opterationTypeOptions, row.opterationType);
       },
       // 参数状态字典翻译

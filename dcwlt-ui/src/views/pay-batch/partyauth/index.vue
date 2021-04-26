@@ -291,7 +291,7 @@ export default {
     },
     /** 导出按钮操作 */
     handleExport() {
-      this.download('pay-batch/partyauth/export', {
+      this.download('/pay-batch/partyauth/export', {
         ...this.queryParams
       }, `system_partyauth.xlsx`)
     }

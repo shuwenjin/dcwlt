@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dcits.dcwlt.pay.batch.mapper.PayCommCertsMapper">
+    
+    <resultMap type="PayCommCerts" id="PayCommCertsResult">
+        <result property="id"    column="id"    />
+        <result property="partyId"    column="party_id"    />
+        <result property="certType"    column="cert_type"    />
+        <result property="certStatus"    column="cert_status"    />
+        <result property="certNo"    column="cert_no"    />
+        <result property="publicKey"    column="public_key"    />
+        <result property="privateKey"    column="private_key"    />
+        <result property="effectTime"    column="effect_time"    />
+        <result property="expiredTime"    column="expired_time"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="remark"    column="remark"    />
+    </resultMap>
+
+    <sql id="selectPayCommCertsVo">
+        select id, party_id, cert_type, cert_status, cert_no, public_key, private_key, effect_time, expired_time, create_time, update_time, remark from pay_comm_certs
+    </sql>
+
+    <select id="selectPayCommCertsList" parameterType="PayCommCerts" resultMap="PayCommCertsResult">
+        <include refid="selectPayCommCertsVo"/>
+        <where>  
+            <if test="partyId != null  and partyId != ''"> and party_id = #{partyId}</if>
+            <if test="certType != null  and certType != ''"> and cert_type = #{certType}</if>
+            <if test="certStatus != null  and certStatus != ''"> and cert_status = #{certStatus}</if>
+            <if test="certNo != null  and certNo != ''"> and cert_no = #{certNo}</if>
+        </where>
+    </select>
+    
+    <select id="selectPayCommCertsById" parameterType="Long" resultMap="PayCommCertsResult">
+        <include refid="selectPayCommCertsVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertPayCommCerts" parameterType="PayCommCerts" useGeneratedKeys="true" keyProperty="id">
+        insert into pay_comm_certs
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="partyId != null and partyId != ''">party_id,</if>
+            <if test="certType != null and certType != ''">cert_type,</if>
+            <if test="certStatus != null and certStatus != ''">cert_status,</if>
+            <if test="certNo != null and certNo != ''">cert_no,</if>
+            <if test="publicKey != null">public_key,</if>
+            <if test="privateKey != null">private_key,</if>
+            <if test="effectTime != null">effect_time,</if>
+            <if test="expiredTime != null">expired_time,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="remark != null">remark,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="partyId != null and partyId != ''">#{partyId},</if>
+            <if test="certType != null and certType != ''">#{certType},</if>
+            <if test="certStatus != null and certStatus != ''">#{certStatus},</if>
+            <if test="certNo != null and certNo != ''">#{certNo},</if>
+            <if test="publicKey != null">#{publicKey},</if>
+            <if test="privateKey != null">#{privateKey},</if>
+            <if test="effectTime != null">#{effectTime},</if>
+            <if test="expiredTime != null">#{expiredTime},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="remark != null">#{remark},</if>
+         </trim>
+    </insert>
+
+    <update id="updatePayCommCerts" parameterType="PayCommCerts">
+        update pay_comm_certs
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="partyId != null and partyId != ''">party_id = #{partyId},</if>
+            <if test="certType != null and certType != ''">cert_type = #{certType},</if>
+            <if test="certStatus != null and certStatus != ''">cert_status = #{certStatus},</if>
+            <if test="certNo != null and certNo != ''">cert_no = #{certNo},</if>
+            <if test="publicKey != null">public_key = #{publicKey},</if>
+            <if test="privateKey != null">private_key = #{privateKey},</if>
+            <if test="effectTime != null">effect_time = #{effectTime},</if>
+            <if test="expiredTime != null">expired_time = #{expiredTime},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="remark != null">remark = #{remark},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deletePayCommCertsById" parameterType="Long">
+        delete from pay_comm_certs where id = #{id}
+    </delete>
+
+    <delete id="deletePayCommCertsByIds" parameterType="String">
+        delete from pay_comm_certs where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

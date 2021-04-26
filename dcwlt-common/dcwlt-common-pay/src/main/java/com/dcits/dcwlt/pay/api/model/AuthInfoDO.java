@@ -1,5 +1,7 @@
 package com.dcits.dcwlt.pay.api.model;
 
+import com.dcits.dcwlt.common.core.annotation.Excel;
+
 /**
  *
  * @desc 业务权限变更表实体
@@ -8,42 +10,52 @@ public class AuthInfoDO {
     /*
      * 机构编码
      * */
+    @Excel(name="机构编码")
     private String partyId;
     /*
      * 报文编号
      * */
+    @Excel(name="机构编号")
     private String msgType;
     /*
      * 业务类型
      * */
+    @Excel(name="业务类型")
     private String tradeCtgyCode;
     /*
      * 发起权限标识
      * */
+    @Excel(name="发起权限标识")
     private String sendAuth;
     /*
      * 接收权限标识
      * */
+    @Excel(name="接收权限标识")
     private String recvAuth;
     /*
      * 撤销状态
      * */
+    @Excel(name="撤销状态")
     private String status;
     /*
      * 生效日期
      * */
+    @Excel(name="生效日期")
     private String effectDate;
     /*
      * 失效日期
      * */
+    @Excel(name="失效日期")
     private String inEffectiveDate;
     /*
      * 最后更新时间
      * */
+    @Excel(name="最后更新时间")
     private String lastUpDate;
     /*
      * 最后更新时间
      * */
+    @Excel(name="最后更新时间")
     private String lastUpTime;
 
     public String getPartyId() {
