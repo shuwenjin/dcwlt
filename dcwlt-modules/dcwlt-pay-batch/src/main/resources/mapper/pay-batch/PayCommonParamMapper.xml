@@ -16,7 +16,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </resultMap>
 
     <sql id="selectPayCommonParamVo">
-        select id, param_type, param_key, param_value, param_desc, param_status, create_time, update_time from pay_common_param
+        select id, param_type, param_key, param_value, param_desc, param_status, create_time, update_time from pay_comm_param
     </sql>
 
     <select id="selectPayCommonParamList" parameterType="com.dcits.dcwlt.pay.api.domain.dcep.config.PayCommonParam" resultMap="PayCommonParamResult">
@@ -36,7 +36,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </select>
         
     <insert id="insertPayCommonParam" parameterType="com.dcits.dcwlt.pay.api.domain.dcep.config.PayCommonParam" useGeneratedKeys="true" keyProperty="id">
-        insert into pay_common_param
+        insert into pay_comm_param
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="paramType != null and paramType != ''">param_type,</if>
             <if test="paramKey != null and paramKey != ''">param_key,</if>
@@ -58,7 +58,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </insert>
 
     <update id="updatePayCommonParam" parameterType="com.dcits.dcwlt.pay.api.domain.dcep.config.PayCommonParam">
-        update pay_common_param
+        update pay_comm_param
         <trim prefix="SET" suffixOverrides=",">
             <if test="paramType != null and paramType != ''">param_type = #{paramType},</if>
             <if test="paramKey != null and paramKey != ''">param_key = #{paramKey},</if>
@@ -72,11 +72,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </update>
 
     <delete id="deletePayCommonParamById" parameterType="Long">
-        delete from pay_common_param where id = #{id}
+        delete from pay_comm_param where id = #{id}
     </delete>
 
     <delete id="deletePayCommonParamByIds" parameterType="String">
-        delete from pay_common_param where id in 
+        delete from pay_comm_param where id in
         <foreach item="id" collection="array" open="(" separator="," close=")">
             #{id}
         </foreach>
