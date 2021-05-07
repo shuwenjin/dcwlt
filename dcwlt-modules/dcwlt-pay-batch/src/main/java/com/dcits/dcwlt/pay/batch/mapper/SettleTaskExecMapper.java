@@ -16,18 +16,21 @@ import java.util.List;
 @Mapper
 public interface SettleTaskExecMapper {
 
-    public int insert(SettleTaskExecDO taskExec);
 
-    public SettleTaskExecDO queryTaskExecByCode(@Param("settleDate")String settleDate, @Param("taskGroupCode")String taskGroupCode, @Param("taskCode")String taskCode, @Param("batchId")String batchId);
+    List<SettleTaskExecDO> select(SettleTaskExecDO settleTaskExecDO);
+
+    int insert(SettleTaskExecDO taskExec);
+
+    SettleTaskExecDO queryTaskExecByCode(@Param("settleDate") String settleDate, @Param("taskGroupCode") String taskGroupCode, @Param("taskCode") String taskCode, @Param("batchId") String batchId);
 
 
-    public int updateTaskExecState(SettleTaskExecDO taskExec);
+    int updateTaskExecState(SettleTaskExecDO taskExec);
 
-    public int updateTaskExecDone(SettleTaskExecDO taskExec);
+    int updateTaskExecDone(SettleTaskExecDO taskExec);
 
-    public List<SettleTaskExecDO> queryTaskExecListByCode(@Param("settleDate")String settleDate, @Param("taskGroupCode")String taskGroupCode, @Param("batchId")String batchId);
+    List<SettleTaskExecDO> queryTaskExecListByCode(@Param("settleDate") String settleDate, @Param("taskGroupCode") String taskGroupCode, @Param("batchId") String batchId);
 
-    public List<SettleTaskExecDO> queryTaskExecFailure(@Param("settleDate")String settleDate);
+    List<SettleTaskExecDO> queryTaskExecFailure(@Param("settleDate") String settleDate);
 
-    public int deleteExecTaskByGroupId(@Param("settleDate")String settleDate, @Param("taskGroupCode")String taskGroupCode, @Param("batchId")String batchId);
+    int deleteExecTaskByGroupId(@Param("settleDate") String settleDate, @Param("taskGroupCode") String taskGroupCode, @Param("batchId") String batchId);
 }

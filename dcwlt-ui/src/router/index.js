@@ -94,6 +94,25 @@ export const constantRoutes = [
     ]
   },
   {
+    path: '/task',
+    component: Layout,
+    hidden: true,
+    children: [
+      {
+        path: 'taskinfo/infodetail/:taskGroupCode',
+        component: (resolve) => require(['@/views/pay-batch/taskinfo/detail'], resolve),
+        name: 'TaskGroupInfoDetail',
+        meta: { title: '任务组信息详情', icon: '' }
+      },
+      {
+        path: 'taskexec/execdetail/:batchId/:taskGroupCode/:settleDate',
+        component: (resolve) => require(['@/views/pay-batch/taskexec/detail'], resolve),
+        name: 'TaskGroupExecDetail',
+        meta: { title: '任务执行详情', icon: '' }
+      }
+    ]
+  },
+  {
     path: '/monitor',
     component: Layout,
     hidden: true,

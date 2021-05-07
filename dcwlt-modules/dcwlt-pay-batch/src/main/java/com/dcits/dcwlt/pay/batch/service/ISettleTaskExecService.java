@@ -4,6 +4,8 @@ import com.dcits.dcwlt.pay.api.model.SettleTaskExecDO;
 import com.dcits.dcwlt.pay.api.model.SettleTaskGroupExecDO;
 import com.dcits.dcwlt.pay.batch.task.ISettleTask;
 
+import java.util.List;
+
 
 /**
  * @description: some desc
@@ -11,6 +13,9 @@ import com.dcits.dcwlt.pay.batch.task.ISettleTask;
  * @date: 2021/3/9 16:41
  */
 public interface ISettleTaskExecService {
+
+    List<SettleTaskExecDO> queryTaskExecList(SettleTaskExecDO settleTaskExecDO);
+
     public void runTaskGroup(String settleDate, String batchId, String taskGroupCode, String digitalEnvelope);
  
     public void runTask(String settleDate, String taskGroupCode, String taskCode, String batchId);

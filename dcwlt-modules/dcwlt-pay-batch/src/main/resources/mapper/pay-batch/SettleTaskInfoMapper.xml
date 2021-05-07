@@ -4,11 +4,158 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.dcits.dcwlt.pay.batch.mapper.SettleTaskInfoMapper">
 
+    <resultMap id="BaseResultMap" type="com.dcits.dcwlt.pay.api.model.SettleTaskInfoDO">
+        <id column="taskcode" jdbcType="VARCHAR" property="taskCode"/>
+        <result column="taskname" jdbcType="VARCHAR" property="taskName"/>
+        <result column="taskgroupcode" jdbcType="VARCHAR" property="taskGroupCode"/>
+        <result column="tasktype" jdbcType="VARCHAR" property="taskType"/>
+        <result column="taskindex" jdbcType="VARCHAR" property="taskIndex"/>
+        <result column="taskclassname" jdbcType="VARCHAR" property="taskClassName"/>
+        <result column="execparam" jdbcType="VARCHAR" property="execParam"/>
+        <result column="taskstate" jdbcType="VARCHAR" property="taskState"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+    taskcode, taskname, taskgroupcode, tasktype, taskindex, taskclassname, execparam,
+    taskstate
+    </sql>
+
+    <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from pay_comm_task_info
+        where taskcode = #{taskcode,jdbcType=VARCHAR}
+    </select>
+
+    <select id="select" parameterType="com.dcits.dcwlt.pay.api.model.SettleTaskInfoDO" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from pay_comm_task_info
+        <where>
+            <if test="taskCode != null and taskCode !=''">
+                and taskcode = #{taskCode}
+            </if>
+            <if test="taskName != null and taskName !=''">
+                and taskname like concat('%',#{taskName},'%')
+            </if>
+            <if test="taskGroupCode != null and taskGroupCode !=''">
+                and taskgroupcode = #{taskGroupCode}
+            </if>
+            <if test="taskType !=null and taskType!=''">
+                and tasktype=#{taskType}
+            </if>
+
+            <if test="taskClassName !=null and taskClassName!=''">
+                and taskclassname like concat('%',#{taskClassName},'%'}
+            </if>
+            <if test="taskState !=null and taskState!=''">
+                and taskstate = #{taskState}
+            </if>
+
+
+        </where>
+    </select>
+
+
     <select id="queryTaskInfoListToExec" resultType="com.dcits.dcwlt.pay.api.model.SettleTaskInfoDO">
         SELECT TASKCODE, TASKNAME, TASKGROUPCODE, TASKTYPE, TASKINDEX, TASKCLASSNAME, EXECPARAM, TASKSTATE
         FROM pay_comm_task_info
         WHERE TASKGROUPCODE = #{taskGroupCode}
         ORDER BY TASKINDEX
     </select>
+
+    <insert id="insertSelective" parameterType="com.dcits.dcwlt.pay.api.model.SettleTaskInfoDO">
+        insert into pay_comm_task_info
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="taskCode != null">
+                taskcode,
+            </if>
+            <if test="taskName != null">
+                taskname,
+            </if>
+            <if test="taskGroupCode != null">
+                taskgroupcode,
+            </if>
+            <if test="taskType != null">
+                tasktype,
+            </if>
+            <if test="taskIndex != null">
+                taskindex,
+            </if>
+            <if test="taskClassName != null">
+                taskclassname,
+            </if>
+            <if test="execParam != null">
+                execparam,
+            </if>
+            <if test="taskState != null">
+                taskstate,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="taskCode != null">
+                #{taskCode,jdbcType=VARCHAR},
+            </if>
+            <if test="taskName != null">
+                #{taskName,jdbcType=VARCHAR},
+            </if>
+            <if test="taskGroupCode != null">
+                #{taskGroupCode,jdbcType=VARCHAR},
+            </if>
+            <if test="taskType != null">
+                #{taskType,jdbcType=VARCHAR},
+            </if>
+            <if test="taskIndex != null">
+                #{taskIndex,jdbcType=VARCHAR},
+            </if>
+            <if test="taskClassName != null">
+                #{taskClassName,jdbcType=VARCHAR},
+            </if>
+            <if test="execParam != null">
+                #{execParam,jdbcType=VARCHAR},
+            </if>
+            <if test="taskState != null">
+                #{taskState,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
+
+    <update id="updateByPrimaryKeySelective" parameterType="com.dcits.dcwlt.pay.api.model.SettleTaskInfoDO">
+        update pay_comm_task_info
+        <set>
+            <if test="taskName != null">
+                taskname = #{taskName,jdbcType=VARCHAR},
+            </if>
+            <if test="taskGroupCode != null">
+                taskgroupcode = #{taskGroupCode,jdbcType=VARCHAR},
+            </if>
+            <if test="taskType != null">
+                tasktype = #{taskType,jdbcType=VARCHAR},
+            </if>
+            <if test="taskIndex != null">
+                taskindex = #{taskIndex,jdbcType=VARCHAR},
+            </if>
+            <if test="taskClassName != null">
+                taskclassname = #{taskClassName,jdbcType=VARCHAR},
+            </if>
+            <if test="execParam != null">
+                execparam = #{execParam,jdbcType=VARCHAR},
+            </if>
+            <if test="taskState != null">
+                taskstate = #{taskState,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where taskcode = #{taskCode,jdbcType=VARCHAR}
+    </update>
+
+
+    <delete id="deleteByPrimaryKey">
+        delete from pay_comm_task_info
+        where taskcode in
+        <foreach collection="array" item="taskCode" open="(" separator="," close=")">
+            #{taskCode,jdbcType=VARCHAR}
+        </foreach>
+    </delete>
+
 
 </mapper>

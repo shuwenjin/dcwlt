@@ -47,7 +47,12 @@ public class SettleTaskExecServiceImpl implements ISettleTaskExecService {
 
 	@Autowired
 	private SettleTaskGroupExecMapper settleTaskGroupExecMapper;
-	
+
+	@Override
+	public List<SettleTaskExecDO> queryTaskExecList(SettleTaskExecDO settleTaskExecDO) {
+		return settleTaskExecMapper.select(settleTaskExecDO);
+	}
+
 	/**
 	 * 按清算日期、任务组号运行工作组
 	 * @param settleDate --对账日期

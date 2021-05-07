@@ -4,11 +4,81 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.dcits.dcwlt.pay.batch.mapper.SettleTaskGroupInfoMapper">
 
+    <resultMap id="BaseResultMap" type="com.dcits.dcwlt.pay.api.model.SettleTaskGroupInfoDO">
+        <id column="taskgroupcode" jdbcType="VARCHAR" property="taskGroupCode"/>
+        <result column="taskgroupname" jdbcType="VARCHAR" property="taskGroupName"/>
+        <result column="busicode" jdbcType="VARCHAR" property="busiCode"/>
+        <result column="busicodename" jdbcType="VARCHAR" property="busiCodeName"/>
+        <result column="remark" jdbcType="VARCHAR" property="remark"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        taskgroupcode, taskgroupname, busicode, busicodename, remark
+    </sql>
+
     <select id="queryTaskGroupInfoToExec" resultType="com.dcits.dcwlt.pay.api.model.SettleTaskGroupInfoDO">
         SELECT TASKGROUPCODE, TASKGROUPNAME, BUSICODE, BUSICODENAME, REMARK
         FROM pay_comm_task_group_info
         WHERE TASKGROUPCODE = #{taskGroupCode}
     </select>
+
+
+    <select id="select" parameterType="com.dcits.dcwlt.pay.api.model.SettleTaskGroupInfoDO" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from pay_comm_task_group_info
+        <where>
+            <if test="taskGroupCode !=null and taskGroupCode !=''">
+                and taskgroupcode = #{taskGroupCode,jdbcType=VARCHAR}
+            </if>
+            <if test="taskGroupName !=null and taskGroupName !=''">
+                and taskgroupname like concat('%',#{taskGroupName,jdbcType=VARCHAR},'%')
+            </if>
+            <if test="busiCode !=null and busiCode !=''">
+                and busicode = #{busiCode,jdbcType=VARCHAR}
+            </if>
+            <if test="busiCodeName !=null and busiCodeName !=''">
+                and busicodename = #{busiCodeName,jdbcType=VARCHAR}
+            </if>
+            <if test="remark !=null and remark !=''">
+                and remark like concat('%',#{remark,jdbcType=VARCHAR},'%')
+            </if>
+        </where>
+    </select>
+
+
+    <insert id="insert" parameterType="com.dcits.dcwlt.pay.api.model.SettleTaskGroupInfoDO">
+    insert into pay_comm_task_group_info (taskgroupcode, taskgroupname, busicode, busicodename, remark)
+    values (#{taskGroupCode,jdbcType=VARCHAR}, #{taskGroupName,jdbcType=VARCHAR}, #{busiCode,jdbcType=VARCHAR},#{busiCodeName,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR})
+  </insert>
+
+
+    <update id="updateByPrimaryKeySelective" parameterType="com.dcits.dcwlt.pay.api.model.SettleTaskGroupInfoDO">
+        update pay_comm_task_group_info
+        <set>
+            <if test="taskGroupName != null">
+                taskgroupname = #{taskGroupName,jdbcType=VARCHAR},
+            </if>
+            <if test="busiCode != null">
+                busicode = #{busiCode,jdbcType=VARCHAR},
+            </if>
+            <if test="busiCodeName != null">
+                busicodename = #{busiCodeName,jdbcType=VARCHAR},
+            </if>
+            <if test="remark != null">
+                remark = #{remark,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where taskgroupcode = #{taskGroupCode,jdbcType=VARCHAR}
+    </update>
+
+    <delete id="deleteByPrimaryKey">
+        delete from pay_comm_task_group_info
+        where taskgroupcode in
+        <foreach collection="array" item="taskGroupCode" open="(" separator="," close=")">
+            #{taskGroupCode,jdbcType=VARCHAR}
+        </foreach>
+    </delete>
 
 
 </mapper>

@@ -7,13 +7,15 @@ import java.util.List;
 
 public interface ISettleTaskGroupExecService {
 
-    public int insert(SettleTaskGroupExecDO taskGroupExec);
+    List<SettleTaskGroupExecDO> querySettleTaskExec(SettleTaskGroupExecDO settleTaskGroupExecDO);
 
-    public int updateTaskGroupExecState(SettleTaskGroupExecDO taskGroupExec);
+    int insert(SettleTaskGroupExecDO taskGroupExec);
 
-    public SettleTaskGroupExecDO queryTaskGroupExec(String settleDate, String batchId, String taskGroupCode);
-    
-    public List<SettleTaskGroupExecDO> queryTaskExecFailure(String settleDate);
-    
-    public int deleteExecTaskByGroupId(String settleDate, String taskGroupCode, String batchId);
+    int updateTaskGroupExecState(SettleTaskGroupExecDO taskGroupExec);
+
+    SettleTaskGroupExecDO queryTaskGroupExec(String settleDate, String batchId, String taskGroupCode);
+
+    List<SettleTaskGroupExecDO> queryTaskExecFailure(String settleDate);
+
+    int deleteExecTaskByGroupId(String settleDate, String taskGroupCode, String batchId);
 }

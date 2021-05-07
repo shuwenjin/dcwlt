@@ -19,6 +19,12 @@ public class SettleTaskGroupExecServiceImpl implements ISettleTaskGroupExecServi
     @Autowired
     private SettleTaskGroupExecMapper settleTaskGroupExecMapper;
 
+
+    @Override
+    public List<SettleTaskGroupExecDO> querySettleTaskExec(SettleTaskGroupExecDO settleTaskGroupExecDO) {
+        return settleTaskGroupExecMapper.select(settleTaskGroupExecDO);
+    }
+
     @Override
     public int insert(SettleTaskGroupExecDO taskGroupExec) {
         return settleTaskGroupExecMapper.insert(taskGroupExec);

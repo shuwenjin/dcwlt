@@ -4,6 +4,50 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.dcits.dcwlt.pay.batch.mapper.SettleTaskExecMapper">
 
+    <resultMap id="BaseResultMap" type="com.dcits.dcwlt.pay.api.model.SettleTaskExecDO">
+        <id column="settledate" jdbcType="VARCHAR" property="settleDate" />
+        <id column="taskgroupcode" jdbcType="VARCHAR" property="taskGroupCode" />
+        <id column="taskcode" jdbcType="VARCHAR" property="taskCode" />
+        <id column="batchid" jdbcType="VARCHAR" property="batchId" />
+        <result column="taskname" jdbcType="VARCHAR" property="taskName" />
+        <result column="taskgroupname" jdbcType="VARCHAR" property="taskGroupName" />
+        <result column="busicode" jdbcType="VARCHAR" property="busiCode" />
+        <result column="busicodename" jdbcType="VARCHAR" property="busiCodeName" />
+        <result column="tasktype" jdbcType="VARCHAR" property="taskType" />
+        <result column="taskindex" jdbcType="VARCHAR" property="taskIndex" />
+        <result column="taskclassname" jdbcType="VARCHAR" property="taskClassName" />
+        <result column="execparam" jdbcType="VARCHAR" property="execParam" />
+        <result column="execstate" jdbcType="VARCHAR" property="execState" />
+        <result column="starttime" jdbcType="VARCHAR" property="startTime" />
+        <result column="endtime" jdbcType="VARCHAR" property="endTime" />
+    </resultMap>
+
+    <sql id="Base_Column_List">
+    settledate, taskgroupcode, taskcode, batchid, taskname, taskgroupname, busicode,
+    busicodename, tasktype, taskindex, taskclassname, execparam, execstate, starttime,
+    endtime
+  </sql>
+
+    <select id="select" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List" />
+        from pay_comm_task_exec
+       <where>
+           <if test="taskGroupCode !=null and taskGroupCode !=''">
+               and taskgroupcode = #{taskGroupCode,jdbcType=VARCHAR}
+           </if>
+           <if test="settleDate !=null and settleDate !=''">
+               and settledate = #{settleDate,jdbcType=VARCHAR}
+           </if>
+           <if test="batchId !=null and batchId !=''">
+               and batchid = #{batchId,jdbcType=VARCHAR}
+           </if>
+           <if test="taskCode !=null and taskCode !=''">
+               and taskcode = #{taskCode,jdbcType=VARCHAR}
+           </if>
+       </where>
+    </select>
+
     <!--任务执行信息表入库-->
     <insert id="insert" parameterType="com.dcits.dcwlt.pay.api.model.SettleTaskExecDO">
         INSERT INTO PAY_COMM_TASK_EXEC
