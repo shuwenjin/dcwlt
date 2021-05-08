@@ -1,5 +1,7 @@
 package com.dcits.dcwlt.pay.api.model;
 
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.util.List;
 
 /**
@@ -9,10 +11,15 @@ import java.util.List;
  */
 public class SettleTaskGroupInfoDO {
 
+	@NotBlank(message = "信息组代码不能为空")
 	private String taskGroupCode;
+	@NotBlank(message = "信息组名称不能为空")
 	private String taskGroupName;
+	@NotBlank(message = "业务代码不能为空")
 	private String busiCode;
+	@NotBlank(message = "业务名称不能为空")
 	private String busiCodeName;
+	@NotNull(message = "备注不能为空")
 	private String remark;
 	
 	private List<SettleTaskInfoDO> taskInfoList;

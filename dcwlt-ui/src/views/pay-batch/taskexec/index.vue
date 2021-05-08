@@ -64,17 +64,6 @@
         </el-form>
 
         <el-row :gutter="10" class="mb8">
-            <el-col :span="1.5">
-                <el-button
-                    type="danger"
-                    plain
-                    icon="el-icon-delete"
-                    size="mini"
-                    :disabled="multiple"
-                    @click="handleDelete"
-                    v-hasPermi="['task:taskgroupinfo:remove']"
-                >删除</el-button>
-            </el-col>
             <right-toolbar :showSearch.sync="showSearch" @queryTable="getList"></right-toolbar>
         </el-row>
 
@@ -106,19 +95,7 @@
             <el-table-column label="业务名称" align="center" prop="busiCodeName"  />
             <el-table-column label="执行状态" align="center" prop="execState"  />
              <el-table-column label="创建时间" align="center" prop="createTime" />
-            <el-table-column label="更新时间" align="center" prop="updateTime" />
-
-            <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
-                <template slot-scope="scope">
-                    <el-button
-                        size="mini"
-                        type="text"
-                        icon="el-icon-delete"
-                        @click="handleDelete(scope.row)"
-                        v-hasPermi="['task:taskgroupinfo:remove']"
-                    >删除</el-button>
-                </template>
-            </el-table-column>
+            <el-table-column label="更新时间" align="center" prop="updateTime" />           
         </el-table>
 
         <pagination

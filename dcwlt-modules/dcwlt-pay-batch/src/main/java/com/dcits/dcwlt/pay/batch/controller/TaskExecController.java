@@ -25,7 +25,7 @@ public class TaskExecController extends BaseController {
     @Autowired
     private ISettleTaskExecService settleTaskExecService;
 
-    @PreAuthorize(hasPermi = "task:taskexecgroup:list")
+    @PreAuthorize(hasPermi = "task:taskgroupexec:list")
     @GetMapping(value = "/taskgroupexec/list")
     public TableDataInfo queryTaskInfogGroupList(SettleTaskGroupExecDO settleTaskGroupExecDO) {
         startPage();

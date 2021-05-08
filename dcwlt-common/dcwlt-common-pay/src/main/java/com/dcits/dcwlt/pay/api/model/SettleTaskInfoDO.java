@@ -1,5 +1,6 @@
 package com.dcits.dcwlt.pay.api.model;
 
+import javax.validation.constraints.NotBlank;
 import java.util.HashMap;
 
 /**
@@ -8,11 +9,17 @@ import java.util.HashMap;
  */
 public class SettleTaskInfoDO {
 
+	@NotBlank(message = "任务代码不能为空")
 	private String taskCode;
+	@NotBlank(message = "任务名称不能为空")
 	private String taskName;
+	@NotBlank(message = "任务组代码不能为空")
 	private String taskGroupCode;
+	@NotBlank(message = "任务类型不能为空")
 	private String taskType;
+	@NotBlank(message = "任务顺序不能为空")
 	private String taskIndex;
+	@NotBlank(message = "任务类不能为空")
 	private String taskClassName;
 	private String execParam;
 	private HashMap paramDict;
