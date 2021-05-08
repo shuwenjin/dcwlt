@@ -1,5 +1,6 @@
 package com.dcits.dcwlt.pay.batch.controller;
 
+import com.dcits.dcwlt.common.core.utils.poi.ExcelUtil;
 import com.dcits.dcwlt.common.core.web.controller.BaseController;
 import com.dcits.dcwlt.common.core.web.domain.AjaxResult;
 import com.dcits.dcwlt.common.core.web.page.TableDataInfo;
@@ -14,10 +15,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.util.List;
 
 /**
  * 任务信息管理
+ *
+ * @author Ashin
  */
 @RestController
 @RequestMapping("/taskinfo")
@@ -37,7 +42,7 @@ public class TaskInfoController extends BaseController {
      */
     @PreAuthorize(hasPermi = "task:taskgroupinfo:list")
     @GetMapping(value = "/taskgroupinfo/list")
-    public TableDataInfo queryTaskInfogGroupList(SettleTaskGroupInfoDO settleTaskGroupInfoDO) {
+    public TableDataInfo queryTaskGroupInfoList(SettleTaskGroupInfoDO settleTaskGroupInfoDO) {
         startPage();
         List<SettleTaskGroupInfoDO> settleTaskGroupInfoDOS = settleTaskGroupInfoService.queryTaskGroupInfoList(settleTaskGroupInfoDO);
 
@@ -52,7 +57,7 @@ public class TaskInfoController extends BaseController {
      * @return
      */
     @PreAuthorize(hasPermi = "task:taskgroupinfo:add")
-    @Log(title = "任务信息组", businessType = BusinessType.INSERT)
+    @Log(title = "任务组", businessType = BusinessType.INSERT)
     @PostMapping(value = "/taskgroupinfo")
     public AjaxResult addTaskGroupInfo(@Validated @RequestBody SettleTaskGroupInfoDO settleTaskGroupInfoDO) {
         return toAjax(settleTaskGroupInfoService.addTaskGroupInfo(settleTaskGroupInfoDO));
@@ -65,7 +70,7 @@ public class TaskInfoController extends BaseController {
      * @return
      */
     @PreAuthorize(hasPermi = "task:taskgroupinfo:edit")
-    @Log(title = "任务信息组", businessType = BusinessType.UPDATE)
+    @Log(title = "任务组", businessType = BusinessType.UPDATE)
     @PutMapping(value = "/taskgroupinfo")
     public AjaxResult editTaskGroupInfo(@Validated @RequestBody SettleTaskGroupInfoDO settleTaskGroupInfoDO) {
         return toAjax(settleTaskGroupInfoService.updateTaskGroupInfo(settleTaskGroupInfoDO));
@@ -75,10 +80,21 @@ public class TaskInfoController extends BaseController {
      * 删除任务组
      */
     @PreAuthorize(hasPermi = "task:taskgroupinfo:remove")
-    @Log(title = "任务信息组", businessType = BusinessType.DELETE)
+    @Log(title = "任务组", businessType = BusinessType.DELETE)
     @DeleteMapping("/taskgroupinfo/{taskGroupCodes}")
     public AjaxResult removeGroupInfo(@PathVariable String[] taskGroupCodes) {
         return toAjax(settleTaskGroupInfoService.deleteTaskGroupInfo(taskGroupCodes));
+    }
+
+    @Log(title = "任务组", businessType = BusinessType.EXPORT)
+    @PreAuthorize(hasPermi = "task:taskgroupinfo:export")
+    @PostMapping("/taskgroupinfo/export")
+    public void exportTaskGroupInfo(HttpServletResponse response, SettleTaskGroupInfoDO settleTaskGroupInfoDO) throws IOException {
+        List<SettleTaskGroupInfoDO> settleTaskGroupInfoDOS = settleTaskGroupInfoService.queryTaskGroupInfoList(settleTaskGroupInfoDO);
+
+        ExcelUtil<SettleTaskGroupInfoDO> util = new ExcelUtil<>(SettleTaskGroupInfoDO.class);
+
+        util.exportExcel(response, settleTaskGroupInfoDOS, "任务组信息");
     }
 
 
@@ -130,6 +146,17 @@ public class TaskInfoController extends BaseController {
     @DeleteMapping("/taskinfo/{taskCodes}")
     public AjaxResult removeTaskInfo(@PathVariable String[] taskCodes) {
         return toAjax(settleTaskInfoService.deleteTaskInfo(taskCodes));
+    }
+
+    @Log(title = "任务信息", businessType = BusinessType.EXPORT)
+    @PreAuthorize(hasPermi = "task:taskinfo:export")
+    @PostMapping("/taskinfo/export")
+    public void exportTaskInfo(HttpServletResponse response, SettleTaskInfoDO settleTaskInfoDO) throws IOException {
+        List<SettleTaskInfoDO> resultList = settleTaskInfoService.queryTaskInfoList(settleTaskInfoDO);
+
+        ExcelUtil<SettleTaskInfoDO> util = new ExcelUtil<>(SettleTaskInfoDO.class);
+
+        util.exportExcel(response, resultList, "任务信息");
     }
 
 

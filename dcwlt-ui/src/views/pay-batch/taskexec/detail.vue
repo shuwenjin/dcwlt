@@ -25,7 +25,17 @@
             </el-form-item>
         </el-form>
 
-        <el-row :gutter="10" class="mb8">         
+        <el-row :gutter="10" class="mb8">
+            <el-col :span="1.5">
+                <el-button
+                    type="warning"
+                    plain
+                    icon="el-icon-download"
+                    size="mini"
+                    @click="handleExport"
+                    v-hasPermi="['task:taskexec:export']"
+                >导出</el-button>
+            </el-col>         
             <right-toolbar :showSearch.sync="showSearch" @queryTable="getList"></right-toolbar>
         </el-row>
 
@@ -186,7 +196,13 @@ export default {
         resetQuery() {
             this.resetForm("queryForm");
             this.handleQuery();
-        }
+        },
+        /** 导出按钮操作 */
+        handleExport() {
+            this.download('/pay-batch/taskexec/taskexec/export', {
+                ...this.queryParams
+            }, `taskexec_${new Date().getTime()}.xlsx`)
+        },
     }
 };
 </script>
