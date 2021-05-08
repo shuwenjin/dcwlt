@@ -68,7 +68,11 @@
         </el-row>
 
         <el-table v-loading="loading" :data="typeList" @selection-change="handleSelectionChange">
-            <el-table-column type="selection" width="55" align="center" />
+            <el-table-column label="序号" type="index" align="center">
+                <template slot-scope="scope">
+                    <span>{{ (queryParams.pageNum - 1) * queryParams.pageSize + scope.$index + 1 }}</span>
+                </template>
+            </el-table-column>
             <el-table-column label="交易批次号" align="center" prop="batchId" >
                  <template slot-scope="scope">
                     <router-link
