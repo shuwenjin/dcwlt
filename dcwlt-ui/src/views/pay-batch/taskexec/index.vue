@@ -9,7 +9,7 @@
              <el-form-item label="清算日期" prop="settleDate">
                 <el-input
                     v-model="queryParams.settleDate"
-                    placeholder="任务分组代码"
+                    placeholder="清算日期"
                     clearable
                     size="small"
                     style="width: 160px"
