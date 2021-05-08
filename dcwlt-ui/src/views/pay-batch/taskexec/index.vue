@@ -6,15 +6,14 @@
             :inline="true"
             v-show="showSearch"
             label-width="68px">
-             <el-form-item label="清算日期" prop="settleDate">
-                <el-input
+             <el-form-item label="清算日期">
+                 <el-date-picker
                     v-model="queryParams.settleDate"
-                    placeholder="清算日期"
-                    clearable
-                    size="small"
-                    style="width: 160px"
-                    @keyup.enter.native="handleQuery"
-                />
+                    type="date"
+                    placeholder="选择日期"
+                    value-format="yyyyMMdd"
+                    >
+                </el-date-picker>
             </el-form-item>
             <el-form-item label="分组代码" prop="taskGroupCode">
                 <el-input
@@ -26,31 +25,11 @@
                     @keyup.enter.native="handleQuery"
                 />
             </el-form-item>
-            <el-form-item label="分组名称" prop="taskGroupName">
-                <el-input
-                    v-model="queryParams.taskGroupName"
-                    placeholder="任务分组名称"
-                    clearable
-                    size="small"
-                    style="width: 160px"
-                    @keyup.enter.native="handleQuery"
-                />
-            </el-form-item>
+
             <el-form-item label="业务代码" prop="busiCode">
                 <el-input
                     v-model="queryParams.busiCode"
                     placeholder="业务代码"
-                    clearable
-                    size="small"
-                    style="width: 160px"
-                    @keyup.enter.native="handleQuery"
-                />
-            </el-form-item>
-
-            <el-form-item label="业务名称" prop="busiCodeName">
-                <el-input
-                    v-model="queryParams.busiCodeName"
-                    placeholder="业务名称"
                     clearable
                     size="small"
                     style="width: 160px"
@@ -109,35 +88,6 @@
             :limit.sync="queryParams.pageSize"
             @pagination="getList"
         />
-
-        <!-- 添加或修改参数配置对话框 -->
-        <el-dialog :title="title" :visible.sync="open" width="500px" append-to-body>
-            <el-form ref="form" :model="form" :rules="rules" label-width="100px">
-                <el-form-item label="任务组代码" prop="taskGroupCode">
-                    <el-input
-                        v-model="form.taskGroupCode"
-                        placeholder="请输入任务组代码"
-                        :disabled="taskGroupMode"
-                    />
-                </el-form-item>
-                <el-form-item label="任务组名称" prop="taskGroupName">
-                    <el-input v-model="form.taskGroupName" placeholder="请输入任务组名称" />
-                </el-form-item>
-                <el-form-item label="业务代码" prop="busiCode">
-                    <el-input v-model="form.busiCode" placeholder="请输入业务代码" />
-                </el-form-item>
-                <el-form-item label="业务名称" prop="busiCodeName">
-                    <el-input v-model="form.busiCodeName" placeholder="请输入业务名称" />
-                </el-form-item>
-                <el-form-item label="备注" prop="remark">
-                    <el-input v-model="form.remark" type="textarea" placeholder="请输入内容"></el-input>
-                </el-form-item>
-            </el-form>
-            <div slot="footer" class="dialog-footer">
-                <el-button type="primary" @click="submitForm">确 定</el-button>
-                <el-button @click="cancel">取 消</el-button>
-            </div>
-        </el-dialog>
     </div>
 </template>
 
@@ -168,6 +118,9 @@ export default {
             open: false,
             // 查询参数
             queryParams: {
+                settleDate:undefined,
+                taskGroupCode:undefined,
+                busiCode:undefined,
                 pageNum: 1,
                 pageSize: 10,
             },
@@ -228,23 +181,7 @@ export default {
                 this.loading = false;
             });
         },
-
-        // 取消按钮
-        cancel() {
-            this.reset();
-            this.open = false;
-        },
-        // 表单重置
-        reset() {   
-            this.form={
-              taskGroupCode: undefined,
-              taskGroupName: undefined,
-              busiCode: undefined,
-              busiCodeName: undefined,
-              remark: undefined
-            }         
-            this.resetForm("form");
-        },
+        
         /** 搜索按钮操作 */
         handleQuery() {
             this.queryParams.pageNum = 1;
@@ -252,70 +189,17 @@ export default {
         },
         /** 重置按钮操作 */
         resetQuery() {
+            this.queryParams.settleDate=undefined;
             this.resetForm("queryForm");
             this.handleQuery();
-        },
-        /** 新增按钮操作 */
-        handleAdd() {
-            this.reset();
-            this.open = true;
-            this.taskGroupMode = false;
-            this.title = "添加任务信息组";
         },
         // 多选框选中数据
         handleSelectionChange(selection) {
             this.taskGroupCodes = selection.map((item) => item.taskGroupCode);
             this.single = selection.length != 1;
             this.multiple = !selection.length;
-        },
-        /** 修改按钮操作 */
-        handleUpdate(row) {
-            this.reset();
-            this.form = JSON.parse(JSON.stringify(row));
-            this.taskGroupMode = true;
-            this.title = "修改任务组信息";
-            this.open = true;
-        },
-        /** 提交按钮 */
-        submitForm: function () {
-            this.$refs["form"].validate((valid) => {
-                if (valid) {
-                    if (this.taskGroupMode) {
-                        updateTaskGroup(this.form).then((response) => {
-                            this.msgSuccess("修改成功");
-                            this.open = false;
-                            this.getList();
-                        });
-                    } else {
-                        addTaskGroup(this.form).then((response) => {
-                            this.msgSuccess("新增成功");
-                            this.open = false;
-                            this.getList();
-                        });
-                    }
-                }
-            });
-        },
-        /** 删除按钮操作 */
-        handleDelete(row) {
-            const taskGroupCodes = row.taskGroupCode || this.taskGroupCodes;
-            this.$confirm(
-                '是否确认删除任务组编号为"' + taskGroupCodes + '"的数据?',
-                "警告",
-                {
-                    confirmButtonText: "确定",
-                    cancelButtonText: "取消",
-                    type: "warning",
-                }
-            )
-                .then(function () {
-                    return delTaskGroup(taskGroupCodes);
-                })
-                .then(() => {
-                    this.getList();
-                    this.msgSuccess("删除成功");
-                });
-        },
+        }
+        
     },
 };
 </script>

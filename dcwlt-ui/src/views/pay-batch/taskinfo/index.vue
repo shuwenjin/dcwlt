@@ -17,31 +17,10 @@
                     @keyup.enter.native="handleQuery"
                 />
             </el-form-item>
-            <el-form-item label="分组名称" prop="taskGroupName">
-                <el-input
-                    v-model="queryParams.taskGroupName"
-                    placeholder="任务分组名称"
-                    clearable
-                    size="small"
-                    style="width: 160px"
-                    @keyup.enter.native="handleQuery"
-                />
-            </el-form-item>
             <el-form-item label="业务代码" prop="busiCode">
                 <el-input
                     v-model="queryParams.busiCode"
                     placeholder="业务代码"
-                    clearable
-                    size="small"
-                    style="width: 160px"
-                    @keyup.enter.native="handleQuery"
-                />
-            </el-form-item>
-
-            <el-form-item label="业务名称" prop="busiCodeName">
-                <el-input
-                    v-model="queryParams.busiCodeName"
-                    placeholder="业务名称"
                     clearable
                     size="small"
                     style="width: 160px"
@@ -200,6 +179,8 @@ export default {
             open: false,
             // 查询参数
             queryParams: {
+                taskGroupCode: undefined,
+                busiCode: undefined,
                 pageNum: 1,
                 pageSize: 10,
             },

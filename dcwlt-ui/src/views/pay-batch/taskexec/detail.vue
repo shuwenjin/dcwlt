@@ -177,25 +177,6 @@ export default {
         taskTypeFormat(row, column) {
             return this.selectDictLabel(this.taskTypeOptions, row.taskState);
         },
-        // 取消按钮
-        cancel() {
-            this.open = false;
-            this.reset();
-        },
-        // 表单重置
-        reset() {
-            this.form={
-                taskCode:undefined,
-                taskName:undefined,
-                taskGroupCode: undefined,
-                taskClassName:undefined,
-                taskType:undefined,
-                execParam:undefined,
-                taskState:"0",
-                taskIndex:0
-            }           
-            this.resetForm("form");
-        },
         /** 搜索按钮操作 */
         handleQuery() {
             this.queryParams.pageNum = 1;
@@ -205,63 +186,6 @@ export default {
         resetQuery() {
             this.resetForm("queryForm");
             this.handleQuery();
-        },
-        /** 新增按钮操作 */
-        handleAdd() {
-            this.reset();
-            this.isAdd=true;            
-            this.title = "添加任务信息";
-            this.form.taskGroupCode = this.queryParams.taskGroupCode;
-            this.open = true;
-        },
-        /** 修改按钮操作 */
-        handleUpdate(row) {
-            this.reset();           
-            this.form=  JSON.parse(JSON.stringify(row));
-            this.isAdd=false;
-            this.title = "修改任务信息";
-            this.open = true;        
-        },
-        /** 提交按钮 */
-        submitForm: function () {
-            this.$refs["form"].validate((valid) => {
-                if (valid) {
-                    if (!this.isAdd) {
-                        updateTaskInfo(this.form).then((response) => {
-                            this.msgSuccess("修改成功");
-                            this.open = false;
-                            this.getList();
-                        });
-
-                    } else {
-                        addTaskInfo(this.form).then((response) => {
-                            this.msgSuccess("新增成功");
-                            this.open = false;
-                            this.getList();
-                        });
-                    }
-                }
-            });
-        },
-        /** 删除按钮操作 */
-        handleDelete(row) {
-            const taskCodes = row.taskCode || this.ids;
-            this.$confirm(
-                '是否确认删除任务编码为"' + taskCodes + '"的数据?',
-                "警告",
-                {
-                    confirmButtonText: "确定",
-                    cancelButtonText: "取消",
-                    type: "warning",
-                }
-            )
-                .then(function () {
-                    return delTaskInfo(taskCodes);
-                })
-                .then(() => {
-                    this.getList();
-                    this.msgSuccess("删除成功");
-                });
         }
     }
 };

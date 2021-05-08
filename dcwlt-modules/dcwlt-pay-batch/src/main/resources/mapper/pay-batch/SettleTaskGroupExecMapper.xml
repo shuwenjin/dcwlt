@@ -33,6 +33,9 @@
             <if test="batchId !=null and batchId !=''">
                 and batchid = #{batchId,jdbcType=VARCHAR}
             </if>
+            <if test="busiCode !=null and busiCode !=''">
+                and busicode = #{busiCode,jdbcType=VARCHAR}
+            </if>
         </where>
     </select>
 
