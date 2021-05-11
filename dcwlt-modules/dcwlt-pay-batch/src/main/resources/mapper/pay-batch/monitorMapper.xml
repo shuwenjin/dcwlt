@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dcits.dcwlt.pay.batch.mapper.MonitorMapper">
+
+    <resultMap id="BaseResultMap" type="com.dcits.dcwlt.pay.api.model.MonitorDO">
+        <id column="exceptdate" jdbcType="VARCHAR" property="exceptDate"/>
+        <id column="exceptserno" jdbcType="VARCHAR" property="exceptSerNO"/>
+        <result column="excepttime" jdbcType="VARCHAR" property="exceptTime"/>
+        <result column="exceptscenario" jdbcType="VARCHAR" property="exceptScenario"/>
+        <result column="exceptparams" jdbcType="VARCHAR" property="excepParams"/>
+        <result column="exceptcontext" jdbcType="VARCHAR" property="excepContext"/>
+        <result column="lastupdate" jdbcType="VARCHAR" property="lastUpDate"/>
+        <result column="lastuptime" jdbcType="VARCHAR" property="lastUpTime"/>
+    </resultMap>
+
+
+    <sql id="Base_Column_List">
+    exceptdate, exceptserno, excepttime, exceptscenario, exceptparams, exceptcontext,
+    lastupdate, lastuptime
+    </sql>
+
+    <select id="selectExMonitorInfo" parameterType="com.dcits.dcwlt.pay.api.model.MonitorDO" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from pay_comm_monitor
+        <where>
+            <if test="exceptSerNO != null  and exceptSerNO != ''">and exceptserno = #{exceptSerNO}</if>
+            <if test="exceptDate != null  and exceptDate != ''">and exceptdate = #{exceptDate}</if>
+            <if test="exceptScenario != null  and exceptScenario != ''">and exceptscenario = #{exceptScenario}</if>
+        </where>
+    </select>
+
+
+</mapper>

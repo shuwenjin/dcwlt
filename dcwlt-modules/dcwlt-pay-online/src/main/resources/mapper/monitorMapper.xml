@@ -21,17 +21,6 @@
     lastupdate, lastuptime
     </sql>
 
-    <select id="selectExMonitorInfo" parameterType="com.dcits.dcwlt.pay.api.model.MonitorDO" resultMap="BaseResultMap">
-        select
-        <include refid="Base_Column_List"/>
-        from pay_comm_monitor
-        <where>
-            <if test="exceptSerNO != null  and exceptSerNO != ''">and exceptserno = #{exceptSerNO}</if>
-            <if test="exceptDate != null  and exceptDate != ''">and exceptdate = #{exceptDate}</if>
-            <if test="exceptScenario != null  and exceptScenario != ''">and exceptscenario = #{exceptScenario}</if>
-        </where>
-    </select>
-
     <!--新增监控数据-->
     <insert id="insertMonitorData">
         INSERT INTO pay_comm_monitor(

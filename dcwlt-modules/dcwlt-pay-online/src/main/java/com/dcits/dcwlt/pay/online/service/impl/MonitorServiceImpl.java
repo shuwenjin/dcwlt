@@ -19,14 +19,6 @@ public class MonitorServiceImpl implements IMonitorService {
     @Autowired
     private ReconsummaryChkMapper reconsummaryChkMapper;
 
-    @Autowired
-    private MonitorMapper monitorMapper;
-
-
-    @Override
-    public List<MonitorDO> queryMonitorList(MonitorDO monitorDO) {
-        return monitorMapper.selectExMonitorInfo(monitorDO);
-    }
 
     @Override
     public int insertMonitorData(MonitorDO monitorDO) {

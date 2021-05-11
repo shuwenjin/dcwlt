@@ -10,13 +10,6 @@ import java.util.List;
  */
 public interface IMonitorService {
 
-    /**
-     * 查询监控数据
-     *
-     * @param monitorDO
-     * @return
-     */
-    List<MonitorDO> queryMonitorList(MonitorDO monitorDO);
 
     /**
      * 新增监控数据

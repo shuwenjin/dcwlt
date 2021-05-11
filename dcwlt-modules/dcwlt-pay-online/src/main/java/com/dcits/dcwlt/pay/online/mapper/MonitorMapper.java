@@ -8,12 +8,6 @@ import java.util.List;
 @Mapper
 public interface MonitorMapper {
 
-    /**
-     * 查询异常监控数据
-     * @param monitorDO
-     * @return
-     */
-    List<MonitorDO> selectExMonitorInfo(MonitorDO monitorDO);
 
     /**
      * 新增监控数据
