@@ -7,8 +7,7 @@ import com.dcits.dcwlt.pay.api.domain.dcep.login.LoginInnerReqDTO;
 import com.dcits.dcwlt.pay.api.domain.dcep.login.LoginInnerRspDTO;
 import com.dcits.dcwlt.pay.api.domain.ecny.ECNYReqDTO;
 import com.dcits.dcwlt.pay.api.domain.ecny.ECNYRspDTO;
-import com.dcits.dcwlt.pay.api.domain.ecny.freeFrmt.FreeFrmtRspDTO;
-import com.dcits.dcwlt.pay.online.flow.EcnyTransInTradeFlow;
+import com.dcits.dcwlt.pay.online.flow.DcwltTransInTradeFlow;
 import com.dcits.dcwlt.pay.online.flow.send.Login933STradeFlow;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -27,7 +26,7 @@ public class LoginLogoutController extends BaseController {
     private Logger logger= LoggerFactory.getLogger(this.getClass());
 
     @Autowired
-    private EcnyTransInTradeFlow ecnyTransInTradeFlow;
+    private DcwltTransInTradeFlow ecnyTransInTradeFlow;
 
 
     /**

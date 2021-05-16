@@ -7,7 +7,7 @@ import com.dcits.dcwlt.common.core.web.domain.AjaxResult;
 import com.dcits.dcwlt.pay.api.domain.ecny.ECNYReqDTO;
 import com.dcits.dcwlt.pay.api.domain.ecny.ECNYRspDTO;
 import com.dcits.dcwlt.pay.api.domain.ecny.dspt.DsptChnlReqDTO;
-import com.dcits.dcwlt.pay.online.flow.EcnyTransInTradeFlow;
+import com.dcits.dcwlt.pay.online.flow.DcwltTransInTradeFlow;
 import com.dcits.dcwlt.pay.online.flow.send.Dispute801STradeFlow;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -26,7 +26,7 @@ public class CheckPathController extends BaseController{
     private Logger logger= LoggerFactory.getLogger(this.getClass());
 
     @Autowired
-    private EcnyTransInTradeFlow ecnyTransInTradeFlow;
+    private DcwltTransInTradeFlow ecnyTransInTradeFlow;
 
 
     /**

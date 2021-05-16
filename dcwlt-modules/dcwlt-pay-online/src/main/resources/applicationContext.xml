@@ -3,7 +3,7 @@
 	   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	   xsi:schemaLocation="http://www.springframework.org/schema/beans
 			http://www.springframework.org/schema/beans/spring-beans-4.1.xsd">
-	<bean id="EcnyTradeConfig" class="com.dcits.dcwlt.pay.online.config.EcnyTradeConfig" init-method="init">
+	<bean id="EcnyTradeConfig" class="com.dcits.dcwlt.pay.online.config.DcwltTradeConfig" init-method="init">
 		<property name="mappings">
 			<list>
 				<value>dcep.225.001.01,Convert225RTradeFlow,com.dcits.dcwlt.pay.api.domain.dcep.convert.ConvertReqDTO,Y</value>

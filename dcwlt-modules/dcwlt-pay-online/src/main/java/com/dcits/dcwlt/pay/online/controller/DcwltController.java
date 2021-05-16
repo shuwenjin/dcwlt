@@ -14,7 +14,7 @@ import com.dcits.dcwlt.pay.api.domain.ecny.dspt.DsptChnlRspDTO;
 import com.dcits.dcwlt.pay.api.domain.ecny.freeFrmt.FreeFrmtRspDTO;
 import com.dcits.dcwlt.pay.api.domain.ecny.payconvert.PayConvertChnlReqDTO;
 import com.dcits.dcwlt.pay.api.domain.ecny.payconvert.PayConvertChnlRspDTO;
-import com.dcits.dcwlt.pay.online.flow.EcnyTransInTradeFlow;
+import com.dcits.dcwlt.pay.online.flow.DcwltTransInTradeFlow;
 import com.dcits.dcwlt.pay.online.flow.send.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -34,7 +34,7 @@ import java.util.Objects;
 public class DcwltController {
 
     @Autowired
-    private EcnyTransInTradeFlow ecnyTransInTradeFlow;
+    private DcwltTransInTradeFlow ecnyTransInTradeFlow;
 
     @PostMapping(value = ApiConstant.FREEFRMT_SERVICE_NAME)
     public ECNYRspDTO<FreeFrmtRspDTO> freeFrmts(@RequestBody ECNYReqDTO<EcnyFreeFrmtReqDTO> ecnyFreeFrmtReqDTO) {

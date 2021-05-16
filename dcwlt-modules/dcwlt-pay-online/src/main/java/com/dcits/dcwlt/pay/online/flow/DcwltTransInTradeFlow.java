@@ -22,7 +22,7 @@ import org.springframework.stereotype.Service;
  * Description:对外行内渠道，公共处理
  */
 @Service
-public class EcnyTransInTradeFlow {
+public class DcwltTransInTradeFlow {
 
     private static final Logger logger = LoggerFactory.getLogger(DcepTransInTradeFlow.class);
 

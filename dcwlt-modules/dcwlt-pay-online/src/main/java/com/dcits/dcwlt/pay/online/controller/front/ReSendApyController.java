@@ -2,25 +2,19 @@ package com.dcits.dcwlt.pay.online.controller.front;
 
 import com.dcits.dcwlt.common.core.web.controller.BaseController;
 import com.dcits.dcwlt.common.core.web.domain.AjaxResult;
-import com.dcits.dcwlt.common.core.web.page.TableDataInfo;
 import com.dcits.dcwlt.common.log.annotation.Log;
 import com.dcits.dcwlt.common.log.enums.BusinessType;
-import com.dcits.dcwlt.common.pay.constant.Constant;
 import com.dcits.dcwlt.common.pay.enums.MsgTpEnum;
 import com.dcits.dcwlt.common.security.annotation.PreAuthorize;
-import com.dcits.dcwlt.pay.api.domain.Head;
 import com.dcits.dcwlt.pay.api.domain.dcep.resendapply.ReSendApyReqDTO;
 import com.dcits.dcwlt.pay.api.domain.dcep.resendapply.ReSendApyRspDTO;
 import com.dcits.dcwlt.pay.api.domain.ecny.ECNYReqDTO;
-import com.dcits.dcwlt.pay.api.domain.ecny.ECNYReqHead;
 import com.dcits.dcwlt.pay.api.domain.ecny.ECNYRspDTO;
-import com.dcits.dcwlt.pay.api.model.PayTransDtlNonfDO;
-import com.dcits.dcwlt.pay.online.flow.EcnyTransInTradeFlow;
+import com.dcits.dcwlt.pay.online.flow.DcwltTransInTradeFlow;
 import com.dcits.dcwlt.pay.online.flow.send.ReSendApy920STradeFlow;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -37,7 +31,7 @@ public class ReSendApyController extends BaseController {
 //    private IPayPayTransdtlNonfService payPayTransdtlNonfService;
 
     @Autowired
-    private EcnyTransInTradeFlow ecnyTransInTradeFlow;
+    private DcwltTransInTradeFlow ecnyTransInTradeFlow;
 
     /**
      * 查询交易重发申请列表

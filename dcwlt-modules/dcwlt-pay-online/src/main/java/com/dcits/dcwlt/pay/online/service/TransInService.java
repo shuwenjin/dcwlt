@@ -8,7 +8,7 @@ import com.dcits.dcwlt.pay.api.domain.dcep.DCEPHeader;
 import com.dcits.dcwlt.pay.api.domain.dcep.DCEPReqBody;
 import com.dcits.dcwlt.pay.api.domain.dcep.DCEPReqDTO;
 import com.dcits.dcwlt.pay.api.model.IdempotentDO;
-import com.dcits.dcwlt.pay.online.config.EcnyTradeConfig;
+import com.dcits.dcwlt.pay.online.config.DcwltTradeConfig;
 import com.dcits.dcwlt.pay.api.mq.event.exception.EcnyTransError;
 import com.dcits.dcwlt.pay.api.mq.event.exception.EcnyTransException;
 import org.slf4j.Logger;
@@ -28,7 +28,7 @@ public class TransInService {
     private static final Logger logger = LoggerFactory.getLogger(TransInService.class);
 
     @Autowired(required = false)
-    private EcnyTradeConfig ecnyTradeConfig;
+    private DcwltTradeConfig ecnyTradeConfig;
 
     @Autowired
     IIdempotentRepository idempotentRepository;
@@ -95,7 +95,7 @@ public class TransInService {
      */
     private boolean allowIdempotent(String msgTp) {
         try {
-            String idempotentFlag = ecnyTradeConfig.getTradeMappings().get(msgTp).get(EcnyTradeConfig.TRADE_IDEMPOTENT_CODE);
+            String idempotentFlag = ecnyTradeConfig.getTradeMappings().get(msgTp).get(DcwltTradeConfig.TRADE_IDEMPOTENT_CODE);
             if (idempotentFlag.equals("N")) {
                 return false;
             }
@@ -114,7 +114,7 @@ public class TransInService {
     private Class<?> getClassName(String msgTp) {
         Class<?> clazz = null;
         try {
-            clazz = Class.forName(ecnyTradeConfig.getTradeMappings().get(msgTp).get(EcnyTradeConfig.TRADE_CLASS_NAME));
+            clazz = Class.forName(ecnyTradeConfig.getTradeMappings().get(msgTp).get(DcwltTradeConfig.TRADE_CLASS_NAME));
         } catch (Exception e) {
             logger.error("未配置交易请求报文类名，请检查");
             throw new EcnyTransException(EcnyTransError.PARAM_NOT_INIT_ERROR);
@@ -130,7 +130,7 @@ public class TransInService {
      */
     public String getTradeProcessor(String msgTp) {
         try {
-            return ecnyTradeConfig.getTradeMappings().get(msgTp).get(EcnyTradeConfig.TRADE_PROCESSOR_NAME);
+            return ecnyTradeConfig.getTradeMappings().get(msgTp).get(DcwltTradeConfig.TRADE_PROCESSOR_NAME);
         } catch (Exception e) {
             logger.error("未配置交易处理器，请检查");
             throw new EcnyTransException(EcnyTransError.PARAM_NOT_INIT_ERROR);
