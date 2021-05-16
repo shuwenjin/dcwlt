@@ -6,6 +6,7 @@ import org.redisson.config.Config;
 import org.redisson.spring.data.connection.RedissonConnectionFactory;
 import org.redisson.spring.starter.RedissonProperties;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.data.redis.RedisProperties;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -28,14 +29,16 @@ import java.io.IOException;
  * 
  * @author ruoyi
  */
-//@Configuration
-//@EnableCaching
+@Configuration
+@EnableCaching
 public class RedisConfig extends CachingConfigurerSupport
 {
+    @Value("${redisson.config:#{null}}")
+    private String redissonConfig;
     @Bean
     @ConditionalOnMissingBean(RedissonClient.class)
     public RedissonClient redisson() throws IOException {
-        Config config = Config.fromYAML(new ClassPathResource("redisson.yml").getInputStream());
+        Config config = Config.fromYAML(redissonConfig);
         RedissonClient redisson = Redisson.create(config);
         return redisson;
     }

@@ -23,9 +23,7 @@ spring:
         # 共享配置
         shared-configs:
           - application-${spring.profiles.active}.${spring.cloud.nacos.config.file-extension}
-
 dcepgw:
   server-addr: http://localhost:8008/dcepgw/
 core:
   server: http://localhost:9205/core/sendBack/
-
