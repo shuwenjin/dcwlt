@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dcits.dcwlt.pay.online.mapper.SettleCheckResultMapper">
+    <!-- 查询通道对账结果表 -->
+    <select id ="selectCheckResult" resultType="com.dcits.dcwlt.pay.api.model.CheckResultDO">
+        SELECT t.PAYDATE     payDate,
+        t.PAYSERNO    paySerno,
+        t.PAYTIME     payTime,
+        t.COREACCTDATE  coreAcctDate,
+        t.MSGTYPE     msgType,
+        t.MSGID      msgId,
+        t.BATCHID     batchId,
+        t.PAYFLAG     payFlag,
+        t.INSTGDRCTPTY  instgDrctPty,
+        t.DBITPARTY    dbitParty,
+        t.PAYERWALLETID  payerWalletId,
+        t.PAYERACCOUNT  payerAccount,
+        t.CRDTPARTY    crdtParty,
+        t.PAYEENAME    payeeName,
+        t.PAYEEACCOUNT  payeeAccount,
+        t.PAYEEWALLETID  payeeWalletId,
+        t.CCY       ccy,
+        t.AMOUNT     amount,
+        t.OGNLMSGTYPE   ognlMsgType,
+        t.OGNLMSGID    ognlMsgId,
+        t.TRADESTATUS   tradeStatus,
+        t.CORESTATUS   coreStatus,
+        t.PATHSTATUS   pathStatus,
+        t.CHECKSTATUS   checkStatus,
+        t.PROCSTATUS   procStatus,
+        t.LASTUPDATE   lastUpDate,
+        t.LASTUPTIME   lastUpTime
+        FROM PAY_BATCH_CHECKRESULT t
+        where t.PAYDATE = #{payDate}
+          AND t.PAYSERNO = #{paySerno}
+    </select>
+
+    <update id ="updateCheckResult">
+        UPDATE PAY_BATCH_CHECKRESULT
+        SET
+        <trim prefix="" suffix="" suffixOverrides=",">
+            <if test="lastUpDate != null and lastUpDate != ''">LASTUPDATE = #{lastUpDate},</if>
+            <if test="lastUpTime != null and lastUpTime != ''">LASTUPTIME = #{lastUpTime},</if>
+            <if test="procStatus != null and procStatus != ''">PROCSTATUS = #{procStatus},</if>
+            <if test="checkStatus != null and checkStatus != ''">CHECKSTATUS = #{checkStatus}</if>
+        </trim>
+        WHERE MSGID = #{msgId, jdbcType=CHAR}
+    </update>
+
+    <select id="selectCheckResultCountByDay" resultType="com.dcits.dcwlt.pay.api.model.CheckResultDO">
+        select count(1) from PAY_BATCH_CHECKRESULT where paydate = #{paydate} and CHECKSTATUS != 'SAME'
+    </select>
+</mapper>

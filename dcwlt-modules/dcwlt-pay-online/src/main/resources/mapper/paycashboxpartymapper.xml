@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dcits.dcwlt.pay.online.mapper.PayCashboxPartyMapper">
+
+    <!-- 新增报文登记信息 -->
+    <insert id="insert" parameterType="com.dcits.dcwlt.pay.api.model.PayCashboxPartyDO">
+            INSERT INTO pay_cert_info(partyname,
+                                      partyid,
+                                      cashboxid,
+                                      lastupdate,
+                                      lastuptime,
+                                      earlywarningamount,
+                                      automaticstorage,
+                                      automaticstuts
+            )
+            VALUE (
+                #{partyname},
+                #{partyid},
+                #{cashboxid},
+                #{lastUpDate},
+                #{lastUpTime},
+                #{earlywarningamount},
+                #{automaticstorage},
+                #{automaticstuts}
+            )
+    </insert>
+
+    <update id="update" parameterType="com.dcits.dcwlt.pay.api.model.PayCashboxPartyDO">
+        UPDATE pay_comm_cashbox_party
+        SET
+        <if test="partyname != null">
+            partyname = #{partyname},
+        </if>
+        <if test="partyid != null">
+            partyid = #{partyid},
+        </if>
+        <if test="cashboxid != null">
+            cashboxid = #{cashboxid},
+        </if>
+        <if test="earlywarningamount != null">
+            earlywarningamount = #{earlywarningamount},
+        </if>
+        <if test="automaticstorage != null">
+            automaticstorage = #{automaticstorage},
+        </if>
+        <if test="automaticstuts != null">
+            automaticstuts = #{automaticstuts},
+        </if>
+        LASTUPDATE = #{lastUpDate},
+        LASTUPTIME = #{lastUpTime}
+        <where>
+            1=1
+            <if test="id != null">
+                and ID = #{id}
+            </if>
+        </where>
+    </update>
+
+    <select id="query" resultType="com.dcits.dcwlt.pay.api.model.PayCashboxPartyDO"
+            parameterType="com.dcits.dcwlt.pay.api.model.PayCashboxPartyDO">
+        select id,
+        partyname,
+        partyid,
+        cashboxid,
+        lastUpDate,
+        lastUpTime,
+        earlywarningamount,
+        automaticstorage,
+        automaticstuts
+        from pay_comm_cashbox_party P
+        <where>
+            1=1
+            <if test="id != null">
+                and id = #{id}
+            </if>
+            <if test="partyid != null">
+                and partyid = #{partyid}
+            </if>
+        </where>
+    </select>
+</mapper>

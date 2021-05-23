@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dcits.dcwlt.pay.online.mapper.PayCertInfoMapper">
+
+    <!-- 新增报文登记信息 -->
+    <insert id="insert" parameterType="com.dcits.dcwlt.pay.api.model.PayCertInfoDO">
+            INSERT INTO pay_cert_info(CERTTYPE,
+                                      CERTINFO,
+                                      PUBLICKEY,
+                                      LASTUPDATE,
+                                      LASTUPTIME,
+                                      COMMENT,
+                                      SN,
+                                      DN
+            )
+            VALUE (
+                #{certtype},
+                #{certinfo},
+                #{publickey},
+                #{lastUpDate},
+                #{lastUpTime},
+                #{comment},
+                #{sn},
+                #{dn}
+            )
+    </insert>
+
+    <update id="update" parameterType="com.dcits.dcwlt.pay.api.model.PayCertInfoDO">
+        UPDATE pay_cert_info
+        SET
+        <if test="certinfo != null">
+            CERTINFO = #{certinfo},
+        </if>
+        <if test="publickey != null">
+            PUBLICKEY = #{publickey},
+        </if>
+        <if test="comment != null">
+            COMMENT = #{comment},
+        </if>
+        <if test="status != null">
+            STATUS = #{status},
+        </if>
+        LASTUPDATE = #{lastUpDate},
+        LASTUPTIME = #{lastUpTime}
+        <where>
+            1=1
+            <if test="certid != null">
+                and CERTID = #{certid}
+            </if>
+            <if test="certtype != null">
+                and CERTTYPE = #{certtype}
+            </if>
+            <if test="sn != null">
+                and SN = #{sn}
+            </if>
+            <if test="dn != null">
+                and DN = #{dn}
+            </if>
+        </where>
+    </update>
+
+    <select id="query" resultType="com.dcits.dcwlt.pay.api.model.PayCertInfoDO"
+            parameterType="com.dcits.dcwlt.pay.api.model.PayCertInfoDO">
+        select CERTID certid,
+        CERTTYPE certtype,
+        CERTINFO certinfo,
+        PUBLICKEY publickey,
+        LASTUPDATE lastUpDate,
+        LASTUPTIME lastUpTime,
+        COMMENT comment,
+        DN dn,
+        SN sn
+        from pay_cert_info P
+        <where>
+            1=1
+            <if test="certid != null">
+                and P.CERTID = #{certid}
+            </if>
+            <if test="certtype != null">
+                and P.CERTTYPE = #{certtype}
+            </if>
+            <if test="sn != null">
+                and P.SN = #{sn}
+            </if>
+            <if test="dn != null">
+                and P.DN = #{dn}
+            </if>
+        </where>
+    </select>
+</mapper>

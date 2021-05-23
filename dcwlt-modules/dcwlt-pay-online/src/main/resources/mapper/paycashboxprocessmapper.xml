@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dcits.dcwlt.pay.online.mapper.PayCashboxProcessMapper">
+
+    <!-- 新增报文登记信息 -->
+    <insert id="insert" parameterType="com.dcits.dcwlt.pay.api.model.PayCashboxProcessDO">
+            INSERT INTO pay_comm_cashbox_process(
+                                      oprTp,
+                                      cdtDbtInd,
+                                      amtCcy,
+                                      amtValue,
+                                      coopBankInstnId,
+                                      coopBankWltId,
+                                      cshBoxInstnId,
+                                      cert,
+                                      msgId,
+                                      creDtTmS,
+                                      creDtTmR,
+                                      prcSts,
+                                      prcCd,
+                                      rspsnSts,
+                                      rjctCd,
+                                      rjctInf,
+                                      clrReptFlg,
+                                      clearAmountCcy,
+                                      clearAmountValue,
+                                      coreSts,
+                                      corepaySerno,
+                                      coreBatchId,
+                                      corePaydate
+            )
+            VALUE (
+                #{oprTp},
+                #{cdtDbtInd},
+                #{amtCcy},
+                #{amtValue},
+                #{coopBankInstnId},
+                #{coopBankWltId},
+                #{cshBoxInstnId},
+                #{cert},
+                #{msgId},
+                #{creDtTmS},
+                #{creDtTmR},
+                #{prcSts},
+                #{prcCd},
+                #{rspsnSts},
+                #{rjctCd},
+                #{rjctInf},
+                #{clrReptFlg},
+                #{clearAmountCcy},
+                #{clearAmountValue},
+                #{coreSts},
+                #{corepaySerno},
+                #{coreBatchId},
+                #{corePaydate}
+            )
+    </insert>
+
+    <update id="update" parameterType="com.dcits.dcwlt.pay.api.model.PayCashboxProcessDO">
+        UPDATE pay_comm_cashbox_process
+        SET
+        <if test="oprTp != null">
+            oprTp=#{oprTp},
+        </if>
+        <if test="cdtDbtInd != null">
+            cdtDbtInd=#{cdtDbtInd},
+        </if>
+        <if test="amtCcy != null">
+            amtCcy=#{amtCcy},
+        </if>
+        <if test="amtValue != null">
+            amtValue=#{amtValue},
+        </if>
+        <if test="coopBankInstnId != null">
+            coopBankInstnId=#{coopBankInstnId},
+        </if>
+        <if test="coopBankWltId != null">
+            coopBankWltId=#{coopBankWltId},
+        </if>
+        <if test="cshBoxInstnId != null">
+            cshBoxInstnId=#{cshBoxInstnId},
+        </if>
+        <if test="cert != null">
+            cert=#{cert},
+        </if>
+        <if test="creDtTmS != null">
+            creDtTmS=#{creDtTmS},
+        </if>
+        <if test="creDtTmR != null">
+            creDtTmR=#{creDtTmR},
+        </if>
+        <if test="prcSts != null">
+            prcSts=#{prcSts},
+        </if>
+        <if test="prcCd != null">
+            prcCd=#{prcCd},
+        </if>
+        <if test="rspsnSts != null">
+            rspsnSts=#{rspsnSts},
+        </if>
+        <if test="rjctCd != null">
+            rjctCd=#{rjctCd},
+        </if>
+        <if test="rjctInf != null">
+            rjctInf=#{rjctInf},
+        </if>
+        <if test="clrReptFlg != null">
+            clrReptFlg=#{clrReptFlg},
+        </if>
+        <if test="clearAmountCcy != null">
+            clearAmountCcy=#{clearAmountCcy},
+        </if>
+        <if test="clearAmountValue != null">
+            clearAmountValue=#{clearAmountValue},
+        </if>
+        <if test="coreSts != null">
+            coreSts=#{coreSts},
+        </if>
+        <if test="corepaySerno != null">
+            corepaySerno=#{corepaySerno},
+        </if>
+        <if test="coreBatchId != null">
+            coreBatchId=#{coreBatchId},
+        </if>
+        <if test="corePaydate != null">
+            corePaydate=#{corePaydate},
+        </if>
+        <if test="msgId != null">
+            msgId=#{msgId}
+        </if>
+        <where>
+            1=1
+            <if test="id != null">
+                and id = #{id}
+            </if>
+            <if test="msgId != null">
+                and msgId = #{msgId}
+            </if>
+        </where>
+    </update>
+
+    <select id="query" resultType="com.dcits.dcwlt.pay.api.model.PayCashboxProcessDO"
+            parameterType="com.dcits.dcwlt.pay.api.model.PayCashboxProcessDO">
+        select id,
+        oprTp,
+        cdtDbtInd,
+        amtCcy,
+        amtValue,
+        coopBankInstnId,
+        coopBankWltId,
+        cshBoxInstnId,
+        cert,
+        msgId,
+        creDtTmS,
+        creDtTmR,
+        prcSts,
+        prcCd,
+        rspsnSts,
+        rjctCd,
+        rjctInf,
+        clrReptFlg,
+        clearAmountCcy,
+        clearAmountValue,
+        coreSts,
+        corepaySerno,
+        coreBatchId,
+        corePaydate
+        from pay_comm_cashbox_process P
+        <where>
+            1=1
+            <if test="id != null">
+                and id = #{id}
+            </if>
+            <if test="msgId != null">
+                and msgId = #{msgId}
+            </if>
+        </where>
+    </select>
+</mapper>

@@ -1,6 +1,7 @@
 package com.dcits.dcwlt.pay.online.controller;
 
 import com.dcits.dcwlt.common.pay.constant.ApiConstant;
+import com.dcits.dcwlt.common.pay.enums.OperTypeEnum;
 import com.dcits.dcwlt.pay.api.domain.Head;
 import com.dcits.dcwlt.pay.api.domain.dcep.freefrmt.EcnyFreeFrmtReqDTO;
 import com.dcits.dcwlt.pay.api.domain.dcep.login.LoginInnerReqDTO;
@@ -15,6 +16,9 @@ import com.dcits.dcwlt.pay.api.domain.ecny.freeFrmt.FreeFrmtRspDTO;
 import com.dcits.dcwlt.pay.api.domain.ecny.payconvert.PayConvertChnlReqDTO;
 import com.dcits.dcwlt.pay.api.domain.ecny.payconvert.PayConvertChnlRspDTO;
 import com.dcits.dcwlt.pay.online.flow.DcwltTransInTradeFlow;
+import com.dcits.dcwlt.pay.online.flow.DisputeTradeFlow;
+import com.dcits.dcwlt.pay.online.flow.builder.EcnyTradeContext;
+import com.dcits.dcwlt.pay.online.flow.builder.TradeFlowRuner;
 import com.dcits.dcwlt.pay.online.flow.send.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -24,6 +28,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Objects;
 
 /**
@@ -35,6 +41,9 @@ public class DcwltController {
 
     @Autowired
     private DcwltTransInTradeFlow ecnyTransInTradeFlow;
+
+    @Autowired
+    private TradeFlowRuner tradeFlowRuner;
 
     @PostMapping(value = ApiConstant.FREEFRMT_SERVICE_NAME)
     public ECNYRspDTO<FreeFrmtRspDTO> freeFrmts(@RequestBody ECNYReqDTO<EcnyFreeFrmtReqDTO> ecnyFreeFrmtReqDTO) {
@@ -74,12 +83,29 @@ public class DcwltController {
     public ECNYRspDTO<DsptChnlRspDTO> changeAccount(@RequestBody ECNYReqDTO<DsptChnlReqDTO> dsptChnlReqDTOECNYReqDTO) {
 
        //DisputeReasonCode=="OT04"
-        String disputeReasonCode = dsptChnlReqDTOECNYReqDTO.getBody().getDisputeReasonCode();
-        if (Objects.nonNull(disputeReasonCode)&&disputeReasonCode.equals("OT04")){
-            return ecnyTransInTradeFlow.execute(dsptChnlReqDTOECNYReqDTO, Dispute801STradeFlow.DSPT_TRADE_FLOW);
-        }else{
-            return   success();
-        }
+//        String disputeReasonCode = dsptChnlReqDTOECNYReqDTO.getBody().getDisputeReasonCode();
+//        if (Objects.nonNull(disputeReasonCode)&&disputeReasonCode.equals("OT04")){
+//            return ecnyTransInTradeFlow.execute(dsptChnlReqDTOECNYReqDTO, Dispute801STradeFlow.DSPT_TRADE_FLOW);
+//        }else{
+//            return   success();
+//        }
+        // 根据差错类型执行分支
+        ECNYRspDTO<DsptChnlRspDTO> execute = tradeFlowRuner.execute(initDisputeMap().get(dsptChnlReqDTOECNYReqDTO.getBody().getOperType()),
+                EcnyTradeContext.getInstance(dsptChnlReqDTOECNYReqDTO.getBody()));
+        return execute;
+    }
+
+    private Map<String,String> initDisputeMap(){
+        Map<String,String> disputeMap = new HashMap<>();
+        // 单笔核心回查
+        disputeMap.put(OperTypeEnum.OT01.getCode(), DisputeTradeFlow.CORE_QRY_FLOW);
+        // 单笔核心冲正
+        disputeMap.put(OperTypeEnum.OT02.getCode(),DisputeTradeFlow.CORE_REVERSED_FLOW);
+        // 单笔核心补入帐
+        disputeMap.put(OperTypeEnum.OT03.getCode(),DisputeTradeFlow.CORE_RECREDIT_FLOW);
+        // 单笔差错贷记调整
+        disputeMap.put(OperTypeEnum.OT04.getCode(),DisputeTradeFlow.DISPUTE_BATCH_TRADE_FLOW);
+        return disputeMap;
     }
 
 

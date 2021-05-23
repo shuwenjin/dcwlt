@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dcits.dcwlt.pay.online.mapper.PayCashboxBanlanceMapper">
+
+    <!-- 新增报文登记信息 -->
+    <insert id="insert" parameterType="com.dcits.dcwlt.pay.api.model.PayCashboxBanlanceDO">
+            INSERT INTO pay_comm_cashbox_process(
+                                      chckngDt,
+                                      coopBankInstnId,
+                                      coopBankWltId,
+                                      cshBoxInstnId,
+                                      initlAmtCcy,
+                                      initlAmtValue,
+                                      cdtDbtInd,
+                                      dbtCntAmtCcy,
+                                      dbtCntAmtValue,
+                                      cdtCntAmtCcy,
+                                      cdtCntAmtValue,
+                                      fnlAmtCcy,
+                                      fnlAmtValue
+            )
+            VALUE (
+                #{chckngDt},
+                #{coopBankInstnId},
+                #{coopBankWltId},
+                #{cshBoxInstnId},
+                #{initlAmtCcy},
+                #{initlAmtValue},
+                #{cdtDbtInd},
+                #{dbtCntAmtCcy},
+                #{dbtCntAmtValue},
+                #{cdtCntAmtCcy},
+                #{cdtCntAmtValue},
+                #{fnlAmtCcy},
+                #{fnlAmtValue}
+            )
+    </insert>
+
+    <update id="update" parameterType="com.dcits.dcwlt.pay.api.model.PayCashboxBanlanceDO">
+        UPDATE pay_comm_cashbox_banlance
+        SET
+        <if test="id != null">
+            id=#{id},
+        </if>
+        <if test="chckngDt != null">
+            chckngDt=#{chckngDt},
+        </if>
+        <if test="coopBankInstnI != null">
+            coopBankInstnI=#{coopBankInstnI},
+        </if>
+        <if test="coopBankWltId != null">
+            coopBankWltId=#{coopBankWltId},
+        </if>
+        <if test="cshBoxInstnId != null">
+            cshBoxInstnId=#{cshBoxInstnId},
+        </if>
+        <if test="initlAmtCcy != null">
+            initlAmtCcy=#{initlAmtCcy},
+        </if>
+        <if test="initlAmtValue != null">
+            initlAmtValue=#{initlAmtValue},
+        </if>
+        <if test="cdtDbtInd != null">
+            cdtDbtInd=#{cdtDbtInd},
+        </if>
+        <if test="dbtCntAmtCcy != null">
+            dbtCntAmtCcy=#{dbtCntAmtCcy},
+        </if>
+        <if test="dbtCntAmtValue != null">
+            dbtCntAmtValue=#{dbtCntAmtValue},
+        </if>
+        <if test="cdtCntAmtCcy != null">
+            cdtCntAmtCcy=#{cdtCntAmtCcy},
+        </if>
+        <if test="cdtCntAmtValue != null">
+            cdtCntAmtValue=#{cdtCntAmtValue},
+        </if>
+        <if test="fnlAmtCcy != null">
+            fnlAmtCcy=#{fnlAmtCcy},
+        </if>
+        <if test="fnlAmtValue != null">
+            fnlAmtValue=#{fnlAmtValue},
+        </if>
+        <where>
+            1=1
+            <if test="id != null">
+                and id = #{id}
+            </if>
+        </where>
+    </update>
+
+    <select id="query" resultType="com.dcits.dcwlt.pay.api.model.PayCashboxBanlanceDO"
+            parameterType="com.dcits.dcwlt.pay.api.model.PayCashboxBanlanceDO">
+        select id,
+        chckngDt,
+        coopBankInstnId,
+        coopBankWltId,
+        cshBoxInstnId,
+        initlAmtCcy,
+        initlAmtValue,
+        cdtDbtInd,
+        dbtCntAmtCcy,
+        dbtCntAmtValue,
+        cdtCntAmtCcy,
+        cdtCntAmtValue,
+        fnlAmtCcy,
+        fnlAmtValue
+        from pay_comm_cashbox_banlance
+        <where>
+            1=1
+            <if test="id != null">
+                and id = #{id}
+            </if>
+        </where>
+    </select>
+</mapper>

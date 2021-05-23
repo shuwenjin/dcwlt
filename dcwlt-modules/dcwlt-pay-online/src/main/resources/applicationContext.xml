@@ -19,6 +19,7 @@
 				<value>dcep.433.001.01,BankAttAcctManage433RTradeFlow,com.dcits.dcwlt.pay.api.domain.dcep.bankattachedmanagement.BankAttAcctReqDTO,Y</value>
 				<value>dcep.711.001.01,ReconSummaryChk711TradeFlow,com.dcits.dcwlt.pay.api.domain.dcep.summarychk.ReconSummaryChkDTO,N</value>
 				<value>dcep.933.001.01,Login933STradeFlow,com.dcits.dcwlt.pay.api.domain.dcep.login.LoginReqDTO,N</value>
+				<value>dcep.123.001.01,Cashbox123RTradeFlow,com.dcits.dcwlt.pay.api.domain.dcep.cashbox.Cashbox121ReqDTO,N</value>
 			</list>
 		</property>
 	</bean>
