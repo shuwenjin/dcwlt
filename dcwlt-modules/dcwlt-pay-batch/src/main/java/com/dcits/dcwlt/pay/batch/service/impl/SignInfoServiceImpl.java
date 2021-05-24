@@ -7,11 +7,11 @@
  *     rtp - initial implementation
  *********************************************/
 
-package com.dcits.dcwlt.pay.online.service.impl;
+package com.dcits.dcwlt.pay.batch.service.impl;
 
 import com.dcits.dcwlt.pay.api.model.SignInfoDO;
-import com.dcits.dcwlt.pay.online.mapper.SignInfoMapper;
-import com.dcits.dcwlt.pay.online.service.ISignInfoService;
+import com.dcits.dcwlt.pay.batch.mapper.SignInfoMapper;
+import com.dcits.dcwlt.pay.batch.service.ISignInfoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 

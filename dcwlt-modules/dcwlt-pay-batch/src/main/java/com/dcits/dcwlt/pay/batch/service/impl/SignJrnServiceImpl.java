@@ -1,9 +1,9 @@
-package com.dcits.dcwlt.pay.online.service.impl;
+package com.dcits.dcwlt.pay.batch.service.impl;
 
 
 import com.dcits.dcwlt.pay.api.model.SignJrnDO;
-import com.dcits.dcwlt.pay.online.mapper.SignJrnMapper;
-import com.dcits.dcwlt.pay.online.service.ISignJrnService;
+import com.dcits.dcwlt.pay.batch.mapper.SignJrnMapper;
+import com.dcits.dcwlt.pay.batch.service.ISignJrnService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
