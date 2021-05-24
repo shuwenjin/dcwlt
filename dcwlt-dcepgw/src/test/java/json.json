@@ -10,6 +10,7 @@
     "OrigSendTime": "094508",
     "StructType": "XML",
     "MesgType": "caps.227.001.01",
+    "MesgType": "dcep.711.001.01",
     "MesgID": "202011171021221000000000001120010001",
     "MesgRefID": "202011171021221000000000001120010001",
     "MesgPriority": "3",
