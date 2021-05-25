@@ -1,7 +1,11 @@
 package com.dcits.dcwlt.pay.api.domain.ecny.freeFrmt;
 
 
+import com.alibaba.fastjson.annotation.JSONField;
 import com.dcits.dcwlt.pay.api.domain.ecny.ECNYRspBody;
+import org.hibernate.validator.constraints.Length;
+
+import javax.validation.Valid;
 
 /**
  * @author
@@ -10,23 +14,23 @@ import com.dcits.dcwlt.pay.api.domain.ecny.ECNYRspBody;
  * Description:自由格式报文服务化接口响应
  */
 public class FreeFrmtRspDTO extends ECNYRspBody {
-    private String processCode;
+    @Length(max = 64)
+    @Valid
+    private String procResult;          //处理结果
 
-    public FreeFrmtRspDTO() {
+    @JSONField(name = "ProcResult")
+    public String getProcResult() {
+        return procResult;
     }
 
-    public String getProcessCode() {
-        return processCode;
-    }
-
-    public void setProcessCode(String processCode) {
-        this.processCode = processCode;
+    public void setProcResult(String procResult) {
+        this.procResult = procResult;
     }
 
     @Override
     public String toString() {
         return "FreeFrmtRspDTO{" +
-                "processCode='" + processCode + '\'' +
+                "procResult='" + procResult + '\'' +
                 '}';
     }
 }

@@ -1,7 +1,11 @@
 package com.dcits.dcwlt.pay.api.domain.ecny.freeFrmt;
 
 
+import com.alibaba.fastjson.annotation.JSONField;
 import com.dcits.dcwlt.pay.api.domain.ecny.ECNYReqBody;
+import org.hibernate.validator.constraints.Length;
+
+import javax.validation.Valid;
 
 /**
  * @author
@@ -10,34 +14,50 @@ import com.dcits.dcwlt.pay.api.domain.ecny.ECNYReqBody;
  * Description:自由格式报文服务化接口请求
  */
 public class FreeFrmtReqDTO extends ECNYReqBody {
-    private String receiver;        //接收方机构
-    private String msgCnt;          //自由格式信息
+    @Length(max = 14)
+    @Valid
+    private String instdDrctPty;            //接收机构
 
+    @Length(max = 1024)
+    @Valid
+    private String msgContext;              //消息内容
 
-    public String getReceiver() {
-        return receiver;
+    @Length(max = 16)
+    private String tlrNO;                   //柜员号
+
+    @JSONField(name = "InstdDrctPty")
+    public String getInstdDrctPty() {
+        return instdDrctPty;
     }
 
-    public void setReceiver(String receiver) {
-        this.receiver = receiver;
+    public void setInstdDrctPty(String instdDrctPty) {
+        this.instdDrctPty = instdDrctPty;
     }
 
-    public FreeFrmtReqDTO() {
+    @JSONField(name = "MsgContext")
+    public String getMsgContext() {
+        return msgContext;
     }
 
-    public String getMsgCnt() {
-        return msgCnt;
+    public void setMsgContext(String msgContext) {
+        this.msgContext = msgContext;
     }
 
-    public void setMsgCnt(String msgCnt) {
-        this.msgCnt = msgCnt;
+    @JSONField(name = "TlrNO")
+    public String getTlrNO() {
+        return tlrNO;
+    }
+
+    public void setTlrNO(String tlrNO) {
+        this.tlrNO = tlrNO;
     }
 
     @Override
     public String toString() {
         return "FreeFrmtReqDTO{" +
-                "receiver='" + receiver + '\'' +
-                "msgCnt='" + msgCnt + '\'' +
+                "instdDrctPty='" + instdDrctPty + '\'' +
+                ", msgContext='" + msgContext + '\'' +
+                ", tlrNO='" + tlrNO + '\'' +
                 '}';
     }
 }

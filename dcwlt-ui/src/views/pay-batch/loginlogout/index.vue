@@ -68,10 +68,10 @@
           >删除</el-button>
         </el-col> -->
 
-        <el-button type="warning" plain icon="el-icon-edit" size="mini" @click="handleLogin"
+        <el-button type="primary" plain icon="el-icon-open" size="mini" @click="handleLogin"
           v-hasPermi="['batch:nonf:loginin']">登入</el-button>
 
-        <el-button type="warning" plain icon="el-icon-edit" size="mini" @click="handleLoginout"
+        <el-button type="danger" plain icon="el-icon-turn-off" size="mini" @click="handleLoginout"
           v-hasPermi="['batch:nonf:loginout']">登出</el-button>
 
 

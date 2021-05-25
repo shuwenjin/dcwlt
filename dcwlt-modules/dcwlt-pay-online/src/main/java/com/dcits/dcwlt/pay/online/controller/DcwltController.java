@@ -3,7 +3,6 @@ package com.dcits.dcwlt.pay.online.controller;
 import com.dcits.dcwlt.common.pay.constant.ApiConstant;
 import com.dcits.dcwlt.common.pay.enums.OperTypeEnum;
 import com.dcits.dcwlt.pay.api.domain.Head;
-import com.dcits.dcwlt.pay.api.domain.dcep.freefrmt.EcnyFreeFrmtReqDTO;
 import com.dcits.dcwlt.pay.api.domain.dcep.login.LoginInnerReqDTO;
 import com.dcits.dcwlt.pay.api.domain.dcep.resendapply.ReSendApyReqDTO;
 import com.dcits.dcwlt.pay.api.domain.dcep.resendapply.ReSendApyRspDTO;
@@ -12,6 +11,7 @@ import com.dcits.dcwlt.pay.api.domain.ecny.ECNYRspDTO;
 import com.dcits.dcwlt.pay.api.domain.ecny.ECNYRspHead;
 import com.dcits.dcwlt.pay.api.domain.ecny.dspt.DsptChnlReqDTO;
 import com.dcits.dcwlt.pay.api.domain.ecny.dspt.DsptChnlRspDTO;
+import com.dcits.dcwlt.pay.api.domain.ecny.freeFrmt.FreeFrmtReqDTO;
 import com.dcits.dcwlt.pay.api.domain.ecny.freeFrmt.FreeFrmtRspDTO;
 import com.dcits.dcwlt.pay.api.domain.ecny.payconvert.PayConvertChnlReqDTO;
 import com.dcits.dcwlt.pay.api.domain.ecny.payconvert.PayConvertChnlRspDTO;
@@ -30,7 +30,6 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Objects;
 
 /**
  * 供行内系统调用入口
@@ -46,8 +45,8 @@ public class DcwltController {
     private TradeFlowRuner tradeFlowRuner;
 
     @PostMapping(value = ApiConstant.FREEFRMT_SERVICE_NAME)
-    public ECNYRspDTO<FreeFrmtRspDTO> freeFrmts(@RequestBody ECNYReqDTO<EcnyFreeFrmtReqDTO> ecnyFreeFrmtReqDTO) {
-        return ecnyTransInTradeFlow.execute(ecnyFreeFrmtReqDTO, FreeFrmt401STradeFlow.FREEFRMT_TRADE_FLOW);
+    public ECNYRspDTO<FreeFrmtRspDTO> freeFrmts(@RequestBody ECNYReqDTO<FreeFrmtReqDTO> freeFrmtReqDTOECNYReqDTO) {
+        return ecnyTransInTradeFlow.execute(freeFrmtReqDTOECNYReqDTO, FreeFrmt401STradeFlow.FREEFRMT_TRADE_FLOW);
     }
 
     @PostMapping(value = ApiConstant.RESENDAPY_SERVICE_NAME)

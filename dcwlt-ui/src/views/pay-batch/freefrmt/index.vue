@@ -80,7 +80,7 @@
       <!--  </el-col>-->
       <el-col :span="1.5">
 
-        <el-button type="warning" plain icon="el-icon-add" size="mini" @click="handleAdd()"
+        <el-button type="primary" plain icon="el-icon-add" size="mini" @click="handleAdd()"
           v-hasPermi="['system:nonf:add']">自由格式添加
         </el-button>
         <el-button type="warning" plain icon="el-icon-download" size="mini" @click="handleExport"

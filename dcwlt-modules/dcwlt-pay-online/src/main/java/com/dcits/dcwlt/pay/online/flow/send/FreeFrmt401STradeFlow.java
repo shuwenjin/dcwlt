@@ -21,19 +21,19 @@ import com.dcits.dcwlt.pay.api.domain.dcep.common.InstdPty;
 import com.dcits.dcwlt.pay.api.domain.dcep.common.InstgPty;
 import com.dcits.dcwlt.pay.api.domain.dcep.fault.Fault;
 import com.dcits.dcwlt.pay.api.domain.dcep.fault.FaultDTO;
-import com.dcits.dcwlt.pay.api.domain.dcep.freefrmt.EcnyFreeFrmtReqDTO;
-import com.dcits.dcwlt.pay.api.domain.dcep.freefrmt.EcnyFreeFrmtRspDTO;
 import com.dcits.dcwlt.pay.api.domain.dcep.freefrmt.FreeFrmt;
 import com.dcits.dcwlt.pay.api.domain.dcep.freefrmt.FreeFrmtDTO;
 import com.dcits.dcwlt.pay.api.domain.dcep.freefrmt.FreeFrmtInf;
 import com.dcits.dcwlt.pay.api.domain.ecny.ECNYReqDTO;
 import com.dcits.dcwlt.pay.api.domain.ecny.ECNYRspDTO;
 import com.dcits.dcwlt.pay.api.domain.ecny.ECNYRspHead;
+import com.dcits.dcwlt.pay.api.domain.ecny.freeFrmt.FreeFrmtReqDTO;
+import com.dcits.dcwlt.pay.api.domain.ecny.freeFrmt.FreeFrmtRspDTO;
 import com.dcits.dcwlt.pay.api.model.MonitorDO;
 import com.dcits.dcwlt.pay.api.model.RspCodeMapDO;
-import com.dcits.dcwlt.pay.online.baffle.dcep.DcepService;
 import com.dcits.dcwlt.pay.api.mq.event.exception.EcnyTransError;
 import com.dcits.dcwlt.pay.api.mq.event.exception.EcnyTransException;
+import com.dcits.dcwlt.pay.online.baffle.dcep.DcepService;
 import com.dcits.dcwlt.pay.online.flow.DcepTransInTradeFlow;
 import com.dcits.dcwlt.pay.online.flow.builder.EcnyTradeContext;
 import com.dcits.dcwlt.pay.online.flow.builder.EcnyTradeFlowBuilder;
@@ -120,8 +120,8 @@ public class    FreeFrmt401STradeFlow {
             logger.error("发起机构无发送权限,{}", AppConstant.CGB_FINANCIAL_INSTITUTION_CD);
             throw new EcnyTransException(EcnyTransError.ORGAN_POWER_ERROR);
         }
-        ECNYReqDTO<EcnyFreeFrmtReqDTO> reqMsg = EcnyTradeContext.getReqMsg(context);
-        EcnyFreeFrmtReqDTO reqDTO = reqMsg.getBody();
+        ECNYReqDTO<FreeFrmtReqDTO> reqMsg = EcnyTradeContext.getReqMsg(context);
+        FreeFrmtReqDTO reqDTO = reqMsg.getBody();
 
         //获取接收机构
         String partyId = reqDTO.getInstdDrctPty();
@@ -217,8 +217,8 @@ public class    FreeFrmt401STradeFlow {
     public void packRspMsg(TradeContext<?, ?> context) {
         //封装五羊支付响应头
         ECNYRspHead ecnyRspHead = new ECNYRspHead();
-        ECNYReqDTO<EcnyFreeFrmtReqDTO> freeFrmtReqDTO = EcnyTradeContext.getReqMsg(context);
-        EcnyFreeFrmtRspDTO freeFrmtRspDTO = new EcnyFreeFrmtRspDTO();
+        ECNYReqDTO<FreeFrmtReqDTO> freeFrmtReqDTO = EcnyTradeContext.getReqMsg(context);
+        FreeFrmtRspDTO freeFrmtRspDTO = new FreeFrmtRspDTO();
         //获取互联互通响应信息
         JSONObject rspObj = (JSONObject) EcnyTradeContext.getTempContext(context).get("rspObj");
 
@@ -302,8 +302,8 @@ public class    FreeFrmt401STradeFlow {
 
         //处理失败响应失败报文
         ECNYRspHead ecnyRspHead = new ECNYRspHead();
-        ECNYReqDTO<EcnyFreeFrmtReqDTO> freeFrmtReqDTO = EcnyTradeContext.getReqMsg(context);
-        EcnyFreeFrmtRspDTO freeFrmtRspDTO = new EcnyFreeFrmtRspDTO();
+        ECNYReqDTO<FreeFrmtReqDTO> freeFrmtReqDTO = EcnyTradeContext.getReqMsg(context);
+        FreeFrmtRspDTO freeFrmtRspDTO = new FreeFrmtRspDTO();
         ecnyRspHead.setTrxStatus(AppConstant.TRXSTATUS_FAILED);
         StringBuilder sb = new StringBuilder();
         sb.append(ProcessStatusCodeEnum.PR01.getValue());
