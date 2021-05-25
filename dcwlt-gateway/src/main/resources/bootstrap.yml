@@ -16,6 +16,8 @@ spring:
 #    zk注册中心
 #    zookeeper:
 #      connect-string: 127.0.0.1:2181
+#      discovery:
+#        preferIpAddress: true
     nacos:
       discovery:
         # 服务注册地址
@@ -28,6 +30,10 @@ spring:
         # 共享配置
         shared-configs:
           - application-${spring.profiles.active}.${spring.cloud.nacos.config.file-extension}
+  redis:
+    redisson:
+      # 配置单点模式
+      file: classpath:redisson.yml
     sentinel:
       # 取消控制台懒加载
       eager: true

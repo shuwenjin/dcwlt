@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dcits.dcwlt.pay.batch.mapper.PayCommCashboxPartyMapper">
+    
+    <resultMap type="com.dcits.dcwlt.pay.api.model.PayCommCashboxParty" id="PayCommCashboxPartyResult">
+        <result property="id"    column="id"    />
+        <result property="partyname"    column="partyname"    />
+        <result property="partyid"    column="partyid"    />
+        <result property="cashboxid"    column="cashboxid"    />
+        <result property="lastupdate"    column="lastupdate"    />
+        <result property="lastuptime"    column="lastuptime"    />
+        <result property="cretername"    column="cretername"    />
+        <result property="cretertime"    column="cretertime"    />
+        <result property="updatename"    column="updatename"    />
+        <result property="earlywarningamount"    column="earlywarningamount"    />
+        <result property="automaticstorage"    column="automaticstorage"    />
+        <result property="automaticstuts"    column="automaticstuts"    />
+    </resultMap>
+
+    <sql id="selectPayCommCashboxPartyVo">
+        select id, partyname, partyid, cashboxid, lastupdate, lastuptime, cretername, cretertime, updatename, earlywarningamount, automaticstorage, automaticstuts from pay_comm_cashbox_party
+    </sql>
+
+    <select id="selectPayCommCashboxPartyList" parameterType="com.dcits.dcwlt.pay.api.model.PayCommCashboxParty" resultMap="PayCommCashboxPartyResult">
+        <include refid="selectPayCommCashboxPartyVo"/>
+        <where>  
+            <if test="partyname != null  and partyname != ''"> and partyname like concat('%', #{partyname}, '%')</if>
+            <if test="partyid != null  and partyid != ''"> and partyid = #{partyid}</if>
+            <if test="cashboxid != null  and cashboxid != ''"> and cashboxid = #{cashboxid}</if>
+            <if test="lastupdate != null  and lastupdate != ''"> and lastupdate = #{lastupdate}</if>
+            <if test="lastuptime != null  and lastuptime != ''"> and lastuptime = #{lastuptime}</if>
+            <if test="cretername != null  and cretername != ''"> and cretername like concat('%', #{cretername}, '%')</if>
+            <if test="cretertime != null "> and cretertime = #{cretertime}</if>
+            <if test="updatename != null  and updatename != ''"> and updatename like concat('%', #{updatename}, '%')</if>
+            <if test="earlywarningamount != null  and earlywarningamount != ''"> and earlywarningamount = #{earlywarningamount}</if>
+            <if test="automaticstorage != null  and automaticstorage != ''"> and automaticstorage = #{automaticstorage}</if>
+            <if test="automaticstuts != null  and automaticstuts != ''"> and automaticstuts = #{automaticstuts}</if>
+        </where>
+    </select>
+    
+    <select id="selectPayCommCashboxPartyById" parameterType="Long" resultMap="PayCommCashboxPartyResult">
+        <include refid="selectPayCommCashboxPartyVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertPayCommCashboxParty" parameterType="com.dcits.dcwlt.pay.api.model.PayCommCashboxParty" useGeneratedKeys="true" keyProperty="id">
+        insert into pay_comm_cashbox_party
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="partyname != null">partyname,</if>
+            <if test="partyid != null and partyid != ''">partyid,</if>
+            <if test="cashboxid != null and cashboxid != ''">cashboxid,</if>
+            <if test="lastupdate != null">lastupdate,</if>
+            <if test="lastuptime != null">lastuptime,</if>
+            <if test="cretername != null">cretername,</if>
+            <if test="cretertime != null">cretertime,</if>
+            <if test="updatename != null">updatename,</if>
+            <if test="earlywarningamount != null">earlywarningamount,</if>
+            <if test="automaticstorage != null">automaticstorage,</if>
+            <if test="automaticstuts != null">automaticstuts,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="partyname != null">#{partyname},</if>
+            <if test="partyid != null and partyid != ''">#{partyid},</if>
+            <if test="cashboxid != null and cashboxid != ''">#{cashboxid},</if>
+            <if test="lastupdate != null">#{lastupdate},</if>
+            <if test="lastuptime != null">#{lastuptime},</if>
+            <if test="cretername != null">#{cretername},</if>
+            <if test="cretertime != null">#{cretertime},</if>
+            <if test="updatename != null">#{updatename},</if>
+            <if test="earlywarningamount != null">#{earlywarningamount},</if>
+            <if test="automaticstorage != null">#{automaticstorage},</if>
+            <if test="automaticstuts != null">#{automaticstuts},</if>
+         </trim>
+    </insert>
+
+    <update id="updatePayCommCashboxParty" parameterType="com.dcits.dcwlt.pay.api.model.PayCommCashboxParty">
+        update pay_comm_cashbox_party
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="partyname != null">partyname = #{partyname},</if>
+            <if test="partyid != null and partyid != ''">partyid = #{partyid},</if>
+            <if test="cashboxid != null and cashboxid != ''">cashboxid = #{cashboxid},</if>
+            <if test="lastupdate != null">lastupdate = #{lastupdate},</if>
+            <if test="lastuptime != null">lastuptime = #{lastuptime},</if>
+            <if test="cretername != null">cretername = #{cretername},</if>
+            <if test="cretertime != null">cretertime = #{cretertime},</if>
+            <if test="updatename != null">updatename = #{updatename},</if>
+            <if test="earlywarningamount != null">earlywarningamount = #{earlywarningamount},</if>
+            <if test="automaticstorage != null">automaticstorage = #{automaticstorage},</if>
+            <if test="automaticstuts != null">automaticstuts = #{automaticstuts},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deletePayCommCashboxPartyById" parameterType="Long">
+        delete from pay_comm_cashbox_party where id = #{id}
+    </delete>
+
+    <delete id="deletePayCommCashboxPartyByIds" parameterType="String">
+        delete from pay_comm_cashbox_party where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>
