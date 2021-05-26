@@ -1,8 +1,14 @@
 server:
   port: 8008
 
+CoopBank:
+  #本行机构号
+  InstnId: C1091231000013
 gateway:
+  #应用网关地址
   server-addr: http://localhost:8000/dcep/dcep/online
-
-decp:
+dcps:
+  #城银清地址
   server-addr: http://localhost:8888/dcps
+  #城银清机构号
+  InstnId: C1030131001288

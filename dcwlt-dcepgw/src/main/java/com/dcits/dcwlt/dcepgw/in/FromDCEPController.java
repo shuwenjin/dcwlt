@@ -24,6 +24,12 @@ public class FromDCEPController {
     @Value("${gateway.server-addr}")
     private String gateway_addr;
 
+    @Value("${CoopBank.InstnId}")
+    private String instnId_coopBank;
+
+    @Value("${dcps.InstnId}")
+    private String instnId_dcps;
+
     @PostMapping("/dcep")
     public String process(@RequestBody String reqmsg) {
         //处理请求报文
@@ -44,9 +50,9 @@ public class FromDCEPController {
             try {
                 JSONObject jsonObject = DcspMsgUtil.get900();
                 jsonObject.getJSONObject(JsonXmlUtil.HEAD).put(DcspMsgUtil.HEAD_KEY_ARRAY[1], "04");
-                jsonObject.getJSONObject(JsonXmlUtil.HEAD).put(DcspMsgUtil.HEAD_KEY_ARRAY[2], "C1091231000013");
+                jsonObject.getJSONObject(JsonXmlUtil.HEAD).put(DcspMsgUtil.HEAD_KEY_ARRAY[2], instnId_coopBank);
                 jsonObject.getJSONObject(JsonXmlUtil.HEAD).put(DcspMsgUtil.HEAD_KEY_ARRAY[3], "DCPS");
-                jsonObject.getJSONObject(JsonXmlUtil.HEAD).put(DcspMsgUtil.HEAD_KEY_ARRAY[4], "C1030131001288");
+                jsonObject.getJSONObject(JsonXmlUtil.HEAD).put(DcspMsgUtil.HEAD_KEY_ARRAY[4], instnId_dcps);
                 jsonObject.getJSONObject(JsonXmlUtil.HEAD).put(DcspMsgUtil.HEAD_KEY_ARRAY[5], "DCPS");
                 jsonObject.getJSONObject(JsonXmlUtil.HEAD).put(DcspMsgUtil.HEAD_KEY_ARRAY[6], DateUtil.format(new Date(), DatePattern.PURE_DATE_PATTERN));
                 jsonObject.getJSONObject(JsonXmlUtil.HEAD).put(DcspMsgUtil.HEAD_KEY_ARRAY[7], DateUtil.format(new Date(), DatePattern.PURE_TIME_PATTERN));

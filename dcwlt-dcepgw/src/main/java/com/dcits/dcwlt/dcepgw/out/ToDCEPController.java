@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 @Slf4j
 public class ToDCEPController {
 
-    @Value("${decp.server-addr}")
+    @Value("${dcps.server-addr}")
     private String decp_addr;
 
     @PostMapping("/dcepgw")
