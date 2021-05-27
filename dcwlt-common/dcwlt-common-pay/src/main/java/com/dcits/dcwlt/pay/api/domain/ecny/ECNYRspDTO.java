@@ -49,12 +49,12 @@ public class ECNYRspDTO<T extends ECNYRspBody> extends BaseRespDto {
             ECNYReqDTO ecnyReqDTO, ECNYRspHead ecnyRspHead, T body, String retCode, String retInfo) {
         ECNYRspDTO<T> msg = new ECNYRspDTO<>();
         //设置响应服务化报文头
-        Head rspHead = ecnyReqDTO.getHead();
-        rspHead.setRetCode(retCode);
-        rspHead.setRetInfo(retInfo);
-        rspHead.setTranDate(DateUtil.getDefaultDate());
-        rspHead.setTranTime(DateUtil.getDefaultTime());
-        msg.setHead(rspHead);
+        //Head rspHead = ecnyReqDTO.getHead();
+        //rspHead.setRetCode(retCode);
+        //rspHead.setRetInfo(retInfo);
+        //rspHead.setTranDate(DateUtil.getDefaultDate());
+        //rspHead.setTranTime(DateUtil.getDefaultTime());
+        //msg.setHead(rspHead);
         msg.setEcnyRspHead(ecnyRspHead);
         msg.setBody(body);
         return msg;

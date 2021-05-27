@@ -2,6 +2,9 @@ package com.dcits.dcwlt.pay.api.model;
 
 import com.dcits.dcwlt.common.core.annotation.Excel;
 
+/**
+ * 钱柜余额对账通知对象
+ */
 public class PayCashboxBanlanceDO {
     @Excel(name = "id")
     private String id;

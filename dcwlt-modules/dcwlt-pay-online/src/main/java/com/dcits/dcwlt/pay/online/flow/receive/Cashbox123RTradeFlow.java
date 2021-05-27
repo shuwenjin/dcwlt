@@ -3,6 +3,7 @@ package com.dcits.dcwlt.pay.online.flow.receive;
 import com.dcits.dcwlt.common.pay.channel.bankcore.dto.bankcore351100.BankCore351100InnerReq;
 import com.dcits.dcwlt.common.pay.channel.bankcore.dto.bankcore351100.BankCore351100InnerRsp;
 import com.dcits.dcwlt.common.pay.constant.AppConstant;
+import com.dcits.dcwlt.common.pay.enums.CashboxTypeEnum;
 import com.dcits.dcwlt.common.pay.enums.LogMonitorLevelCdEnum;
 import com.dcits.dcwlt.common.pay.enums.MsgTpEnum;
 import com.dcits.dcwlt.common.pay.enums.ProcessStsCdEnum;
@@ -164,7 +165,7 @@ public class Cashbox123RTradeFlow {
                 //成功
                 PayTransDtlInfoDO payTransDtlInfoDO = (PayTransDtlInfoDO) EcnyTradeContext.getTempContext(context).get("payTransDtlInfoDO");
                 // 初始化核心请求报文
-                BankCore351100InnerReq bankCore30410002Req = sendCoreInit(payTransDtlInfoDO);
+                BankCore351100InnerReq bankCore30410002Req = sendCoreInit(reqMsg);
                 // 核心前处理
                 sendCorePre(payTransDtlInfoDO, bankCore30410002Req);
                 // 发送核心
@@ -194,32 +195,28 @@ public class Cashbox123RTradeFlow {
     /**
      * 初始化核心请求报文
      *
-     * @param payTransDtlInfoDO
+     * @param
      * @return
      */
-    public BankCore351100InnerReq sendCoreInit(PayTransDtlInfoDO payTransDtlInfoDO) {
+    public BankCore351100InnerReq sendCoreInit(DCEPReqDTO<Cashbox123ReqDTO> dcepReqDTO) {
 
         BankCore351100InnerReq bankCore351100InnerReq = new BankCore351100InnerReq();
-        bankCore351100InnerReq.setPaySerno(payTransDtlInfoDO.getPaySerno());
-        bankCore351100InnerReq.setPayDate(payTransDtlInfoDO.getPayDate());
-        bankCore351100InnerReq.setPayerAcct(payTransDtlInfoDO.getPayerAcct());
-        bankCore351100InnerReq.setPayerName(payTransDtlInfoDO.getPayerName());
-        bankCore351100InnerReq.setPayeeAcct(payTransDtlInfoDO.getPayeeWalletId());
-        bankCore351100InnerReq.setPayeeName(payTransDtlInfoDO.getPayeeWalletName());
-        bankCore351100InnerReq.setPayeeBank(payTransDtlInfoDO.getPayeePtyId());
-        bankCore351100InnerReq.setPayPath(com.dcits.dcwlt.pay.online.base.Constant.ECNY_SYS_ID);
-        bankCore351100InnerReq.setAcctMeth("DJ010011");
-        bankCore351100InnerReq.setServerId(Constant.P_BANKCORE_DEBIT);
-        bankCore351100InnerReq.setAmount(payTransDtlInfoDO.getAmount());
-        bankCore351100InnerReq.setCurrency(Constant.CURRENCY_CODE_156);
-        bankCore351100InnerReq.setBookType(Constant.BANKCORE_DEBIT);
-        bankCore351100InnerReq.setCoreSysId(Constant.DEFAULT_BANKSYSID);
-        bankCore351100InnerReq.setRevTranFlag(Constant.REVTRANFLAG_POSITIVE);
-        bankCore351100InnerReq.setCoreTrxType(Constant.BANKTRXTYPE_DEBIT);
-        bankCore351100InnerReq.setAcctBrno(payTransDtlInfoDO.getAcctBrno());
-        bankCore351100InnerReq.setBrno(payTransDtlInfoDO.getBrno());
-        bankCore351100InnerReq.setClearDate(payTransDtlInfoDO.getPayDate());
-        bankCore351100InnerReq.setSummary(payTransDtlInfoDO.getSummary());
+        AdjInf adjInf = dcepReqDTO.getBody().getCshBoxAdjNtfctn().getAdjInf();
+        bankCore351100InnerReq.setBookType(com.dcits.dcwlt.common.pay.constant.Constant.BANKCORE_DEBIT);//核心付款
+        bankCore351100InnerReq.setAmount(AmountUtil.fenToYuan(adjInf.getAmt().getValue()));
+        bankCore351100InnerReq.setCurrency(com.dcits.dcwlt.common.pay.constant.Constant.CURRENCY_CODE_156);
+        if(adjInf.getOprTp().equals(CashboxTypeEnum.OT00.getCode())) {
+            // todo 后续从账户配置参数中获取
+            bankCore351100InnerReq.setPayerAcct("1");     //付款人账户
+            bankCore351100InnerReq.setPayerName("2");     //付款人户名
+            bankCore351100InnerReq.setPayeeAcct("2");   // 收款账户
+            bankCore351100InnerReq.setPayeeName("3");   //收款户名
+        }else if(adjInf.getOprTp().equals(CashboxTypeEnum.OT01.getCode())){
+            bankCore351100InnerReq.setPayerAcct("1");     //付款人账户
+            bankCore351100InnerReq.setPayerName("2");     //付款人户名
+            bankCore351100InnerReq.setPayeeAcct("2");   // 收款账户
+            bankCore351100InnerReq.setPayeeName("3");   //收款户名
+        }
         bankCore351100InnerReq.setChkNameFlg1("Y");
         return bankCore351100InnerReq;
     }

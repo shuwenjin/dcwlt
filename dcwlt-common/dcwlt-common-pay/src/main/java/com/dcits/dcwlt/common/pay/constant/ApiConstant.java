@@ -24,6 +24,9 @@ public class ApiConstant {
     //差错贷记调账服务化接口
     public static final String PAYCONVERT_SERVICE_NAME = "pymtRmtOtptRqstIntt";
 
+    //发送钱柜入库出库报文
+    public static final String SEND_CASHBOX = "sendCashbox";
+
 
 
 }

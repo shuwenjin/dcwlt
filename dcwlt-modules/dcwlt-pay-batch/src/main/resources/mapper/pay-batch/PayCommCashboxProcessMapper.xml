@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dcits.dcwlt.pay.batch.mapper.PayCommCashboxProcessMapper">
+
+    <resultMap type="com.dcits.dcwlt.pay.api.model.PayCommCashboxProcess" id="PayCommCashboxProcessResult">
+        <result property="id" column="id"/>
+        <result property="oprtp" column="oprTp"/>
+        <result property="cdtdbtind" column="cdtDbtInd"/>
+        <result property="amtccy" column="amtCcy"/>
+        <result property="amtvalue" column="amtValue"/>
+        <result property="coopbankinstnid" column="coopBankInstnId"/>
+        <result property="coopbankwltid" column="coopBankWltId"/>
+        <result property="cshboxinstnid" column="cshBoxInstnId"/>
+        <result property="cert" column="cert"/>
+        <result property="msgid" column="msgId"/>
+        <result property="credttms" column="creDtTmS"/>
+        <result property="credttmr" column="creDtTmR"/>
+        <result property="prcsts" column="prcSts"/>
+        <result property="prccd" column="prcCd"/>
+        <result property="rspsnsts" column="rspsnSts"/>
+        <result property="rjctcd" column="rjctCd"/>
+        <result property="rjctinf" column="rjctInf"/>
+        <result property="clrreptflg" column="clrReptFlg"/>
+        <result property="clearamountccy" column="clearAmountCcy"/>
+        <result property="clearamountvalue" column="clearAmountValue"/>
+        <result property="corests" column="coreSts"/>
+    </resultMap>
+
+    <sql id="selectPayCommCashboxProcessVo">
+        select id, oprTp, cdtDbtInd, amtCcy, amtValue, coopBankInstnId, coopBankWltId, cshBoxInstnId, cert, msgId, creDtTmS, creDtTmR, prcSts, prcCd, rspsnSts, rjctCd, rjctInf, clrReptFlg, clearAmountCcy, clearAmountValue, coreSts from pay_comm_cashbox_process
+    </sql>
+
+    <select id="selectPayCommCashboxProcessList" parameterType="com.dcits.dcwlt.pay.api.model.PayCommCashboxProcess"
+            resultMap="PayCommCashboxProcessResult">
+        <include refid="selectPayCommCashboxProcessVo"/>
+        <where>
+            <if test="oprtp != null  and oprtp != ''">and oprTp = #{oprtp}</if>
+            <if test="cdtdbtind != null  and cdtdbtind != ''">and cdtDbtInd = #{cdtdbtind}</if>
+            <if test="amtccy != null  and amtccy != ''">and amtCcy = #{amtccy}</if>
+            <if test="amtvalue != null  and amtvalue != ''">and amtValue = #{amtvalue}</if>
+            <if test="coopbankinstnid != null  and coopbankinstnid != ''">and coopBankInstnId = #{coopbankinstnid}</if>
+            <if test="coopbankwltid != null  and coopbankwltid != ''">and coopBankWltId = #{coopbankwltid}</if>
+            <if test="cshboxinstnid != null  and cshboxinstnid != ''">and cshBoxInstnId = #{cshboxinstnid}</if>
+            <if test="cert != null  and cert != ''">and cert = #{cert}</if>
+            <if test="msgid != null  and msgid != ''">and msgId = #{msgid}</if>
+            <if test="credttms != null  and credttms != ''">and creDtTmS = #{credttms}</if>
+            <if test="credttmr != null  and credttmr != ''">and creDtTmR = #{credttmr}</if>
+            <if test="prcsts != null  and prcsts != ''">and prcSts not in('PR00','PR03')</if>
+            <if test="prccd != null  and prccd != ''">and prcCd = #{prccd}</if>
+            <if test="rspsnsts != null  and rspsnsts != ''">and rspsnSts = #{rspsnsts}</if>
+            <if test="rjctcd != null  and rjctcd != ''">and rjctCd = #{rjctcd}</if>
+            <if test="rjctinf != null  and rjctinf != ''">and rjctInf = #{rjctinf}</if>
+            <if test="clrreptflg != null  and clrreptflg != ''">and clrReptFlg = #{clrreptflg}</if>
+            <if test="clearamountccy != null  and clearamountccy != ''">and clearAmountCcy = #{clearamountccy}</if>
+            <if test="clearamountvalue != null  and clearamountvalue != ''">and clearAmountValue = #{clearamountvalue}
+            </if>
+            <if test="corests != null  and corests != ''">and coreSts = #{corests}</if>
+
+        </where>
+    </select>
+
+    <select id="selectPayCommCashboxProcessById" parameterType="Long" resultMap="PayCommCashboxProcessResult">
+        <include refid="selectPayCommCashboxProcessVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertPayCommCashboxProcess" parameterType="com.dcits.dcwlt.pay.api.model.PayCommCashboxProcess"
+            useGeneratedKeys="true" keyProperty="id">
+        insert into pay_comm_cashbox_process
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="oprtp != null">oprTp,</if>
+            <if test="cdtdbtind != null">cdtDbtInd,</if>
+            <if test="amtccy != null">amtCcy,</if>
+            <if test="amtvalue != null">amtValue,</if>
+            <if test="coopbankinstnid != null">coopBankInstnId,</if>
+            <if test="coopbankwltid != null">coopBankWltId,</if>
+            <if test="cshboxinstnid != null">cshBoxInstnId,</if>
+            <if test="cert != null">cert,</if>
+            <if test="msgid != null">msgId,</if>
+            <if test="credttms != null">creDtTmS,</if>
+            <if test="credttmr != null">creDtTmR,</if>
+            <if test="prcsts != null">prcSts,</if>
+            <if test="prccd != null">prcCd,</if>
+            <if test="rspsnsts != null">rspsnSts,</if>
+            <if test="rjctcd != null">rjctCd,</if>
+            <if test="rjctinf != null">rjctInf,</if>
+            <if test="clrreptflg != null">clrReptFlg,</if>
+            <if test="clearamountccy != null">clearAmountCcy,</if>
+            <if test="clearamountvalue != null">clearAmountValue,</if>
+            <if test="corests != null">coreSts,</if>
+
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="oprtp != null">#{oprtp},</if>
+            <if test="cdtdbtind != null">#{cdtdbtind},</if>
+            <if test="amtccy != null">#{amtccy},</if>
+            <if test="amtvalue != null">#{amtvalue},</if>
+            <if test="coopbankinstnid != null">#{coopbankinstnid},</if>
+            <if test="coopbankwltid != null">#{coopbankwltid},</if>
+            <if test="cshboxinstnid != null">#{cshboxinstnid},</if>
+            <if test="cert != null">#{cert},</if>
+            <if test="msgid != null">#{msgid},</if>
+            <if test="credttms != null">#{credttms},</if>
+            <if test="credttmr != null">#{credttmr},</if>
+            <if test="prcsts != null">#{prcsts},</if>
+            <if test="prccd != null">#{prccd},</if>
+            <if test="rspsnsts != null">#{rspsnsts},</if>
+            <if test="rjctcd != null">#{rjctcd},</if>
+            <if test="rjctinf != null">#{rjctinf},</if>
+            <if test="clrreptflg != null">#{clrreptflg},</if>
+            <if test="clearamountccy != null">#{clearamountccy},</if>
+            <if test="clearamountvalue != null">#{clearamountvalue},</if>
+            <if test="corests != null">#{corests},</if>
+        </trim>
+    </insert>
+
+    <update id="updatePayCommCashboxProcess" parameterType="com.dcits.dcwlt.pay.api.model.PayCommCashboxProcess">
+        update pay_comm_cashbox_process
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="oprtp != null">oprTp = #{oprtp},</if>
+            <if test="cdtdbtind != null">cdtDbtInd = #{cdtdbtind},</if>
+            <if test="amtccy != null">amtCcy = #{amtccy},</if>
+            <if test="amtvalue != null">amtValue = #{amtvalue},</if>
+            <if test="coopbankinstnid != null">coopBankInstnId = #{coopbankinstnid},</if>
+            <if test="coopbankwltid != null">coopBankWltId = #{coopbankwltid},</if>
+            <if test="cshboxinstnid != null">cshBoxInstnId = #{cshboxinstnid},</if>
+            <if test="cert != null">cert = #{cert},</if>
+            <if test="msgid != null">msgId = #{msgid},</if>
+            <if test="credttms != null">creDtTmS = #{credttms},</if>
+            <if test="credttmr != null">creDtTmR = #{credttmr},</if>
+            <if test="prcsts != null">prcSts = #{prcsts},</if>
+            <if test="prccd != null">prcCd = #{prccd},</if>
+            <if test="rspsnsts != null">rspsnSts = #{rspsnsts},</if>
+            <if test="rjctcd != null">rjctCd = #{rjctcd},</if>
+            <if test="rjctinf != null">rjctInf = #{rjctinf},</if>
+            <if test="clrreptflg != null">clrReptFlg = #{clrreptflg},</if>
+            <if test="clearamountccy != null">clearAmountCcy = #{clearamountccy},</if>
+            <if test="clearamountvalue != null">clearAmountValue = #{clearamountvalue},</if>
+            <if test="corests != null">coreSts = #{corests},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deletePayCommCashboxProcessById" parameterType="Long">
+        delete from pay_comm_cashbox_process where id = #{id}
+    </delete>
+
+    <delete id="deletePayCommCashboxProcessByIds" parameterType="String">
+        delete from pay_comm_cashbox_process where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

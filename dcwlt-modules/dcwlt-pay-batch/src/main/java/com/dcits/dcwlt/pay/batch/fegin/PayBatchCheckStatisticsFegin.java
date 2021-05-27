@@ -26,4 +26,19 @@ public interface PayBatchCheckStatisticsFegin {
 
     @RequestMapping(value = "/dcwlt/loginoutFmtMsgSnd",method = RequestMethod.GET)
     public AjaxResult loginOut(@RequestParam(value="opType") String opType);
+
+    //查询客户信息 todo 后续增加核心接口是再添加
+    //@RequestMapping(value = "/dcwlt/queryCustInfo",method = RequestMethod.POST)
+    //public BankCore20130001Rsp queryCustInfo(@RequestBody BankCore20130001Req bankCore20130001Req);
+
+
+    // 核心冲正
+    //@RequestMapping(value = "/dcwlt/bankRev",method = RequestMethod.POST)
+    //public BankCore3041000204Rsp bankRev(@RequestBody BankCore3041000204Req bank);
+
+
+    // 回查核心状态
+    //@RequestMapping(value = "/dcwlt/queryCoreStatus",method = RequestMethod.POST)
+    //public BankCore30430001Rsp queryCoreStatus(@RequestBody BankCore30430001Req bank);
+
 }

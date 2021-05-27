@@ -34,7 +34,6 @@ import com.dcits.dcwlt.pay.api.model.RspCodeMapDO;
 import com.dcits.dcwlt.pay.api.model.StateMachine;
 import com.dcits.dcwlt.pay.api.mq.event.exception.EcnyTransError;
 import com.dcits.dcwlt.pay.api.mq.event.exception.EcnyTransException;
-import com.dcits.dcwlt.pay.online.baffle.core.impl.BankCoreImplDubboServiceImpl;
 import com.dcits.dcwlt.pay.online.baffle.dcep.impl.BankCoreImplDubboService;
 import com.dcits.dcwlt.pay.online.event.callback.ConvertBankRevCallBack;
 import com.dcits.dcwlt.pay.online.event.service.BankRevService;
@@ -104,9 +103,6 @@ public class CashBox121STradeFlow {
     private CoreEventServiceImpl coreEventService;
 
     @Autowired
-    private BankRevService bankRevService;
-
-    @Autowired
     private BankCoreImplDubboService bankCoreImplDubboService;
 
     @Autowired
@@ -127,9 +123,9 @@ public class CashBox121STradeFlow {
                 .saveTxn(this::insertJrnDO)                                                        //插入流水
                 .initTxn(this::initTxn)                                                            //交易流水初始化
                 .process(this::insertCshboxPrs)                                                    //插入钱柜入库出库流水
-                .process(this::coreProcess)                                                        //上核心
-                .process(this::sendDCEP)                                                           //向互联互通发送请求
-                .response(this::packRspMsg)                                                        //响应保存封装
+                //.process(this::coreProcess)                                                        //上核心
+                //.process(this::sendDCEP)                                                           //向互联互通发送请求
+                //.response(this::packRspMsg)                                                        //响应保存封装
                 .updateTxn(this::updateJrnDO)                                                      //更新交易流水
                 .errHandler(this::errHandle)
                 .build();
@@ -168,7 +164,9 @@ public class CashBox121STradeFlow {
         String oprTp = (String) params.get("OprTp");//入库出库类型
         //获取入库出库借贷标识
         String cdtDbtInd = CashboxTypeEnum.OT00.getCode().equals(oprTp) ? CashboxTypeEnum.DBIT.getCode() : CashboxTypeEnum.CRDT.getCode();
-        String amtCcy = (String) params.get("AmtCcy");//入库/出库金额
+        // todo 币种默认156
+        //String amtCcy = (String) params.get("AmtCcy");//入库/出库金额
+        String amtCcy = "156";
         String amtValue = (String) params.get("AmtValue");//入库/出库金额
         String cshBoxInstnId = (String) params.get("CshBoxInstnId");//钱柜所属运营机构
         String MsgId = (String) params.get("MsgId");//消息ID
@@ -236,13 +234,9 @@ public class CashBox121STradeFlow {
         payTransDtlInfoDO.setPayPathDateTime(DateUtil.getISODateTime());
         payTransDtlInfoDO.setPathProcStatus(AppConstant.PAYPATHSTATUS_INIT);
         payTransDtlInfoDO.setBatchId(generateCodeService.getBachNo());
-//        payTransDtlInfoDO.setBusiChnl(esbReqSysHeader.getSvcCd());
-//        payTransDtlInfoDO.setBusiChnl2(esbReqSysHeader.getScnCd());
-        payTransDtlInfoDO.setBusiSysDate(grpHdr.getCreDtTm().substring(0, grpHdr.getCreDtTm().indexOf("T")));       //渠道请求日期
-        payTransDtlInfoDO.setBusiSysTime(grpHdr.getCreDtTm().substring(grpHdr.getCreDtTm().indexOf("T") + 1));          //  渠道请求时间
+        payTransDtlInfoDO.setBusiSysDate(DateUtil.getDefaultDate());       //渠道请求日期
+        payTransDtlInfoDO.setBusiSysTime(DateUtil.getDefaultTime());          //  渠道请求时间
         payTransDtlInfoDO.setBusiSysSerno(grpHdr.getMsgId());     //     渠道请求流水
-
-        //      payTransDtlInfoDO.setBusiSysSerno(generateCodeService.getBachNo());
 
         payTransDtlInfoDO.setMsgType(MsgTpEnum.DCEP121.getCode());
         payTransDtlInfoDO.setBusiType(adjInf.getOprTp());
@@ -251,10 +245,7 @@ public class CashBox121STradeFlow {
         payTransDtlInfoDO.setInstdPty(grpHdr.getInstdPty().getInstdDrctPty());
         payTransDtlInfoDO.setCcy(AppConstant.CURRENCY_SYMBOL);
         payTransDtlInfoDO.setAmount(AmountUtil.yuanToFen(adjInf.getAmt().getValue()));
-//        payTransDtlInfoDO.setNarraTive(reqBody.getNarraTive());
         payTransDtlInfoDO.setPayerPtyId(adjInf.getCshBoxInstnId());
-//        payTransDtlInfoDO.setPayerName(reqBody.getPayerName());
-//        payTransDtlInfoDO.setPayerAcct(reqBody.getPayerAcct());
         payTransDtlInfoDO.setPayeePtyId(adjInf.getCoopBankInstnId());
         payTransDtlInfoDO.setPayeeWalletId(adjInf.getCoopBankWltId());
         payTransDtlInfoDO.setPayeeWalletName(adjInf.getCoopBankInstnId());
@@ -295,7 +286,7 @@ public class CashBox121STradeFlow {
         PayCashboxProcessDO payCashboxProcessDO = (PayCashboxProcessDO) contextMap.get(PROCESS_DO);
         PayTransDtlInfoDO payTransDtlInfoDO = (PayTransDtlInfoDO) contextMap.get("payTransDtlInfoDO");
         // 初始化核心请求报文
-        BankCore351100InnerReq bankCore30410002Req = sendCoreInit(payTransDtlInfoDO);
+        BankCore351100InnerReq bankCore30410002Req = sendCoreInit(dcepReqDTO);
         // 核心前处理
         sendCorePre(payTransDtlInfoDO, bankCore30410002Req);
         // 发送核心
@@ -307,32 +298,28 @@ public class CashBox121STradeFlow {
     /**
      * 初始化核心请求报文
      *
-     * @param payTransDtlInfoDO
+     * @param
      * @return
      */
-    public BankCore351100InnerReq sendCoreInit(PayTransDtlInfoDO payTransDtlInfoDO) {
+    public BankCore351100InnerReq sendCoreInit(DCEPReqDTO<Cashbox121ReqDTO> dcepReqDTO) {
 
         BankCore351100InnerReq bankCore351100InnerReq = new BankCore351100InnerReq();
-        bankCore351100InnerReq.setPaySerno(payTransDtlInfoDO.getPaySerno());
-        bankCore351100InnerReq.setPayDate(payTransDtlInfoDO.getPayDate());
-        bankCore351100InnerReq.setPayerAcct(payTransDtlInfoDO.getPayerAcct());
-        bankCore351100InnerReq.setPayerName(payTransDtlInfoDO.getPayerName());
-        bankCore351100InnerReq.setPayeeAcct(payTransDtlInfoDO.getPayeeWalletId());
-        bankCore351100InnerReq.setPayeeName(payTransDtlInfoDO.getPayeeWalletName());
-        bankCore351100InnerReq.setPayeeBank(payTransDtlInfoDO.getPayeePtyId());
-        bankCore351100InnerReq.setPayPath(com.dcits.dcwlt.pay.online.base.Constant.ECNY_SYS_ID);
-        bankCore351100InnerReq.setAcctMeth("DJ010011");
-        bankCore351100InnerReq.setServerId(com.dcits.dcwlt.pay.online.base.Constant.P_BANKCORE_DEBIT);
-        bankCore351100InnerReq.setAmount(payTransDtlInfoDO.getAmount());
-        bankCore351100InnerReq.setCurrency(com.dcits.dcwlt.pay.online.base.Constant.CURRENCY_CODE_156);
-        bankCore351100InnerReq.setBookType(com.dcits.dcwlt.pay.online.base.Constant.BANKCORE_DEBIT);
-        bankCore351100InnerReq.setCoreSysId(com.dcits.dcwlt.pay.online.base.Constant.DEFAULT_BANKSYSID);
-        bankCore351100InnerReq.setRevTranFlag(com.dcits.dcwlt.pay.online.base.Constant.REVTRANFLAG_POSITIVE);
-        bankCore351100InnerReq.setCoreTrxType(com.dcits.dcwlt.pay.online.base.Constant.BANKTRXTYPE_DEBIT);
-        bankCore351100InnerReq.setAcctBrno(payTransDtlInfoDO.getAcctBrno());
-        bankCore351100InnerReq.setBrno(payTransDtlInfoDO.getBrno());
-        bankCore351100InnerReq.setClearDate(payTransDtlInfoDO.getPayDate());
-        bankCore351100InnerReq.setSummary(payTransDtlInfoDO.getSummary());
+        AdjInf adjInf = dcepReqDTO.getBody().getCshBoxAdjAppl().getAdjInf();
+        bankCore351100InnerReq.setBookType(Constant.BANKCORE_DEBIT);//核心付款
+        bankCore351100InnerReq.setAmount(AmountUtil.fenToYuan(adjInf.getAmt().getValue()));
+        bankCore351100InnerReq.setCurrency(Constant.CURRENCY_CODE_156);
+        if(adjInf.getOprTp().equals(CashboxTypeEnum.OT00.getCode())) {
+            // todo 后续从账户配置参数中获取
+            bankCore351100InnerReq.setPayerAcct("1");     //付款人账户
+            bankCore351100InnerReq.setPayerName("2");     //付款人户名
+            bankCore351100InnerReq.setPayeeAcct("2");   // 收款账户
+            bankCore351100InnerReq.setPayeeName("3");   //收款户名
+        }else if(adjInf.getOprTp().equals(CashboxTypeEnum.OT01.getCode())){
+            bankCore351100InnerReq.setPayerAcct("1");     //付款人账户
+            bankCore351100InnerReq.setPayerName("2");     //付款人户名
+            bankCore351100InnerReq.setPayeeAcct("2");   // 收款账户
+            bankCore351100InnerReq.setPayeeName("3");   //收款户名
+        }
         bankCore351100InnerReq.setChkNameFlg1("Y");
         return bankCore351100InnerReq;
     }
@@ -341,7 +328,7 @@ public class CashBox121STradeFlow {
      * 核心前处理
      *
      * @param payTransDtlInfoDO
-     * @param bankCore30410002Req
+     * @param
      */
     public void sendCorePre(PayTransDtlInfoDO payTransDtlInfoDO, BankCore351100InnerReq bankCore351100InnerReq) {
         logger.info("核心前处理");
@@ -441,7 +428,7 @@ public class CashBox121STradeFlow {
      * 设置核心结果
      *
      * @param payTransDtlInfoDO
-     * @param bankCore30410002Rsp
+     * @param
      */
     public void setTradeResult(PayTransDtlInfoDO payTransDtlInfoDO, BankCore351100InnerRsp bankCore351100InnerRsp) {
         logger.info("核心返回信息：返回码:{}, 返回信息:{}", bankCore351100InnerRsp.getErrorCode(), bankCore351100InnerRsp.getErrorMsg());

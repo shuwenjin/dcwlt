@@ -87,7 +87,7 @@ public class GrpHdr {
     public static GrpHdr getInstance(String msgId) {
         GrpHdr grpHdr = new GrpHdr();
         grpHdr.setMsgId(msgId);
-        grpHdr.setCreDtTm(grpHdr.getCreDtTm());
+        grpHdr.setCreDtTm(DateUtil.getISODateTime());
         grpHdr.setInstdPty(new InstdPty(AppConstant.NET_PARTY_ID));
         grpHdr.setInstgPty(new InstgPty(AppConstant.CGB_FINANCIAL_INSTITUTION_CD));
         return grpHdr;

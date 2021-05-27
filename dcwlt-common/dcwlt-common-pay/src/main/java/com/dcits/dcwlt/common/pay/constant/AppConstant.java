@@ -217,5 +217,11 @@ public class AppConstant {
     public static final String LSFK43_ACCOUNT_ERROR = "CB520012";
     public static final String LSFK43_ACCOUNT_AUTH_ERROR = "CB1010";
 
-
+    /**
+     * 0、未申请  1、 出入库重发，2、核心状态同步 3、手工冲账
+     */
+    public static final Integer ZERO = 0;
+    public static final Integer ONE = 1;
+    public static final Integer TOW = 2;
+    public static final Integer THR = 3;
 }
