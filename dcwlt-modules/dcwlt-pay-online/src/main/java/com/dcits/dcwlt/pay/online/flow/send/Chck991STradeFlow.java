@@ -34,10 +34,10 @@ import java.util.Objects;
  * HTTP通信级探测报文
  */
 @Configuration
-public class Chck992STradeFlow {
-    private static final Logger logger = LoggerFactory.getLogger(Chck992STradeFlow.class);
+public class Chck991STradeFlow {
+    private static final Logger logger = LoggerFactory.getLogger(Chck991STradeFlow.class);
 
-    public static final String CHCK_TRADE_FLOW = "Chck992STradeFlow";
+    public static final String CHCK_TRADE_FLOW = "Chck991STradeFlow";
 
     @Autowired
     private GenerateCodeServiceImpl generateCodeService;
