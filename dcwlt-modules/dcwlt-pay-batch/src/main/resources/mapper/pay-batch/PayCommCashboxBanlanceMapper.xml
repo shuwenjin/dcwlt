@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dcits.dcwlt.pay.batch.mapper.PayCommCashboxBanlanceMapper">
+
+    <resultMap type="com.dcits.dcwlt.pay.batch.domain.PayCommCashboxBanlance" id="PayCommCashboxBanlanceResult">
+        <result property="id" column="id"/>
+        <result property="chckngdt" column="chckngDt"/>
+        <result property="coopbankinstnid" column="coopBankInstnId"/>
+        <result property="coopbankwltid" column="coopBankWltId"/>
+        <result property="cshboxinstnid" column="cshBoxInstnId"/>
+        <result property="initlamtccy" column="initlAmtCcy"/>
+        <result property="initlamtvalue" column="initlAmtValue"/>
+        <result property="cdtdbtind" column="cdtDbtInd"/>
+        <result property="dbtcntamtccy" column="dbtCntAmtCcy"/>
+        <result property="dbtcntamtvalue" column="dbtCntAmtValue"/>
+        <result property="cdtcntamtccy" column="cdtCntAmtCcy"/>
+        <result property="cdtcntamtvalue" column="cdtCntAmtValue"/>
+        <result property="fnlamtccy" column="fnlAmtCcy"/>
+        <result property="fnlamtvalue" column="fnlAmtValue"/>
+    </resultMap>
+
+    <sql id="selectPayCommCashboxBanlanceVo">
+        select id, chckngDt, coopBankInstnId, coopBankWltId, cshBoxInstnId, initlAmtCcy, initlAmtValue, cdtDbtInd, dbtCntAmtCcy, dbtCntAmtValue, cdtCntAmtCcy, cdtCntAmtValue, fnlAmtCcy, fnlAmtValue from pay_comm_cashbox_banlance
+    </sql>
+
+    <select id="selectPayCommCashboxBanlanceList"
+            parameterType="com.dcits.dcwlt.pay.batch.domain.PayCommCashboxBanlance"
+            resultMap="PayCommCashboxBanlanceResult">
+        <include refid="selectPayCommCashboxBanlanceVo"/>
+        <where>
+            <if test="chckngdt != null  and chckngdt != ''">and chckngDt = #{chckngdt}</if>
+            <if test="coopbankinstnid != null  and coopbankinstnid != ''">and coopBankInstnId = #{coopbankinstnid}</if>
+            <if test="coopbankwltid != null  and coopbankwltid != ''">and coopBankWltId = #{coopbankwltid}</if>
+            <if test="cshboxinstnid != null  and cshboxinstnid != ''">and cshBoxInstnId = #{cshboxinstnid}</if>
+            <if test="initlamtccy != null  and initlamtccy != ''">and initlAmtCcy = #{initlamtccy}</if>
+            <if test="initlamtvalue != null  and initlamtvalue != ''">and initlAmtValue = #{initlamtvalue}</if>
+            <if test="cdtdbtind != null  and cdtdbtind != ''">and cdtDbtInd = #{cdtdbtind}</if>
+            <if test="dbtcntamtccy != null  and dbtcntamtccy != ''">and dbtCntAmtCcy = #{dbtcntamtccy}</if>
+            <if test="dbtcntamtvalue != null  and dbtcntamtvalue != ''">and dbtCntAmtValue = #{dbtcntamtvalue}</if>
+            <if test="cdtcntamtccy != null  and cdtcntamtccy != ''">and cdtCntAmtCcy = #{cdtcntamtccy}</if>
+            <if test="cdtcntamtvalue != null  and cdtcntamtvalue != ''">and cdtCntAmtValue = #{cdtcntamtvalue}</if>
+            <if test="fnlamtccy != null  and fnlamtccy != ''">and fnlAmtCcy = #{fnlamtccy}</if>
+            <if test="fnlamtvalue != null  and fnlamtvalue != ''">and fnlAmtValue = #{fnlamtvalue}</if>
+        </where>
+    </select>
+
+    <select id="selectPayCommCashboxBanlanceById" parameterType="Long" resultMap="PayCommCashboxBanlanceResult">
+        <include refid="selectPayCommCashboxBanlanceVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertPayCommCashboxBanlance" parameterType="com.dcits.dcwlt.pay.batch.domain.PayCommCashboxBanlance"
+            useGeneratedKeys="true" keyProperty="id">
+        insert into pay_comm_cashbox_banlance
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="chckngdt != null">chckngDt,</if>
+            <if test="coopbankinstnid != null">coopBankInstnId,</if>
+            <if test="coopbankwltid != null">coopBankWltId,</if>
+            <if test="cshboxinstnid != null">cshBoxInstnId,</if>
+            <if test="initlamtccy != null">initlAmtCcy,</if>
+            <if test="initlamtvalue != null">initlAmtValue,</if>
+            <if test="cdtdbtind != null">cdtDbtInd,</if>
+            <if test="dbtcntamtccy != null">dbtCntAmtCcy,</if>
+            <if test="dbtcntamtvalue != null">dbtCntAmtValue,</if>
+            <if test="cdtcntamtccy != null">cdtCntAmtCcy,</if>
+            <if test="cdtcntamtvalue != null">cdtCntAmtValue,</if>
+            <if test="fnlamtccy != null">fnlAmtCcy,</if>
+            <if test="fnlamtvalue != null">fnlAmtValue,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="chckngdt != null">#{chckngdt},</if>
+            <if test="coopbankinstnid != null">#{coopbankinstnid},</if>
+            <if test="coopbankwltid != null">#{coopbankwltid},</if>
+            <if test="cshboxinstnid != null">#{cshboxinstnid},</if>
+            <if test="initlamtccy != null">#{initlamtccy},</if>
+            <if test="initlamtvalue != null">#{initlamtvalue},</if>
+            <if test="cdtdbtind != null">#{cdtdbtind},</if>
+            <if test="dbtcntamtccy != null">#{dbtcntamtccy},</if>
+            <if test="dbtcntamtvalue != null">#{dbtcntamtvalue},</if>
+            <if test="cdtcntamtccy != null">#{cdtcntamtccy},</if>
+            <if test="cdtcntamtvalue != null">#{cdtcntamtvalue},</if>
+            <if test="fnlamtccy != null">#{fnlamtccy},</if>
+            <if test="fnlamtvalue != null">#{fnlamtvalue},</if>
+        </trim>
+    </insert>
+
+    <update id="updatePayCommCashboxBanlance" parameterType="com.dcits.dcwlt.pay.batch.domain.PayCommCashboxBanlance">
+        update pay_comm_cashbox_banlance
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="chckngdt != null">chckngDt = #{chckngdt},</if>
+            <if test="coopbankinstnid != null">coopBankInstnId = #{coopbankinstnid},</if>
+            <if test="coopbankwltid != null">coopBankWltId = #{coopbankwltid},</if>
+            <if test="cshboxinstnid != null">cshBoxInstnId = #{cshboxinstnid},</if>
+            <if test="initlamtccy != null">initlAmtCcy = #{initlamtccy},</if>
+            <if test="initlamtvalue != null">initlAmtValue = #{initlamtvalue},</if>
+            <if test="cdtdbtind != null">cdtDbtInd = #{cdtdbtind},</if>
+            <if test="dbtcntamtccy != null">dbtCntAmtCcy = #{dbtcntamtccy},</if>
+            <if test="dbtcntamtvalue != null">dbtCntAmtValue = #{dbtcntamtvalue},</if>
+            <if test="cdtcntamtccy != null">cdtCntAmtCcy = #{cdtcntamtccy},</if>
+            <if test="cdtcntamtvalue != null">cdtCntAmtValue = #{cdtcntamtvalue},</if>
+            <if test="fnlamtccy != null">fnlAmtCcy = #{fnlamtccy},</if>
+            <if test="fnlamtvalue != null">fnlAmtValue = #{fnlamtvalue},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deletePayCommCashboxBanlanceById" parameterType="Long">
+        delete from pay_comm_cashbox_banlance where id = #{id}
+    </delete>
+
+    <delete id="deletePayCommCashboxBanlanceByIds" parameterType="String">
+        delete from pay_comm_cashbox_banlance where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>
