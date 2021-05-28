@@ -16,7 +16,6 @@ import com.dcits.dcwlt.common.pay.util.BigDecimalUtil;
 import com.dcits.dcwlt.common.pay.util.DateUtil;
 import com.dcits.dcwlt.pay.api.domain.dcep.DCEPReqDTO;
 import com.dcits.dcwlt.pay.api.domain.dcep.DCEPRspDTO;
-import com.dcits.dcwlt.pay.api.domain.dcep.bankattachedmanagement.BankAttRspsnInf;
 import com.dcits.dcwlt.pay.api.domain.dcep.cmonconf.CmonConfDTO;
 import com.dcits.dcwlt.pay.api.domain.dcep.cmonconf.CmonConfInf;
 import com.dcits.dcwlt.pay.api.domain.dcep.common.GrpHdr;
@@ -223,7 +222,7 @@ public class PayConvert227STradeFlow {
         String busiType = reqMsg.getBody().getBusiType();
 
         //判断发起机构是否广发银
-        if (!AppConstant.CGB_FINANCIAL_INSTITUTION_CD.equals(instgPtyId)) {
+        if (!AppConstant.BANK_FINANCIAL_INSTITUTION_CD.equals(instgPtyId)) {
             logger.info("发起机构传输有误,{}", instgPtyId);
             throw new EcnyTransException(AppConstant.TRXSTATUS_FAILED, EcnyTransError.PARTY_INSTG_ERROR);
         }

@@ -16,4 +16,13 @@ export function getParty(partyid) {
     method: 'get'
   })
 }
+// 查询机构信息
+export function getPartyInfo() {
+  return request({
+    url: '/pay-batch/party/info',
+    method: 'get'
+  })
+}
+
+
 

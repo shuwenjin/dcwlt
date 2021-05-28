@@ -244,7 +244,7 @@ public class DCEPHeader {
 //=========================================================
         reqHead.setVersionID("04");
         reqHead.setOrigSenderSID(AppConstant.DCEP_SYS_ID);
-        reqHead.setOrigSender(AppConstant.CGB_FINANCIAL_INSTITUTION_CD);
+        reqHead.setOrigSender(AppConstant.BANK_FINANCIAL_INSTITUTION_CD);
         reqHead.setOrigReceiver(receiver);
         reqHead.setOrigReceiverSID(AppConstant.DCEP_SYS_ID);
         reqHead.setStructType("XML");

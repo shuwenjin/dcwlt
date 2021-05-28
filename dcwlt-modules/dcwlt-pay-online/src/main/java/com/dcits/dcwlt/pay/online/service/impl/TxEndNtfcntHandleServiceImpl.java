@@ -474,7 +474,7 @@ public class TxEndNtfcntHandleServiceImpl {
         String orgnlInstgPty = txEndNtfctn.getOrgnlGrpHdr().getOrgnlInstgPty();
         logger.info("终态通知差错贷记调账：原发起机构号：{}，业务状态：{}，原报文标识号：{}",orgnlInstgPty,txEndNtfctn.getOrgnlMsgCntt().getPrcSts(),txEndNtfctn.getOrgnlGrpHdr().getOrgnlMsgId());
         //终态通知差错贷记调账往账流程（原发起机构为广发）
-        if(StringUtils.equals(AppConstant.CGB_FINANCIAL_INSTITUTION_CD,orgnlInstgPty)){
+        if(StringUtils.equals(AppConstant.BANK_FINANCIAL_INSTITUTION_CD,orgnlInstgPty)){
             processSend801(txEndNtfctn);
         }else{
             //终态通知差错贷记调账来账处理
@@ -923,7 +923,7 @@ public class TxEndNtfcntHandleServiceImpl {
         payTransDtlInfoDONEW.setOrigMsgType(orgnlGrpHdr.getOrgnlMT());
 
         //终态通知差错贷记调账往账流程（原发起机构为广发）
-        if(StringUtils.equals(AppConstant.CGB_FINANCIAL_INSTITUTION_CD,orgnlInstgPty)){
+        if(StringUtils.equals(AppConstant.BANK_FINANCIAL_INSTITUTION_CD,orgnlInstgPty)){
             payTransDtlInfoDONEW.setDirect(AppConstant.DIRECT_SEND);
             payTransDtlInfoDONEW.setPayFlag(AppConstant.IDENTIFICATION_PAYEE);
             payTransDtlInfoDONEW.setOperStep(AppConstant.OPERSTEP_DRDT);
@@ -973,7 +973,7 @@ public class TxEndNtfcntHandleServiceImpl {
             payTransDtlInfoDONEW.setPayeeAcctType(payTransDtlInfoDOOLD.getPayerAcctType());
 
             //往账原交易不存在，补充原交易后更新兑换即原原交易业务状态为A
-            if(StringUtils.equals(AppConstant.CGB_FINANCIAL_INSTITUTION_CD,orgnlInstgPty)){
+            if(StringUtils.equals(AppConstant.BANK_FINANCIAL_INSTITUTION_CD,orgnlInstgPty)){
                 payTransDtlInfoDOOLD.setTrxStatus(AppConstant.TRXSTATUS_PRECREDITSUCCESS);
                 updatePayTransDtlInfo(payTransDtlInfoDOOLD,new StateMachine());
             }

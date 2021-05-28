@@ -191,7 +191,7 @@ public class Login933STradeFlow {
             throw new EcnyTransException(EcnyTransError.ECNY_PARAM_ERROR);
         }
 
-        PartyInfoDO partyInfoDO = partyInfoservice.queryPartyInfoByPartyId(AppConstant.CGB_FINANCIAL_INSTITUTION_CD);
+        PartyInfoDO partyInfoDO = partyInfoservice.queryPartyInfoByPartyId(AppConstant.BANK_FINANCIAL_INSTITUTION_CD);
         if (partyInfoDO == null) {
             logger.error("登录请求，机构不存在,请先调用机构变更接口初始化机构数据");
             throw new EcnyTransException(EcnyTransError.ECNY_NOPARTY_ERROR);
@@ -306,7 +306,7 @@ public class Login933STradeFlow {
         ECNYReqDTO<LoginInnerReqDTO> reqMsg = EcnyTradeContext.getReqMsg(tradeContext);
         //操作类型
         PartyInfoDO partyInfoDO = (PartyInfoDO) tradeContext.getTempCtx().get(KEY_LOGIN_PARTY_DO);
-        partyInfoDO.setPartyID(AppConstant.CGB_FINANCIAL_INSTITUTION_CD);
+        partyInfoDO.setPartyID(AppConstant.BANK_FINANCIAL_INSTITUTION_CD);
         if (LoginOperationTpCdEnum.OT00.getCode().equals(reqMsg.getBody().getOpterationType())) {
             //登录操作,更新状态为已登录
             partyInfoDO.setPartyStatus(StatusTpCdEnum.ST02);

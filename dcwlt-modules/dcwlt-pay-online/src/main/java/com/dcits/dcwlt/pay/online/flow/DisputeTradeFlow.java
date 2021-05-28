@@ -206,7 +206,7 @@ public class DisputeTradeFlow {
         DsptChnlReqDTO dsptChnlReqDTO = EcnyTradeContext.getReqMsg(tradeContext);
         boolean dcep221 = MsgTpEnum.DCEP221.getCode().equals(dsptChnlReqDTO.getMsgTp());
         boolean dcepRecv801 = (StringUtils.equals(MsgTpEnum.DCEP801.getCode(), dsptChnlReqDTO.getMsgTp())
-                && !StringUtils.equals(AppConstant.CGB_FINANCIAL_INSTITUTION_CD, dsptChnlReqDTO.getInstgPty()));
+                && !StringUtils.equals(AppConstant.BANK_FINANCIAL_INSTITUTION_CD, dsptChnlReqDTO.getInstgPty()));
         boolean dcep225 = MsgTpEnum.DCEP225.getCode().equals(dsptChnlReqDTO.getMsgTp());
         boolean dcep227 = MsgTpEnum.DCEP227.getCode().equals(dsptChnlReqDTO.getMsgTp());
         if (!(dcep221 || dcepRecv801 || dcep225 || dcep227)) {
@@ -429,7 +429,7 @@ public class DisputeTradeFlow {
      */
     private void dsptChnlHandle(PayTransDtlInfoDO payTransDtlInfoDO) {
 
-        if (StringUtils.equals(AppConstant.CGB_FINANCIAL_INSTITUTION_CD, payTransDtlInfoDO.getInstgPty())) {
+        if (StringUtils.equals(AppConstant.BANK_FINANCIAL_INSTITUTION_CD, payTransDtlInfoDO.getInstgPty())) {
             //贷记调账往账处理
             logger.info("贷记调账往账处理,平台日期：{}，平台流水：{}", payTransDtlInfoDO.getPayDate(), payTransDtlInfoDO.getPaySerno());
             //X10冲正
@@ -723,7 +723,7 @@ public class DisputeTradeFlow {
 
         //交易是否贷记调账来账
         boolean dcepRecv801 = (StringUtils.equals(MsgTpEnum.DCEP801.getCode(), payTransDtlInfoDO.getMsgType())
-                && !StringUtils.equals(AppConstant.CGB_FINANCIAL_INSTITUTION_CD, payTransDtlInfoDO.getInstgPty()));
+                && !StringUtils.equals(AppConstant.BANK_FINANCIAL_INSTITUTION_CD, payTransDtlInfoDO.getInstgPty()));
 
         //仅兑回和贷记调账来账可补入账
         if (dcep221 || dcepRecv801) {
@@ -779,7 +779,7 @@ public class DisputeTradeFlow {
 
         //差错贷记调账往账
         boolean dcepSent801 = (StringUtils.equals(MsgTpEnum.DCEP801.getCode(), msgType)
-                && StringUtils.equals(AppConstant.CGB_FINANCIAL_INSTITUTION_CD, payTransDtlInfoDO.getInstgPty()));
+                && StringUtils.equals(AppConstant.BANK_FINANCIAL_INSTITUTION_CD, payTransDtlInfoDO.getInstgPty()));
 
         //终态 111
         boolean status111 = (StringUtils.equals(trxStatus, AppConstant.TRXSTATUS_SUCCESS)

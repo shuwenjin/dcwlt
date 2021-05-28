@@ -169,7 +169,7 @@ public class Reconvert221RTradeFlow {
         }
 
         //判断接收机构是否广发银行 及校验机构状态
-        if (!AppConstant.CGB_FINANCIAL_INSTITUTION_CD.equals(instdPtyId)) {
+        if (!AppConstant.BANK_FINANCIAL_INSTITUTION_CD.equals(instdPtyId)) {
             logger.error("接收机构传输有误,{}", instdPtyId);
             throw new EcnyTransException(AppConstant.TRXSTATUS_FAILED, EcnyTransError.PARTY_INSTD_ERROR);
         }

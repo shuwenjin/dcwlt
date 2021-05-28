@@ -105,7 +105,7 @@ public class AuthInfo915RTradeFlow {
         FaultDTO faultDTO = new FaultDTO();
         Fault fault = new Fault();
         //业务故障信息:发生错误的机构编码
-        fault.setFaultActor(AppConstant.CGB_FINANCIAL_INSTITUTION_CD);
+        fault.setFaultActor(AppConstant.BANK_FINANCIAL_INSTITUTION_CD);
         //业务故障代码:业务拒绝码
         fault.setFaultCode(rspCodeMapDO.getDestRspCode());
         //业务故障说明

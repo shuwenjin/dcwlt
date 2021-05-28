@@ -72,4 +72,14 @@ public class PartyInfoQryController extends BaseController
     }
 
 
+
+    /**
+     * 获取本机构信息
+     */
+    @PreAuthorize(hasPermi = "pay-batch:party:query")
+    @GetMapping(value = "/info")
+    public AjaxResult getPartyInfo()
+    {
+        return AjaxResult.success(partyInfoDOService.getPartyInfo());
+    }
 }

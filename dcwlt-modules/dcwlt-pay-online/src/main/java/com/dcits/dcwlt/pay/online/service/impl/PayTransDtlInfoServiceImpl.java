@@ -506,7 +506,7 @@ public class PayTransDtlInfoServiceImpl implements IPayTransDtlInfoService {
 
         //差错贷记调账往账
         boolean dcepSent801 = (StringUtils.equals(MsgTpEnum.DCEP801.getCode(), msgType)
-                && StringUtils.equals(AppConstant.CGB_FINANCIAL_INSTITUTION_CD, payTransDtlInfoDO.getInstgPty()));
+                && StringUtils.equals(AppConstant.BANK_FINANCIAL_INSTITUTION_CD, payTransDtlInfoDO.getInstgPty()));
 
         boolean flag = msgTypeFlag || dcepSent801;
 

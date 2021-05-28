@@ -270,8 +270,8 @@ public class CashBoxWarning451STradeFlow {
         payTransDtlNonfDO.setSenderDateTime(DateUtil.getSysTime());
         payTransDtlNonfDO.setTradeStatus(TrxStatusEnum.PROCESSING.getCode());
         payTransDtlNonfDO.setDrct(SEND_DIRECT);
-        payTransDtlNonfDO.setInstgDrctPty(AppConstant.CGB_FINANCIAL_INSTITUTION_CD);
-        payTransDtlNonfDO.setInstdDrctPty(AppConstant.NET_PARTY_ID);
+        payTransDtlNonfDO.setInstgDrctPty(AppConstant.BANK_FINANCIAL_INSTITUTION_CD);
+        payTransDtlNonfDO.setInstdDrctPty(AppConstant.DCEP_FINANCIAL_INSTITUTION_CD);
         //初始化时设置状态为处理中，在后续的处理过程中更新状态
         payTransDtlNonfDO.setProcStatus(ProcessStsCdEnum.PR02.getCode());
         payTransDtlNonfDO.setLastUpDate(DateUtil.getDefaultDate());

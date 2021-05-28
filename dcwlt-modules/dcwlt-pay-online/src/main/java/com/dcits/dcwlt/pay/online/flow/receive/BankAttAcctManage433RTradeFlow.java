@@ -194,7 +194,7 @@ public class BankAttAcctManage433RTradeFlow {
         boolean partyFlag = partyService.isAvailable(instdPty);
 
         //判断接收机构是否广发银行
-        if (!AppConstant.CGB_FINANCIAL_INSTITUTION_CD.equals(instdPty)) {
+        if (!AppConstant.BANK_FINANCIAL_INSTITUTION_CD.equals(instdPty)) {
             logger.info("接收机构有误,{}", instgPty);
             throw new EcnyTransException(AppConstant.TRXSTATUS_FAILED, EcnyTransError.INSTD_PTY_ERROR);
         }
@@ -630,7 +630,7 @@ public class BankAttAcctManage433RTradeFlow {
 //        signInfoDO.setPayTime(DateUtil.getCurTime());                        //平台时间
         signInfoDO.setPayTime(DateUtil.getDefaultTime());                        //平台时间
         signInfoDO.setSignStatus(VALID_SIGN_STATUS);                                    //协议状态
-        signInfoDO.setAcctPtyId(AppConstant.CGB_FINANCIAL_INSTITUTION_CD);              //签约人银行账户所属机构
+        signInfoDO.setAcctPtyId(AppConstant.BANK_FINANCIAL_INSTITUTION_CD);              //签约人银行账户所属机构
         signInfoDO.setAcctType(reqBody.getSgnInf().getSgnAcctTp());                     //签约人银行账户类型
         signInfoDO.setAcctId(reqBody.getSgnInf().getSgnAcctId());                       //签约人银行账户账号
         signInfoDO.setAcctName(reqBody.getSgnInf().getSgnAcctNm());                     //签约人银行账户户名

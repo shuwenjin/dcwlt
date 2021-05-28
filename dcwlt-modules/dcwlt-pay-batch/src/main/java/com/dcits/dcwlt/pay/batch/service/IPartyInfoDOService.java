@@ -3,6 +3,7 @@ package com.dcits.dcwlt.pay.batch.service;
 import com.dcits.dcwlt.pay.api.model.PartyInfoDO;
 
 import java.util.List;
+import java.util.Map;
 
 
 /**
@@ -60,4 +61,11 @@ public interface IPartyInfoDOService
      * @return 结果
      */
     public int deletePartyInfoDOById(String partyid);
+
+    /**
+     * 获取本机构基本信息
+     *
+     * @return 结果
+     */
+    public Map getPartyInfo();
 }

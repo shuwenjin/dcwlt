@@ -112,12 +112,12 @@ public class    FreeFrmt401STradeFlow {
         String msgSn = generateCodeService.generateMsgSN(msgId);
 
         //发起机构是否有发送权限
-        boolean sendAuth = authInfoService.validateAuthInfo(AppConstant.CGB_FINANCIAL_INSTITUTION_CD, Constant.DCEP_401, "", AuthInfoDrctEnum.sendAuth);
+        boolean sendAuth = authInfoService.validateAuthInfo(AppConstant.BANK_FINANCIAL_INSTITUTION_CD, Constant.DCEP_401, "", AuthInfoDrctEnum.sendAuth);
         if (!sendAuth) {
             //初始化异常内容
             retCode = EcnyTransError.SEND_PARTY_AUTH_ERROR.getErrorCode();
             retMsg = EcnyTransError.SEND_PARTY_AUTH_ERROR.getErrorMsg();
-            logger.error("发起机构无发送权限,{}", AppConstant.CGB_FINANCIAL_INSTITUTION_CD);
+            logger.error("发起机构无发送权限,{}", AppConstant.BANK_FINANCIAL_INSTITUTION_CD);
             throw new EcnyTransException(EcnyTransError.ORGAN_POWER_ERROR);
         }
         ECNYReqDTO<FreeFrmtReqDTO> reqMsg = EcnyTradeContext.getReqMsg(context);
@@ -168,7 +168,7 @@ public class    FreeFrmt401STradeFlow {
         FreeFrmtInf freeFrmtInf = new FreeFrmtInf();
         GrpHdr grpHdr = new GrpHdr();
         //发起机构--广发银行
-        InstgPty instgPty = new InstgPty(AppConstant.CGB_FINANCIAL_INSTITUTION_CD);
+        InstgPty instgPty = new InstgPty(AppConstant.BANK_FINANCIAL_INSTITUTION_CD);
         //接收机构
         InstdPty instdPty = new InstdPty(partyId);
         //自由格式内容

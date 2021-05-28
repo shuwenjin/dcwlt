@@ -19,7 +19,6 @@ import com.dcits.dcwlt.pay.api.mq.event.exception.EcnyTransError;
 import com.dcits.dcwlt.pay.api.mq.event.exception.EcnyTransException;
 import com.dcits.dcwlt.pay.online.service.ITxDtlQryNetPartyService;
 import org.apache.commons.lang3.StringUtils;
-import com.dcits.dcwlt.pay.online.base.Constant;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -117,7 +116,7 @@ public class TxDtlQryNetPartyServiceImpl implements ITxDtlQryNetPartyService {
         grpHdr.setCreDtTm(DateUtil.getISODateTime());
 
         //发起机构 即 广发
-        InstgPty instgPty = new InstgPty(AppConstant.CGB_FINANCIAL_INSTITUTION_CD);
+        InstgPty instgPty = new InstgPty(AppConstant.BANK_FINANCIAL_INSTITUTION_CD);
         grpHdr.setInstgPty(instgPty);
 
         //接收机构 即 互联互通

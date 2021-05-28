@@ -64,7 +64,7 @@ public class GrpHdr {
         grpHdr.setMsgId(msgId);
         grpHdr.setCreDtTm(DateUtil.getISODateTime());
         grpHdr.setInstdPty(new InstdPty(receiver));
-        grpHdr.setInstgPty(new InstgPty(AppConstant.CGB_FINANCIAL_INSTITUTION_CD));
+        grpHdr.setInstgPty(new InstgPty(AppConstant.BANK_FINANCIAL_INSTITUTION_CD));
         return grpHdr;
     }
 
@@ -88,8 +88,8 @@ public class GrpHdr {
         GrpHdr grpHdr = new GrpHdr();
         grpHdr.setMsgId(msgId);
         grpHdr.setCreDtTm(DateUtil.getISODateTime());
-        grpHdr.setInstdPty(new InstdPty(AppConstant.NET_PARTY_ID));
-        grpHdr.setInstgPty(new InstgPty(AppConstant.CGB_FINANCIAL_INSTITUTION_CD));
+        grpHdr.setInstdPty(new InstdPty(AppConstant.DCEP_FINANCIAL_INSTITUTION_CD));
+        grpHdr.setInstgPty(new InstgPty(AppConstant.BANK_FINANCIAL_INSTITUTION_CD));
         return grpHdr;
     }
 

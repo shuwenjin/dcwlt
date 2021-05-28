@@ -1,7 +1,10 @@
 package com.dcits.dcwlt.pay.batch.service.impl;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
+import com.dcits.dcwlt.common.pay.constant.AppConstant;
 import com.dcits.dcwlt.pay.api.model.PartyInfoDO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -91,5 +94,22 @@ public class PartyInfoDOServiceImpl implements IPartyInfoDOService
     public int deletePartyInfoDOById(String partyid)
     {
         return partyInfoDOMapper.deletePartyInfoDOById(partyid);
+    }
+
+    /**
+     * 获取本机构基本信息
+     * @return 机构
+     */
+    @Override
+    public Map getPartyInfo()
+    {
+        Map infoMap = new HashMap();
+        String partyid = AppConstant.BANK_FINANCIAL_INSTITUTION_CD;
+        PartyInfoDO partyInfo =  partyInfoDOMapper.selectPartyInfoDOById(partyid);
+        infoMap.put("partyID",partyid);
+        if(null != partyInfo) {
+            infoMap.put("partyStatus",partyInfo.getPartyStatus());
+        }
+        return infoMap;
     }
 }

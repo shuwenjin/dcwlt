@@ -270,7 +270,7 @@ public class Dispute801STradeFlow {
         // 发起机构权限校验
         Boolean sendAuth = authInfoService.validateAuthInfo(instgPty, msgType, DSPT_BIZ_TP, AuthInfoDrctEnum.sendAuth);
         //判断发起机构是否广发银行
-        if (!AppConstant.CGB_FINANCIAL_INSTITUTION_CD.equals(instgPty)) {
+        if (!AppConstant.BANK_FINANCIAL_INSTITUTION_CD.equals(instgPty)) {
             logger.error("发起机构传输有误,{}", instgPty);
             throw new EcnyTransException(AppConstant.TRXSTATUS_FAILED, EcnyTransError.PARTY_INSTG_ERROR);
         }
