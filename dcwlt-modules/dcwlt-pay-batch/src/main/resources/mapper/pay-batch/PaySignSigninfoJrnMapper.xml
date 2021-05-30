@@ -1,0 +1,219 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dcits.dcwlt.pay.batch.mapper.PaySignSigninfoJrnMapper">
+
+    <resultMap type="com.dcits.dcwlt.pay.batch.domain.PaySignSigninfoJrn" id="PaySignSigninfoJrnResult">
+        <result property="paydate" column="paydate"/>
+        <result property="payserno" column="payserno"/>
+        <result property="paytime" column="paytime"/>
+        <result property="msgid" column="msgid"/>
+        <result property="instgpty" column="instgpty"/>
+        <result property="instdpty" column="instdpty"/>
+        <result property="direct" column="direct"/>
+        <result property="managetype" column="managetype"/>
+        <result property="signtype" column="signtype"/>
+        <result property="signno" column="signno"/>
+        <result property="msgsendcode" column="msgsendcode"/>
+        <result property="msgverifycode" column="msgverifycode"/>
+        <result property="trxstatus" column="trxstatus"/>
+        <result property="trxretcode" column="trxretcode"/>
+        <result property="trxretmsg" column="trxretmsg"/>
+        <result property="rspmsgid" column="rspmsgid"/>
+        <result property="rspstatus" column="rspstatus"/>
+        <result property="rspcode" column="rspcode"/>
+        <result property="rspmsg" column="rspmsg"/>
+        <result property="acctptyid" column="acctptyid"/>
+        <result property="accttype" column="accttype"/>
+        <result property="acctid" column="acctid"/>
+        <result property="acctname" column="acctname"/>
+        <result property="idtype" column="idtype"/>
+        <result property="idno" column="idno"/>
+        <result property="telephone" column="telephone"/>
+        <result property="walletptyid" column="walletptyid"/>
+        <result property="walletid" column="walletid"/>
+        <result property="wallettype" column="wallettype"/>
+        <result property="walletlevel" column="walletlevel"/>
+        <result property="lastupjrnno" column="lastupjrnno"/>
+        <result property="lastupdate" column="lastupdate"/>
+        <result property="lastuptime" column="lastuptime"/>
+        <result property="remark" column="remark"/>
+    </resultMap>
+
+    <sql id="selectPaySignSigninfoJrnVo">
+        select paydate, payserno, paytime, msgid, instgpty, instdpty, direct, managetype, signtype, signno, msgsendcode, msgverifycode, trxstatus, trxretcode, trxretmsg, rspmsgid, rspstatus, rspcode, rspmsg, acctptyid, accttype, acctid, acctname, idtype, idno, telephone, walletptyid, walletid, wallettype, walletlevel, lastupjrnno, lastupdate, lastuptime, remark from pay_sign_signinfo_jrn
+    </sql>
+
+    <select id="selectPaySignSigninfoJrnList" parameterType="com.dcits.dcwlt.pay.batch.domain.PaySignSigninfoJrn"
+            resultMap="PaySignSigninfoJrnResult">
+        <include refid="selectPaySignSigninfoJrnVo"/>
+        <where>
+            <if test="paydatestart != null  and paydatestart != ''">and paydate &gt;= #{paydatestart}</if>
+            <if test="paydateend != null  and paydateend != ''">and paydate &lt;= #{paydateend}</if>
+            <if test="paytime != null  and paytime != ''">and paytime = #{paytime}</if>
+            <if test="msgid != null  and msgid != ''">and msgid = #{msgid}</if>
+            <if test="instgpty != null  and instgpty != ''">and instgpty = #{instgpty}</if>
+            <if test="instdpty != null  and instdpty != ''">and instdpty = #{instdpty}</if>
+            <if test="direct != null  and direct != ''">and direct = #{direct}</if>
+            <if test="managetype != null  and managetype != ''">and managetype = #{managetype}</if>
+            <if test="signtype != null  and signtype != ''">and signtype = #{signtype}</if>
+            <if test="signno != null  and signno != ''">and signno = #{signno}</if>
+            <if test="msgsendcode != null  and msgsendcode != ''">and msgsendcode = #{msgsendcode}</if>
+            <if test="msgverifycode != null  and msgverifycode != ''">and msgverifycode = #{msgverifycode}</if>
+            <if test="trxstatus != null  and trxstatus != ''">and trxstatus = #{trxstatus}</if>
+            <if test="trxretcode != null  and trxretcode != ''">and trxretcode = #{trxretcode}</if>
+            <if test="trxretmsg != null  and trxretmsg != ''">and trxretmsg = #{trxretmsg}</if>
+            <if test="rspmsgid != null  and rspmsgid != ''">and rspmsgid = #{rspmsgid}</if>
+            <if test="rspstatus != null  and rspstatus != ''">and rspstatus = #{rspstatus}</if>
+            <if test="rspcode != null  and rspcode != ''">and rspcode = #{rspcode}</if>
+            <if test="rspmsg != null  and rspmsg != ''">and rspmsg = #{rspmsg}</if>
+            <if test="acctptyid != null  and acctptyid != ''">and acctptyid = #{acctptyid}</if>
+            <if test="accttype != null  and accttype != ''">and accttype = #{accttype}</if>
+            <if test="acctid != null  and acctid != ''">and acctid = #{acctid}</if>
+            <if test="acctname != null  and acctname != ''">and acctname like concat('%', #{acctname}, '%')</if>
+            <if test="idtype != null  and idtype != ''">and idtype = #{idtype}</if>
+            <if test="idno != null  and idno != ''">and idno = #{idno}</if>
+            <if test="telephone != null  and telephone != ''">and telephone = #{telephone}</if>
+            <if test="walletptyid != null  and walletptyid != ''">and walletptyid = #{walletptyid}</if>
+            <if test="walletid != null  and walletid != ''">and walletid = #{walletid}</if>
+            <if test="wallettype != null  and wallettype != ''">and wallettype = #{wallettype}</if>
+            <if test="walletlevel != null  and walletlevel != ''">and walletlevel = #{walletlevel}</if>
+            <if test="lastupjrnno != null  and lastupjrnno != ''">and lastupjrnno = #{lastupjrnno}</if>
+            <if test="lastupdate != null  and lastupdate != ''">and lastupdate = #{lastupdate}</if>
+            <if test="lastuptime != null  and lastuptime != ''">and lastuptime = #{lastuptime}</if>
+        </where>
+    </select>
+
+    <select id="selectPaySignSigninfoJrnById" parameterType="String" resultMap="PaySignSigninfoJrnResult">
+        <include refid="selectPaySignSigninfoJrnVo"/>
+        where paydate = #{paydate}
+    </select>
+
+    <insert id="insertPaySignSigninfoJrn" parameterType="com.dcits.dcwlt.pay.batch.domain.PaySignSigninfoJrn">
+        insert into pay_sign_signinfo_jrn
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="paydate != null">paydate,</if>
+            <if test="payserno != null">payserno,</if>
+            <if test="paytime != null and paytime != ''">paytime,</if>
+            <if test="msgid != null and msgid != ''">msgid,</if>
+            <if test="instgpty != null and instgpty != ''">instgpty,</if>
+            <if test="instdpty != null and instdpty != ''">instdpty,</if>
+            <if test="direct != null and direct != ''">direct,</if>
+            <if test="managetype != null and managetype != ''">managetype,</if>
+            <if test="signtype != null and signtype != ''">signtype,</if>
+            <if test="signno != null">signno,</if>
+            <if test="msgsendcode != null">msgsendcode,</if>
+            <if test="msgverifycode != null">msgverifycode,</if>
+            <if test="trxstatus != null">trxstatus,</if>
+            <if test="trxretcode != null">trxretcode,</if>
+            <if test="trxretmsg != null">trxretmsg,</if>
+            <if test="rspmsgid != null">rspmsgid,</if>
+            <if test="rspstatus != null">rspstatus,</if>
+            <if test="rspcode != null">rspcode,</if>
+            <if test="rspmsg != null">rspmsg,</if>
+            <if test="acctptyid != null and acctptyid != ''">acctptyid,</if>
+            <if test="accttype != null and accttype != ''">accttype,</if>
+            <if test="acctid != null and acctid != ''">acctid,</if>
+            <if test="acctname != null and acctname != ''">acctname,</if>
+            <if test="idtype != null and idtype != ''">idtype,</if>
+            <if test="idno != null and idno != ''">idno,</if>
+            <if test="telephone != null and telephone != ''">telephone,</if>
+            <if test="walletptyid != null and walletptyid != ''">walletptyid,</if>
+            <if test="walletid != null and walletid != ''">walletid,</if>
+            <if test="wallettype != null and wallettype != ''">wallettype,</if>
+            <if test="walletlevel != null and walletlevel != ''">walletlevel,</if>
+            <if test="lastupjrnno != null">lastupjrnno,</if>
+            <if test="lastupdate != null">lastupdate,</if>
+            <if test="lastuptime != null">lastuptime,</if>
+            <if test="remark != null">remark,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="paydate != null">#{paydate},</if>
+            <if test="payserno != null">#{payserno},</if>
+            <if test="paytime != null and paytime != ''">#{paytime},</if>
+            <if test="msgid != null and msgid != ''">#{msgid},</if>
+            <if test="instgpty != null and instgpty != ''">#{instgpty},</if>
+            <if test="instdpty != null and instdpty != ''">#{instdpty},</if>
+            <if test="direct != null and direct != ''">#{direct},</if>
+            <if test="managetype != null and managetype != ''">#{managetype},</if>
+            <if test="signtype != null and signtype != ''">#{signtype},</if>
+            <if test="signno != null">#{signno},</if>
+            <if test="msgsendcode != null">#{msgsendcode},</if>
+            <if test="msgverifycode != null">#{msgverifycode},</if>
+            <if test="trxstatus != null">#{trxstatus},</if>
+            <if test="trxretcode != null">#{trxretcode},</if>
+            <if test="trxretmsg != null">#{trxretmsg},</if>
+            <if test="rspmsgid != null">#{rspmsgid},</if>
+            <if test="rspstatus != null">#{rspstatus},</if>
+            <if test="rspcode != null">#{rspcode},</if>
+            <if test="rspmsg != null">#{rspmsg},</if>
+            <if test="acctptyid != null and acctptyid != ''">#{acctptyid},</if>
+            <if test="accttype != null and accttype != ''">#{accttype},</if>
+            <if test="acctid != null and acctid != ''">#{acctid},</if>
+            <if test="acctname != null and acctname != ''">#{acctname},</if>
+            <if test="idtype != null and idtype != ''">#{idtype},</if>
+            <if test="idno != null and idno != ''">#{idno},</if>
+            <if test="telephone != null and telephone != ''">#{telephone},</if>
+            <if test="walletptyid != null and walletptyid != ''">#{walletptyid},</if>
+            <if test="walletid != null and walletid != ''">#{walletid},</if>
+            <if test="wallettype != null and wallettype != ''">#{wallettype},</if>
+            <if test="walletlevel != null and walletlevel != ''">#{walletlevel},</if>
+            <if test="lastupjrnno != null">#{lastupjrnno},</if>
+            <if test="lastupdate != null">#{lastupdate},</if>
+            <if test="lastuptime != null">#{lastuptime},</if>
+            <if test="remark != null">#{remark},</if>
+        </trim>
+    </insert>
+
+    <update id="updatePaySignSigninfoJrn" parameterType="com.dcits.dcwlt.pay.batch.domain.PaySignSigninfoJrn">
+        update pay_sign_signinfo_jrn
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="payserno != null">payserno = #{payserno},</if>
+            <if test="paytime != null and paytime != ''">paytime = #{paytime},</if>
+            <if test="msgid != null and msgid != ''">msgid = #{msgid},</if>
+            <if test="instgpty != null and instgpty != ''">instgpty = #{instgpty},</if>
+            <if test="instdpty != null and instdpty != ''">instdpty = #{instdpty},</if>
+            <if test="direct != null and direct != ''">direct = #{direct},</if>
+            <if test="managetype != null and managetype != ''">managetype = #{managetype},</if>
+            <if test="signtype != null and signtype != ''">signtype = #{signtype},</if>
+            <if test="signno != null">signno = #{signno},</if>
+            <if test="msgsendcode != null">msgsendcode = #{msgsendcode},</if>
+            <if test="msgverifycode != null">msgverifycode = #{msgverifycode},</if>
+            <if test="trxstatus != null">trxstatus = #{trxstatus},</if>
+            <if test="trxretcode != null">trxretcode = #{trxretcode},</if>
+            <if test="trxretmsg != null">trxretmsg = #{trxretmsg},</if>
+            <if test="rspmsgid != null">rspmsgid = #{rspmsgid},</if>
+            <if test="rspstatus != null">rspstatus = #{rspstatus},</if>
+            <if test="rspcode != null">rspcode = #{rspcode},</if>
+            <if test="rspmsg != null">rspmsg = #{rspmsg},</if>
+            <if test="acctptyid != null and acctptyid != ''">acctptyid = #{acctptyid},</if>
+            <if test="accttype != null and accttype != ''">accttype = #{accttype},</if>
+            <if test="acctid != null and acctid != ''">acctid = #{acctid},</if>
+            <if test="acctname != null and acctname != ''">acctname = #{acctname},</if>
+            <if test="idtype != null and idtype != ''">idtype = #{idtype},</if>
+            <if test="idno != null and idno != ''">idno = #{idno},</if>
+            <if test="telephone != null and telephone != ''">telephone = #{telephone},</if>
+            <if test="walletptyid != null and walletptyid != ''">walletptyid = #{walletptyid},</if>
+            <if test="walletid != null and walletid != ''">walletid = #{walletid},</if>
+            <if test="wallettype != null and wallettype != ''">wallettype = #{wallettype},</if>
+            <if test="walletlevel != null and walletlevel != ''">walletlevel = #{walletlevel},</if>
+            <if test="lastupjrnno != null">lastupjrnno = #{lastupjrnno},</if>
+            <if test="lastupdate != null">lastupdate = #{lastupdate},</if>
+            <if test="lastuptime != null">lastuptime = #{lastuptime},</if>
+            <if test="remark != null">remark = #{remark},</if>
+        </trim>
+        where paydate = #{paydate}
+    </update>
+
+    <delete id="deletePaySignSigninfoJrnById" parameterType="String">
+        delete from pay_sign_signinfo_jrn where paydate = #{paydate}
+    </delete>
+
+    <delete id="deletePaySignSigninfoJrnByIds" parameterType="String">
+        delete from pay_sign_signinfo_jrn where paydate in
+        <foreach item="paydate" collection="array" open="(" separator="," close=")">
+            #{paydate}
+        </foreach>
+    </delete>
+</mapper>

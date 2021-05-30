@@ -27,6 +27,8 @@ spring:
         # 共享配置
         shared-configs:
           - application-${spring.profiles.active}.${spring.cloud.nacos.config.file-extension}
+#    inetutils:
+#      preferred-networks: 192.168.130.147
 
 # 线程数量
 ency:

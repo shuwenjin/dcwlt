@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dcits.dcwlt.pay.batch.mapper.PaySignSigninfoMapper">
+
+    <resultMap type="com.dcits.dcwlt.pay.batch.domain.PaySignSigninfo" id="PaySignSigninfoResult">
+        <result property="paydate" column="paydate"/>
+        <result property="payserno" column="payserno"/>
+        <result property="paytime" column="paytime"/>
+        <result property="signno" column="signno"/>
+        <result property="signstatus" column="signstatus"/>
+        <result property="acctptyid" column="acctptyid"/>
+        <result property="accttype" column="accttype"/>
+        <result property="acctid" column="acctid"/>
+        <result property="acctname" column="acctname"/>
+        <result property="idtype" column="idtype"/>
+        <result property="idno" column="idno"/>
+        <result property="telephone" column="telephone"/>
+        <result property="walletptyid" column="walletptyid"/>
+        <result property="walletid" column="walletid"/>
+        <result property="wallettype" column="wallettype"/>
+        <result property="walletlevel" column="walletlevel"/>
+        <result property="lastupjrnno" column="lastupjrnno"/>
+        <result property="lastupdate" column="lastupdate"/>
+        <result property="lastuptime" column="lastuptime"/>
+    </resultMap>
+
+    <sql id="selectPaySignSigninfoVo">
+        select paydate, payserno, paytime, signno, signstatus, acctptyid, accttype, acctid, acctname, idtype, idno, telephone, walletptyid, walletid, wallettype, walletlevel, lastupjrnno, lastupdate, lastuptime from pay_sign_signinfo
+    </sql>
+
+    <select id="selectPaySignSigninfoList" parameterType="com.dcits.dcwlt.pay.batch.domain.PaySignSigninfo"
+            resultMap="PaySignSigninfoResult">
+        <include refid="selectPaySignSigninfoVo"/>
+        <where>
+            <if test="paydatestart != null  and paydatestart != ''">and paydate &gt;= #{paydatestart}</if>
+            <if test="paydateend != null  and paydateend != ''">and paydate &lt;= #{paydateend}</if>
+            <if test="payserno != null  and payserno != ''">and payserno = #{payserno}</if>
+            <if test="paytime != null  and paytime != ''">and paytime = #{paytime}</if>
+            <if test="signstatus != null  and signstatus != ''">and signstatus = #{signstatus}</if>
+            <if test="acctptyid != null  and acctptyid != ''">and acctptyid = #{acctptyid}</if>
+            <if test="accttype != null  and accttype != ''">and accttype = #{accttype}</if>
+            <if test="acctid != null  and acctid != ''">and acctid = #{acctid}</if>
+            <if test="acctname != null  and acctname != ''">and acctname like concat('%', #{acctname}, '%')</if>
+            <if test="idtype != null  and idtype != ''">and idtype = #{idtype}</if>
+            <if test="idno != null  and idno != ''">and idno = #{idno}</if>
+            <if test="telephone != null  and telephone != ''">and telephone = #{telephone}</if>
+            <if test="walletptyid != null  and walletptyid != ''">and walletptyid = #{walletptyid}</if>
+            <if test="walletid != null  and walletid != ''">and walletid = #{walletid}</if>
+            <if test="wallettype != null  and wallettype != ''">and wallettype = #{wallettype}</if>
+            <if test="walletlevel != null  and walletlevel != ''">and walletlevel = #{walletlevel}</if>
+            <if test="lastupjrnno != null  and lastupjrnno != ''">and lastupjrnno = #{lastupjrnno}</if>
+            <if test="lastupdate != null  and lastupdate != ''">and lastupdate = #{lastupdate}</if>
+            <if test="lastuptime != null  and lastuptime != ''">and lastuptime = #{lastuptime}</if>
+        </where>
+    </select>
+
+    <select id="selectPaySignSigninfoById" parameterType="String" resultMap="PaySignSigninfoResult">
+        <include refid="selectPaySignSigninfoVo"/>
+        where signno = #{signno}
+    </select>
+
+    <insert id="insertPaySignSigninfo" parameterType="com.dcits.dcwlt.pay.batch.domain.PaySignSigninfo">
+        insert into pay_sign_signinfo
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="paydate != null and paydate != ''">paydate,</if>
+            <if test="payserno != null and payserno != ''">payserno,</if>
+            <if test="paytime != null and paytime != ''">paytime,</if>
+            <if test="signno != null">signno,</if>
+            <if test="signstatus != null and signstatus != ''">signstatus,</if>
+            <if test="acctptyid != null and acctptyid != ''">acctptyid,</if>
+            <if test="accttype != null and accttype != ''">accttype,</if>
+            <if test="acctid != null and acctid != ''">acctid,</if>
+            <if test="acctname != null and acctname != ''">acctname,</if>
+            <if test="idtype != null and idtype != ''">idtype,</if>
+            <if test="idno != null and idno != ''">idno,</if>
+            <if test="telephone != null and telephone != ''">telephone,</if>
+            <if test="walletptyid != null and walletptyid != ''">walletptyid,</if>
+            <if test="walletid != null and walletid != ''">walletid,</if>
+            <if test="wallettype != null and wallettype != ''">wallettype,</if>
+            <if test="walletlevel != null">walletlevel,</if>
+            <if test="lastupjrnno != null">lastupjrnno,</if>
+            <if test="lastupdate != null">lastupdate,</if>
+            <if test="lastuptime != null">lastuptime,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="paydate != null and paydate != ''">#{paydate},</if>
+            <if test="payserno != null and payserno != ''">#{payserno},</if>
+            <if test="paytime != null and paytime != ''">#{paytime},</if>
+            <if test="signno != null">#{signno},</if>
+            <if test="signstatus != null and signstatus != ''">#{signstatus},</if>
+            <if test="acctptyid != null and acctptyid != ''">#{acctptyid},</if>
+            <if test="accttype != null and accttype != ''">#{accttype},</if>
+            <if test="acctid != null and acctid != ''">#{acctid},</if>
+            <if test="acctname != null and acctname != ''">#{acctname},</if>
+            <if test="idtype != null and idtype != ''">#{idtype},</if>
+            <if test="idno != null and idno != ''">#{idno},</if>
+            <if test="telephone != null and telephone != ''">#{telephone},</if>
+            <if test="walletptyid != null and walletptyid != ''">#{walletptyid},</if>
+            <if test="walletid != null and walletid != ''">#{walletid},</if>
+            <if test="wallettype != null and wallettype != ''">#{wallettype},</if>
+            <if test="walletlevel != null">#{walletlevel},</if>
+            <if test="lastupjrnno != null">#{lastupjrnno},</if>
+            <if test="lastupdate != null">#{lastupdate},</if>
+            <if test="lastuptime != null">#{lastuptime},</if>
+        </trim>
+    </insert>
+
+    <update id="updatePaySignSigninfo" parameterType="com.dcits.dcwlt.pay.batch.domain.PaySignSigninfo">
+        update pay_sign_signinfo
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="paydate != null and paydate != ''">paydate = #{paydate},</if>
+            <if test="payserno != null and payserno != ''">payserno = #{payserno},</if>
+            <if test="paytime != null and paytime != ''">paytime = #{paytime},</if>
+            <if test="signstatus != null and signstatus != ''">signstatus = #{signstatus},</if>
+            <if test="acctptyid != null and acctptyid != ''">acctptyid = #{acctptyid},</if>
+            <if test="accttype != null and accttype != ''">accttype = #{accttype},</if>
+            <if test="acctid != null and acctid != ''">acctid = #{acctid},</if>
+            <if test="acctname != null and acctname != ''">acctname = #{acctname},</if>
+            <if test="idtype != null and idtype != ''">idtype = #{idtype},</if>
+            <if test="idno != null and idno != ''">idno = #{idno},</if>
+            <if test="telephone != null and telephone != ''">telephone = #{telephone},</if>
+            <if test="walletptyid != null and walletptyid != ''">walletptyid = #{walletptyid},</if>
+            <if test="walletid != null and walletid != ''">walletid = #{walletid},</if>
+            <if test="wallettype != null and wallettype != ''">wallettype = #{wallettype},</if>
+            <if test="walletlevel != null">walletlevel = #{walletlevel},</if>
+            <if test="lastupjrnno != null">lastupjrnno = #{lastupjrnno},</if>
+            <if test="lastupdate != null">lastupdate = #{lastupdate},</if>
+            <if test="lastuptime != null">lastuptime = #{lastuptime},</if>
+        </trim>
+        where signno = #{signno}
+    </update>
+
+    <delete id="deletePaySignSigninfoById" parameterType="String">
+        delete from pay_sign_signinfo where signno = #{signno}
+    </delete>
+
+    <delete id="deletePaySignSigninfoByIds" parameterType="String">
+        delete from pay_sign_signinfo where signno in
+        <foreach item="signno" collection="array" open="(" separator="," close=")">
+            #{signno}
+        </foreach>
+    </delete>
+</mapper>
