@@ -20,7 +20,7 @@ public class ChckReqDTO extends DCEPReqBody {
         CheckReq checkReq = new CheckReq();
         ChckInf chckInf = new ChckInf();
         chckInf.setInstgDrctPty(AppConstant.BANK_FINANCIAL_INSTITUTION_CD);
-        chckInf.setReqDt(DateUtil.formatSeconds());
+        chckInf.setReqDt(DateUtil.getCurTimeSeconds());
         chckInf.setReqNdNm(reqNdNm);
         checkReq.setChckInf(chckInf);
         chckReqDTO.setCheckReq(checkReq);

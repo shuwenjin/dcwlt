@@ -5,7 +5,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 /**
- * 922应答状态
+ * 992应答状态
  */
 public enum RspnCdEnum {
     ONLN("ONLN","在线（健康）"),

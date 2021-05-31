@@ -8,12 +8,16 @@ import com.dcits.dcwlt.common.pay.sequence.service.impl.GenerateCodeServiceImpl;
 import com.dcits.dcwlt.common.pay.tradeflow.TradeContext;
 import com.dcits.dcwlt.common.pay.tradeflow.TradeFlow;
 import com.dcits.dcwlt.common.pay.type.OutOrgTypeEnum;
+import com.dcits.dcwlt.common.pay.util.APPUtil;
+import com.dcits.dcwlt.pay.api.domain.dcep.DCEPHeader;
 import com.dcits.dcwlt.pay.api.domain.dcep.DCEPReqDTO;
 import com.dcits.dcwlt.pay.api.domain.dcep.DCEPRspDTO;
 import com.dcits.dcwlt.pay.api.domain.dcep.chckReq.ChckReqDTO;
 import com.dcits.dcwlt.pay.api.domain.dcep.chckRspn.ChckRspnDTO;
 import com.dcits.dcwlt.pay.api.domain.dcep.fault.Fault;
 import com.dcits.dcwlt.pay.api.domain.dcep.fault.FaultDTO;
+import com.dcits.dcwlt.pay.api.domain.ecny.ECNYRspDTO;
+import com.dcits.dcwlt.pay.api.domain.ecny.ECNYRspHead;
 import com.dcits.dcwlt.pay.api.model.ChckDO;
 import com.dcits.dcwlt.pay.api.mq.event.exception.EcnyTransError;
 import com.dcits.dcwlt.pay.api.mq.event.exception.EcnyTransException;
@@ -71,7 +75,7 @@ public class Chck991STradeFlow {
         msgId = generateCodeService.generateMsgId(OutOrgTypeEnum.InnerOrg, MsgTpEnum.OMSS991.getCode().substring(5, 8), "");
         String msgSn = generateCodeService.generateMsgSN(msgId);
 
-        String requestNodeName = EcnyTradeContext.getReqMsg(context);
+        String requestNodeName = APPUtil.getLocalHostName();
         ChckReqDTO chckReqDTO = ChckReqDTO.newInstance(requestNodeName);
 
         // 拼装请求报文
@@ -90,7 +94,7 @@ public class Chck991STradeFlow {
             JSONObject jsonObject = dcepSendService.sendDcep(dsptReqDTODCEPReqDTO);
             EcnyTradeContext.getTempContext(tradeContext).put("dcps_resp", jsonObject);
         } catch (Exception e) {
-            logger.error("发送992到城银清请求失败：{}-{}", e.getMessage(), e);
+            logger.error("发送991到城银清请求失败：{}-{}", e.getMessage(), e);
             throw new EcnyTransException(AppConstant.TRXSTATUS_ABEND, EcnyTransError.PAY_TIME_ERROR);
         }
     }
@@ -101,14 +105,14 @@ public class Chck991STradeFlow {
     public void sendDcepDone(TradeContext<?, ?> tradeContext) {
         JSONObject dcps_resp = (JSONObject)
                 EcnyTradeContext.getTempContext(tradeContext).get("dcps_resp");
-        JSONObject jsonObject = dcps_resp.getJSONObject("Header");
+        DCEPHeader dcepHeader = JSONObject.toJavaObject(dcps_resp.getJSONObject(AppConstant.DCEP_HEAD), DCEPHeader.class);
         //平台响应是否成功
-        if (Objects.isNull(jsonObject)) {
+        if (Objects.isNull(dcepHeader)) {
             //初始化异常内容
             logger.error("922响应报文失败");
             throw new EcnyTransException(EcnyTransError.RESPOSE_ERROR);
         }
-        if (StringUtils.equals(jsonObject.getString("MesgType"), MsgTpEnum.DCEP911.getCode())) {
+        if (StringUtils.equals(dcepHeader.getMsgTp(), MsgTpEnum.DCEP911.getCode())) {
             // 响应911失败报文
             DCEPRspDTO<FaultDTO> dcepRspDTO = DCEPRspDTO.jsonToDCEPRspDTO(dcps_resp, FaultDTO.class);
             FaultDTO faultDTO = dcepRspDTO.getBody();
@@ -129,7 +133,7 @@ public class Chck991STradeFlow {
             chckDO.setRspnCd(dcepRspDTO.getBody().getChckRspn().getChckRspnInf().getRspnCd());
             chckDO.setRspnDt(dcepRspDTO.getBody().getChckRspn().getChckRspnInf().getRspnDt());
             chckDO.setRspnNdNm(dcepRspDTO.getBody().getChckRspn().getChckRspnInf().getRspnNdNm());
-            chckMapper.insert(chckDO);
+//            chckMapper.insert(chckDO);
             EcnyTradeContext.getTempContext(tradeContext).put("resp", dcepRspDTO);
         } catch (Exception e) {
             logger.error("插入数据库失败");
@@ -143,8 +147,12 @@ public class Chck991STradeFlow {
         // 获取响应结果
         String rspnCd = dcepRspDTO.getBody().getChckRspn().getChckRspnInf().getRspnCd();
         // 设置响应信息
-        String rspn = RspnCdEnum.getValue(rspnCd);
-        EcnyTradeContext.setRspMsg(tradeContext, rspn);
+        String rspn = rspnCd;
+        ECNYRspDTO rspDTO = new ECNYRspDTO<>();
+        ECNYRspHead ecnyRspHead = new ECNYRspHead();
+        ecnyRspHead.setTrxStatus(rspn);
+        rspDTO.setEcnyRspHead(ecnyRspHead);
+        EcnyTradeContext.setRspMsg(tradeContext, rspDTO);
     }
 
     /**
@@ -152,8 +160,12 @@ public class Chck991STradeFlow {
      */
     public void errHandler(TradeContext<?, ?> tradeContext, Throwable exception) {
         logger.error("进入异常处理模块！");
-        if (exception instanceof EcnyTransException) {
-            EcnyTradeContext.setRspMsg(tradeContext, ((EcnyTransException) exception).getErrorMsg());
-        }
+        // 设置响应信息
+        String rspn = "EXCP";
+        ECNYRspDTO rspDTO = new ECNYRspDTO<>();
+        ECNYRspHead ecnyRspHead = new ECNYRspHead();
+        ecnyRspHead.setTrxStatus(rspn);
+        rspDTO.setEcnyRspHead(ecnyRspHead);
+        EcnyTradeContext.setRspMsg(tradeContext, rspDTO);
     }
 }

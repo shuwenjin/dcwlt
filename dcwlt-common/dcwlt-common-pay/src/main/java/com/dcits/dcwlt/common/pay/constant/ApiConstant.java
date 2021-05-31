@@ -27,6 +27,9 @@ public class ApiConstant {
     //发送钱柜入库出库报文
     public static final String SEND_CASHBOX = "sendCashbox";
 
+    //http通信级探测
+    public static final String CHCKREQ_SERVICE_NAME = "chckReq";
+
 
 
 }

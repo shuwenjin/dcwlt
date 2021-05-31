@@ -1,25 +1,18 @@
 <template>
   <div class="app-container">
-    <el-card class="box-card">
+    <el-card class="box-card" align="center">
       <el-row>
-        <el-col :span="6">
-          城银清状态：
-          <el-button class="buttonType" v-if="successButton" type="success" circle>在线</el-button>
-          <el-button class="buttonType" v-if="dangerButton" type="danger" circle>离线</el-button>
-          <el-button class="buttonType" v-if="warningButton" type="warning" circle>网络异常</el-button>
-          <el-button class="buttonType" v-if="HTTP_INIT" type="warning" circle>未知</el-button>
+        <el-col :span="12">
+          <span>城银清状态：</span>
+          <el-button class="buttonType" :type="this.http_type" onclick="checkReqHttp()" circle>{{http_stat}}</el-button>
         </el-col>
-        <el-col :span="6">
-          机构状态：
-          <el-button class="buttonType" v-if="ST00" type="danger" circle>设置故障</el-button>
-          <el-button class="buttonType" v-if="ST01" type="success" circle>恢复运行</el-button>
-          <el-button class="buttonType" v-if="ST02" type="success" circle>已登录</el-button>
-          <el-button class="buttonType" v-if="ST03" type="warning" circle>已退出</el-button>
-          <el-button class="buttonType" v-if="ST04" type="danger" circle>强制退出</el-button>
-          <el-button class="buttonType" v-if="INIT" type="warning" circle>未知</el-button>
+        <el-col :span="12">
+          <span>机构状态：</span>
+          <el-button class="buttonType" :type="this.bank_type" onclick="getPartyInfos()" circle>{{bank_stat}}</el-button>
         </el-col>
       </el-row>
     </el-card>
+    <br/>
     <el-card class="box-card">
       <div slot="header" class="clearfix">
         <span>机构信息</span>
@@ -47,7 +40,7 @@
 
 <script>
   import {listParty} from "@/api/pay-batch/cashparty";
-  import {getPartyInfo} from "@/api/pay-batch/party";
+  import {getPartyInfo, checkReq} from "@/api/pay-batch/party";
 
   export default {
     name: "Party",
@@ -59,12 +52,13 @@
         dangerButton: false,
         warningButton: false,
         HTTP_INIT: true,
-        INIT: true,
-        ST00: false,
-        ST01: false,
-        ST02: false,
-        ST03: false,
-        ST04: false,
+        // http探测状态
+        http_type: "warning",
+        http_stat: "未知",
+        //本机构状态
+        bank_type: "warning",
+        bank_stat: "未知",
+
         colortype: 1,
         // 参数状态字典
         paramStatusOptions: [],
@@ -94,24 +88,41 @@
     },
     created() {
       this.getList();
-      this.getPartyInfo();
+      this.checkReqHttp();
+      this.getPartyInfos();
       this.getDicts("automatic_stuts").then(response => {
         this.paramStatusOptions = response.data;
       });
     },
     methods: {
       /**获取按钮信息 */
-      getchckReq(opType) {
-        chckReq(opType).then(response => {
-          if (opType == null) {
-            this.colortype = response.code;
-            if (this.colortype == 200) {
-              this.warningButton = false;
-              this.successButton = true;
-            } else if (this.colortype == 110) {
-              this.warningButton = false;
-              this.dangerButton = true;
-            }
+      checkReqHttp() {
+        checkReq().then(response => {
+          this.http_stat = response.msg;
+          switch (this.http_stat) {
+            case "ONLN":
+              this.http_type= "success";
+              this.http_stat= "在线";
+              break;
+            case "OFLN":
+              this.http_type= "danger";
+              this.http_stat= "离线";
+              break;
+            case "UNLG":
+              this.http_type= "warning";
+              this.http_stat= "没有登录";
+              break;
+            case "AUTH":
+              this.http_type= "warning";
+              this.http_stat= "无权访问";
+              break;
+            case "EXCP":
+              this.http_type= "danger";
+              this.http_stat= "链路不通";
+              break;
+            default:
+              this.http_type= "warning";
+              this.http_stat= "未知";
           }
         });
       },
@@ -125,40 +136,42 @@
         });
       },
       /** 查询本机构信息 */
-      getPartyInfo() {
+      getPartyInfos() {
         this.loading = true;
         getPartyInfo().then(response => {
           this.partyInfo = response.data;
           this.loading = false;
-          ST00 = false;
-          ST01 = false;
-          ST02 = false;
-          ST03 = false;
-          ST04 = false;
-          INIT = false;
           if (this.partyInfo == null) {
-            INIT = true;
+            this.bank_type = "warning";
+            this.bank_stat = "未知";
           } else {
             switch (this.partyInfo.partyStatus) {
               case "ST00":
-                ST00 = true;
+                this.bank_type = "danger";
+                this.bank_stat = "设置故障";
                 break;
               case "ST01":
-                ST01 = true;
+                this.bank_type = "success";
+                this.bank_stat = "恢复运行";
                 break;
               case "ST02":
-                ST02 = true;
+                this.bank_type = "success";
+                this.bank_stat = "已登录";
                 break;
               case "ST03":
-                ST03 = true;
+                this.bank_type = "warning";
+                this.bank_stat = "已退出";
                 break;
               case "ST04":
-                ST04 = true;
+                this.bank_type = "danger";
+                this.bank_stat = "强制退出";
                 break;
               default:
-                INIT = true;
+                this.bank_type = "warning";
+                this.bank_stat = "未知";
             }
           }
+          ST02 = true;
         });
       },
       // 参数状态字典翻译

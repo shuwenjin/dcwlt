@@ -32,6 +32,7 @@ public class ReceiveMsgController {
             put("dcep.902.001.01.xml", "dcep.902.001.01.xml");
             put("dcep.920.001.01.xml", "dcep.900.001.01.xml");
             put("dcep.933.001.01.xml", "dcep.934.001.01.xml");
+            put("omss.991.002.01.xml", "omss.992.002.01.xml");
         }
     };
 

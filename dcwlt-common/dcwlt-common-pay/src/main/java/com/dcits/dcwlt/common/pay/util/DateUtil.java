@@ -257,5 +257,13 @@ public class DateUtil {
 		return DEFAULT_TIME_FORMATTER.format(date);
 	}
 
-
+	/**
+	 * @Description: 指公元1970年1月1日0时0分0秒算起至今的北京时间所经过的秒数。
+	 * 北京时间比格林尼治时间（世界时）早8小时，即：北京时间=世界时+8小时。
+	 * 格式HHmmss
+	 * @return
+	 */
+	public static String getCurTimeSeconds(){
+		return String.valueOf(new Date().getTime()/1000);
+	}
 }

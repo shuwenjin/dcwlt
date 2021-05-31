@@ -24,5 +24,13 @@ export function getPartyInfo() {
   })
 }
 
+// HTTP通讯级探测
+export function checkReq() {
+  return request({
+    url: '/pay-online/chckreq/check',
+    method: 'get'
+  })
+}
+
 
 

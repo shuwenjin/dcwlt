@@ -2,6 +2,8 @@ package com.dcits.dcwlt.pay.online.service.impl;
 
 import com.alibaba.fastjson.JSONObject;
 import com.dcits.dcwlt.common.pay.constant.AppConstant;
+import com.dcits.dcwlt.common.pay.exception.PlatformError;
+import com.dcits.dcwlt.common.pay.exception.TransException;
 import com.dcits.dcwlt.pay.api.domain.dcep.DCEPReqBody;
 import com.dcits.dcwlt.pay.api.domain.dcep.DCEPReqDTO;
 import com.dcits.dcwlt.pay.online.service.TransInService;
@@ -88,11 +90,10 @@ public class DcepSendService {
                 //System.out.println(response.getStatusLine());
                 rspMsg = EntityUtils.toString(entity, "utf-8");
             }
-        } catch (ClientProtocolException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } finally {
+        } catch (Exception e) {
+            logger.error("请求发送失败！地址：{}",uri,e);
+            throw new TransException(PlatformError.COMM_ABEND.getErrorCode(), PlatformError.COMM_ABEND.getErrorMsg());
+        }  finally {
             try {
                 // 释放资源
                 if (httpClient != null) {
