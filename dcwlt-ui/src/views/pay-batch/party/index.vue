@@ -45,38 +45,6 @@
     </el-form>
 
     <el-row :gutter="10" class="mb8">
-      <!--      <el-col :span="1.5">-->
-      <!--        <el-button-->
-      <!--          type="primary"-->
-      <!--          plain-->
-      <!--          icon="el-icon-plus"-->
-      <!--          size="mini"-->
-      <!--          @click="handleAdd"-->
-      <!--          v-hasPermi="['pay-batch:party:add']"-->
-      <!--        >新增</el-button>-->
-      <!--      </el-col>-->
-      <!--      <el-col :span="1.5">-->
-      <!--        <el-button-->
-      <!--          type="success"-->
-      <!--          plain-->
-      <!--          icon="el-icon-edit"-->
-      <!--          size="mini"-->
-      <!--          :disabled="single"-->
-      <!--          @click="handleUpdate"-->
-      <!--          v-hasPermi="['pay-batch:party:edit']"-->
-      <!--        >修改</el-button>-->
-      <!--      </el-col>-->
-      <!--      <el-col :span="1.5">-->
-      <!--        <el-button-->
-      <!--          type="danger"-->
-      <!--          plain-->
-      <!--          icon="el-icon-delete"-->
-      <!--          size="mini"-->
-      <!--          :disabled="multiple"-->
-      <!--          @click="handleDelete"-->
-      <!--          v-hasPermi="['pay-batch:party:remove']"-->
-      <!--        >删除</el-button>-->
-      <!--      </el-col>-->
       <el-col :span="1.5">
         <el-button
           type="warning"
@@ -92,7 +60,60 @@
     </el-row>
 
     <el-table v-loading="loading" :data="partyList" @selection-change="handleSelectionChange">
-      <el-table-column type="selection" width="55" align="center"/>
+      <el-table-column type="expand">
+        <template slot-scope="props">
+          <el-form label-position="left" inline class="demo-table-expand">
+            <el-form-item label="机构编码">
+              <span>{{ props.row.partyID }}</span>
+            </el-form-item>
+            <el-form-item label="机构类型">
+              <span>{{ props.row.partyType }}</span>
+            </el-form-item>
+            <el-form-item label="机构名称">
+              <span>{{ props.row.partyName }}</span>
+            </el-form-item>
+            <el-form-item label="机构标识">
+              <span>{{ props.row.partyAlias }}</span>
+            </el-form-item>
+            <el-form-item label="机构状态">
+              <span>{{ props.row.partyStatus }}</span>
+            </el-form-item>
+            <el-form-item label="撤销状态">
+              <span>{{ props.row.status }}</span>
+            </el-form-item>
+            <el-form-item label="联系人">
+              <span>{{ props.row.contact }}</span>
+            </el-form-item>
+            <el-form-item label="电话">
+              <span>{{ props.row.telephone }}</span>
+            </el-form-item>
+            <el-form-item label="邮箱">
+              <span>{{ props.row.mail }}</span>
+            </el-form-item>
+            <el-form-item label="传真号">
+              <span>{{ props.row.fax }}</span>
+            </el-form-item>
+            <el-form-item label="生效日期">
+              <span>{{ props.row.effectDate }}</span>
+            </el-form-item>
+            <el-form-item label="失效日期">
+              <span>{{ props.row.inEffectiveDate }}</span>
+            </el-form-item>
+            <el-form-item label="变更期数">
+              <span>{{ props.row.changeNumber }}</span>
+            </el-form-item>
+            <el-form-item label="变更记录条目">
+              <span>{{ props.row.changeCircleTimes }}</span>
+            </el-form-item>
+            <el-form-item label="最后更新日期">
+              <span>{{ props.row.lastUpDate }}</span>
+            </el-form-item>
+            <el-form-item label="最后更新时间">
+              <span>{{ props.row.lastUpTime }}</span>
+            </el-form-item>
+          </el-form>
+        </template>
+      </el-table-column>
       <el-table-column label="机构编码" align="center" prop="partyID" v-if="columns[0].visible":show-overflow-tooltip="true"/>
       <el-table-column label="机构类型" align="center" prop="partyType" :formatter="partytypeFormat" v-if="columns[1].visible":show-overflow-tooltip="true"/>
       <el-table-column label="机构名称" align="center" prop="partyName" v-if="columns[2].visible":show-overflow-tooltip="true"/>
@@ -109,26 +130,6 @@
       <el-table-column label="变更记录条目" align="center" prop="changeCircleTimes" v-if="columns[13].visible":show-overflow-tooltip="true"/>
       <el-table-column label="最后更新日期" align="center" prop="lastUpDate" v-if="columns[14].visible":show-overflow-tooltip="true"/>
       <el-table-column label="最后更新时间" align="center" prop="lastUpTime" v-if="columns[15].visible":show-overflow-tooltip="true"/>
-<!--      <el-table-column label="操作" align="center" class-name="small-padding fixed-width" v-if="columns[16].visible":show-overflow-tooltip="true">-->
-<!--        <template slot-scope="scope">-->
-<!--          <el-button-->
-<!--            size="mini"-->
-<!--            type="text"-->
-<!--            icon="el-icon-edit"-->
-<!--            @click="handleUpdate(scope.row)"-->
-<!--            v-hasPermi="['pay-batch:party:edit']"-->
-<!--          >修改-->
-<!--          </el-button>-->
-<!--          <el-button-->
-<!--            size="mini"-->
-<!--            type="text"-->
-<!--            icon="el-icon-delete"-->
-<!--            @click="handleDelete(scope.row)"-->
-<!--            v-hasPermi="['pay-batch:party:remove']"-->
-<!--          >删除-->
-<!--          </el-button>-->
-<!--        </template>-->
-<!--      </el-table-column>-->
     </el-table>
 
     <pagination
@@ -151,6 +152,20 @@
   </div>
 </template>
 
+<style>
+  .demo-table-expand {
+    font-size: 0;
+  }
+  .demo-table-expand label {
+    width: 100px;
+    color: #99a9bf;
+  }
+  .demo-table-expand .el-form-item {
+    margin-right: 0;
+    margin-bottom: 0;
+    width: 50%;
+  }
+</style>
 <script>
   import {listParty, getParty, delParty, addParty, updateParty} from "@/api/pay-batch/party";
 
@@ -220,7 +235,7 @@
       });
 
       this.getDicts("ST").then(response => {
-        
+
         this.partyStatusOptions = response.data;
         console.info(partyStatusOptions);
       });

@@ -1,18 +1,28 @@
 <template>
   <div class="app-container">
     <el-form :model="queryParams" ref="queryForm" :inline="true" v-show="showSearch" label-width="88px">
+      <el-form-item label="操作类型" prop="opterationType">
+        <el-select v-model="queryParams.opterationType" placeholder="请选操作类型" clearable size="small">
+          <el-option
+            v-for="dict in opterationTypeOptions"
+            :key="dict.dictValue"
+            :label="dict.dictLabel"
+            :value="dict.dictValue"
+          />
+        </el-select>
+      </el-form-item>
       <el-form-item label="报文标识号" prop="msgId">
         <el-input v-model="queryParams.msgId" placeholder="请输入报文标识号" clearable size="small"
-          @keyup.enter.native="handleQuery" />
+                  @keyup.enter.native="handleQuery"/>
       </el-form-item>
       <el-form-item label="平台日期" prop="payDate">
         <el-date-picker clearable size="small" v-model="queryParams.payDate" type="date" value-format="yyyyMMdd"
-          placeholder="选择平台日期">
+                        placeholder="选择平台日期">
         </el-date-picker>
       </el-form-item>
       <el-form-item label="平台流水" prop="paySerNo">
         <el-input v-model="queryParams.paySerNo" placeholder="请输入平台流水" clearable size="small"
-          @keyup.enter.native="handleQuery" />
+                  @keyup.enter.native="handleQuery"/>
       </el-form-item>
       <el-form-item>
         <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
@@ -21,93 +31,50 @@
     </el-form>
 
     <el-row :gutter="10" class="mb8">
-      <!--<el-col :span="1.5">
-        <el-button
-          type="primary"
-          plain
-          icon="el-icon-plus"
-          size="mini"
-          @click="handleAdd"
-          v-hasPermi="['batch:nonf:add']"
-        >新增</el-button>
-      </el-col>
-      <el-col :span="1.5">
-        <el-button
-          type="success"
-          plain
-          icon="el-icon-edit"
-          size="mini"
-          :disabled="single"
-          @click="handleUpdate"
-          v-hasPermi="['batch:nonf:edit']"
-        >修改</el-button>
-      </el-col>
-      <el-col :span="1.5">
-        <el-button
-          type="danger"
-          plain
-          icon="el-icon-delete"
-          size="mini"
-          :disabled="multiple"
-          @click="handleDelete"
-          v-hasPermi="['batch:nonf:remove']"
-        >删除</el-button>
-      </el-col>-->
-
 
       <el-col :span="1.5">
-
-        <!--    <el-button
-            type="danger"
-            plain
-            icon="el-icon-delete"
-            size="mini"
-            :disabled="multiple"
-            @click="handleDelete"
-            v-hasPermi="['batch:nonf:remove']"
-          >删除</el-button>
-        </el-col> -->
-
         <el-button type="primary" plain icon="el-icon-open" size="mini" @click="handleLogin"
-          v-hasPermi="['batch:nonf:loginin']">登入</el-button>
+                   v-hasPermi="['batch:nonf:loginin']">登录
+        </el-button>
 
         <el-button type="danger" plain icon="el-icon-turn-off" size="mini" @click="handleLoginout"
-          v-hasPermi="['batch:nonf:loginout']">登出</el-button>
+                   v-hasPermi="['batch:nonf:loginout']">退出
+        </el-button>
 
 
         <el-button type="warning" plain icon="el-icon-download" size="mini" @click="handleExport"
-          v-hasPermi="['batch:nonf:export']">导出</el-button>
+                   v-hasPermi="['batch:nonf:export']">导出
+        </el-button>
       </el-col>
       <right-toolbar :showSearch.sync="showSearch" @queryTable="getList" :columns="columns"></right-toolbar>
     </el-row>
 
     <el-table v-loading="loading" :data="nonfList" @selection-change="handleSelectionChange">
-      <el-table-column type="selection" width="55" align="center" />
+      <el-table-column label="操作类型" align="center" prop="opterationType" :formatter="opterationTypeFormat"
+                       v-if="columns[10].visible"/>
       <el-table-column label="报文标识号" align="center" prop="msgId" v-if="columns[0].visible" show-overflow-tooltip/>
       <el-table-column label="平台日期" align="center" prop="payDate" width="180" v-if="columns[1].visible">
         <!-- <template slot-scope="scope">
           <span>{{ parseTime(scope.row.payDate, '{y}-{m}-{d}') }}</span>
         </template> -->
       </el-table-column>
-      <el-table-column label="平台时间" align="center" prop="payTime" v-if="columns[2].visible" />
-      <el-table-column label="平台流水" align="center" prop="paySerNo" v-if="columns[3].visible" />
-      <el-table-column label="报文编号" align="center" prop="pkgNo" v-if="columns[4].visible" />
-      <el-table-column label="报文方向" align="center" prop="drct" :formatter="drctFormat" v-if="columns[5].visible" />
-      <el-table-column label="交易状态" align="center" prop="tradeStatus" v-if="columns[6].visible" />
-      <el-table-column label="报文发送时间" align="center" prop="senderDateTime" v-if="columns[7].visible" />
-      <el-table-column label="发起机构" align="center" prop="instgDrctPty" v-if="columns[8].visible" />
-      <el-table-column label="接收机构" align="center" prop="instddrctpty" v-if="columns[9].visible" />
-      <el-table-column label="操作类型" align="center" prop="opterationType" :formatter="opterationTypeFormat"
-        v-if="columns[10].visible" />
+      <el-table-column label="平台时间" align="center" prop="payTime" v-if="columns[2].visible"/>
+      <el-table-column label="平台流水" align="center" prop="paySerNo" v-if="columns[3].visible"/>
+      <el-table-column label="报文编号" align="center" prop="pkgNo" v-if="columns[4].visible"/>
+      <el-table-column label="报文方向" align="center" prop="drct" :formatter="drctFormat" v-if="columns[5].visible"/>
+      <el-table-column label="交易状态" align="center" prop="tradeStatus" v-if="columns[6].visible"/>
+      <el-table-column label="报文发送时间" align="center" prop="senderDateTime" v-if="columns[7].visible"/>
+      <el-table-column label="发起机构" align="center" prop="instgDrctPty" v-if="columns[8].visible"/>
+      <el-table-column label="接收机构" align="center" prop="instddrctpty" v-if="columns[9].visible"/>
       <el-table-column label="业务处理状态" align="center" prop="procStatus" :formatter="procStatusFormat"
-        v-if="columns[11].visible" />
-      <el-table-column label="业务拒绝码" align="center" prop="rejectCode" v-if="columns[12].visible" />
-      <el-table-column label="业务拒绝信息" align="center" prop="rejectInfo" v-if="columns[13].visible" />
-      <el-table-column label="柜员号" align="center" prop="tlrNo" v-if="columns[14].visible" />
-      <el-table-column label="备注" align="center" prop="remark" v-if="columns[15].visible" />
-      <el-table-column label="信息内容" align="center" prop="messageContext" v-if="columns[16].visible" />
-      <el-table-column label="最后更新日期" align="center" prop="lastUpDate" v-if="columns[17].visible" />
-      <el-table-column label="最后更新时间" align="center" prop="lastUpTime" v-if="columns[18].visible" />
+                       v-if="columns[11].visible"/>
+      <el-table-column label="业务拒绝码" align="center" prop="rejectCode" v-if="columns[12].visible"/>
+      <el-table-column label="业务拒绝信息" align="center" prop="rejectInfo" v-if="columns[13].visible"/>
+      <el-table-column label="柜员号" align="center" prop="tlrNo" v-if="columns[14].visible"/>
+      <el-table-column label="备注" align="center" prop="remark" v-if="columns[15].visible"/>
+      <el-table-column label="信息内容" align="center" prop="messageContext" v-if="columns[16].visible"/>
+      <el-table-column label="最后更新日期" align="center" prop="lastUpDate" v-if="columns[17].visible"/>
+      <el-table-column label="最后更新时间" align="center" prop="lastUpTime" v-if="columns[18].visible"/>
       <!--   <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope">
           <el-button
@@ -129,7 +96,7 @@
     </el-table>
 
     <pagination v-show="total>0" :total="total" :page.sync="queryParams.pageNum" :limit.sync="queryParams.pageSize"
-      @pagination="getList" />
+                @pagination="getList"/>
 
     <!-- 添加或修改非金融登记簿对话框 -->
     <el-dialog :title="title" :visible.sync="open" width="500px" append-to-body>
@@ -192,105 +159,32 @@
           msgId: null,
           payDate: null,
           paySerNo: null,
+          opterationType: null,
         },
         // 表单参数
         form: {},
         // 列信息
         columns: [{
-            key: 0,
-            label: `报文标识号`,
-            visible: true
-          },
-          {
-            key: 1,
-            label: `平台日期`,
-            visible: true
-          },
-          {
-            key: 2,
-            label: `平台时间`,
-            visible: true
-          },
-          {
-            key: 3,
-            label: `平台流水`,
-            visible: true
-          },
-          {
-            key: 4,
-            label: `报文编号`,
-            visible: true
-          },
-          {
-            key: 5,
-            label: `报文方向`,
-            visible: true
-          },
-          {
-            key: 6,
-            label: `交易状态`,
-            visible: true
-          },
-          {
-            key: 7,
-            label: `报文发送时间`,
-            visible: true
-          },
-          {
-            key: 8,
-            label: `发起机构`,
-            visible: true
-          },
-          {
-            key: 9,
-            label: `接收机构`,
-            visible: true
-          },
-          {
-            key: 10,
-            label: `操作类型`,
-            visible: true
-          },
-          {
-            key: 11,
-            label: `业务处理状态`,
-            visible: true
-          },
-          {
-            key: 12,
-            label: `业务拒绝码`,
-            visible: true
-          },
-          {
-            key: 13,
-            label: `业务拒绝信息`,
-            visible: true
-          },
-          {
-            key: 14,
-            label: `柜员号`,
-            visible: true
-          },
-          {
-            key: 15,
-            label: `备注`,
-            visible: true
-          },
-          {
-            key: 16,
-            label: `信息内容`,
-            visible: true
-          },
-          {
-            key: 17,
-            label: `最后更新日期`,
-            visible: true
-          },
-          {
-            key: 18,
-            label: `最后更新时间`,
-            visible: true
-          }
+          key: 0, label: `报文标识号`, visible: true
+        },
+          {key: 1, label: `平台日期`, visible: true},
+          {key: 2, label: `平台时间`, visible: true},
+          {key: 3, label: `平台流水`, visible: true},
+          {key: 4, label: `报文编号`, visible: false},
+          {key: 5, label: `报文方向`, visible: false},
+          {key: 6, label: `交易状态`, visible: false},
+          {key: 7, label: `报文发送时间`, visible: true},
+          {key: 8, label: `发起机构`, visible: false},
+          {key: 9, label: `接收机构`, visible: false},
+          {key: 10, label: `操作类型`, visible: true},
+          {key: 11, label: `业务处理状态`, visible: true},
+          {key: 12, label: `业务拒绝码`, visible: false},
+          {key: 13, label: `业务拒绝信息`, visible: false},
+          {key: 14, label: `柜员号`, visible: false},
+          {key: 15, label: `备注`, visible: false},
+          {key: 16, label: `信息内容`, visible: false},
+          {key: 17, label: `最后更新日期`, visible: false},
+          {key: 18, label: `最后更新时间`, visible: false}
         ],
         // 表单校验
         rules: {
@@ -433,7 +327,7 @@
           confirmButtonText: "确定",
           cancelButtonText: "取消",
           type: "warning"
-        }).then(function() {
+        }).then(function () {
           return delNonf(msgIds);
         }).then(() => {
           this.getList();
@@ -460,7 +354,7 @@
           confirmButtonText: "确定",
           cancelButtonText: "取消",
           type: "warning"
-        }).then(function() {
+        }).then(function () {
           //登录状态
           //debugger
 
@@ -483,7 +377,7 @@
           confirmButtonText: "确定",
           cancelButtonText: "取消",
           type: "warning"
-        }).then(function() {
+        }).then(function () {
           //登出状态
           let opterationType = "OT01";
 

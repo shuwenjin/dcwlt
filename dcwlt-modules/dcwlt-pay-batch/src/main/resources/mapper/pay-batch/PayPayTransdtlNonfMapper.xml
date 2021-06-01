@@ -37,6 +37,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="payDate != null  and payDate != ''"> and paydate = #{payDate}</if>
             <if test="paySerNo != null  and paySerNo != ''"> and payserno = #{paySerNo}</if>
             <if test="pkgNo != null  and pkgNo != ''"> and pkgno = #{pkgNo}</if>
+            <if test="opterationType != null"> and opterationtype = #{opterationType}</if>
+            <if test="drct != null  and drct != ''"> and drct = #{drct}</if>
+            <if test="instgDrctPty != null  and instgDrctPty != ''"> and instgdrctpty = #{instgDrctPty}</if>
+            <if test="instdDrctPty != null  and instdDrctPty != ''"> and instddrctpty = #{instdDrctPty}</if>
+            <if test="tradeStatus != null  and tradeStatus != ''"> and tradestatus = #{tradeStatus}</if>
+            <if test="procStatus != null  and procStatus != ''"> and procstatus = #{procStatus}</if>
         </where>
     </select>
     
