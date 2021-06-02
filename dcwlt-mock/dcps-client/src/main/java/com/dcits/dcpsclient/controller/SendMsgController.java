@@ -135,6 +135,17 @@ public class SendMsgController {
         return rspMsg;
     }
 
+    @GetMapping("/401/alert")
+    public String do401alert(){
+        String reqMsg = MsgUtil.getReqMsg("dcep.401.001.01_alert.xml");
+        System.out.println("交易请求报文：");
+        System.out.println(reqMsg);
+        String rspMsg = getRsp(reqMsg);
+        System.out.println("交易响应报文：");
+        System.out.println(rspMsg);
+        return rspMsg;
+    }
+
     @GetMapping("/711")
     public String do711(){
         String reqMsg = MsgUtil.getReqMsg("dcep.711.001.01.xml");

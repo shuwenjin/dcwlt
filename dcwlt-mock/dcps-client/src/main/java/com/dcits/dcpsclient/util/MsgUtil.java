@@ -319,6 +319,7 @@ public class MsgUtil {
 
             String msgId = "00000000001120010001" + new SimpleDateFormat("yyyyMMddHHmmsss").format(new Date());
             bodyMsg = String.format(bodyMsg, msgId);
+            bodyMsg = bodyMsg.replace("#ISODT#",DateUtil.format(new Date(), "yyyy-MM-dd'T'HH:mm:ss"));
             String newHeader = String.format(header, DateUtil.format(new Date(), "yyyyMMddHHmmss"), msgType.substring(0, 15), msgId, msgId);
 
             reqMsg = newHeader + "\r\n" + getDigitalSign(bodyMsg) + bodyMsg;

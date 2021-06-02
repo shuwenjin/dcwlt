@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--示例 dcep.401.001.01 自由格式报文-->
+<Document xmlns="urn:cbcc:std:dcep:2020:tech:xsd:dcep.401.001.01" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<FreeFrmt>
+		<GrpHdr>
+			<MsgId>%s</MsgId>
+			<CreDtTm>#ISODT#</CreDtTm>
+			<InstgPty>
+				<InstgDrctPty>C1030644021075</InstgDrctPty>
+			</InstgPty>
+			<InstdPty>
+				<InstdDrctPty>C1010311000014</InstdDrctPty>
+			</InstdPty>			
+			<Rmk>测试</Rmk>
+		</GrpHdr>		
+		<FreeFrmtInf>			
+			<MsgCnt>ALERT/C1030644021075/C1234263623425/1234567890123456/99999/10000/XX银行，你行在XX运营机构开立的钱柜余额低于预警值，请你行及时进行钱柜入库</MsgCnt>
+		</FreeFrmtInf>				
+	</FreeFrmt>
+</Document>
