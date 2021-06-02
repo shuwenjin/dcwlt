@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dcits.dcwlt.pay.online.mapper.PayCommCashboxWrngMapper">
+    
+    <resultMap type="com.dcits.dcwlt.pay.api.model.PayCommCashboxWrng" id="PayCommCashboxWrngResult">
+        <result property="coopbankInstnid"    column="coopbank_instnId"    />
+        <result property="coopbankWltid"    column="coopbank_wltId"    />
+        <result property="cshboxInstnid"    column="cshbox_instnId"    />
+        <result property="wrngVal"    column="wrng_val"    />
+        <result property="amtValue"    column="amt_value"    />
+        <result property="msgCnt"    column="msg_cnt"    />
+        <result property="wrngTm"    column="wrng_tm"    />
+    </resultMap>
+
+    <sql id="selectPayCommCashboxWrngVo">
+        select coopbank_instnId, coopbank_wltId, cshbox_instnId, wrng_val, amt_value, msg_cnt, wrng_tm from pay_comm_cashbox_wrng
+    </sql>
+
+    <select id="selectPayCommCashboxWrngList" parameterType="com.dcits.dcwlt.pay.api.model.PayCommCashboxWrng" resultMap="PayCommCashboxWrngResult">
+        <include refid="selectPayCommCashboxWrngVo"/>
+        <where>  
+            <if test="cshboxInstnid != null  and cshboxInstnid != ''"> and cshbox_instnId = #{cshboxInstnid}</if>
+            <if test="params.beginWrngTm != null and params.beginWrngTm != '' and params.endWrngTm != null and params.endWrngTm != ''"> and wrng_tm between #{params.beginWrngTm} and #{params.endWrngTm}</if>
+        </where>
+    </select>
+    
+    <select id="selectPayCommCashboxWrngById" parameterType="String" resultMap="PayCommCashboxWrngResult">
+        <include refid="selectPayCommCashboxWrngVo"/>
+        where coopbank_wltId = #{coopbankWltid}
+    </select>
+        
+    <insert id="insertPayCommCashboxWrng" parameterType="com.dcits.dcwlt.pay.api.model.PayCommCashboxWrng">
+        insert into pay_comm_cashbox_wrng
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="coopbankInstnid != null">coopbank_instnId,</if>
+            <if test="coopbankWltid != null">coopbank_wltId,</if>
+            <if test="cshboxInstnid != null">cshbox_instnId,</if>
+            <if test="wrngVal != null">wrng_val,</if>
+            <if test="amtValue != null">amt_value,</if>
+            <if test="msgCnt != null">msg_cnt,</if>
+            <if test="wrngTm != null">wrng_tm,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="coopbankInstnid != null">#{coopbankInstnid},</if>
+            <if test="coopbankWltid != null">#{coopbankWltid},</if>
+            <if test="cshboxInstnid != null">#{cshboxInstnid},</if>
+            <if test="wrngVal != null">#{wrngVal},</if>
+            <if test="amtValue != null">#{amtValue},</if>
+            <if test="msgCnt != null">#{msgCnt},</if>
+            <if test="wrngTm != null">#{wrngTm},</if>
+         </trim>
+    </insert>
+
+    <update id="updatePayCommCashboxWrng" parameterType="com.dcits.dcwlt.pay.api.model.PayCommCashboxWrng">
+        update pay_comm_cashbox_wrng
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="coopbankInstnid != null">coopbank_instnId = #{coopbankInstnid},</if>
+            <if test="cshboxInstnid != null">cshbox_instnId = #{cshboxInstnid},</if>
+            <if test="wrngVal != null">wrng_val = #{wrngVal},</if>
+            <if test="amtValue != null">amt_value = #{amtValue},</if>
+            <if test="msgCnt != null">msg_cnt = #{msgCnt},</if>
+            <if test="wrngTm != null">wrng_tm = #{wrngTm},</if>
+        </trim>
+        where coopbank_wltId = #{coopbankWltid}
+    </update>
+
+    <delete id="deletePayCommCashboxWrngById" parameterType="String">
+        delete from pay_comm_cashbox_wrng where coopbank_wltId = #{coopbankWltid}
+    </delete>
+
+    <delete id="deletePayCommCashboxWrngByIds" parameterType="String">
+        delete from pay_comm_cashbox_wrng where coopbank_wltId in 
+        <foreach item="coopbankWltid" collection="array" open="(" separator="," close=")">
+            #{coopbankWltid}
+        </foreach>
+    </delete>
+</mapper>

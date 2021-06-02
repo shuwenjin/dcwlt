@@ -2,6 +2,7 @@ package com.dcits.dcwlt.pay.online.flow.receive;
 
 import com.dcits.dcwlt.common.pay.constant.AppConstant;
 import com.dcits.dcwlt.common.pay.enums.MsgTpEnum;
+import com.dcits.dcwlt.common.pay.exception.TransException;
 import com.dcits.dcwlt.common.pay.sequence.service.IGenerateCodeService;
 import com.dcits.dcwlt.common.pay.tradeflow.TradeContext;
 import com.dcits.dcwlt.common.pay.tradeflow.TradeFlow;
@@ -23,6 +24,7 @@ import com.dcits.dcwlt.pay.online.flow.builder.EcnyTradeContext;
 import com.dcits.dcwlt.pay.online.flow.builder.EcnyTradeFlowBuilder;
 import com.dcits.dcwlt.pay.online.mapper.MonitorMapper;
 import com.dcits.dcwlt.pay.online.service.impl.FreeFormatServiceimpl;
+import com.dcits.dcwlt.pay.online.service.impl.PayCommCashboxWrngServiceImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,6 +44,9 @@ public class FreeFrmt401RTradeFlow {
 
     @Autowired
     private FreeFormatServiceimpl freeFormatService;
+
+    @Autowired
+    private PayCommCashboxWrngServiceImpl cashboxWrngService;
 
     @Autowired
     private MonitorMapper monitorMapper;
@@ -69,9 +74,14 @@ public class FreeFrmt401RTradeFlow {
         FreeFrmt freeFrmt = freeFrmtDTO.getFreeFrmt();
         try {
             //封装自由格式 存入payTransDtlNonf表
-            freeFormatService.insertOrUpdateFreeFormat(freeFrmt, AppConstant.DIRECT_RECV, "", AppConstant.TRXSTATUS_INIT);
+            freeFormatService.insertOrUpdateFreeFormat(freeFrmt, AppConstant.DIRECT_RECV, "" , AppConstant.TRXSTATUS_INIT);
+            String msgCnt = freeFrmt.getFreeFrmtInf().getMsgCnt();
+            if (null != msgCnt && msgCnt.startsWith("ALERT")) {
+                logger.info("收到钱柜余额预警通知：{}" , msgCnt);
+                cashboxWrngService.freeFmtCashboxWrng(msgCnt, freeFrmt.getGrpHdr().getCreDtTm());
+            }
         } catch (Exception e) {
-            logger.error("自由格式操作状态异常:{}-{}", e.getMessage(), e);
+            logger.error("自由格式操作状态异常:{}-{}" , e.getMessage(), e);
             throw new EcnyTransException(EcnyTransError.OTHER_TECH_ERROR);
         }
     }
@@ -85,7 +95,7 @@ public class FreeFrmt401RTradeFlow {
 
         //更新交易状态
         try {
-            freeFormatService.insertOrUpdateFreeFormat(reqMsg.getBody().getFreeFrmt(), AppConstant.DIRECT_RECV, "", AppConstant.TRXSTATUS_FAILED);
+            freeFormatService.insertOrUpdateFreeFormat(reqMsg.getBody().getFreeFrmt(), AppConstant.DIRECT_RECV, "" , AppConstant.TRXSTATUS_FAILED);
         } catch (Exception exception) {
             logger.error("自由格式报文更新失败:{}");
         }
@@ -130,10 +140,10 @@ public class FreeFrmt401RTradeFlow {
             //异常事件最后处理时间
             monitorDO.setLastUpTime(DateUtil.getDefaultTime());
 
-            logger.info("异常事件:{},流水信息:{},请联系管理员及研发处理", monitorDO.getExceptTime(), monitorDO.getExceptSerNO());
+            logger.info("异常事件:{},流水信息:{},请联系管理员及研发处理" , monitorDO.getExceptTime(), monitorDO.getExceptSerNO());
             //将异常信息存入数据库
 
-            logger.info("异常消息存入数据库:{}", monitorDO.toString());
+            logger.info("异常消息存入数据库:{}" , monitorDO.toString());
             //先更新监控表,若无数据则插入新数据
             int row = monitorMapper.updateMonitorData(monitorDO);
             if (row == 0) {
@@ -141,7 +151,7 @@ public class FreeFrmt401RTradeFlow {
                 monitorMapper.insertMonitorData(monitorDO);
             }
         } catch (Exception exception) {
-            logger.error("异常消息入库失败,异常信息:{}", exception.getMessage());
+            logger.error("异常消息入库失败,异常信息:{}" , exception.getMessage());
         }
     }
 
@@ -160,9 +170,9 @@ public class FreeFrmt401RTradeFlow {
         EcnyTradeContext.setRspMsg(context, dcepRspDTO);
         try {
             //封装自由格式 存入payTransDtlNonf表
-            freeFormatService.insertOrUpdateFreeFormat(freeFrmtDTO.getFreeFrmt(), AppConstant.DIRECT_RECV, "", AppConstant.TRXSTATUS_SUCCESS);
+            freeFormatService.insertOrUpdateFreeFormat(freeFrmtDTO.getFreeFrmt(), AppConstant.DIRECT_RECV, "" , AppConstant.TRXSTATUS_SUCCESS);
         } catch (Exception e) {
-            logger.info("更新自由格式报文失败:{}", freeFrmtDTO.getFreeFrmt());
+            logger.info("更新自由格式报文失败:{}" , freeFrmtDTO.getFreeFrmt());
             throw new EcnyTransException(EcnyTransError.OTHER_TECH_ERROR);
         }
     }
