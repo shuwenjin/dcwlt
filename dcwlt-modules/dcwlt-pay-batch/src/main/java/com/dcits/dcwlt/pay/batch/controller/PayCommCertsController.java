@@ -3,6 +3,8 @@ package com.dcits.dcwlt.pay.batch.controller;
 import java.util.List;
 import java.io.IOException;
 import javax.servlet.http.HttpServletResponse;
+
+import com.dcits.dcwlt.common.pay.enums.ChangeCdEnum;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -45,6 +47,19 @@ public class PayCommCertsController extends BaseController
         startPage();
         List<PayCommCerts> list = payCommCertsService.selectPayCommCertsList(payCommCerts);
         return getDataTable(list);
+    }
+
+    /**
+     * dcepgw查询有效的证书
+     *
+     */
+    @GetMapping("/getValidlist")
+    public List<PayCommCerts> getValidlist()
+    {
+        PayCommCerts payCommCerts = new PayCommCerts();
+        payCommCerts.setCertStatus(ChangeCdEnum.CC00.getCode());
+        List<PayCommCerts> list = payCommCertsService.selectPayCommCertsList(payCommCerts);
+        return list;
     }
 
     /**
