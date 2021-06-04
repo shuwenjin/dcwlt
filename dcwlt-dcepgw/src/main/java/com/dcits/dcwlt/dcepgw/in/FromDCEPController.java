@@ -3,10 +3,12 @@ package com.dcits.dcwlt.dcepgw.in;
 import cn.hutool.core.date.DatePattern;
 import cn.hutool.core.date.DateUtil;
 import com.alibaba.fastjson.JSONObject;
+import com.dcits.dcwlt.dcepgw.config.AppConfig;
 import com.dcits.dcwlt.dcepgw.utils.DcspMsgUtil;
 import com.dcits.dcwlt.dcepgw.utils.JsonXmlUtil;
 import com.dcits.dcwlt.dcepgw.utils.RestUtil;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -30,6 +32,9 @@ public class FromDCEPController {
     @Value("${dcps.InstnId}")
     private String instnId_dcps;
 
+    @Autowired
+    AppConfig appConfig;
+
     @PostMapping("/dcep")
     public String process(@RequestBody String reqmsg) {
         //处理请求报文
@@ -37,7 +42,7 @@ public class FromDCEPController {
         String msgId = "";
         try {
             //拆包
-            JSONObject jsonObject = DcspMsgUtil.unPack(reqmsg);
+            JSONObject jsonObject = DcspMsgUtil.unPack(reqmsg,appConfig.getIsSign());
             msgId = jsonObject.getJSONObject(JsonXmlUtil.HEAD).getString(DcspMsgUtil.HEAD_KEY_ARRAY[10]);
             //发送至应用网关
             rspMsg = RestUtil.getRsp(jsonObject.toJSONString(), gateway_addr);

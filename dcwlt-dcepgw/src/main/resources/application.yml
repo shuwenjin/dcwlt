@@ -1,9 +1,12 @@
 server:
   port: 8008
-
+app:
+  #签名验签及加解密开关
+  isSign: false
 CoopBank:
   #本行机构号
   InstnId: C1091231000013
+
 gateway:
   #应用网关地址
   server-addr: http://localhost:8000/dcep/dcep/online
