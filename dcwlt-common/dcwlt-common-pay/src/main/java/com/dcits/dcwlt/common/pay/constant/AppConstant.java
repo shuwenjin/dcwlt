@@ -219,4 +219,10 @@ public class AppConstant {
     public static final Integer ONE = 1;
     public static final Integer TOW = 2;
     public static final Integer THR = 3;
+
+    /**
+     * 通用标签
+     */
+    public static final String PAYEE_AMOUNT = "_payeeAmount";       //兑回标签，日累计兑回限额标记用
+    public static final String PAYER_AMOUNT = "_payerAmount";       //兑出标签，日累计兑出限额标记用
 }

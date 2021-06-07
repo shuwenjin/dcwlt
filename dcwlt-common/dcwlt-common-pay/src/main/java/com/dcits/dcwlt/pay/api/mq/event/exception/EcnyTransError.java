@@ -133,6 +133,8 @@ public class EcnyTransError extends TransError {
     public static final EcnyTransError DECRYPT_FAILED                 = new EcnyTransError("ECNYP20008", "解密失败");
     public static final EcnyTransError SEND_DCEP_ERROR                = new EcnyTransError("ECNYP20009", "发送互联互通平台异常");
     public static final EcnyTransError ACCT_TYPE_TRANS_ERROR          = new EcnyTransError("ECNYP20010", "账户类型转换异常");
+    public static final EcnyTransError DAY_LIMIT_AMOUNT_EXPIRED       = new EcnyTransError("ECNYP20011","账户当日业务累计金额超限");
+    public static final EcnyTransError PER_LIMIT_AMOUNT_EXPIRED       = new EcnyTransError("ECNYP20012","账户单笔业务金额超限");
     /**
      * 差错贷记调账
      */

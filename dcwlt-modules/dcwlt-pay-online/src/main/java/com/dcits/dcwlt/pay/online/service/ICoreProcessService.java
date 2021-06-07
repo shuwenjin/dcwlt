@@ -86,4 +86,10 @@ public interface ICoreProcessService {
      * @param bankCore351100InnerRsp
      */
     void sendCoreDebitDone(PayTransDtlInfoDO payTransDtlInfoDO, BankCore351100InnerRsp bankCore351100InnerRsp);
+
+    /**
+     * 日累计交易金额处理
+     *
+     */
+    void cacheLimitAmount(String key, String amount,boolean isAdd);
 }

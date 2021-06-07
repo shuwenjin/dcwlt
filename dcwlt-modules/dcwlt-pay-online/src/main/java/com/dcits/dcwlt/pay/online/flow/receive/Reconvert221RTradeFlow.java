@@ -13,6 +13,7 @@ import com.dcits.dcwlt.common.pay.sequence.service.impl.GenerateCodeServiceImpl;
 import com.dcits.dcwlt.common.pay.tradeflow.TradeContext;
 import com.dcits.dcwlt.common.pay.tradeflow.TradeFlow;
 import com.dcits.dcwlt.common.pay.util.DateUtil;
+import com.dcits.dcwlt.common.redis.service.RedisService;
 import com.dcits.dcwlt.pay.api.domain.dcep.DCEPReqDTO;
 import com.dcits.dcwlt.pay.api.domain.dcep.DCEPRspDTO;
 import com.dcits.dcwlt.pay.api.domain.dcep.common.GrpHdr;
@@ -33,12 +34,15 @@ import com.dcits.dcwlt.pay.online.service.ICoreProcessService;
 import com.dcits.dcwlt.pay.online.service.IPartyService;
 import com.dcits.dcwlt.pay.online.service.IPayTransDtlInfoService;
 import com.dcits.dcwlt.pay.online.task.ParamConfigCheckTask;
+import com.dcits.dcwlt.pay.online.task.PayCommParamTask;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+
+import java.math.BigDecimal;
 
 /**
  * 兑回交易处理配置
@@ -66,6 +70,9 @@ public class Reconvert221RTradeFlow {
 
     @Autowired
     private IAuthInfoService authInfoService;
+
+    @Autowired
+    private RedisService redisService;
 
 
     @Bean(name = RECONVERT_TRADE_FLOW)
@@ -184,6 +191,37 @@ public class Reconvert221RTradeFlow {
         if (!sendAuth) {
             logger.error("发送机构权限不足,{}", instgPtyId);
             throw new EcnyTransException(AppConstant.TRXSTATUS_FAILED, EcnyTransError.PARTY_POWER_ERROR);
+        }
+
+        String payeeAcct = reqMsg.getBody().getReconvertReq().getCdtrInf().getCdtrAcct();
+        //已累计交易金额
+        BigDecimal payeeAmount = redisService.getCacheObject(payeeAcct+AppConstant.PAYEE_AMOUNT);
+        //当前交易金额
+        BigDecimal amount = new BigDecimal(reqMsg.getBody().getReconvertReq().getTrxInf().getTrxAmt().getValue());
+
+        //日兑回累计限额
+        String dayLimitPayeeAmount = PayCommParamTask.getPayCommParamVal(Constant.PARAM_TYPE_DATA,Constant.DAY_LIMIT_PAYEE_AMOUNT);
+        if(com.dcits.dcwlt.common.core.utils.StringUtils.isNotEmpty(dayLimitPayeeAmount)){        //如果日兑回累计限额不为空，则进行限额校验
+            BigDecimal dayLimitAmount = new BigDecimal(dayLimitPayeeAmount);
+            //当前交易金额加上累计交易金额，判断是否大于日累计限额
+            if(null == payeeAmount){
+                payeeAmount = new BigDecimal("0.00");
+            }
+            if((amount.add(payeeAmount)).compareTo(dayLimitAmount) > 0){
+                logger.error("当前账户{}日累计兑出超过限额{}", payeeAcct.substring(payeeAcct.length()-4),dayLimitAmount.toString());
+                throw new EcnyTransException(EcnyTransError.DAY_LIMIT_AMOUNT_EXPIRED);
+            }
+        }
+        //日兑回累计限额
+        String perLimitPayeeAmount = PayCommParamTask.getPayCommParamVal(Constant.PARAM_TYPE_DATA,Constant.PER_LIMIT_PAYEE_AMOUNT);
+        if(com.dcits.dcwlt.common.core.utils.StringUtils.isNotEmpty(perLimitPayeeAmount)){
+            //单笔交易限额
+            BigDecimal perLimitAmount = new BigDecimal(perLimitPayeeAmount);
+            //判断当前交易金额是否超过单笔限额
+            if(amount.compareTo(perLimitAmount) > 0){
+                logger.error("当前账户{}单笔兑出超过限额{}", payeeAcct.substring(payeeAcct.length()-4),perLimitAmount.toString());
+                throw new EcnyTransException( EcnyTransError.PER_LIMIT_AMOUNT_EXPIRED);
+            }
         }
     }
 
@@ -342,6 +380,8 @@ public class Reconvert221RTradeFlow {
                 payTransDtlInfoDO.setPayPathRspStatus(ProcessStsCdEnum.PR00.getCode());
                 payTransDtlInfoDO.setPayPathRetCode(RejectCdEnum.SUCCESS.getCode());
                 payTransDtlInfoDO.setPayPathRetMsg(RejectCdEnum.SUCCESS.getDesc());
+                //记录当前账户累计收款金额
+                bankCoreProcessService.cacheLimitAmount(payTransDtlInfoDO.getPayeeAcct()+AppConstant.PAYEE_AMOUNT,payTransDtlInfoDO.getAmount(),true);
 
                 break;
             case AppConstant.CORESTATUS_FAILED:

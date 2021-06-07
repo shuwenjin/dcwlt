@@ -1,6 +1,7 @@
 package com.dcits.dcwlt.pay.online.flow.receive;
 
 
+import com.alibaba.csp.sentinel.util.StringUtil;
 import com.dcits.dcwlt.common.pay.channel.bankcore.dto.bankcore351100.BankCore351100InnerReq;
 import com.dcits.dcwlt.common.pay.channel.bankcore.dto.bankcore351100.BankCore351100InnerRsp;
 import com.dcits.dcwlt.common.pay.constant.AppConstant;
@@ -10,6 +11,7 @@ import com.dcits.dcwlt.common.pay.tradeflow.TradeContext;
 import com.dcits.dcwlt.common.pay.tradeflow.TradeFlow;
 import com.dcits.dcwlt.common.pay.util.AmountUtil;
 import com.dcits.dcwlt.common.pay.util.DateUtil;
+import com.dcits.dcwlt.common.redis.service.RedisService;
 import com.dcits.dcwlt.pay.api.domain.dcep.DCEPReqDTO;
 import com.dcits.dcwlt.pay.api.domain.dcep.DCEPRspDTO;
 import com.dcits.dcwlt.pay.api.domain.dcep.common.GrpHdr;
@@ -36,12 +38,15 @@ import com.dcits.dcwlt.pay.online.service.IPayTransDtlInfoService;
 import com.dcits.dcwlt.pay.online.service.impl.CoreEventServiceImpl;
 import com.dcits.dcwlt.pay.online.service.impl.PartyService;
 import com.dcits.dcwlt.pay.online.task.ParamConfigCheckTask;
+import com.dcits.dcwlt.pay.online.task.PayCommParamTask;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+
+import java.math.BigDecimal;
 
 /**
  * 兑出交易处理配置
@@ -79,6 +84,9 @@ public class Convert225RTradeFlow {
     private CoreEventServiceImpl coreEventServiceImpl;
     @Autowired
     private IPayTransDtlInfoService payTransDtlInfoService;
+
+    @Autowired
+    private RedisService redisService;
 
 
     @Bean(name = CONVER_TRADE_FLOW)
@@ -236,6 +244,38 @@ public class Convert225RTradeFlow {
         }
         // 协议校验
         checkSignInfo(tradeContext);
+
+        String payerAcct = reqMsg.getBody().getConvertReq().getDbtrInf().getDbtrAcct();
+        //已累计交易金额
+        BigDecimal payerAmount = redisService.getCacheObject(payerAcct+AppConstant.PAYER_AMOUNT);;
+        //当前交易金额
+        BigDecimal amount = new BigDecimal(reqMsg.getBody().getConvertReq().getTrxInf().getTrxAmt().getValue());
+        //单笔交易限额
+        String perLimitPayerAmount = PayCommParamTask.getPayCommParamVal(com.dcits.dcwlt.common.pay.constant.Constant.PARAM_TYPE_DATA, com.dcits.dcwlt.common.pay.constant.Constant.PER_LIMIT_PAYER_AMOUNT);
+        //判断当前交易金额是否超过单笔限额
+        if(StringUtil.isNotEmpty(perLimitPayerAmount)){
+            BigDecimal perLimitAmount = new BigDecimal(perLimitPayerAmount);
+            //判断当前交易金额是否超过单笔限额
+            if(amount.compareTo(perLimitAmount) > 0){
+                logger.error("当前账户{}单笔兑出超过限额{}", payerAcct.substring(payerAcct.length()-4),perLimitAmount.toString());
+                throw new EcnyTransException(AppConstant.TRXSTATUS_FAILED, EcnyTransError.PER_LIMIT_AMOUNT_EXPIRED);
+            }
+        }
+
+        //当前交易金额加上累计交易金额，判断是否大于日累计限额
+        //日交易限额
+        String dayLimitAmountStr = PayCommParamTask.getPayCommParamVal(com.dcits.dcwlt.common.pay.constant.Constant.PARAM_TYPE_DATA, com.dcits.dcwlt.common.pay.constant.Constant.DAY_LIMIT_PAYER_AMOUNT);
+        if(StringUtil.isNotEmpty(dayLimitAmountStr)){
+            BigDecimal dayLimitAmount = new BigDecimal(dayLimitAmountStr);
+            //当前交易金额加上累计交易金额，判断是否大于日累计限额
+            if(null == payerAmount){
+                payerAmount = new BigDecimal("0.00");
+            }
+            if((amount.add(payerAmount)).compareTo(dayLimitAmount) > 0){
+                logger.error("当前账户{}日累计兑出超过限额{}", payerAcct.substring(payerAcct.length()-4),dayLimitAmount.toString());
+                throw new EcnyTransException(AppConstant.TRXSTATUS_FAILED, EcnyTransError.DAY_LIMIT_AMOUNT_EXPIRED);
+            }
+        }
     }
 
 
@@ -445,6 +485,8 @@ public class Convert225RTradeFlow {
             payTransDtlInfoDO.setPayPathRspStatus(ProcessStsCdEnum.PR00.getCode());
             payTransDtlInfoDO.setPayPathRetCode(RejectCdEnum.SUCCESS.getCode());
             payTransDtlInfoDO.setPayPathRetMsg(RejectCdEnum.SUCCESS.getDesc());
+            //记录当前账户日累计支付金额
+            bankCoreProcessService.cacheLimitAmount(payTransDtlInfoDO.getPayerAcct()+AppConstant.PAYER_AMOUNT,payTransDtlInfoDO.getAmount(),true);
         } else if (AppConstant.CORESTATUS_FAILED.equals(coreProcStatus)) {
             // 核心失败
             payTransDtlInfoDO.setOperStatus(AppConstant.OPERSTATUS_FAIL);

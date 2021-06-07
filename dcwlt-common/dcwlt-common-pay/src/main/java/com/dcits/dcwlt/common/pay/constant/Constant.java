@@ -161,6 +161,17 @@ public class Constant {
     public static final String PAYER_MEDIA_TYPE_BANKBOOK = "1";
 
     /**
+     * 应用参数类型
+     */
+    public static final String PARAM_TYPE_URL = "url";              //应用参数类型：请求url
+    public static final String PARAM_TYPE_DATA = "data";            //应用参数类型；数据类型
+    public static final String DAY_LIMIT_PAYEE_AMOUNT = "DAY_LIMIT_PAYEE_AMOUNT";       //日累计兑回限额
+    public static final String DAY_LIMIT_PAYER_AMOUNT = "DAY_LIMIT_PAYER_AMOUNT";       //日累计兑出限额
+    public static final String PER_LIMIT_PAYEE_AMOUNT = "PER_LIMIT_PAYEE_AMOUNT";       //单笔兑回限额
+    public static final String PER_LIMIT_PAYER_AMOUNT = "PER_LIMIT_PAYER_AMOUNT";       //单笔兑出限额
+    public static final String SIGN_FAIL_NUM = "SIGN_FAIL_NUM";                         //签约允许连续失败次数
+
+    /**
      * 报文标识
      */
     public static final String DCEP_221 = "dcep.221.001.01";         //兑回业务请求报文

@@ -1,6 +1,8 @@
 package com.dcits.dcwlt.pay.online.service.impl;
 
 import com.dcits.dcwlt.common.pay.channel.bankcore.dto.BankCore996666.BankCore996666Rsp;
+import com.dcits.dcwlt.common.pay.util.AmountUtil;
+import com.dcits.dcwlt.common.redis.service.RedisService;
 import com.dcits.dcwlt.pay.api.model.PayTransDtlInfoDO;
 import com.dcits.dcwlt.pay.api.model.StateMachine;
 import com.dcits.dcwlt.common.pay.channel.bankcore.dto.bankcore351100.BankCore351100InnerReq;
@@ -20,6 +22,10 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.math.BigDecimal;
+import java.util.Date;
+import java.util.concurrent.TimeUnit;
 
 
 @Service("bankCoreProcessService")
@@ -45,6 +51,9 @@ public class BankCoreProcessServiceImpl implements ICoreProcessService {
 
     @Autowired
     private CoreEventServiceImpl coreEventServiceImpl;
+
+    @Autowired
+    private RedisService redisService;
     /**
      * 初始化核心请求报文
      *
@@ -447,6 +456,27 @@ public class BankCoreProcessServiceImpl implements ICoreProcessService {
         } catch (Exception e) {
             logger.error("sendCoreDone：接收核心结果，更新对应状态异常：{}-{}", e.getMessage(), e);
             throw new EcnyTransException(EcnyTransError.OTHER_TECH_ERROR);
+        }
+    }
+
+    @Override
+    public void cacheLimitAmount(String key, String amountVal,boolean isAdd) {
+        BigDecimal payerAmount = redisService.getCacheObject(key);
+        long timeout = DateUtil.getRemainSecondsOneDay(new Date());
+        if(null == payerAmount){
+            payerAmount = new BigDecimal(AmountUtil.fenToYuan(amountVal));
+            redisService.setCacheObject(key,payerAmount,timeout, TimeUnit.SECONDS);
+        }else{
+            BigDecimal amount = new BigDecimal(AmountUtil.fenToYuan(amountVal));
+            BigDecimal resultAmount = null;
+            if(isAdd){
+                resultAmount = payerAmount.add(amount);
+            }else{
+                resultAmount = payerAmount.subtract(amount);
+            }
+            redisService.setCacheObject(key,resultAmount,timeout, TimeUnit.SECONDS);
+            //       redisService.expire(key,10);
+            logger.info("日累计支付金额{},过期时间{}",resultAmount.toString(),redisService.getTimeoutVal(key));
         }
     }
 
