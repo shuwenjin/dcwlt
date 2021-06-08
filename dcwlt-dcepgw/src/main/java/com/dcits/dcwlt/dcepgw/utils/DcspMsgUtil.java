@@ -1,16 +1,13 @@
 package com.dcits.dcwlt.dcepgw.utils;
 
-import cn.hutool.core.codec.Base64;
 import cn.hutool.core.util.HexUtil;
 import cn.hutool.core.util.StrUtil;
-import cn.hutool.crypto.SmUtil;
-import cn.hutool.crypto.asymmetric.KeyType;
-import cn.hutool.crypto.digest.SM3;
-import cn.hutool.crypto.symmetric.SM4;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.dcits.dcwlt.dcepgw.exception.GwException;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
+import org.bouncycastle.util.encoders.Base64;
 
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -33,17 +30,9 @@ public class DcspMsgUtil {
     public static final String HAED_BEGIN_FLAG = "{H:";
     public static final String SIGN_BEGIN_FLAG = "{S:";
     public static final String END_FLAG = "}\r\n";
+    public static final String MSGTP903 = "ccms.903.001.02";
 
     public static final Map<String, String[]> ENCRYPT_FIELD = new LinkedHashMap<String, String[]>();
-    //发送方公钥
-    public static String SENDPUBLICKEY = "MFkwEwYHKoZIzj0CAQYIKoEcz1UBgi0DQgAEdcjKVPXzo9pHK+tSgKRlLME8ViiaaLrOwt7LZ7hUHphx/q8fvGfy1nmbUIZlZJ++E4WKiqrYH457WyaObaG+WQ==";
-    //发送方私钥
-    public static String SENDPRIVATEKEY = "MIGTAgEAMBMGByqGSM49AgEGCCqBHM9VAYItBHkwdwIBAQQg405/E9Kvb30cE4R0MNwnuiOGQA+J66zKlheVtIK9/+qgCgYIKoEcz1UBgi2hRANCAAR1yMpU9fOj2kcr61KApGUswTxWKJpous7C3stnuFQemHH+rx+8Z/LWeZtQhmVkn74ThYqKqtgfjntbJo5tob5Z";
-
-    //接收方公钥
-    public static String PUBLICKEY = "MFkwEwYHKoZIzj0CAQYIKoEcz1UBgi0DQgAETcVczGjTB4p7kerqtSDMcc2CfVI1j1Tr2tl9VV5irEKUnSq1QMRKsx1tbzMjgkZSTt/4wUNVzgGnk+D8GkHEGQ==";
-    //接收方私钥
-    public static String PRIVATEKEY = "MIGTAgEAMBMGByqGSM49AgEGCCqBHM9VAYItBHkwdwIBAQQg5QXLcbQxbgpKAQgyBn+Lk0zZzmHPw4ZHo3UZDoFZcpegCgYIKoEcz1UBgi2hRANCAARNxVzMaNMHinuR6uq1IMxxzYJ9UjWPVOva2X1VXmKsQpSdKrVAxEqzHW1vMyOCRlJO3/jBQ1XOAaeT4PwaQcQZ";
 
     static {
         //DC/EP兑回业务请求报文
@@ -76,13 +65,18 @@ public class DcspMsgUtil {
 
     }
 
+    public static JSONObject unPack(String orgString) throws Exception {
+        return unPack(orgString, false);
+    }
+
     /**
      * 拆解混合结构报文
      *
      * @param orgString 混合结构报文
+     * @param isSign    签名开关
      * @return JSONObject 拆解后的json
      */
-    public static JSONObject unPack(String orgString) throws Exception {
+    public static JSONObject unPack(String orgString, boolean isSign) throws Exception {
         JSONObject jsonObject = new JSONObject();
         //头
         String head = orgString.substring(0, 202);
@@ -98,25 +92,55 @@ public class DcspMsgUtil {
             Map signMap = DcspMsgUtil.unPackTagSign(sgn);
             headerMap.putAll(signMap);
         }
+        //报文编号
+        String msgTp = headerMap.get(HEAD_KEY_ARRAY[9]);
         //报文体
         String body = signAndBody.substring(bodyStartIdx);
 
-        //验签 TODO 根据序号获取对方公钥，暂时用固定的
-        if (StrUtil.isNotBlank(headerMap.get(SIGNSN_KEY))) {
-            boolean verify = verifyDigitalSignature(body, headerMap.get(DIGITALSIGNATURE_KEY), PUBLICKEY);
-            if (!verify) {
+        //验签
+        //如果是证书绑定通知使用pkcs7打包 dsg TODO
+        if (StringUtils.equals(msgTp, MSGTP903)) {
+            Map certInfo = new HashMap();
+            boolean re = SMUtil.signedData_Verify(Base64.decode(headerMap.get(DIGITALSIGNATURE_KEY)), certInfo);
+            if (re) {
+                //TODO
+                System.out.println(certInfo);
+            } else {
                 log.error("报文验签不通过！");
                 throw new GwException(GwException.CODE_SIGN, "报文验签不通过");
             }
+        } else {
+            // 根据序号获取对方公钥
+            String ssn = headerMap.get(SIGNSN_KEY);
+            if (isSign) {
+                if (StrUtil.isNotBlank(ssn)) {
+                    boolean verify = SMUtil.verifySign(ssn, body, headerMap.get(DIGITALSIGNATURE_KEY));
+                    if (!verify) {
+                        log.error("报文验签不通过！");
+                        throw new GwException(GwException.CODE_SIGN, "报文验签不通过");
+                    }
+                }
+
+//                //校验schema
+//                boolean xmlValid = XmlUtil.validateXMLByXSD(body, msgTp);
+//                if (!xmlValid) {
+//                    //TODO
+//                    throw new GwException("GW-1001", "XML格式检验失败！");
+//                }
+
+                //解密 根据序号获取我方私钥
+                String nsn = headerMap.get(NCRPTNSN_KEY);
+                if (StrUtil.isNotBlank(nsn)) {
+//            byte[] key = getDigitalEnvelopePlain(PRIVATEKEY, headerMap.get(DGTLENVLP_KEY));
+                    byte[] key = SMUtil.getKeyFromDigitalEnvelope(nsn, headerMap.get(DGTLENVLP_KEY));
+                    //将数字信封密码HEX存放到数字信封
+                    headerMap.put(DGTLENVLP_KEY, HexUtil.encodeHexStr(key, false));
+                    //解密敏感字段
+                    body = decryptField(headerMap.get(HEAD_KEY_ARRAY[9]), body, key);
+                }
+            }
         }
-        //解密 TODO 根据序号获取我方私钥，暂时用固定的
-        if (StrUtil.isNotBlank(headerMap.get(NCRPTNSN_KEY))) {
-            byte[] key = getDigitalEnvelopePlain(PRIVATEKEY, headerMap.get(DGTLENVLP_KEY));
-            //将数字信封密码HEX存放到数字信封
-            headerMap.put(DGTLENVLP_KEY, HexUtil.encodeHexStr(key));
-            //解密敏感字段
-            body = decryptField(headerMap.get(HEAD_KEY_ARRAY[9]), body, key);
-        }
+
         //报文转换
         JSONObject jsonBody = JsonXmlUtil.dcspXmlToJson(body);
 
@@ -170,41 +194,67 @@ public class DcspMsgUtil {
         return mapSign;
     }
 
+    public static String pack(String orgJson) throws Exception {
+        return pack(orgJson, false);
+    }
+
     /**
      * 拆解混合结构报文
      *
      * @param orgJson json结构报文
+     * @param isSign  签名开关
      * @return String 组装后的混合报文
      */
-    public static String pack(String orgJson) throws Exception {
+    public static String pack(String orgJson, boolean isSign) throws Exception {
         StringBuilder mix = new StringBuilder();
         JSONObject jsonObject = JSON.parseObject(orgJson);
         //报文体
         String bodyXml = JsonXmlUtil.jsonToDcspXml(jsonObject);
-        //加密敏感字段 不能用API操作，因为BASE64信息会被API转码导致加解密异常 TODO
+        log.debug("加密前报文体[{}]", bodyXml);
+        //加密敏感字段 不能用API操作，因为BASE64信息会被API转码导致加解密异常
         String msgType = jsonObject.getJSONObject(JsonXmlUtil.HEAD).getString(HEAD_KEY_ARRAY[9]);
         //随机生成对称密钥
-        byte[] sm4Key = new SM4().getSecretKey().getEncoded();
-        String nsn = "1";
-        if (StrUtil.isNotBlank(nsn)) {
-            bodyXml = encryptField(msgType, bodyXml, sm4Key);
+        byte[] sm4Key = SMUtil.genSM4Key();
+        //加密证书序列号 ,TODO 后端选择，通过报文头传过来
+        String nsn = jsonObject.getJSONObject(JsonXmlUtil.HEAD).getString(NCRPTNSN_KEY);
+        if (isSign) {
+            if (StrUtil.isNotBlank(nsn)) {
+                bodyXml = encryptField(msgType, bodyXml, sm4Key);
+            }
         }
+
+//        //排序
+//        XmlUtil.sortByXSD(bodyXml, msgType);
+//        //校验schema
+//        boolean xmlValid = XmlUtil.validateXMLByXSD(bodyXml, msgType);
+//        if (!xmlValid) {
+//            //TODO
+//            throw new GwException("GW-1001", "XML格式检验失败！");
+//        }
+
+
         //报文头
         String headString = packFixHead(jsonObject.getJSONObject(JsonXmlUtil.HEAD));
 
         //签名
-
-        String ssn = "1";//TODO  根据序号获取我方私钥，暂时用固定的
-        //报文签名
+        //签名证书序列号 TODO  后端选择，通过报文头传过来
+        String ssn = jsonObject.getJSONObject(JsonXmlUtil.HEAD).getString(SIGNSN_KEY);
+        ;
         String dsg = "";
-        if (StrUtil.isNotBlank(ssn)) {
-            dsg = getDigitalSignature(bodyXml, PRIVATEKEY);
-        }
-        //TODO  根据序号获取对方公钥，暂时用固定的
-        //数字信封
         String dep = "";
-        if (StrUtil.isNotBlank(nsn)) {
-            dep = getDigitalEnvelopeCipher(PUBLICKEY, sm4Key);
+        if (isSign) {
+            //报文签名
+            if (StrUtil.isNotBlank(ssn)) {
+                dsg = SMUtil.sign(ssn, bodyXml);
+            }
+            //数字信封
+            if (StrUtil.isNotBlank(nsn)) {
+                dep = SMUtil.getDigitalEnvelopeCipher(nsn, sm4Key);
+            }
+        }
+        //如果是证书绑定通知使用pkcs7打包 dsg TODO
+        if (StringUtils.equals(msgType, MSGTP903)) {
+            dsg = SMUtil.pkcs7(SMUtil.digest(bodyXml));
         }
         //签名域
         String tagString = packTagSign(ssn, dsg, nsn, dep);
@@ -275,76 +325,6 @@ public class DcspMsgUtil {
         return tagString.toString();
     }
 
-    /**
-     * 生成数字信封
-     * 使用接收方数字证书（公钥）和非对称算法（SM2）加密对称密钥
-     *
-     * @param publicKey            对方公钥
-     * @param digitalEnvelopePlain 数字信封明文(对称密钥)
-     * @return String              Base64数字信封
-     */
-    public static String getDigitalEnvelopeCipher(String publicKey, byte[] digitalEnvelopePlain) {
-        String data = SmUtil.sm2(null, publicKey).encryptBase64(digitalEnvelopePlain, KeyType.PublicKey);
-        return data;
-    }
-
-    /**
-     * 解密数字信封获取明文密钥
-     *
-     * @param privateKey            我方私钥
-     * @param digitalEnvelopeCipher 数字信封密文(对称密钥)
-     * @return byte[]               数字信封密文密钥
-     */
-    public static byte[] getDigitalEnvelopePlain(String privateKey, String digitalEnvelopeCipher) {
-        byte[] data = SmUtil.sm2(privateKey, null).decrypt(digitalEnvelopeCipher, KeyType.PrivateKey);
-        return data;
-    }
-
-
-    /**
-     * 生成数字签名内容
-     * （1）业务发起方将整个Document（报文体）计算哈希值，作为签名源串；
-     * （2）使用本行的数字证书（私钥）对签名源串签名；
-     * （3）将签名值使用BASE64转码
-     *
-     * @param msg        待签名信息
-     * @param privateKey 签名我方私钥
-     * @return String    签名
-     */
-    public static String getDigitalSignature(String msg, String privateKey) {
-        String signature = "";
-        try {
-            byte[] data = SmUtil.sm2(privateKey, null).sign(SM3.create().digest(msg));
-            signature = Base64.encode(data);
-        } catch (Exception e) {
-            log.error("签名异常", e);
-            throw new GwException(GwException.CODE_SIGN, "签名异常");
-        }
-
-        return signature;
-    }
-
-    /**
-     * 校验数字签名内容
-     * （1）将签名值使用BASE64解码
-     * （1）业务发起方将整个Document（报文体）计算哈希值，作为签名源串；
-     * （2）使用对方的数字证书（公钥）对签名验签；
-     *
-     * @param msg       待校验原文
-     * @param sign      签名信息
-     * @param publicKey 对方公钥
-     * @return String   签名
-     */
-    public static boolean verifyDigitalSignature(String msg, String sign, String publicKey) {
-        boolean isVerify = false;
-        try {
-            isVerify = SmUtil.sm2(null, publicKey).verify(SM3.create().digest(msg), Base64.decode(sign));
-        } catch (Exception e) {
-            log.error("验签异常", e);
-            throw new GwException(GwException.CODE_SIGN, "验签异常");
-        }
-        return isVerify;
-    }
 
     /**
      * 加密报文体中敏感字段
@@ -395,9 +375,9 @@ public class DcspMsgUtil {
             for (String key : elements) {
                 String value = getXmlKeyValue(xml, key);
                 if (isencrypt) {
-                    values.put(key, SmUtil.sm4(dpKey).encryptBase64(value));
+                    values.put(key, SMUtil.encryptSm4B64(value, dpKey));
                 } else {
-                    values.put(key, SmUtil.sm4(dpKey).decryptStr(value));
+                    values.put(key, SMUtil.decryptSm4B64(value, dpKey));
                 }
 
             }
@@ -455,7 +435,7 @@ public class DcspMsgUtil {
 
     /**
      * 通用响应报文，900
-     * */
+     */
     public static JSONObject get900() {
         JSONObject header = new JSONObject();
         header.put("MesgType", "dcep.900.001.01");
