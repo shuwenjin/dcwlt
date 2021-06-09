@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dcits.dcwlt.pay.batch.mapper.PartyInfoMapper" >
+    <sql id="querySql">
+        SELECT P.PARTYID partyID,
+               P.CHANGETYPE changeType,
+               P.EFFECTIVETYPE effectiveType,
+               P.PARTYTYPE partyType,
+               P.PARTYNAME partyName,
+               P.PARTYALIAS partyAlias,
+               P.PARTYSTATUS partyStatus,
+               P.CONTACT contact,
+               P.TELEPHONE telephone,
+               P.MAIL mail,
+               P.FAX fax,
+               P.EFFECTDATE effectDate,
+               P.INEFFECTIVEDATE inEffectiveDate,
+               P.CHANGENUMBER changeNumber,
+               P.CHANGECIRCLETIMES changeCircleTimes,
+               P.LASTUPDATE lastUpDate,
+               P.LASTUPTIME lastUpTime
+        FROM pay_comm_party_tobeffect P
+    </sql>
+    <!-- 新增报文登记信息 -->
+    <insert id="insertParty" parameterType="com.dcits.dcwlt.pay.api.model.PartyInfoDO">
+            INSERT INTO pay_comm_party(PARTYID,
+            PARTYTYPE,
+            PARTYNAME,
+            PARTYALIAS,
+            PARTYSTATUS,
+            STATUS,
+            CONTACT,
+            TELEPHONE,
+            MAIL,
+            FAX,
+            EFFECTDATE,
+            INEFFECTIVEDATE,
+            CHANGENUMBER,
+            CHANGECIRCLETIMES,
+            LASTUPDATE,
+            LASTUPTIME
+            )
+            VALUE (
+            #{partyID},
+            #{partyType},
+            #{partyName},
+            #{partyAlias},
+            #{partyStatus},
+            #{status},
+            #{contact},
+            #{telephone},
+            #{mail},
+            #{fax},
+            #{effectDate},
+            #{inEffectiveDate},
+            #{changeNumber},
+            #{changeCircleTimes},
+            #{lastUpDate},
+            #{lastUpTime}
+            )
+    </insert>
+
+    <update id="updateParty" parameterType="com.dcits.dcwlt.pay.api.model.PartyInfoDO">
+        UPDATE pay_comm_party
+        SET PARTYTYPE = #{partyType},
+        PARTYNAME = #{partyName},
+        PARTYALIAS = #{partyAlias},
+        PARTYSTATUS = #{partyStatus},
+        CONTACT = #{contact},
+        TELEPHONE = #{telephone},
+        MAIL = #{mail},
+        FAX = #{fax},
+        STATUS = #{status},
+        EFFECTDATE = #{effectDate},
+        INEFFECTIVEDATE = #{inEffectiveDate},
+        CHANGENUMBER = #{changeNumber},
+        CHANGECIRCLETIMES = #{changeCircleTimes},
+        LASTUPDATE = #{lastUpDate},
+        LASTUPTIME = #{lastUpTime}
+        WHERE PARTYID = #{partyID}
+    </update>
+    <select id="queryParty" parameterType="String" resultType="com.dcits.dcwlt.pay.api.model.PartyInfoDO">
+        <include refid="selectPartyInfoDOVo"/>
+        where partyid = #{partyID}
+    </select>
+    <!--    查询指定日期会生效的临时机构表信息-->
+    <select id="selectPartyTmpOfEffectiveToDay" resultType="com.dcits.dcwlt.pay.api.model.PartyToBeEffectiveDO" parameterType="com.dcits.dcwlt.pay.api.model.PartyToBeEffectiveDO">
+        <include refid="querySql"></include>
+        WHERE P.EFFECTDATE &lt;= #{effectDate} OR P.INEFFECTIVEDATE &lt;= #{inEffectiveDate}
+    </select>
+
+    <sql id="selectPartyInfoDOVo">
+        select partyid, partytype, partyname, partyalias, partystatus, status, contact, telephone, mail, fax, effectdate, ineffectivedate, changenumber, changecircletimes, lastupdate, lastuptime from pay_comm_party
+    </sql>
+
+</mapper>

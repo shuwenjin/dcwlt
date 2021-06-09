@@ -79,4 +79,35 @@ public class DcwltPayBatchTask {
         }
         return result;
     }
+    public TaskResult partyToEffective(String settleDate/*${yyyyMMdd}*/) throws Exception {
+        TaskResult result = new TaskResult();
+        String servieName=settleDate;
+        // 解析成日期字符串
+       // String params = DateUtils.parseTaskDate(settleDate);
+        // 把字符串用单引号包裹
+        result.setInvokeTarget("partyToEffective(" + StringUtils.toTaskString(settleDate) + ")");
+        // 初始化执行结果为失败
+        result.setSuccess(false);
+
+        System.out.println("执行方法：partyToEffective(" + StringUtils.toTaskString(settleDate) + ")");
+
+        String ret = null;
+        try {
+            ret = remotePayBatchService.schedulerController(null, null, servieName);
+        } catch (Exception e) {
+            result.setMessage(e.getMessage());
+            // 必须转成JSONString
+            throw new Exception(JSONObject.toJSONString(result));
+        }
+
+        // 执行结果
+        result.setRet(ret);
+        if (null == ret) {
+            result.setSuccess(false);
+        } else {
+            // 执行成功
+            result.setSuccess(true);
+        }
+        return result;
+    }
 }
