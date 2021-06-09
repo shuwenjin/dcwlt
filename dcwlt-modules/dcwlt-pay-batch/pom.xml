@@ -16,6 +16,11 @@
         dcwlt-pay-batch 支付-批量模块
     </description>
 
+    <properties>
+        <!-- 跳过测试 -->
+        <skipTests>true</skipTests>
+    </properties>
+
     <dependencies>
         <!-- SpringCloud Ailibaba Nacos -->
         <dependency>

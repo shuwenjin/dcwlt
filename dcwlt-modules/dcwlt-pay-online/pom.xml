@@ -15,7 +15,17 @@
         dcwlt-pay-online 支付-联机模块
     </description>
 
+    <properties>
+        <!-- 跳过测试 -->
+        <skipTests>true</skipTests>
+    </properties>
+
     <dependencies>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+        </dependency>
 
         <!-- SpringCloud Ailibaba Nacos -->
         <dependency>
