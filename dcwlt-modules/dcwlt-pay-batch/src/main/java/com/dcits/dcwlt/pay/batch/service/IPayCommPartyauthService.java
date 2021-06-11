@@ -59,4 +59,6 @@ public interface IPayCommPartyauthService
      * @return 结果
      */
     public int deletePayCommPartyauthById(String partyid);
+
+    public int replaceAuthInfo(AuthInfoDO authInfoDO);
 }

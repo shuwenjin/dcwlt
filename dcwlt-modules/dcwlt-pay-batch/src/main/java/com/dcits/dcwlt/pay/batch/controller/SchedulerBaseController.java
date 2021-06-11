@@ -17,14 +17,13 @@ import com.dcits.dcwlt.common.pay.sequence.service.IGenerateCodeService;
 import com.dcits.dcwlt.common.pay.util.DateCompareUtil;
 import com.dcits.dcwlt.common.pay.util.DateUtil;
 import com.dcits.dcwlt.pay.api.domain.dcep.common.NbInf;
-import com.dcits.dcwlt.pay.api.model.PartyInfoDO;
-import com.dcits.dcwlt.pay.api.model.PartyToBeEffectiveDO;
-import com.dcits.dcwlt.pay.api.model.SettleTaskGroupExecDO;
+import com.dcits.dcwlt.pay.api.model.*;
 import com.dcits.dcwlt.pay.api.mq.event.exception.EcnyTransError;
 import com.dcits.dcwlt.pay.api.mq.event.exception.EcnyTransException;
-import com.dcits.dcwlt.pay.batch.mapper.PartyInfoMapper;
+import com.dcits.dcwlt.pay.batch.service.IAuthInfoToBeEffectiveRepository;
 import com.dcits.dcwlt.pay.batch.service.ISettleTaskGroupExecService;
 import com.dcits.dcwlt.pay.batch.service.impl.IPartyServiceImpl;
+import com.dcits.dcwlt.pay.batch.service.impl.PayCommPartyauthServiceImpl;
 import com.dcits.dcwlt.pay.batch.task.TaskExecRunnable;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -59,8 +58,13 @@ public class SchedulerBaseController {
     private static final String TMP_SYS_ID = "UPP";
     @Autowired
     private IPartyServiceImpl partyInfoTmpRepository;
-//    @Autowired
-//    private PartyInfoMapper partyInfoRepository;
+
+    @Autowired
+    private PayCommPartyauthServiceImpl iAuthInfoRepository;
+
+    @Autowired
+    private IAuthInfoToBeEffectiveRepository authInfoToBeEffectiveRepository;
+
     @Autowired
     private ISettleTaskGroupExecService taskGroupRepository;
 
@@ -162,53 +166,70 @@ public class SchedulerBaseController {
                 throw new EcnyTransException(EcnyTransError.ECNY_PARTY_TOBE_EFFECTIVE_ERROR);
             }
         }
-//        logger.info("start process party to effective task.");
-//        String dsptUrl = RtpUtil.getInstance().getProperty("ecny.online.server.url");
-//        if (StringUtils.isEmpty(dsptUrl)) {
-//            logger.error("Cannot found online server url.");
-//            return "找不到联机服务器url地址";
-//        }
-//        try {
-//            ECNYReqDTO ecnyReqDTO = new ECNYReqDTO();
-//
-//            //封装请求头
-//            Head head = new Head();
-//            head.setRetCode(Head.RET_CODE_SUCCESS);
-//            head.setRetInfo(Head.RET_CODE_SUCCESS);
-//            head.setResdFlag("N");
-//            head.setTranDate(DateUtil.getDefaultDate());
-//            head.setTranTime(DateUtil.getDefaultTime());
-//            head.setSeqNo(generateCodeService.generateCoreReqSerno());
-//            ecnyReqDTO.setHead(head);
-//
-//            //封装ECNY头
-//            ECNYReqHead ecnyReqHead = new ECNYReqHead();
-//            ecnyReqHead.setBusiChnl(BusiConst.ECNY_SYS_ID);
-//            ecnyReqHead.setBrno(TMP_BRO_NO);
-//            ecnyReqHead.setOrigChnl(TMP_SYS_ID);
-//            ecnyReqDTO.setEcnyHead(ecnyReqHead);
-//
-//            //执行请求
-//            String url = dsptUrl + PART_TO_EFFECTIVE_URL;
-//            logger.info("发送待生效机构转生效机构请求任务到联机服务器");
-//            String rsp = HttpClientUtil.doJsonPost(BusiConst.ECNY_SYS_ID, ApiConstant.INVOKE_PARTY_TO_EFFECTIVE,
-//                    url, JSONObject.toJSON(ecnyReqDTO).toString(), "utf-8");
-//            logger.info("待生效机构转生效机构任务执行完成，联机服务器响应记过{}", rsp);
-//
-//            //解析结果
-//            JSONObject jsonObject = JSONObject.parseObject(rsp);
-//            ECNYRspDTO ecnyRspDTO = JSONObject.toJavaObject(jsonObject, ECNYRspDTO.class);
-//
-//            //结果判断，head.retCode 000000为成功
-//            if (!Head.RET_CODE_SUCCESS.equals(ecnyRspDTO.getHead().getRetCode())) {
-//                logger.error("待生效机构移动到生效机构表任务执行出现错误");
-//                result = ecnyRspDTO.getHead().getRetInfo();
-//            }
-//        } catch (Exception e) {
-//            logger.error("请求网络错误{}", e.getMessage(), e);
-//            result = "网络请求错误";
-//        }
-//        logger.info("end process part to effective task.");
+
+        return result;
+    }
+    /**
+     * 业务权限变更事件
+     *
+     * @AUth :wanyangwei
+     */
+    private String rightChange() {
+        String result = SUCC;
+        //失败条数
+        int faultCount = 0;
+        AuthInfoToBeEffectiveDO authInfoToBeEffectiveDO = new AuthInfoToBeEffectiveDO();
+        //设置当前时间为生效/失效时间
+
+        String currentDateStr = DateUtil.getSysDate();
+        authInfoToBeEffectiveDO.setEffectDate(currentDateStr);
+        authInfoToBeEffectiveDO.setInEffectiveDate(currentDateStr);
+
+        //根据当前时间查询符合条件的权限信息
+        List<AuthInfoToBeEffectiveDO> authInfoList = authInfoToBeEffectiveRepository.queryAuthInfo(authInfoToBeEffectiveDO);
+        if (authInfoList.isEmpty() || null == authInfoList) {
+            logger.info("无符合条件的业务权限信息:authInfoList {}", authInfoList);
+        }
+        //执行转存业务权限临时信息到业务权限表操作
+        for (AuthInfoToBeEffectiveDO infoToBeEffectiveDO : authInfoList) {
+            String changeType = infoToBeEffectiveDO.getChangeType();
+            //封装实体
+            AuthInfoDO authInfoDO = new AuthInfoDO();
+            authInfoDO.setPartyId(infoToBeEffectiveDO.getPartyId());
+            authInfoDO.setMsgType(infoToBeEffectiveDO.getMsgType());
+            authInfoDO.setTradeCtgyCode(infoToBeEffectiveDO.getTradeCtgyCode());
+            authInfoDO.setSendAuth(infoToBeEffectiveDO.getSendAuth());
+            authInfoDO.setRecvAuth(infoToBeEffectiveDO.getRecvAuth());
+            authInfoDO.setEffectDate(infoToBeEffectiveDO.getEffectDate());
+            authInfoDO.setInEffectiveDate(infoToBeEffectiveDO.getInEffectiveDate());
+            authInfoDO.setLastUpDate(DateUtil.getSysDate());
+            authInfoDO.setLastUpTime(DateUtil.getCurTime());
+            //变更类型为新增或修改
+            if (ChangeCdEnum.CC00.getCode().equals(changeType) || ChangeCdEnum.CC01.getCode().equals(changeType)) {
+                //设置状态为生效中
+                authInfoDO.setStatus(AppConstant.EFFECTIVE_STATUS_EFFECTIVE);
+            } else { //更变类型为撤销
+                //设置状态为已撤销
+                authInfoDO.setStatus(AppConstant.EFFECTIVE_STATUS_REVOKE);
+            }
+            try {
+                //转存业务权限信息,转存完成无需删除源数据
+                iAuthInfoRepository.replaceAuthInfo(authInfoDO);
+                //转存业务权限信息成功后 删除该条信息
+                authInfoToBeEffectiveRepository.deleteAuthInfo(infoToBeEffectiveDO);
+                logger.info("转存该条业务权限信息插入业务权限表成功,删除临时表数据成功:authInfoDO {}", authInfoDO);
+            } catch (Exception e) {
+                faultCount += 1;
+                logger.warn("转存该条业务权限失败,partyId:{},msgType:{},tradeCtgyCode:{}", infoToBeEffectiveDO.getPartyId(), infoToBeEffectiveDO.getMsgType(), infoToBeEffectiveDO.getTradeCtgyCode());
+                logger.warn("转存异常信息为:{}", e.getMessage());
+            }
+        }
+        //失败日志记录
+        if (faultCount != 0) {
+            logger.warn("移动业务权限临时表数据到业务权限表完成，移动总数：{}， 移动失败条数：{}", authInfoList.size(), faultCount);
+            throw new EcnyTransException(EcnyTransError.ECNY_AHTUINFO_TOBE_EFFECTIVE_ERROR);
+        }
+
         return result;
     }
     /**
@@ -334,62 +355,7 @@ public class SchedulerBaseController {
         }
     }
 
-    /**
-     * 业务权限变更事件
-     *
-     * @AUth :wanyangwei
-     */
-    private String rightChange() {
-        String result = SUCC;
-//        logger.info("start process right change task.");
-//        String dsptUrl = RtpUtil.getInstance().getProperty("ecny.online.server.url");
-//        if (StringUtils.isEmpty(dsptUrl)) {
-//            logger.error("Cannot found online server url.");
-//            return "找不到联机服务器url地址";
-//        }
-//        try {
-//            ECNYReqDTO ecnyReqDTO = new ECNYReqDTO();
-//
-//            //封装请求头
-//            Head head = new Head();
-//            head.setRetCode(Head.RET_CODE_SUCCESS);
-//            head.setRetInfo(Head.RET_CODE_SUCCESS);
-//            head.setResdFlag("N");
-//            head.setTranDate(DateUtil.getDefaultDate());
-//            head.setTranTime(DateUtil.getDefaultTime());
-//            head.setSeqNo(generateCodeService.generateCoreReqSerno());
-//            ecnyReqDTO.setHead(head);
-//
-//            //封装ECNY头
-//            ECNYReqHead ecnyReqHead = new ECNYReqHead();
-//            ecnyReqHead.setBusiChnl(BusiConst.ECNY_SYS_ID);
-//            ecnyReqHead.setBrno(TMP_BRO_NO);
-//            ecnyReqHead.setOrigChnl(TMP_SYS_ID);
-//            ecnyReqDTO.setEcnyHead(ecnyReqHead);
-//
-//            //执行请求
-//            String url = dsptUrl + RIGHT_CHANGE_URL;
-//            logger.info("发送业务权限变更请求任务到联机服务器");
-//            String rsp = HttpClientUtil.doJsonPost(BusiConst.ECNY_SYS_ID, ApiConstant.INVOKE_RIGHT_CHANGE,
-//                    url, JSONObject.toJSON(ecnyReqDTO).toString(), "utf-8");
-//            logger.info("待业务权限变更任务执行完成，联机服务器响应记过{}", rsp);
-//
-//            //解析结果
-//            JSONObject jsonObject = JSONObject.parseObject(rsp);
-//            ECNYRspDTO ecnyRspDTO = JSONObject.toJavaObject(jsonObject, ECNYRspDTO.class);
-//
-//            //结果判断，head.retCode 000000为成功
-//            if (!Head.RET_CODE_SUCCESS.equals(ecnyRspDTO.getHead().getRetCode())) {
-//                logger.error("待业务权限变更任务执行出现错误");
-//                result = ecnyRspDTO.getHead().getRetInfo();
-//            }
-//        } catch (Exception e) {
-//            logger.error("请求网络错误{}", e.getMessage(), e);
-//            result = "网络请求错误";
-//        }
-//        logger.info("end process right change  task.");
-        return result;
-    }
+
 
     public void execTask(String settleDate) {
         logger.info("start process execute task fialure case.");

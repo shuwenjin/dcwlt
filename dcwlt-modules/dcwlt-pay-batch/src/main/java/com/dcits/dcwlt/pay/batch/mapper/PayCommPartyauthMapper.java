@@ -1,6 +1,7 @@
 package com.dcits.dcwlt.pay.batch.mapper;
 
 import com.dcits.dcwlt.pay.api.model.AuthInfoDO;
+import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;
 
@@ -11,6 +12,7 @@ import java.util.List;
  * @author 
  * @date 2021-03-03
  */
+@Mapper
 public interface PayCommPartyauthMapper 
 {
     /**
@@ -39,7 +41,7 @@ public interface PayCommPartyauthMapper
 
     /**
      * 修改业务权限变更信息
-     * 
+     *
      * @param payCommPartyauth 业务权限变更信息
      * @return 结果
      */
@@ -47,7 +49,7 @@ public interface PayCommPartyauthMapper
 
     /**
      * 删除业务权限变更信息
-     * 
+     *
      * @param partyid 业务权限变更信息ID
      * @return 结果
      */
@@ -60,4 +62,6 @@ public interface PayCommPartyauthMapper
      * @return 结果
      */
     public int deletePayCommPartyauthByIds(String[] partyids);
+
+    public int replaceAuthInfo(AuthInfoDO authInfoDO);
 }

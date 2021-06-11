@@ -94,4 +94,9 @@ public class PayCommPartyauthServiceImpl implements IPayCommPartyauthService
     {
         return payCommPartyauthMapper.deletePayCommPartyauthById(partyid);
     }
+
+    @Override
+    public int replaceAuthInfo(AuthInfoDO authInfoDO) {
+        return payCommPartyauthMapper.replaceAuthInfo(authInfoDO);
+    }
 }

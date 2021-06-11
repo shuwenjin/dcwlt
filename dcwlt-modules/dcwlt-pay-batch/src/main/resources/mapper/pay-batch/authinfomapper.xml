@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dcits.dcwlt.pay.batch.mapper.AuthInfoMapper">
+    <!-- 校验业务权限信息 -->
+    <select id="validateAuthInfo" resultType="com.dcits.dcwlt.pay.api.model.AuthInfoDO">
+        SELECT
+        PARTYID ,
+        MSGTYPE ,
+        TRADECTGYCODE ,
+        SENDAUTH ,
+        RECVAUTH ,
+        STATUS,
+        EFFECTDATE,
+        INEFFECTIVEDATE,
+        LASTUPDATE ,
+        LASTUPTIME
+        FROM pay_comm_partyauth
+        <where>
+            <if test="partyId != null and partyId!='' ">
+                PARTYID= #{partyId}
+            </if>
+            <if test="msgType != null and msgType!='' ">
+                AND MSGTYPE = #{msgType}
+            </if>
+            <if test="tradeCtgyCode != null and tradeCtgyCode!='' ">
+                AND (TRADECTGYCODE = #{tradeCtgyCode} or TRADECTGYCODE = "null")
+            </if>
+            <if test="tradeCtgyCode == null or tradeCtgyCode==''">
+                AND TRADECTGYCODE = "null"
+            </if>
+        </where>
+    </select>
+
+    <!-- 更新/增加业务权限信息  -->
+    <insert id="replaceAuthInfo">
+        REPLACE INTO pay_comm_partyauth(
+        PARTYID,
+        MSGTYPE,
+        TRADECTGYCODE,
+        SENDAUTH,
+        RECVAUTH,
+        STATUS,
+        EFFECTDATE,
+        INEFFECTIVEDATE,
+        LASTUPDATE,
+        LASTUPTIME)
+        VALUES(#{partyId},
+        #{msgType},
+        <if test="tradeCtgyCode != null and tradeCtgyCode!='' ">
+            #{tradeCtgyCode},
+        </if>
+        <if test="tradeCtgyCode == null or tradeCtgyCode==''">
+            "null",
+        </if>
+        #{sendAuth},
+        #{recvAuth},
+        #{status},
+        #{effectDate},
+        #{inEffectiveDate},
+        #{lastUpDate},
+        #{lastUpTime}
+        )
+    </insert>
+
+    <insert id="replaceAuthInfoToBeEffective">
+        REPLACE INTO pay_comm_partyauth_tobeffect(
+        PARTYID,
+        MSGTYPE,
+        TRADECTGYCODE,
+        SENDAUTH,
+        RECVAUTH,
+        CHANGETYPE,
+        EFFECTIVETYPE,
+        EFFECTDATE,
+        INEFFECTIVEDATE,
+        LASTUPDATE,
+        LASTUPTIME)
+        VALUES(#{partyId},
+        #{msgType},
+        <if test="tradeCtgyCode != null and tradeCtgyCode!='' ">
+            #{tradeCtgyCode},
+        </if>
+        <if test="tradeCtgyCode == null or tradeCtgyCode==''">
+            "null",
+        </if>
+        #{sendAuth},
+        #{recvAuth},
+        #{changeType},
+        #{effectiveType},
+        #{effectDate},
+        #{inEffectiveDate},
+        #{lastUpDate},
+        #{lastUpTime}
+        )
+    </insert>
+
+    <!--根据生效日期查询业务权限信息-->
+    <select id="queryAuthInfo" resultType="com.dcits.dcwlt.pay.api.model.AuthInfoToBeEffectiveDO">
+        SELECT
+        PARTYID,
+        MSGTYPE,
+        TRADECTGYCODE,
+        SENDAUTH,
+        RECVAUTH,
+        CHANGETYPE,
+        EFFECTIVETYPE,
+        EFFECTDATE,
+        INEFFECTIVEDATE,
+        LASTUPDATE,
+        LASTUPTIME
+        FROM pay_comm_partyauth_tobeffect
+        <where>
+            <if test="effectDate != null and effectDate!='' ">
+                EFFECTDATE &lt;= #{effectDate}
+            </if>
+            <if test="inEffectiveDate != null and inEffectiveDate!='' ">
+                or INEFFECTIVEDATE &lt;= #{effectDate}
+            </if>
+        </where>
+    </select>
+
+    <!--删除临时业务权限信息-->
+    <delete id="deleteAuthInfo">
+        delete from pay_comm_partyauth_tobeffect
+        <where>
+            <if test="partyId != null and partyId!='' ">
+                PARTYID= #{partyId}
+            </if>
+            <if test="msgType != null and msgType!='' ">
+                AND MSGTYPE = #{msgType}
+            </if>
+            <if test="tradeCtgyCode != null and tradeCtgyCode!='' ">
+                AND TRADECTGYCODE = #{tradeCtgyCode}
+            </if>
+            <if test="tradeCtgyCode == null or tradeCtgyCode==''">
+                AND TRADECTGYCODE = "null"
+            </if>
+        </where>
+    </delete>
+</mapper>

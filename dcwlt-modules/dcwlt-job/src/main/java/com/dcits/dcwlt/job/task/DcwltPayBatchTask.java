@@ -81,19 +81,48 @@ public class DcwltPayBatchTask {
     }
     public TaskResult partyToEffective(String settleDate/*${yyyyMMdd}*/) throws Exception {
         TaskResult result = new TaskResult();
-        String servieName=settleDate;
-        // 解析成日期字符串
-       // String params = DateUtils.parseTaskDate(settleDate);
+       // 解析成日期字符串
+        String params = DateUtils.parseTaskDate(settleDate);
         // 把字符串用单引号包裹
-        result.setInvokeTarget("partyToEffective(" + StringUtils.toTaskString(settleDate) + ")");
+        result.setInvokeTarget("partyToEffective(" + StringUtils.toTaskString(params) + ")");
         // 初始化执行结果为失败
         result.setSuccess(false);
 
-        System.out.println("执行方法：partyToEffective(" + StringUtils.toTaskString(settleDate) + ")");
+        System.out.println("执行方法：partyToEffective(" + StringUtils.toTaskString(params) + ")");
 
         String ret = null;
         try {
-            ret = remotePayBatchService.schedulerController(null, null, servieName);
+            ret = remotePayBatchService.schedulerController(params, null, "PartyToEffectiveService");
+        } catch (Exception e) {
+            result.setMessage(e.getMessage());
+            // 必须转成JSONString
+            throw new Exception(JSONObject.toJSONString(result));
+        }
+
+        // 执行结果
+        result.setRet(ret);
+        if (null == ret) {
+            result.setSuccess(false);
+        } else {
+            // 执行成功
+            result.setSuccess(true);
+        }
+        return result;
+    }
+    public TaskResult partyToEffectiveAuth(String settleDate/*${yyyyMMdd}*/) throws Exception {
+        TaskResult result = new TaskResult();
+        // 解析成日期字符串
+         String params = DateUtils.parseTaskDate(settleDate);
+        // 把字符串用单引号包裹
+        result.setInvokeTarget("partyToEffect-iveAuth(" + StringUtils.toTaskString(params) + ")");
+        // 初始化执行结果为失败
+        result.setSuccess(false);
+
+        System.out.println("执行方法：partyToEffectiveAuth(" + StringUtils.toTaskString(params) + ")");
+
+        String ret = null;
+        try {
+            ret = remotePayBatchService.schedulerController(params, null, "RightChangeService");
         } catch (Exception e) {
             result.setMessage(e.getMessage());
             // 必须转成JSONString
