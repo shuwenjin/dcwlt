@@ -79,7 +79,13 @@
       <el-table-column label="备注" align="center" prop="remark" v-if="columns[7].visible" />
       <el-table-column label="数字信封" align="center" prop="digitalEnvelope" v-if="columns[8].visible" />
       <el-table-column label="批次日期" align="center" prop="batchDate" v-if="columns[9].visible" />
-      <el-table-column label="交易批次号" align="center" prop="batchId" v-if="columns[10].visible" />
+      <el-table-column label="交易批次号" align="center" prop="batchId" v-if="columns[10].visible" >
+     <template slot-scope="scope">
+     <router-link :to="'/pay/checkdtl/' + scope.row.batchId" class="link-type">
+            <span>{{ scope.row.batchId }}</span>
+            </router-link>
+          </template>
+        </el-table-column>
       <el-table-column label="总笔数" align="center" prop="countNum" v-if="columns[11].visible" />
       <el-table-column label="总金额" align="center" prop="countAmt" v-if="columns[12].visible" >
           <template slot-scope="scope">
@@ -236,6 +242,7 @@ export default {
     };
   },
   created() {
+
     this.getList();
     this.getDicts("msgbizstatus").then(response => {
       this.msgbizstatusOptions = response.data;

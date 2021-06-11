@@ -147,6 +147,12 @@ export const constantRoutes = [
         component: (resolve) => require(['@/views/pay-batch/checkpath/checkpathdtl'], resolve),
         name: 'Checkpathdtl',
         meta: { title: '对账明细' }
+      },
+      {
+        path: 'checkdtl/:batchId',
+        component: (resolve) => require(['@/views/pay-batch/checkpath/checkdtl'], resolve),
+        name: 'Checkdtl',
+        meta: { title: '对账明细' }
       }
     ]
   },
